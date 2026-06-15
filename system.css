@@ -1,0 +1,163 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #e9f056;
+  font-family: 'Pretendard', sans-serif;
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* ── 전체 레이아웃 ── */
+#systemLayout {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* ── 왼쪽 패널 (흰 배경 + 그리드 텍스처) ── */
+#leftPanel {
+  position: relative;
+  flex-shrink: 0;
+  width: 810px;
+  height: 100vh;
+  background: white;
+  background-image:
+    repeating-linear-gradient(to right, #e8e8e8 0, #e8e8e8 1px, transparent 1px, transparent 45px),
+    repeating-linear-gradient(to bottom, #e8e8e8 0, #e8e8e8 1px, transparent 1px, transparent 45px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+/* ── 얼굴 컨테이너 (노란 둥근 사각형) ── */
+#faceContainer {
+  position: relative;
+  width: 679px;
+  height: 830px;
+  background: #e9f056;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+/* ── 촬영된 얼굴 캔버스 ── */
+#savedCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ── 황금비 / 얼굴 그리드 오버레이 ── */
+#facegridOverlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0.5;
+}
+
+/* ── 점 오버레이 캔버스 ── */
+#dotCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ── 클릭 그리드 (투명) ── */
+#grid {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: repeat(18, 1fr);
+  grid-template-rows: repeat(23, 1fr);
+}
+
+.cell {
+  background: transparent;
+  cursor: crosshair;
+}
+
+.cell:hover {
+  background: rgba(255, 92, 52, 0.06);
+}
+
+/* ── 분석 버튼 ── */
+#analyzeBtn {
+  width: 200px;
+  height: 52px;
+  background: black;
+  color: white;
+  border: none;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 0;
+  transition: background 0.15s;
+}
+
+#analyzeBtn:hover {
+  background: #ff5c34;
+}
+
+/* ── 오른쪽 패널 (노란 배경 + 방사형 차트) ── */
+#rightPanel {
+  flex: 1;
+  position: relative;
+  background: #e9f056;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── +/- 줌 버튼 ── */
+#chartControls {
+  position: absolute;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 60px;
+  z-index: 10;
+}
+
+#chartControls button {
+  width: 36px;
+  height: 36px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+#chartControls button:hover {
+  background: #f0f0f0;
+}
+
+/* ── 방사형 SVG ── */
+#radialSvg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}

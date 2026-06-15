@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>POINT INDEX</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+    />
+    <link rel="stylesheet" href="main.css" />
+  </head>
+
+  <body>
+    <!-- ── 상단 네비게이션 바 ── -->
+    <nav class="topNav">
+      <span class="navLeft">PROJECT: POINT INDEX</span>
+      <div class="navCenter">
+        <svg
+          width="35"
+          height="7"
+          viewBox="0 0 35 7"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <circle cx="3.5" cy="3.5" r="3.5" fill="black" />
+          <circle cx="17.5" cy="3.5" r="3.5" fill="black" />
+          <circle cx="31.5" cy="3.5" r="3.5" fill="black" />
+        </svg>
+      </div>
+      <span class="navRight">Everything starts from a dot</span>
+    </nav>
+
+    <!-- ── 섹션 1: 히어로 ── -->
+    <section class="heroSection">
+      <div class="heroImgLeft">
+        <img src="images/main-left.png" alt="portrait left" />
+      </div>
+      <div class="heroImgRight">
+        <img src="images/main-right.png" alt="portrait right" />
+      </div>
+
+      <!-- 장식 점 1: 상단 (얼굴 점 기호 시스템) -->
+      <div class="heroDot heroDot--top">
+        <div class="dot-tooltip">
+          <div class="dot-line"></div>
+          <span class="dot-title">얼굴 점 기호 시스템</span>
+          <p class="dot-desc">
+            얼굴 위의 점을 좌표상의 점으로 변환하여<br />개인의 점 패턴을
+            도출하는 시스템
+          </p>
+        </div>
+      </div>
+
+      <!-- 장식 점 2: 중단 (About Project) -->
+      <div class="heroDot heroDot--mid">
+        <div class="dot-tooltip">
+          <div class="dot-line"></div>
+          <span class="dot-title">About Project</span>
+          <p class="dot-desc">
+            해당 프로젝트는 신체상의 점과 기하학의 점이<br />동음이의어라는
+            데에서 시작했다.
+          </p>
+        </div>
+      </div>
+
+      <div class="heroContent">
+        <h1 class="heroTitle">POINT INDEX</h1>
+        <p class="heroSubtitle">
+          A Coordinate-Based Facial Classification System
+        </p>
+
+        <div class="heroButtons">
+          <button class="heroBtn" onclick="window.location.href = 'main.html'">
+            프로젝트
+          </button>
+          <button
+            class="heroBtn"
+            onclick="window.location.href = 'camera.html'"
+          >
+            점 패턴<br />분석
+          </button>
+          <button class="heroBtn" disabled>얼굴<br />지도</button>
+          <button
+            class="heroBtn on"
+            onclick="window.location.href = 'gwansang.html'"
+          >
+            점과<br />관상학
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 섹션 2: 프로젝트 개요 ── -->
+    <section class="overviewSection">
+      <div class="overviewOrange"></div>
+      <div class="overviewText">
+        <h2 class="overviewHeading">Mole과 Point</h2>
+        <p class="overviewBody">
+          해당 프로젝트는 신체상의 점(mole)과 기하학의 점(point)가<br />
+          동음이의어라는 데에서 시작했다. 얼굴은 하나의 지도이고 점은 <br />
+          지도 위에 찍힌 표식이다. 사람마다 고유한 표식을 가지고 태어난다.<br />
+          점은 단순히 신체의 흔적이 아니라 인생을 나타내는 좌표이고 당신의 삶을
+          대변하는 기호이다.
+        </p>
+      </div>
+    </section>
+
+    <!-- ── 섹션 3: HOW IT WORKS ── -->
+    <section class="howSection">
+      <h2 class="howTitle">HOW IT WORKS</h2>
+      <div class="howCircles">
+        <div class="howCircle"></div>
+        <div class="howCircle"></div>
+        <div class="howCircle"></div>
+        <div class="howCircle"></div>
+        <div class="howCircle"></div>
+      </div>
+    </section>
+  </body>
+</html>

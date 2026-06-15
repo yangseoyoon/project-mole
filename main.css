@@ -1,0 +1,321 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Pretendard', sans-serif;
+  background: #e9f056;
+  overflow-x: hidden;
+}
+
+/* ── 상단 네비게이션 바 ── */
+.topNav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 26px;
+  background: white;
+  border-bottom: 1px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  z-index: 100;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.navLeft,
+.navRight {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  color: black;
+  white-space: nowrap;
+  line-height: 26px;
+}
+
+.navCenter {
+  display: flex;
+  align-items: center;
+}
+
+/* ── 섹션 1: 히어로 ── */
+.heroSection {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 600px;
+  background: #e9f056;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 26px;
+}
+
+.heroImgLeft {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 31.5%;
+  height: 106%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.heroImgLeft img {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.heroImgRight {
+  position: absolute;
+  right: 0;
+  top: 2%;
+  width: 31.25%;
+  height: 98.1%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.heroImgRight img {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 장식 점 */
+.heroDot {
+  position: absolute;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  background: #ff5c34;
+  cursor: pointer;
+  z-index: 20;
+}
+
+/* tooltip 컨테이너 */
+.dot-tooltip {
+  position: absolute;
+  left: 21px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 300px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  white-space: nowrap;
+}
+
+.heroDot:hover .dot-tooltip {
+  opacity: 1;
+}
+
+/* 가로선 */
+.dot-line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 75px;
+  height: 1px;
+  background: #ff5c34;
+  transform: translateY(-50%);
+}
+
+/* 제목 */
+.dot-title {
+  position: absolute;
+  left: 80px;
+  top: -16px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 17px;
+  color: #ff5c34;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* 설명 */
+.dot-desc {
+  position: absolute;
+  left: 80px;
+  top: 10px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  color: black;
+  line-height: 20px;
+  white-space: nowrap;
+}
+
+.heroDot--top {
+  top: 19.4%;
+  left: 45.5%;
+}
+
+.heroDot--mid {
+  top: 71.7%;
+  left: 18.8%;
+}
+
+/* 중앙 콘텐츠 */
+.heroContent {
+  position: relative;
+  z-index: 10;
+  margin-top: 560px;
+  margin-bottom: 220px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.heroTitle {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(60px, 8.9vw, 128px);
+  color: black;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.heroSubtitle {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  font-size: clamp(18px, 2.5vw, 36px);
+  color: black;
+  margin-top: clamp(8px, 1.5vh, 20px);
+  white-space: nowrap;
+}
+
+.heroButtons {
+  display: flex;
+  gap: 20px;
+  margin-top: 220px;
+}
+
+.heroBtn {
+  width: clamp(56px, 4.2vw, 80px);
+  height: clamp(56px, 4.2vw, 80px);
+  background: black;
+  color: white;
+  border: 1px solid black;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: clamp(12px, 1.04vw, 16px);
+  line-height: 1.6;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.heroBtn:hover:not(:disabled) {
+  background: #ff5c34;
+  color: white;
+  border-color: black;
+}
+
+.heroBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.heroBtn.on {
+  background: black;
+  color: white;
+  border-color: black;
+}
+/* ── 섹션 2: 프로젝트 개요 ── */
+.overviewSection {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 600px;
+  background: white;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.overviewOrange {
+  position: absolute;
+  right: 8.5%;
+  top: 14.7%;
+  width: 33.8%;
+  height: 78.2%;
+  background: #ff5c34;
+}
+
+.overviewText {
+  position: relative;
+  z-index: 1;
+  padding-left: 7.8%;
+  max-width: 58%;
+}
+
+.overviewHeading {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: clamp(28px, 3.3vw, 48px);
+  color: black;
+  margin-bottom: clamp(16px, 3.5vh, 40px);
+}
+
+.overviewBody {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: clamp(14px, 1.67vw, 24px);
+  color: black;
+  line-height: 1.375;
+  word-break: keep-all;
+}
+
+/* ── 섹션 3: HOW IT WORKS ── */
+.howSection {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 600px;
+  background: #e9f056;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.howTitle {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: clamp(28px, 2.6vw, 50px);
+  color: black;
+  text-align: right;
+  padding-right: 5.3%;
+  margin-bottom: clamp(20px, 5.9vh, 64px);
+}
+
+.howCircles {
+  display: flex;
+  gap: 0;
+  padding-left: 7.1%;
+}
+
+.howCircle {
+  width: clamp(80px, 19.5vw, 374px);
+  height: clamp(80px, 19.5vw, 374px);
+  background: black;
+  border-radius: 50%;
+  flex-shrink: 0;
+}

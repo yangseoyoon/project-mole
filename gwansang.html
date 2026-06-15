@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>관상학 페이지 | POINT INDEX</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+    />
+    <link rel="stylesheet" href="gwansang.css" />
+  </head>
+  <body>
+    <!-- 상단 네비게이션 -->
+    <nav class="topNav">
+      <span class="navLeft">PROJECT: POINT INDEX</span>
+      <div class="navCenter">
+        <svg
+          width="35"
+          height="7"
+          viewBox="0 0 35 7"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <circle cx="3.5" cy="3.5" r="3.5" fill="black" />
+          <circle cx="17.5" cy="3.5" r="3.5" fill="black" />
+          <circle cx="31.5" cy="3.5" r="3.5" fill="black" />
+        </svg>
+      </div>
+      <span class="navRight">Everything starts from a dot</span>
+    </nav>
+
+    <!-- 네비 버튼 (우상단) -->
+    <div class="navButtons">
+      <button class="navBtn" onclick="window.location.href = 'main.html'">
+        프로젝트
+      </button>
+      <button class="navBtn">점 패턴<br />분석</button>
+      <button class="navBtn">얼굴<br />지도</button>
+      <button class="navBtn active">점과<br />관상학</button>
+    </div>
+
+    <!-- 그리드 배경 + 카드 영역 -->
+    <div class="pageGrid">
+      <!-- 카드 1: 남자2 (음양오행) — 좌상단 -->
+      <div class="portrait-card" style="left: 280px; top: 185px">
+        <div class="card-default">
+          <img
+            src="https://www.figma.com/api/mcp/asset/13217a30-ad5d-4748-accf-0f96ab9976b1"
+            alt="남자2"
+            class="portrait-img portrait-flipped"
+          />
+        </div>
+        <div class="card-hover">
+          <img
+            class="hover-bg-img hover-circle-img"
+            src="https://www.figma.com/api/mcp/asset/6c7ef522-f860-4fc8-a90d-1834b76d0f20"
+            alt=""
+          />
+          <img
+            class="hover-bg-img hover-group-img"
+            src="https://www.figma.com/api/mcp/asset/e1dd1c3a-495c-4626-8982-8946b5fd768e"
+            alt=""
+          />
+          <p class="hover-label">음양오행</p>
+        </div>
+      </div>
+
+      <!-- 카드 2: 여자2 (얼굴의 방위체계) — 좌상단 두 번째 -->
+      <div class="portrait-card" style="left: 620px; top: 185px">
+        <div class="card-default">
+          <img
+            src="https://www.figma.com/api/mcp/asset/a196edd9-b661-4f68-94fb-47c84061085a"
+            alt="여자2"
+            class="portrait-img"
+          />
+        </div>
+        <div class="card-hover">
+          <img
+            class="hover-bg-img hover-group-img hover-coord-img"
+            src="https://www.figma.com/api/mcp/asset/d6b19811-e4d3-40f8-a184-075aaee9566d"
+            alt=""
+          />
+          <p class="hover-label hover-label--topright">얼굴의<br />방위체계</p>
+        </div>
+      </div>
+
+      <!-- 카드 3: 남자1 (점과 관상) — 중앙 -->
+      <div class="portrait-card" style="left: 960px; top: 525px">
+        <div class="card-default">
+          <img
+            src="https://www.figma.com/api/mcp/asset/b4e84bbf-5986-4f6d-886d-8325dba1ae90"
+            alt="남자1"
+            class="portrait-img portrait-top"
+          />
+        </div>
+        <div class="card-hover">
+          <img
+            class="hover-bg-img hover-vector-img"
+            src="https://www.figma.com/api/mcp/asset/6b0e0cff-40e4-45c2-907f-c4166b4883eb"
+            alt=""
+          />
+          <!-- 산재된 점들 -->
+          <span class="mdot" style="left: 229px; top: 286px"></span>
+          <span class="mdot" style="left: 195px; top: 311px"></span>
+          <span class="mdot" style="left: 67px; top: 165px"></span>
+          <span class="mdot" style="left: 239px; top: 75px"></span>
+          <span class="mdot" style="left: 224px; top: 80px"></span>
+          <span class="mdot" style="left: 224px; top: 16px"></span>
+          <span class="mdot" style="left: 39px; top: 128px"></span>
+          <span class="mdot" style="left: 185px; top: 118px"></span>
+          <p class="hover-label">점과 관상</p>
+        </div>
+      </div>
+
+      <!-- 카드 4: 여자1 (십이궁) — 우측 -->
+      <div class="portrait-card" style="left: 1470px; top: 355px">
+        <div class="card-default">
+          <img
+            src="https://www.figma.com/api/mcp/asset/7c189c0f-794c-4514-8046-3ff8c34adada"
+            alt="여자1"
+            class="portrait-img portrait-center"
+          />
+        </div>
+        <div class="card-hover">
+          <img
+            class="hover-bg-img hover-sijung-img"
+            src="https://www.figma.com/api/mcp/asset/51777e6a-84c9-4f08-9920-a8487de1f3a1"
+            alt=""
+          />
+          <p class="hover-label">십이궁</p>
+        </div>
+      </div>
+    </div>
+    <!-- /pageGrid -->
+
+    <!-- 하단 바 -->
+    <div class="footerBar"></div>
+  </body>
+</html>

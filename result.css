@@ -1,0 +1,180 @@
+body {
+  margin: 0;
+
+  background: #e9e9e9;
+
+  font-family: sans-serif;
+}
+
+/* -------------------
+전체 레이아웃
+------------------- */
+
+#systemLayout {
+  display: flex;
+
+  gap: 60px;
+
+  align-items: flex-start;
+
+  padding: 40px;
+}
+
+/* -------------------
+왼쪽
+------------------- */
+
+#leftSection {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 20px;
+}
+
+/* -------------------
+GRID WRAPPER
+------------------- */
+
+#gridWrapper {
+  position: relative;
+
+  width: 810.21px;
+  height: 1080px;
+
+  overflow: hidden;
+}
+
+/* -------------------
+촬영 얼굴
+------------------- */
+
+#savedCanvas {
+  position: absolute;
+
+  left: 0;
+  top: 0;
+
+  width: 810.21px;
+  height: 1080px;
+
+  z-index: 0;
+}
+
+/* -------------------
+GRID PNG
+------------------- */
+
+#gridImage {
+  position: absolute;
+
+  left: 0;
+  top: 0;
+
+  width: 810.21px;
+  height: 1080px;
+
+  pointer-events: none;
+
+  z-index: 5;
+}
+
+/* -------------------
+숨겨진 클릭 GRID
+------------------- */
+
+#grid {
+  position: absolute;
+
+  left: 0;
+  top: 0;
+
+  z-index: 10;
+
+  display: grid;
+
+  grid-template-columns: repeat(18, 45.011px);
+
+  grid-template-rows: repeat(23, 46.956px);
+}
+
+/* -------------------
+CELL
+------------------- */
+
+.cell {
+  width: 45.011px;
+  height: 46.956px;
+
+  background: transparent;
+
+  border: none;
+
+  color: transparent;
+
+  cursor: pointer;
+}
+
+/* hover 확인용 */
+
+.cell:hover {
+  background: rgba(255, 0, 0, 0.06);
+}
+
+/* -------------------
+버튼
+------------------- */
+
+button {
+  width: 220px;
+
+  height: 60px;
+
+  border: none;
+
+  background: black;
+
+  color: white;
+
+  font-size: 20px;
+
+  cursor: pointer;
+}
+
+/* -------------------
+좌표 정보
+------------------- */
+
+#pointInfo {
+  width: 400px;
+
+  max-height: 300px;
+
+  overflow-y: auto;
+
+  background: white;
+
+  padding: 20px;
+
+  line-height: 1.7;
+}
+
+/* -------------------
+오른쪽
+------------------- */
+
+#rightSection {
+  position: sticky;
+
+  top: 40px;
+}
+
+/* -------------------
+방사형 SVG
+------------------- */
+
+#radialSvg {
+  background: white;
+
+  border: 1px solid #ccc;
+}

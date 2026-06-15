@@ -1,0 +1,161 @@
+body {
+  margin: 0;
+
+  background: #dde54b;
+
+  font-family: sans-serif;
+}
+
+#systemLayout {
+  display: flex;
+
+  justify-content: center;
+
+  align-items: flex-start;
+
+  gap: 60px;
+
+  padding: 40px;
+}
+
+/* ------------------- */
+/* LEFT */
+/* ------------------- */
+
+#leftSection {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 20px;
+}
+
+/* ------------------- */
+/* GRID WRAPPER */
+/* ------------------- */
+
+#gridWrapper {
+  position: relative;
+
+  width: 810px;
+
+  height: 1080px;
+
+  background: #dde54b;
+
+  overflow: hidden;
+
+  border-radius: 24px;
+}
+
+/* ------------------- */
+/* 얼굴 */
+/* ------------------- */
+
+#savedCanvas {
+  position: absolute;
+
+  inset: 0;
+
+  width: 810px;
+
+  height: 1080px;
+
+  z-index: 1;
+}
+
+/* ------------------- */
+/* facegrid */
+/* ------------------- */
+
+#facegridOverlay {
+  position: absolute;
+
+  inset: 0;
+
+  width: 810px;
+
+  height: 1080px;
+
+  pointer-events: none;
+
+  z-index: 2;
+}
+
+/* ------------------- */
+/* 클릭 GRID */
+/* ------------------- */
+
+#grid {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 3;
+
+  display: grid;
+
+  grid-template-columns: repeat(18, 1fr);
+
+  grid-template-rows: repeat(23, 1fr);
+}
+
+.cell {
+  background: transparent;
+
+  cursor: pointer;
+}
+
+/* ------------------- */
+/* BUTTON */
+/* ------------------- */
+
+button {
+  width: 220px;
+
+  height: 60px;
+
+  border: none;
+
+  background: black;
+
+  color: white;
+
+  font-size: 20px;
+
+  cursor: pointer;
+}
+
+/* ------------------- */
+/* RIGHT */
+/* ------------------- */
+
+#rightSection {
+  position: sticky;
+
+  top: 40px;
+}
+
+#radialSvg {
+  background: #dde54b;
+}
+.gridPoint {
+  position: absolute;
+
+  width: 12px;
+
+  height: 12px;
+
+  background: red;
+
+  border-radius: 50%;
+
+  transform: translate(-50%, -50%);
+
+  pointer-events: none;
+
+  z-index: 999;
+}
+#savedCanvas {
+  display: block;
+}

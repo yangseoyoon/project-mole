@@ -1,0 +1,275 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Pretendard', sans-serif;
+  background: #e9f056;
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* ── 상단 네비게이션 바 ── */
+.topNav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 26px;
+  background: white;
+  border-bottom: 1px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  z-index: 200;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.navLeft,
+.navRight {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  color: black;
+  white-space: nowrap;
+  line-height: 26px;
+}
+
+.navCenter {
+  display: flex;
+  align-items: center;
+}
+
+/* ── 우상단 네비 버튼 ── */
+.navButtons {
+  position: fixed;
+  top: 65px;
+  right: calc(100% - 1787px);
+  display: flex;
+  gap: 0;
+  z-index: 150;
+}
+
+.navBtn {
+  width: 80px;
+  height: 80px;
+  background: white;
+  color: black;
+  border: 1px solid black;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.navBtn:hover,
+.navBtn.active {
+  background: black;
+  color: white;
+}
+
+/* ── 그리드 배경 ── */
+.pageGrid {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #e9f056;
+  background-image:
+    repeating-linear-gradient(to right, #000 0, #000 1px, transparent 1px, transparent 170px),
+    repeating-linear-gradient(to bottom, #000 0, #000 1px, transparent 1px, transparent 170px);
+  background-position: -60px 15px;
+}
+
+/* ── 하단 바 ── */
+.footerBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 30px;
+  background: white;
+  border-top: 1px solid black;
+  box-shadow: 0 -1px 2px rgba(0,0,0,0.1);
+  z-index: 200;
+}
+
+/* ── 인물 카드 ── */
+.portrait-card {
+  position: absolute;
+  width: 340px;
+  height: 340px;
+  border: 1px solid black;
+  overflow: hidden;
+  cursor: pointer;
+  z-index: 50;
+}
+
+/* 기본 상태: 검정 배경 + 인물 사진 */
+.card-default {
+  position: absolute;
+  inset: 0;
+  background: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease;
+}
+
+/* hover 상태: 흰 배경 + 다이어그램 */
+.card-hover {
+  position: absolute;
+  inset: 0;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.portrait-card:hover .card-default {
+  opacity: 0;
+}
+
+.portrait-card:hover .card-hover {
+  opacity: 1;
+}
+
+/* ── 인물 사진 위치 조정 ── */
+.portrait-img {
+  position: absolute;
+  object-fit: cover;
+}
+
+/* 남자2: 상단 중앙, 약간 뒤집힘 (Figma: scale-y-100 rotate-180) */
+.portrait-flipped {
+  top: 50%;
+  left: 50.38px;
+  width: 227px;
+  height: 321px;
+  transform: translateY(-50%) scaleY(-1) rotate(180deg);
+  object-position: center top;
+}
+
+/* 여자2: 중앙 배치 */
+.portrait-img:not(.portrait-flipped):not(.portrait-top):not(.portrait-center) {
+  top: 50%;
+  left: 50%;
+  width: 237px;
+  height: 336px;
+  transform: translate(-50%, -50%);
+  object-position: center top;
+}
+
+/* 남자1: 상단 배치 */
+.portrait-top {
+  top: 7.6px;
+  left: 52.63px;
+  width: 222px;
+  height: 315px;
+  transform: none;
+}
+
+/* 여자1: 중앙 배치 */
+.portrait-center {
+  top: 50%;
+  left: 50%;
+  width: 228px;
+  height: 328px;
+  transform: translate(-50%, -50%);
+  object-position: center top;
+}
+
+/* ── hover 다이어그램 이미지 ── */
+.hover-bg-img {
+  position: absolute;
+  display: block;
+}
+
+/* 음양오행: 원 배경 */
+.hover-circle-img {
+  top: 50%;
+  left: 50%;
+  width: 298px;
+  height: 298px;
+  transform: translate(-50%, -43%);
+}
+
+/* 음양오행: 오행 그래픽 오버레이 */
+.hover-group-img {
+  top: 13px;
+  left: 11px;
+  width: 316px;
+  height: 302px;
+}
+
+/* 얼굴의 방위체계: 좌표계 */
+.hover-coord-img {
+  top: 16px;
+  left: 15px;
+  width: 308px;
+  height: 308px;
+}
+
+/* 점과 관상: 별자리 벡터 */
+.hover-vector-img {
+  top: 20.5px;
+  left: 43.56px;
+  width: 201px;
+  height: 296.5px;
+}
+
+/* 십이궁: 원 다이어그램 */
+.hover-sijung-img {
+  top: 50%;
+  left: 50%;
+  width: 245px;
+  height: 297px;
+  transform: translate(-50%, -55%);
+}
+
+/* ── 산재 점 (점과 관상 hover) ── */
+.mdot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: black;
+}
+
+/* ── hover 레이블 ── */
+.hover-label {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 32px;
+  color: black;
+  text-align: center;
+  white-space: nowrap;
+  line-height: 1.375;
+  z-index: 2;
+}
+
+/* 얼굴의 방위체계: 우상단 배치 */
+.hover-label--topright {
+  bottom: auto;
+  top: 50%;
+  left: auto;
+  right: 20px;
+  transform: translateY(-100%);
+  text-align: center;
+  white-space: normal;
+  line-height: 1.375;
+}

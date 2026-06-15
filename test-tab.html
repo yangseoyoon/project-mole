@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+
+    <title>Face System</title>
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div id="systemLayout">
+      <!-- LEFT -->
+
+      <div id="leftSection">
+        <div id="gridWrapper">
+          <canvas id="savedCanvas"> </canvas>
+
+          <img id="facegridOverlay" src="images/facegrid.png" />
+
+          <div id="grid"></div>
+        </div>
+
+        <button id="analyzeBtn">분석하기</button>
+      </div>
+
+      <!-- RIGHT -->
+
+      <div id="rightSection">
+        <svg id="radialSvg" width="800" height="800"></svg>
+      </div>
+    </div>
+
+    <script src="system.js"></script>
+  </body>
+</html>

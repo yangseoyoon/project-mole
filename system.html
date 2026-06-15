@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Face System</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <link rel="stylesheet" href="system.css" />
+  </head>
+  <body>
+    <div id="systemLayout">
+
+      <!-- ── 왼쪽 패널: 흰 배경 + 그리드 텍스처 + 얼굴 ── -->
+      <div id="leftPanel">
+        <!-- 얼굴 컨테이너 (노란 둥근 사각형) -->
+        <div id="faceContainer">
+          <canvas id="savedCanvas"></canvas>
+          <!-- 점 표시용 오버레이 캔버스 -->
+          <canvas id="dotCanvas"></canvas>
+          <img id="facegridOverlay" src="images/facegrid.png" alt="" />
+          <div id="grid"></div>
+        </div>
+
+        <button id="analyzeBtn">분석하기</button>
+      </div>
+
+      <!-- ── 오른쪽 패널: 방사형 차트 ── -->
+      <div id="rightPanel">
+        <!-- +/- 줌 버튼 -->
+        <div id="chartControls">
+          <button id="zoomInBtn">+</button>
+          <button id="zoomOutBtn">−</button>
+        </div>
+
+        <svg id="radialSvg" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+
+    </div>
+
+    <script src="system.js"></script>
+  </body>
+</html>
