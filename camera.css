@@ -7,6 +7,7 @@
 }
 
 body {
+  font-family: 'Pretendard', sans-serif;
   background: #e9f056;
   width: 100vw;
   height: 100vh;
@@ -20,7 +21,7 @@ body {
 .cameraPage {
   width: 100%;
   height: 100%;
-  padding: 30px;
+  padding: 73px 30px 103px;
   display: flex;
   align-items: center;
   justify-content: center;

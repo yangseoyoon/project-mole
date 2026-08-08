@@ -12,70 +12,78 @@ body {
   height: 100vh;
 }
 
-/* ── 상단 네비게이션 바 ── */
-.topNav {
+
+/* ── 새 관상학 페이지 ── */
+.gwansangPage {
   position: fixed;
-  top: 0;
+  top: 43px;
   left: 0;
-  width: 100%;
-  height: 26px;
-  background: white;
-  border-bottom: 1px solid black;
+  width: 100vw;
+  height: calc(100vh - 43px - 73px);
+  background-color: #e9f056;
+  overflow: hidden;
+  border-left: 1px solid #000;
+  border-right: 1px solid #000;
+}
+
+/* 그리드 오버레이: 최상위 레이어 */
+.gwGrid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  background-image:
+    linear-gradient(to right, #000 1px, transparent 1px),
+    linear-gradient(to bottom, #000 1px, transparent 1px);
+  background-size: 130.5px 130.5px;
+  background-position: 111.75px 18px;
+}
+
+.gwPhoto {
+  position: absolute;
+  background: #000;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.gwPhoto img {
+  position: absolute;
+  display: block;
+  max-width: none;
+}
+
+/* 모든 크롭: 정확히 130.5×130.5 */
+.gwCrop {
+  position: absolute;
+  width: 130.5px;
+  height: 130.5px;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.gwCrop img {
+  position: absolute;
+  display: block;
+  max-width: none;
+}
+
+.gwBlack {
+  position: absolute;
+  width: 130.5px;
+  height: 130.5px;
+  background: #000;
+  z-index: 1;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 24px;
-  z-index: 200;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  justify-content: center;
 }
 
-.navLeft,
-.navRight {
-  font-family: 'Pretendard', sans-serif;
-  font-weight: 700;
-  font-size: 11px;
-  color: black;
-  white-space: nowrap;
-  line-height: 26px;
+.gwBlack img {
+  display: block;
+  max-width: none;
 }
 
-.navCenter {
-  display: flex;
-  align-items: center;
-}
-
-/* ── 우상단 네비 버튼 ── */
-.navButtons {
-  position: fixed;
-  top: 65px;
-  right: calc(100% - 1787px);
-  display: flex;
-  gap: 0;
-  z-index: 150;
-}
-
-.navBtn {
-  width: 80px;
-  height: 80px;
-  background: white;
-  color: black;
-  border: 1px solid black;
-  font-family: 'Pretendard', sans-serif;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 1.6;
-  text-align: center;
-  cursor: pointer;
-  transition: background 0.15s, color 0.15s;
-}
-
-.navBtn:hover,
-.navBtn.active {
-  background: black;
-  color: white;
-}
-
-/* ── 그리드 배경 ── */
+/* ── (구) 그리드 배경 ── */
 .pageGrid {
   position: fixed;
   top: 0;
@@ -89,18 +97,6 @@ body {
   background-position: -60px 15px;
 }
 
-/* ── 하단 바 ── */
-.footerBar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 30px;
-  background: white;
-  border-top: 1px solid black;
-  box-shadow: 0 -1px 2px rgba(0,0,0,0.1);
-  z-index: 200;
-}
 
 /* ── 인물 카드 ── */
 .portrait-card {
@@ -245,6 +241,40 @@ body {
   border-radius: 50%;
   background: black;
 }
+
+/* ── 인용구 텍스트 (상단 우측) ── */
+.quote-large {
+  position: absolute;
+  left: 1140px;   /* 그리드 선 x=1130 기준 +10px 안쪽 */
+  top: 195px;     /* 그리드 선 y=185 기준 +10px 안쪽 */
+  max-width: 320px; /* 2칸(340px) - 양쪽 여백 */
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 1.5;
+  color: black;
+  z-index: 100;
+  pointer-events: none;
+  word-break: keep-all;
+}
+
+/* ── 인용구 박스 (하단 좌측) ── */
+.quote-box {
+  position: absolute;
+  left: 120px;    /* 그리드 선 x=110 기준 +10px 안쪽 */
+  top: 705px;     /* 그리드 선 y=695 기준 +10px 안쪽 */
+  width: 280px;   /* 2칸(340px) 이내 */
+  background: white;
+  padding: 16px 20px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1.85;
+  color: black;
+  z-index: 100;
+  pointer-events: none;
+}
+
 
 /* ── hover 레이블 ── */
 .hover-label {

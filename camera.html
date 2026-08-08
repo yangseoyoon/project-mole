@@ -3,9 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <title>웹캠페이지</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <link rel="stylesheet" href="nav.css" />
     <link rel="stylesheet" href="camera.css" />
   </head>
   <body>
+    <!-- 상단 네비게이션 바 -->
+    <nav class="topNav">
+      <span class="navLeft">PROJECT: DOT SHIFT</span>
+      <div class="navCenter">
+        <svg width="35" height="7" viewBox="0 0 35 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="3.5" cy="3.5" r="3.5" fill="black" />
+          <circle cx="17.5" cy="3.5" r="3.5" fill="black" />
+          <circle cx="31.5" cy="3.5" r="3.5" fill="black" />
+        </svg>
+      </div>
+      <span class="navRight">Everything starts from a dot</span>
+    </nav>
 
     <div class="cameraPage">
       <!-- 카메라 영역 (검정 네모) -->
@@ -25,6 +40,32 @@
         </button>
       </div>
     </div>
+
+    <!-- 하단 네비게이션 바 -->
+    <nav class="bottomNav">
+      <div class="bottomLogo">DOT SHIFT</div>
+      <div class="navBadges">
+        <span class="badge badge--h" onclick="window.location.href='index.html'">H</span>
+        <span class="badge badge--b" onclick="history.back()">B</span>
+      </div>
+      <button class="bottomNavBtn" onclick="window.location.href='index.html'">
+        <span>프로젝트 알아보기</span>
+        <img src="https://www.figma.com/api/mcp/asset/7561d293-b240-400a-a8ff-d579225efbb0" alt="" />
+      </button>
+      <button class="bottomNavBtn" onclick="window.location.href='camera.html'">
+        <span>점 패턴 분석하기</span>
+        <img src="https://www.figma.com/api/mcp/asset/7561d293-b240-400a-a8ff-d579225efbb0" alt="" />
+      </button>
+      <button class="bottomNavBtn" onclick="window.location.href='facemap.html'">
+        <span>얼굴 지도 살펴보기</span>
+        <img src="https://www.figma.com/api/mcp/asset/7561d293-b240-400a-a8ff-d579225efbb0" alt="" />
+      </button>
+      <button class="bottomNavBtn" onclick="window.location.href='gwansang.html'">
+        <span>관상학 알아보기</span>
+        <img src="https://www.figma.com/api/mcp/asset/7561d293-b240-400a-a8ff-d579225efbb0" alt="" />
+      </button>
+      <button class="helpBtn"><span class="helpIcon">?</span></button>
+    </nav>
 
     <canvas id="photoCanvas" style="display:none;"></canvas>
     <script src="camera.js"></script>

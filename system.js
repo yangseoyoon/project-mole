@@ -203,6 +203,56 @@ function redrawRadial() {
   });
 }
 
+// ── dotCanvas: 점 + 연결 도형 글로우 렌더링 ──
+function redrawDots() {
+  dotCtx.clearRect(0, 0, CANVAS_W, CANVAS_H);
+  if (points.length === 0) return;
+
+  const COLOR = '#ff5c34';
+
+  // 폴리곤 / 선 그리기
+  if (points.length >= 2) {
+    // 외곽 글로우 (여러 겹으로 번짐 효과)
+    [40, 25, 12].forEach((blur, i) => {
+      dotCtx.save();
+      dotCtx.shadowColor = COLOR;
+      dotCtx.shadowBlur = blur;
+      dotCtx.beginPath();
+      dotCtx.moveTo(points[0].dotX, points[0].dotY);
+      points.forEach(p => dotCtx.lineTo(p.dotX, p.dotY));
+      if (points.length >= 3) dotCtx.closePath();
+      dotCtx.strokeStyle = `rgba(255,92,52,${0.6 - i * 0.15})`;
+      dotCtx.lineWidth = 1.5;
+      dotCtx.stroke();
+      dotCtx.restore();
+    });
+
+    // 내부 반투명 채우기
+    if (points.length >= 3) {
+      dotCtx.save();
+      dotCtx.beginPath();
+      dotCtx.moveTo(points[0].dotX, points[0].dotY);
+      points.forEach(p => dotCtx.lineTo(p.dotX, p.dotY));
+      dotCtx.closePath();
+      dotCtx.fillStyle = 'rgba(255,92,52,0.12)';
+      dotCtx.fill();
+      dotCtx.restore();
+    }
+  }
+
+  // 점 그리기 (글로우 포함)
+  points.forEach(p => {
+    dotCtx.save();
+    dotCtx.shadowColor = COLOR;
+    dotCtx.shadowBlur = 18;
+    dotCtx.beginPath();
+    dotCtx.arc(p.dotX, p.dotY, 5, 0, Math.PI * 2);
+    dotCtx.fillStyle = COLOR;
+    dotCtx.fill();
+    dotCtx.restore();
+  });
+}
+
 // ── 자유 클릭: 클릭 위치에 점 표시, 판정은 그리드 칸으로 ──
 const cellW = CANVAS_W / GRID_COLS;
 const cellH = CANVAS_H / GRID_ROWS;
@@ -231,15 +281,7 @@ grid.addEventListener('click', (e) => {
   const radial = drawRadialPoint(angle, radius);
   points.push({ x, y, px: radial.px, py: radial.py, dotX: clickX, dotY: clickY });
   redrawRadial();
-
-  // 클릭한 정확한 위치에 점 표시
-  dotCtx.beginPath();
-  dotCtx.arc(clickX, clickY, 5, 0, Math.PI * 2);
-  dotCtx.fillStyle = '#ff5c34';
-  dotCtx.fill();
-  dotCtx.strokeStyle = 'white';
-  dotCtx.lineWidth = 1.5;
-  dotCtx.stroke();
+  redrawDots();
 });
 
 // ── 줌 버튼 ──
@@ -290,3 +332,10 @@ function analyzePattern() {
 }
 
 document.getElementById('analyzeBtn').addEventListener('click', analyzePattern);
+
+// ── 다시찍기: 점 초기화 ──
+document.getElementById('resetBtn').addEventListener('click', () => {
+  points.length = 0;
+  redrawDots();
+  redrawRadial();
+});

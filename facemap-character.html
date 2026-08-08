@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>얼굴 지도 : Character | DOT SHIFT</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <link rel="stylesheet" href="nav.css" />
+    <link rel="stylesheet" href="facemap.css" />
+  </head>
+  <body>
+
+    <!-- 상단 네비게이션 바 -->
+    <nav class="topNav">
+      <span class="navLeft">PROJECT: DOT SHIFT</span>
+      <div class="navCenter">
+        <svg width="35" height="7" viewBox="0 0 35 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="3.5" cy="3.5" r="3.5" fill="black" />
+          <circle cx="17.5" cy="3.5" r="3.5" fill="black" />
+          <circle cx="31.5" cy="3.5" r="3.5" fill="black" />
+        </svg>
+      </div>
+      <span class="navRight">Everything starts from a dot</span>
+    </nav>
+
+    <!-- 메인 콘텐츠 -->
+    <div class="faceMapPage">
+
+      <!-- 얼굴 지도 이미지 + 파란 오버레이 -->
+      <div class="faceMapBg">
+        <img class="faceMapImg" src="https://www.figma.com/api/mcp/asset/61d23ee4-86e9-4510-9a1a-4c0a6639bd49" alt="" />
+        <div class="faceMapOverlay" style="background:#3a7dea;"></div>
+      </div>
+
+      <!-- 우측 노란 패널 + 세로 텍스트 -->
+      <div class="rightPanel">
+        <div class="verticalText" style="color:#5e9bff;">ICONIC &amp; CHARMING POINT</div>
+      </div>
+
+      <!-- 설명 텍스트 (우측 상단) -->
+      <div class="descText">
+        <p class="descTitle">아이코닉함과 매력 포인트</p>
+        <p class="descBody">현대에 들어서 점은 미신적인 의미를 탈피하고, 개인의 매력 포인트로 완전히 재정의되었다.</p>
+      </div>
+
+      <!-- 왼쪽 범례 -->
+      <div class="legendCircle" style="top:64.75px; --legend-hover-w:330px;" onclick="window.location.href='facemap.html'">
+        <span class="legend-c" style="color:#fb6d4b;">C</span><span class="legend-label">elebrity</span>
+      </div>
+      <div class="legendCircle" style="top:199.75px; --legend-hover-w:346px;">
+        <span class="legend-c" style="color:#5e9bff;">C</span><span class="legend-label">haracter</span>
+      </div>
+      <div class="legendCircle" style="top:334.75px; --legend-hover-w:292px;">
+        <span class="legend-c" style="color:#ff53cb;">C</span><span class="legend-label">ustom</span>
+      </div>
+
+      <!-- 얼굴 위 점 버튼들 -->
+      <!-- Frame408: 오토레이니 -->
+      <button class="dotBtn" data-profile="otorainy" style="left:1103.58px; top:562.09px;">
+        <img src="https://www.figma.com/api/mcp/asset/175eec2d-1f19-4aef-a2f3-c14faa21b61a" alt="" />
+      </button>
+      <!-- Frame411: 코하쿠 -->
+      <button class="dotBtn" data-profile="kohaku" style="left:1077.16px; top:934.09px;">
+        <img src="https://www.figma.com/api/mcp/asset/767d32a4-c3ec-42db-9987-75933e38d2d6" alt="" />
+      </button>
+      <!-- Frame412: 시즈쿠 -->
+      <button class="dotBtn" data-profile="shizuku" style="left:840px; top:934.09px;">
+        <img src="https://www.figma.com/api/mcp/asset/96be63e9-36d5-4363-a462-f401616271cc" alt="" />
+      </button>
+      <!-- Frame409: 힘멜 -->
+      <button class="dotBtn" data-profile="himmel" style="left:1206px; top:477.58px;">
+        <img src="https://www.figma.com/api/mcp/asset/7bcfad09-4f21-400b-a6b5-865f68d5f32b" alt="" />
+      </button>
+      <!-- Frame410: 토모에 -->
+      <button class="dotBtn" data-profile="tomoe" style="left:1268.58px; top:495.79px;">
+        <img src="https://www.figma.com/api/mcp/asset/64d515a6-5d53-48aa-a7c0-1bfb074cee8e" alt="" />
+      </button>
+      <!-- Frame413: 토우야 -->
+      <button class="dotBtn" data-profile="touya" style="left:1250.37px; top:469.37px;">
+        <img src="https://www.figma.com/api/mcp/asset/3b327ed7-6d52-4b02-bf1b-4182dcb3baab" alt="" />
+      </button>
+      <!-- Frame416: 사쿠사 (클러스터) -->
+      <button class="dotBtn" data-profile="sakusa" style="left:494px; top:387.09px; width:96px; height:66px; overflow:hidden;">
+        <img style="position:absolute; left:50px; top:29.58px; width:36.42px; height:36.42px;" src="https://www.figma.com/api/mcp/asset/5e6cb8d0-1a40-4dc4-9509-f4ae16e581d4" alt="" />
+        <img style="position:absolute; left:8px; top:-6.84px; width:36.42px; height:36.42px;" src="https://www.figma.com/api/mcp/asset/5e6cb8d0-1a40-4dc4-9509-f4ae16e581d4" alt="" />
+      </button>
+
+      <!-- 프로필 말풍선 (공유) -->
+      <div class="profile-bubble" id="profileBubble">
+        <div class="bubble-photo-wrap">
+          <img id="bubblePhoto" src="" alt="" />
+        </div>
+        <div class="bubble-text">
+          <p id="bubbleName" class="bubble-name"></p>
+          <p id="bubbleDesc" class="bubble-desc"></p>
+        </div>
+      </div>
+
+    </div>
+
+    <script>
+      const PROFILES = {
+        sakusa:   { name: 'Kiyoomi Sakusa',   desc: '일본의 애니메이션 · 만화 <하이큐!!>의 등장인물',                                        photo: 'https://www.figma.com/api/mcp/asset/2f8b5708-0187-48b6-8969-5d246596f010' },
+        otorainy: { name: 'Oto Rainy',        desc: '허블사무소 소속 5인 버츄얼 밴드 아이돌 그룹 스코시즘의 멤버이자 버츄얼 유튜버',             photo: 'https://www.figma.com/api/mcp/asset/6f604cf8-6820-461f-a022-b179b6054209' },
+        himmel:   { name: 'Himmel',           desc: '일본의 판타지 만화 <장송의 프리렌>의 등장인물',                                           photo: 'https://www.figma.com/api/mcp/asset/7ba7c5a5-982e-4ae3-a5b1-ccce927aa1aa' },
+        tomoe:    { name: 'Tomie',            desc: '일본의 만화작가 이토준지의 대표작 <토미에 시리즈>의 등장인물',                              photo: 'https://www.figma.com/api/mcp/asset/86dd1d22-375d-4274-9598-1496c9ae7dc1' },
+        touya:    { name: 'Toya Aoyagi',      desc: '게임 <프로젝트 세카이 컬러풀 스테이지! feat.하츠네미쿠>의 등장인물',                      photo: 'https://www.figma.com/api/mcp/asset/1ab83579-4a1e-4b82-b18c-6693278a6994' },
+        kohaku:   { name: 'Ichimura Kohaku',  desc: '일본의 순정만화 <아름다운 초저녁달>의 등장인물',                                          photo: 'https://www.figma.com/api/mcp/asset/dc805848-56cc-44b6-8147-5dc6d5cacebb' },
+        shizuku:  { name: 'Shizuku Hinomori', desc: '게임 <프로젝트 세카이 컬러풀 스테이지! feat.하츠네미쿠>의 등장인물',                      photo: 'https://www.figma.com/api/mcp/asset/09b28ba8-f9fc-4781-827a-563b49c1c33d' },
+      };
+
+      const bubble  = document.getElementById('profileBubble');
+      const bPhoto  = document.getElementById('bubblePhoto');
+      const bName   = document.getElementById('bubbleName');
+      const bDesc   = document.getElementById('bubbleDesc');
+      const page    = document.querySelector('.faceMapPage');
+      let activeDot = null;
+
+      document.querySelectorAll('[data-profile]').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          if (activeDot === btn && bubble.classList.contains('active')) {
+            bubble.classList.remove('active');
+            activeDot = null;
+            return;
+          }
+          activeDot = btn;
+          const p = PROFILES[btn.dataset.profile];
+          bPhoto.src        = p.photo;
+          bName.textContent = p.name;
+          bDesc.textContent = p.desc;
+
+          const BUBBLE_W = 436, BUBBLE_H = 156;
+          const btnRect  = btn.getBoundingClientRect();
+          const pageRect = page.getBoundingClientRect();
+          const dotCx    = btnRect.left - pageRect.left + btnRect.width / 2;
+          const dotTop   = btnRect.top  - pageRect.top;
+
+          let left = dotCx - BUBBLE_W / 2;
+          let top  = dotTop - BUBBLE_H - 18;
+
+          left = Math.max(8, Math.min(left, pageRect.width - BUBBLE_W - 8));
+          if (top < 8) top = dotTop + btnRect.height + 18;
+
+          bubble.style.left = left + 'px';
+          bubble.style.top  = top  + 'px';
+          bubble.classList.add('active');
+        });
+      });
+
+      document.addEventListener('click', () => {
+        bubble.classList.remove('active');
+        activeDot = null;
+      });
+    </script>
+
+    <!-- 하단 네비게이션 바 -->
+    <nav class="bottomNav">
+      <div class="bottomLogo">DOT SHIFT</div>
+      <div class="navBadges">
+        <span class="badge badge--h" onclick="window.location.href='index.html'">H</span>
+        <span class="badge badge--b" onclick="history.back()">B</span>
+      </div>
+      <button class="bottomNavBtn" onclick="window.location.href='index.html'">
+        <span>프로젝트 알아보기</span>
+        <img src="https://www.figma.com/api/mcp/asset/7561d293-b240-400a-a8ff-d579225efbb0" alt="" />
+      </button>
+      <button class="bottomNavBtn" onclick="window.location.href='camera.html'">
+        <span>점 패턴 분석하기</span>
+        <img src="https://www.figma.com/api/mcp/asset/7561d293-b240-400a-a8ff-d579225efbb0" alt="" />
+      </button>
+      <button class="bottomNavBtn" onclick="window.location.href='facemap.html'">
+        <span>얼굴 지도 살펴보기</span>
+        <img src="https://www.figma.com/api/mcp/asset/7561d293-b240-400a-a8ff-d579225efbb0" alt="" />
+      </button>
+      <button class="bottomNavBtn" onclick="window.location.href='gwansang.html'">
+        <span>관상학 알아보기</span>
+        <img src="https://www.figma.com/api/mcp/asset/7561d293-b240-400a-a8ff-d579225efbb0" alt="" />
+      </button>
+      <button class="helpBtn"><span class="helpIcon">?</span></button>
+    </nav>
+
+  </body>
+</html>
