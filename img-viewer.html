@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+  <head>
+    <style>
+      body {
+        background: #111;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 8px;
+      }
+      div {
+        text-align: center;
+        color: white;
+        font: 11px monospace;
+      }
+      img {
+        display: block;
+        width: 150px;
+        height: auto;
+        border: 1px solid #444;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      const files = Array.from(
+        { length: 20 },
+        (_, i) => `images/gwansang/raw_${i + 1}.png`,
+      );
+      files.forEach((f) => {
+        const d = document.createElement('div');
+        const name = f.split('/').pop();
+        d.innerHTML = `<img src="${f}" onerror="this.style.border='2px solid red'"><br>${name}`;
+        document.body.appendChild(d);
+      });
+    </script>
+  </body>
+</html>

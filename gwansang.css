@@ -43,7 +43,9 @@ body {
   position: absolute;
   background: #000;
   overflow: hidden;
-  z-index: 1;
+  z-index: 20;
+  cursor: pointer;
+  border: 1px solid #000;
 }
 
 .gwPhoto img {
@@ -51,6 +53,9 @@ body {
   display: block;
   max-width: none;
 }
+
+.gwPhoto:hover .card-default { opacity: 0; }
+.gwPhoto:hover .card-hover  { opacity: 1; }
 
 /* 모든 크롭: 정확히 130.5×130.5 */
 .gwCrop {
@@ -117,7 +122,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.15s ease;
 }
 
 /* hover 상태: 흰 배경 + 다이어그램 */
@@ -129,7 +134,7 @@ body {
   align-items: center;
   justify-content: center;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.15s ease;
 }
 
 .portrait-card:hover .card-default {

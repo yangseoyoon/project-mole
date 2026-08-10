@@ -1,0 +1,926 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>점과 관상 | DOT SHIFT</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+    />
+    <link rel="stylesheet" href="nav.css" />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: 'Pretendard', sans-serif;
+        overflow: hidden;
+        width: 100vw;
+        height: 100vh;
+        background: #e9f056;
+      }
+      .jeomPage {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+      }
+      /* 화살표+텍스트 컨테이너 */
+      .ja {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: visible;
+      }
+      /* 회전 래퍼: img만 포함 (텍스트는 별도 .jt 요소로 분리) */
+      .jr {
+        position: relative;
+        flex-shrink: 0;
+      }
+      .jr img {
+        display: block;
+        max-width: none;
+        height: 22.092px;
+      }
+      /* 독립 텍스트 레이블 */
+      .jt {
+        position: absolute;
+        font-family: 'Pretendard', sans-serif;
+        font-weight: 200;
+        font-size: 20px;
+        white-space: nowrap;
+        line-height: 1;
+        transform-origin: left center;
+      }
+      .jt-w {
+        color: white;
+      }
+      .jt-b {
+        color: black;
+      }
+      /* 폴더 */
+      .jeomFolder {
+        position: absolute;
+        width: 133px;
+        height: 106px;
+      }
+      .jeomFolder .f-base {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      .jeomFolder .f-body {
+        position: absolute;
+        top: 19.61%;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: linear-gradient(
+          180deg,
+          #f14217 0%,
+          #ff5c34 36.538%,
+          #ff8868 86.538%,
+          #f84f25 100%
+        );
+        border: 0.5px solid #000;
+        border-radius: 5px;
+      }
+      .jeomFolder .f-mask {
+        position: absolute;
+        inset: 0 0 0.37% 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      .jeomFolder .f-label {
+        position: absolute;
+        bottom: -13px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-family: 'Pretendard', sans-serif;
+        font-weight: 600;
+        font-size: 24px;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        white-space: nowrap;
+        line-height: 1;
+        transition: opacity 0.2s ease;
+      }
+      /* ── 폴더 호버 상태 ── */
+      .jeomFolder {
+        cursor: pointer;
+        overflow: visible;
+      }
+      .jeomFolder .f-base,
+      .jeomFolder .f-body,
+      .jeomFolder .f-mask {
+        transition: opacity 0.2s ease;
+      }
+      .jeomFolder .f-hover {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 202px;
+        height: 151px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease;
+      }
+      .jeomFolder:hover {
+        z-index: 50;
+      }
+      .jeomFolder:hover .f-base,
+      .jeomFolder:hover .f-body,
+      .jeomFolder:hover .f-mask {
+        opacity: 0;
+      }
+      /* .f-label: hover에도 유지 */
+      .jeomFolder:hover .f-hover {
+        opacity: 1;
+      }
+      /* f-hover 내부 레이어 (기준: 202×151px) */
+      .fh-folder3d {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      .fh-folder3d img {
+        display: block;
+        max-width: none;
+      }
+      .fh-ellipse {
+        position: absolute;
+        top: -18.54%;
+        left: 29.7%;
+        right: -4.46%;
+        bottom: 18.54%;
+        transform: rotate(180deg) scaleX(-1);
+      }
+      .fh-ellipse img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+      .fh-label {
+        position: absolute;
+        top: 4.64%;
+        bottom: 88.08%;
+        display: flex;
+        align-items: center;
+        font-family: 'Pretendard', sans-serif;
+        font-weight: 600;
+        font-size: 16px;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        white-space: nowrap;
+        overflow: visible;
+      }
+      .fh-grad {
+        display: none;
+      }
+      .fh-dots {
+        display: none;
+      }
+
+      /* ── 상세 패널 ── */
+      .detail-panel {
+        position: absolute;
+        right: 162px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 935px;
+        height: 749px;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid #000;
+        overflow: hidden;
+        z-index: 200;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease;
+      }
+      .detail-panel.is-open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .dp-portrait {
+        position: absolute;
+        right: -1px;
+        top: calc(50% + 62px);
+        transform: translateY(-50%);
+        width: 330px;
+        height: 893px;
+        overflow: hidden;
+      }
+      .dp-portrait img {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 194%;
+        height: 94.25%;
+        max-width: none;
+        display: block;
+      }
+      .dp-dots {
+        position: absolute;
+        right: -15px;
+        top: 72px;
+        width: 49px;
+        height: 9px;
+      }
+      .dp-dots img {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      .dp-line {
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 0;
+        border-top: 1px solid #000;
+      }
+      .dp-sub {
+        position: absolute;
+        left: 29px;
+        top: 22px;
+        transform: translateY(-50%);
+        font-family: 'Pretendard', sans-serif;
+        font-weight: 600;
+        font-size: 22px;
+        color: #000;
+        white-space: nowrap;
+        line-height: 44px;
+      }
+      .dp-title {
+        position: absolute;
+        left: 29px;
+        top: 82.5px;
+        transform: translateY(-50%);
+        font-family: 'Pretendard', sans-serif;
+        font-weight: 600;
+        font-size: 32px;
+        color: #ea5c3a;
+        white-space: nowrap;
+        line-height: 44px;
+      }
+      .dp-body {
+        position: absolute;
+        left: 29px;
+        top: 155px;
+        width: 504px;
+        height: 470px;
+        font-family: 'Pretendard', sans-serif;
+        font-weight: 500;
+        font-size: 20px;
+        color: #000;
+        line-height: 32px;
+        overflow: hidden;
+      }
+      .dp-body p {
+        margin: 0;
+      }
+      .dp-close {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 64px;
+        background: transparent;
+        border: none;
+        border-top: 1px solid #000;
+        font-family: 'Pretendard', sans-serif;
+        font-weight: 500;
+        font-size: 26px;
+        color: #000;
+        cursor: pointer;
+        width: 100%;
+      }
+      .dp-close:hover {
+        background: rgba(0, 0, 0, 0.05);
+      }
+
+      /* 배경 제외 전체 콘텐츠 레이어 */
+      .content-layer {
+        position: absolute;
+        inset: 0;
+        overflow: visible;
+        transform: translateX(80px);
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="topNav">
+      <span class="navLeft">PROJECT: DOT SHIFT</span>
+      <div class="navCenter">
+        <svg
+          width="35"
+          height="7"
+          viewBox="0 0 35 7"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <circle cx="3.5" cy="3.5" r="3.5" fill="black" />
+          <circle cx="17.5" cy="3.5" r="3.5" fill="black" />
+          <circle cx="31.5" cy="3.5" r="3.5" fill="black" />
+        </svg>
+      </div>
+      <span class="navRight">Everything starts from a dot</span>
+    </nav>
+
+    <div class="jeomPage">
+      <!-- 배경 -->
+      <div
+        style="
+          position: absolute;
+          left: -817px;
+          top: -428px;
+          width: 3574px;
+          height: 2012px;
+        "
+      >
+        <img
+          src="images/jeom/bg-face.png"
+          alt=""
+          style="
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+          "
+        />
+      </div>
+
+      <div class="content-layer">
+        <!-- ── 화살표 9개 (텍스트 없음) ── -->
+
+        <!-- Arrow 17 (7.75°) -->
+        <div
+          class="ja"
+          style="left: 66px; top: 217px; width: 397px; height: 54px"
+        >
+          <div class="jr" style="transform: rotate(7.75deg)">
+            <img src="images/jeom/arrow-17.png" style="width: 402.156px" />
+          </div>
+        </div>
+
+        <!-- Arrow 18 (69.16°) -->
+        <div
+          class="ja"
+          style="
+            left: calc(16.67% - 16px);
+            top: 205px;
+            width: 142px;
+            height: 373px;
+          "
+        >
+          <div class="jr" style="transform: rotate(69.16deg)">
+            <img src="images/jeom/arrow-18.png" style="width: 400.615px" />
+          </div>
+        </div>
+
+        <!-- Arrow 19 (131.8°) -->
+        <div
+          class="ja"
+          style="
+            left: calc(8.33% + 28px);
+            top: 533px;
+            width: 267px;
+            height: 299px;
+          "
+        >
+          <div class="jr" style="transform: rotate(131.8deg)">
+            <img src="images/jeom/arrow-19.png" style="width: 402.156px" />
+          </div>
+        </div>
+
+        <!-- Arrow 20 (23.39°) -->
+        <div
+          class="ja"
+          style="
+            left: calc(8.33% + 65.28px);
+            top: 721.28px;
+            width: 439px;
+            height: 190px;
+          "
+        >
+          <div class="jr" style="transform: rotate(23.39deg)">
+            <img src="images/jeom/arrow-20.png" style="width: 479.483px" />
+          </div>
+        </div>
+
+        <!-- Arrow 21 (-50.6°) -->
+        <div
+          class="ja"
+          style="
+            left: calc(25% + 136px);
+            top: 622px;
+            width: 249px;
+            height: 303px;
+          "
+        >
+          <div class="jr" style="transform: rotate(-50.6deg)">
+            <img src="images/jeom/arrow-21.png" style="width: 393.789px" />
+          </div>
+        </div>
+
+        <!-- Arrow 22 (37.99°) -->
+        <div
+          class="ja"
+          style="
+            left: calc(41.67% + 22px);
+            top: 647px;
+            width: 315px;
+            height: 246px;
+          "
+        >
+          <div class="jr" style="transform: rotate(37.99deg)">
+            <img src="images/jeom/arrow-22.png" style="width: 401.176px" />
+          </div>
+        </div>
+
+        <!-- Arrow 23 (-46.98°) -->
+        <div
+          class="ja"
+          style="
+            left: calc(50% + 145px);
+            top: 579px;
+            width: 293px;
+            height: 314px;
+          "
+        >
+          <div class="jr" style="transform: rotate(-46.98deg)">
+            <img src="images/jeom/arrow-23.png" style="width: 430.971px" />
+          </div>
+        </div>
+
+        <!-- Arrow 24 (24.31°) -->
+        <div
+          class="ja"
+          style="
+            left: calc(66.67% + 66px);
+            top: 578px;
+            width: 394px;
+            height: 178px;
+          "
+        >
+          <div class="jr" style="transform: rotate(24.31deg)">
+            <img src="images/jeom/arrow-24.png" style="width: 433.842px" />
+          </div>
+        </div>
+
+        <!-- Arrow 25 (137.9°) -->
+        <div
+          class="ja"
+          style="
+            left: calc(75% + 88px);
+            top: 659px;
+            width: 259px;
+            height: 234px;
+          "
+        >
+          <div class="jr" style="transform: rotate(137.9deg)">
+            <img src="images/jeom/arrow-25.png" style="width: 350.552px" />
+          </div>
+        </div>
+
+        <!-- ── 텍스트 레이블 9개 (화살표와 독립 배치, 각자 고유 각도) ── -->
+
+        <!-- 텍스트 레이블 9개 (Figma 기준 독립 배치) -->
+        <div
+          class="jt jt-w"
+          style="
+            left: calc(25% - 5px);
+            top: 281.65px;
+            transform: rotate(7.13deg);
+          "
+        >
+          관상은 꼴을 보는 것
+        </div>
+        <div
+          class="jt jt-w"
+          style="
+            left: calc(16.67% + 122px);
+            top: 646.62px;
+            transform: rotate(68.89deg);
+          "
+        >
+          관상은 과학이다!
+        </div>
+        <div
+          class="jt jt-b"
+          style="left: 66px; top: 893.87px; transform: rotate(-45deg)"
+        >
+          분수에 맞게 살아라?
+        </div>
+        <div
+          class="jt jt-w"
+          style="
+            left: calc(33.33% + 27px);
+            top: 949.73px;
+            transform: rotate(15.55deg);
+          "
+        >
+          그릇보다 큰 복은 오래가지 않는다
+        </div>
+        <div
+          class="jt jt-b"
+          style="
+            left: calc(41.67% + 64px);
+            top: 570.66px;
+            transform: rotate(-50.74deg);
+          "
+        >
+          인간 = 소우주?
+        </div>
+        <div
+          class="jt jt-w"
+          style="
+            left: calc(58.33% + 17px);
+            top: 958.18px;
+            transform: rotate(32.61deg);
+          "
+        >
+          자연과 신체의 대응체계 (上)
+        </div>
+        <div
+          class="jt jt-b"
+          style="
+            left: calc(66.67% + 115px);
+            top: 492.09px;
+            transform: rotate(-48.15deg);
+          "
+        >
+          자연과 신체의 대응체계 (下)
+        </div>
+        <div
+          class="jt jt-b"
+          style="
+            left: calc(83.33% + 140px);
+            top: 778.36px;
+            transform: rotate(22.64deg);
+          "
+        >
+          복점? 흉점?
+        </div>
+        <div
+          class="jt jt-b"
+          style="
+            left: calc(66.67% + 103.93px);
+            top: 958.39px;
+            transform: rotate(-42.91deg);
+          "
+        >
+          관상은 끊임없이 변한다
+        </div>
+
+        <!-- ── 폴더 아이콘 9개 ── -->
+
+        <!-- 폴더1: "관상은 꼴을 보는 것" -->
+        <div
+          class="jeomFolder"
+          style="left: 89px; top: 152px"
+          onclick="openPanel('panel1')"
+          role="button"
+          tabindex="0"
+        >
+          <img class="f-base" src="images/jeom/folder-base.svg" alt="" />
+          <div class="f-body"></div>
+          <img class="f-mask" src="images/jeom/folder-mask.svg" alt="" /><span
+            class="f-label"
+            >.</span
+          >
+          <div class="f-hover">
+            <div class="fh-ellipse">
+              <img src="images/jeom/folder1-ellipse.svg" alt="" />
+            </div>
+            <div class="fh-folder3d">
+              <img src="images/jeom/file_open.png" alt="" />
+            </div>
+            <div class="fh-label" style="left: 39.11%; right: 0">
+              관상은 꼴을 보는 것
+            </div>
+            <div class="fh-grad"></div>
+            <div class="fh-dots" style="left: 31.19%; right: 65.35%">.</div>
+          </div>
+        </div>
+
+        <!-- 폴더2: "관상은 과학이다!" -->
+        <div class="jeomFolder" style="left: calc(8.33% + 121px); top: 334px">
+          <img class="f-base" src="images/jeom/folder-base.svg" alt="" />
+          <div class="f-body"></div>
+          <img class="f-mask" src="images/jeom/folder-mask.svg" alt="" /><span
+            class="f-label"
+            >..</span
+          >
+          <div class="f-hover">
+            <div class="fh-ellipse">
+              <img src="images/jeom/folder2-ellipse.svg" alt="" />
+            </div>
+            <div class="fh-folder3d">
+              <img src="images/jeom/file_open.png" alt="" />
+            </div>
+            <div class="fh-label" style="left: 43.07%; right: 4.45%">
+              관상은 과학이다!
+            </div>
+            <div class="fh-grad"></div>
+            <div class="fh-dots" style="left: 29.21%; right: 63.86">..</div>
+          </div>
+        </div>
+
+        <!-- 폴더3: "분수에 맞게 살아라?" -->
+        <div class="jeomFolder" style="left: calc(8.33% + 77px); top: 592px">
+          <img class="f-base" src="images/jeom/folder-base.svg" alt="" />
+          <div class="f-body"></div>
+          <img class="f-mask" src="images/jeom/folder-mask.svg" alt="" /><span
+            class="f-label"
+            >...</span
+          >
+          <div class="f-hover">
+            <div class="fh-ellipse">
+              <img src="images/jeom/folder3-ellipse.svg" alt="" />
+            </div>
+            <div class="fh-folder3d">
+              <img src="images/jeom/file_open.png" alt="" />
+            </div>
+            <div class="fh-label" style="left: 38.12%; right: -0.99%">
+              분수에 맞게 살아라?
+            </div>
+            <div class="fh-grad"></div>
+            <div class="fh-dots" style="left: 27.72%; right: 62.38%">...</div>
+          </div>
+        </div>
+
+        <!-- 폴더4: "그릇보다 큰 복은 오래가지 않는다" -->
+        <div class="jeomFolder" style="left: calc(25% + 10px); top: 806px">
+          <img class="f-base" src="images/jeom/folder-base.svg" alt="" />
+          <div class="f-body"></div>
+          <img class="f-mask" src="images/jeom/folder-mask.svg" alt="" /><span
+            class="f-label"
+            >....</span
+          >
+          <div class="f-hover">
+            <div class="fh-ellipse">
+              <img src="images/jeom/folder4-ellipse.svg" alt="" />
+            </div>
+            <div class="fh-folder3d">
+              <img src="images/jeom/file_open.png" alt="" />
+            </div>
+            <div class="fh-label" style="left: 17.82%; right: -21.29%">
+              그릇보다 큰 복은 오래가지 않는다
+            </div>
+            <div class="fh-grad"></div>
+            <div class="fh-dots" style="left: 26.24%; right: 60.4%">....</div>
+          </div>
+        </div>
+
+        <!-- 폴더5: "인간 = 소우주?" -->
+        <div
+          class="jeomFolder"
+          style="left: calc(33.33% + 36px); top: 682px"
+          onclick="openPanel('panel5')"
+          role="button"
+          tabindex="0"
+        >
+          <img class="f-base" src="images/jeom/folder-base.svg" alt="" />
+          <div class="f-body"></div>
+          <img class="f-mask" src="images/jeom/folder-mask.svg" alt="" /><span
+            class="f-label"
+            >.....</span
+          >
+          <div class="f-hover">
+            <div class="fh-ellipse">
+              <img src="images/jeom/folder5-ellipse.svg" alt="" />
+            </div>
+            <div class="fh-folder3d">
+              <img src="images/jeom/file_open.png" alt="" />
+            </div>
+            <div class="fh-label" style="left: 45.55%; right: 6.93%">
+              인간 = 소우주?
+            </div>
+            <div class="fh-grad"></div>
+            <div class="fh-dots" style="left: 24.75%; right: 58.91%">.....</div>
+          </div>
+        </div>
+
+        <!-- 폴더6: "자연과 신체의 대응체계 (上)" -->
+        <div class="jeomFolder" style="left: calc(41.67% + 147px); top: 805px">
+          <img class="f-base" src="images/jeom/folder-base.svg" alt="" />
+          <div class="f-body"></div>
+          <img class="f-mask" src="images/jeom/folder-mask.svg" alt="" /><span
+            class="f-label"
+            >......</span
+          >
+          <div class="f-hover">
+            <div class="fh-ellipse">
+              <img src="images/jeom/folder6-ellipse.svg" alt="" />
+            </div>
+            <div class="fh-folder3d">
+              <img src="images/jeom/file_open.png" alt="" />
+            </div>
+            <div class="fh-label" style="left: 25.25%; right: -13.37%">
+              자연과 신체의 대응체계 (上)
+            </div>
+            <div class="fh-grad"></div>
+            <div class="fh-dots" style="left: 14.85%; right: 65.35%">
+              ......
+            </div>
+          </div>
+        </div>
+
+        <!-- 폴더7: "자연과 신체의 대응체계 (下)" -->
+        <div class="jeomFolder" style="left: calc(58.33% + 120px); top: 638px">
+          <img class="f-base" src="images/jeom/folder-base.svg" alt="" />
+          <div class="f-body"></div>
+          <img class="f-mask" src="images/jeom/folder-mask.svg" alt="" /><span
+            class="f-label"
+            >.......</span
+          >
+          <div class="f-hover">
+            <div class="fh-ellipse">
+              <img src="images/jeom/folder7-ellipse.svg" alt="" />
+            </div>
+            <div class="fh-folder3d">
+              <img src="images/jeom/file_open.png" alt="" />
+            </div>
+            <div class="fh-label" style="left: 25.25%; right: -13.37%">
+              자연과 신체의 대응체계 (下)
+            </div>
+            <div class="fh-grad"></div>
+            <div class="fh-dots" style="left: 21.29%; right: 55.94%">
+              .......
+            </div>
+          </div>
+        </div>
+
+        <!-- 폴더8: "복점? 흉점?" -->
+        <div class="jeomFolder" style="left: calc(75% + 65px); top: 604px">
+          <img class="f-base" src="images/jeom/folder-base.svg" alt="" />
+          <div class="f-body"></div>
+          <img class="f-mask" src="images/jeom/folder-mask.svg" alt="" /><span
+            class="f-label"
+            >........</span
+          >
+          <div class="f-hover">
+            <div class="fh-ellipse">
+              <img src="images/jeom/folder8-ellipse.svg" alt="" />
+            </div>
+            <div class="fh-folder3d">
+              <img src="images/jeom/file_open.png" alt="" />
+            </div>
+            <div class="fh-label" style="left: 50.5%; right: 11.88%">
+              복점? 흉점?
+            </div>
+            <div class="fh-grad"></div>
+            <div class="fh-dots" style="left: 19.8%; right: 53.96%">
+              ........
+            </div>
+          </div>
+        </div>
+
+        <!-- 폴더9: "관상은 끊임없이 변한다" -->
+        <div class="jeomFolder" style="left: calc(75% + 123px); top: 788px">
+          <img class="f-base" src="images/jeom/folder-base.svg" alt="" />
+          <div class="f-body"></div>
+          <img class="f-mask" src="images/jeom/folder-mask.svg" alt="" /><span
+            class="f-label"
+            >.........</span
+          >
+          <div class="f-hover">
+            <div class="fh-ellipse">
+              <img src="images/jeom/folder9-ellipse.svg" alt="" />
+            </div>
+            <div class="fh-folder3d">
+              <img src="images/jeom/file_open.png" alt="" />
+            </div>
+            <div class="fh-label" style="left: 33.17%; right: -5.45%">
+              관상은 끊임없이 변한다
+            </div>
+            <div class="fh-grad"></div>
+            <div class="fh-dots" style="left: 18.32%; right: 52.48%">
+              .........
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /content-layer -->
+
+      <!-- ── 상세 패널: 인간 = 소우주? ── -->
+      <div class="detail-panel" id="panel5">
+        <div class="dp-portrait" style="top:-51px; transform:none; width:350px; height:799px;">
+          <img
+            src="images/jeom/popup-portrait2.png"
+            alt=""
+            style="width:200.11%; height:115.39%; top:0; left:-0.05%;"
+          />
+        </div>
+        <div class="dp-dots">
+          <img src="images/jeom/popup-dots.png" alt="" />
+        </div>
+        <div class="dp-line" style="top: 49px"></div>
+        <p class="dp-sub">About...</p>
+        <div class="dp-line" style="top: 119px"></div>
+        <h2 class="dp-title">인간 = 소우주?</h2>
+        <div class="dp-body">
+          <p>
+            관상학에서는 우주 안에 존재하는 지구에 살아가는 인간 또한 작은 우주,
+            즉 소우주라고 여긴다. 따라서 관상학이란 새로운 것을 창조한 학문이
+            아니라 이미 존재하는 자연을 그대로 사람에게 대입해 만들어낸 것이다.
+            사람의 형태가 자연과 닮을 수록 잘 생긴 것이고, 자연과 멀어질 수록
+            그렇지 않게 생긴 것이다.
+          </p>
+        </div>
+        <button class="dp-close" onclick="closePanel('panel5')">닫기</button>
+      </div>
+
+      <!-- ── 상세 패널: 관상은 꼴을 보는 것 ── -->
+      <div class="detail-panel" id="panel1">
+        <!-- 우측 인물 이미지 -->
+        <div class="dp-portrait">
+          <img src="images/jeom/popup-portrait.png" alt="" />
+        </div>
+        <!-- 상단 장식 점선 -->
+        <div class="dp-dots">
+          <img src="images/jeom/popup-dots.png" alt="" />
+        </div>
+        <!-- 구분선 1 -->
+        <div class="dp-line" style="top: 49px"></div>
+        <!-- 서브타이틀 -->
+        <p class="dp-sub">About...</p>
+        <!-- 구분선 2 -->
+        <div class="dp-line" style="top: 119px"></div>
+        <!-- 메인 타이틀 -->
+        <h2 class="dp-title">관상은 꼴을 보는 것</h2>
+        <!-- 본문 -->
+        <div class="dp-body">
+          <p>
+            볼 관(觀) + 꼴, 모양 상(相)으로 얼굴의 형상과 꼴을 본다는 뜻이다.
+            다만 관상은 얼굴만 보는 것이 아니라 머리끝부터 발끝까지, 행동거지를
+            포함한 사람의 전체를 읽는 것이다.
+          </p>
+          <p>&nbsp;</p>
+          <p>
+            관상학(觀相學, Physiognomy)은 겉으로 드러난 인간의 얼굴 생김새를
+            관찰하여 그 사람의 성격, 기질, 운명을 판단하려는 점(占)을 말한다. 이
+            용어는 고대 그리스어로 자연이나 본성을 의미하는 'physis'와 지식 혹은
+            판단을 의미하는 'gnomon'이 결합하여 만들어졌다. 관상은 문명이 발생한
+            시기와 비슷한 때에 생겨났고, 마의 상법으로부터 체계화되어 현재까지
+            내려오는 점술로서 역사적으로 동서양을 막론하고 고대부터 근대까지
+            인간을 이해하는 하나의 방법론으로 통용되었다. 그러나 현대 과학의
+            발달과 함께 그 타당성이 검증되지 않아 현재는 대표적인 의사과학으로
+            분류된다.
+          </p>
+        </div>
+        <!-- 닫기 버튼 -->
+        <button class="dp-close" onclick="closePanel('panel1')">닫기</button>
+      </div>
+    </div>
+
+    <!-- ── 하단 내비게이션 ── -->
+    <nav class="bottomNav">
+      <div class="bottomLogo">DOT SHIFT</div>
+      <div class="navBadges">
+        <span class="badge badge--h">H</span>
+        <span class="badge badge--b">B</span>
+      </div>
+      <a class="bottomNavBtn" href="index.html"
+        >프로젝트 알아보기<img src="images/gwansang/nav-arrow.svg" alt=""
+      /></a>
+      <a class="bottomNavBtn" href="#"
+        >점 패턴 분석하기<img src="images/gwansang/nav-arrow.svg" alt=""
+      /></a>
+      <a class="bottomNavBtn" href="#"
+        >얼굴 지도 살펴보기<img src="images/gwansang/nav-arrow.svg" alt=""
+      /></a>
+      <a class="bottomNavBtn" href="gwansang.html"
+        >관상학 알아보기<img src="images/gwansang/nav-arrow.svg" alt=""
+      /></a>
+      <button class="helpBtn"><span class="helpIcon">?</span></button>
+    </nav>
+
+    <script>
+      function openPanel(id) {
+        document.querySelectorAll('.detail-panel.is-open').forEach(function(p) {
+          p.classList.remove('is-open');
+        });
+        document.getElementById(id).classList.add('is-open');
+      }
+      function closePanel(id) {
+        document.getElementById(id).classList.remove('is-open');
+      }
+    </script>
+  </body>
+</html>
