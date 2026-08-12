@@ -1,0 +1,488 @@
+﻿<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>처첩궁 | DOT SHIFT</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <link rel="stylesheet" href="nav.css" />
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      body {
+        font-family: 'Pretendard', sans-serif;
+        background: #e9f056;
+        overflow: hidden;
+        width: 100vw;
+        height: 100vh;
+      }
+
+      .sijungDetailPage {
+        position: fixed;
+        top: 43.446px;
+        left: 0;
+        width: 1920px;
+        height: calc(1080px - 43.446px - 73px);
+        overflow: hidden;
+      }
+
+      /* ── 얼굴 사진 ── */
+      .face-wrap {
+        position: absolute;
+        width: 668.875px;
+        height: 946.134px;
+        top: calc(105.87px - 95.87px);
+        left: 50px;
+        overflow: hidden;
+      }
+      .face-wrap img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        pointer-events: none;
+      }
+
+      /* ── 번호 버튼 ── */
+      .num-btn {
+        position: absolute;
+        width: 28.824px;
+        height: 28px;
+        border: 1.5px solid #000;
+        border-radius: 100px;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Pretendard', sans-serif;
+        font-weight: 400;
+        font-size: 20px;
+        color: #000;
+        line-height: 1;
+        cursor: pointer;
+        z-index: 10;
+        text-decoration: none;
+      }
+      .num-btn:hover { background: #ff5c34; color: #fff; }
+      .num-btn.active { background: #ff5c34; color: #fff; }
+
+      /* ── 눈 확대 사진 ── */
+      .eye-wrap {
+        position: absolute;
+        left: 1374.07px;
+        top: calc(709.92px - 95.87px);
+        width: 306.973px;
+        height: 171.672px;
+        overflow: hidden;
+      }
+      .eye-wrap img {
+        position: absolute;
+        width: 316.46%;
+        height: 800.43%;
+        left: -37.82%;
+        top: -336.91%;
+        max-width: none;
+        object-fit: cover;
+        pointer-events: none;
+      }
+
+      /* ── 우측 연결선 (눈) ── */
+      .line-eye {
+        position: absolute;
+        left: 1527.56px;
+        top: calc(682.84px - 95.87px);
+        width: 0;
+        height: 218.111px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .line-eye > div {
+        transform: rotate(90deg);
+        width: 218.111px;
+        height: 0;
+        position: relative;
+      }
+      .line-eye > div img { display: block; width: 100%; }
+
+      /* ── 언더라인 ── */
+      .line-underline {
+        position: absolute;
+        left: 857.447px;
+        top: calc(766.438px - 95.87px);
+        width: 263.5px;
+        height: 0;
+      }
+      .line-underline img { display: block; width: 100%; }
+
+      /* ── 사선 데코 ── */
+      .line-diagonal {
+        position: absolute;
+        left: 913.98px;
+        top: calc(574.93px - 95.87px);
+        width: 444px;
+        height: 384.515px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .line-diagonal > div {
+        transform: rotate(-30deg);
+        width: 384.515px;
+        height: 222px;
+        position: relative;
+      }
+      .line-diagonal > div img { display: block; width: 100%; height: 100%; }
+
+      /* ── 타이틀 텍스트 ── */
+      .detail-hanja {
+        position: absolute;
+        left: 737.56px;
+        top: calc(474.19px - 95.87px);
+        transform: translateY(-50%);
+        font-family: 'Pretendard', sans-serif;
+        font-weight: 700;
+        font-size: 96px;
+        color: #000;
+        line-height: 44px;
+        white-space: nowrap;
+        display: flex;
+        align-items: baseline;
+        gap: 0;
+      }
+      .detail-hanja-sub {
+        font-size: 20px;
+        font-weight: 400;
+        margin-left: 12px;
+      }
+
+      .detail-sub {
+        position: absolute;
+        left: 737.87px;
+        top: calc(547.05px - 95.87px);
+        transform: translateY(-50%);
+        font-family: 'Pretendard', sans-serif;
+        font-weight: 400;
+        font-size: 20px;
+        color: #000;
+        line-height: 40px;
+        white-space: nowrap;
+      }
+
+      .detail-title {
+        position: absolute;
+        left: 737.87px;
+        top: calc(600.94px - 95.87px);
+        transform: translateY(-50%);
+        font-family: 'Pretendard', sans-serif;
+        font-weight: 600;
+        font-size: 32px;
+        color: #000;
+        line-height: 44px;
+        white-space: nowrap;
+      }
+
+      .detail-body1 {
+        position: absolute;
+        left: 737.97px;
+        top: calc(642.51px - 95.87px);
+        width: 465px;
+        font-family: 'Pretendard', sans-serif;
+        font-weight: 500;
+        font-size: 20px;
+        color: #000;
+        line-height: 32px;
+      }
+
+      .detail-body2 {
+        position: absolute;
+        left: 737.87px;
+        top: calc(745.51px - 95.87px);
+        width: 474.922px;
+        font-family: 'Pretendard', sans-serif;
+        font-weight: 500;
+        font-size: 20px;
+        color: #000;
+        line-height: 32px;
+      }
+
+      /* ── 다이어그램 컨테이너 ── */
+      .diag-frame {
+        position: absolute;
+        left: 1225.262px;
+        top: calc(176.902px - 95.87px);
+        width: 528.670px;
+        height: 467.795px;
+      }
+      .diag-frame > * { position: absolute; }
+
+      .diag-label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Pretendard', sans-serif;
+        font-weight: 500;
+        font-size: 18px;
+        color: #000;
+        text-align: center;
+        line-height: 32px;
+        padding: 2px;
+      }
+
+      .diag-dot {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        width: 39.284px;
+        height: 39.284px;
+        cursor: pointer;
+      }
+      .diag-dot img { width: 15px; height: 15px; display: block; flex-shrink: 0; transition: filter 0.15s ease; }
+      .diag-dot:hover img { filter: invert(44%) sepia(98%) saturate(744%) hue-rotate(345deg) brightness(102%) contrast(101%); }
+
+      .diag-tooltip {
+        position: absolute;
+        background: #fff;
+        border: 1px solid #000;
+        padding: 10px 15px;
+        width: 262px;
+        min-width: 262px;
+        max-width: 262px;
+        height: auto;
+        font-family: 'Pretendard', sans-serif;
+        font-weight: 500;
+        font-size: 18px;
+        color: #000;
+        line-height: 32px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.12s ease;
+        z-index: 100;
+        word-break: keep-all;
+        white-space: normal;
+      }
+      .diag-tooltip.show { opacity: 1; }
+
+      /* 형태 라벨 (frame 외부 좌측) */
+      .diag-label-left {
+        position: absolute;
+        left: 1225.262px;
+        top: calc(393.176px - 95.87px);
+        width: 57.673px;
+        height: 27.234px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Pretendard', sans-serif;
+        font-weight: 500;
+        font-size: 18px;
+        color: #000;
+        text-align: center;
+        line-height: 32px;
+        padding: 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="topNav">
+      <span class="navLeft">PROJECT: DOT SHIFT</span>
+      <span class="navRight">Everything starts from a dot</span>
+    </nav>
+
+    <div class="sijungDetailPage page-scale">
+
+      <!-- 얼굴 사진 -->
+      <div class="face-wrap">
+        <img src="images/sijung/face.png" alt="얼굴 사진" />
+      </div>
+
+      <!-- 눈 확대 -->
+      <div class="eye-wrap">
+        <img src="images/sijung/face.png" alt="눈 확대" />
+      </div>
+
+      <!-- 눈 연결선 -->
+      <div class="line-eye">
+        <div><img src="images/sijung/line-eye-connect.svg" alt="" /></div>
+      </div>
+
+      <!-- 언더라인 -->
+      <div class="line-underline">
+        <img src="images/sijung/line-underline.svg" alt="" />
+      </div>
+
+      <!-- 사선 데코 라인 -->
+      <div class="line-diagonal">
+        <div><img src="images/sijung/line-diagonal.svg" alt="" /></div>
+      </div>
+
+      <!-- 타이틀 -->
+      <p class="detail-hanja">妻妾宮 <span class="detail-hanja-sub">아내 처 • 첩 첩 • 집 궁</span></p>
+      <p class="detail-sub">Interpersonal and social activities 대인관계 및 사회활동</p>
+      <h2 class="detail-title">처첩궁</h2>
+      <p class="detail-body1">양 쪽 눈꼬리 끝에서부터 관자놀이까지에 해당하는 영역으로 부부 관계, 애정운, 배우자나 이성과의 인연을 본다. 현대에서 처와 첩의 구조는 맞지 않다 판단해 부부궁이라고도 불린다.</p>
+      <div class="detail-body2">
+        <p>처첩궁을 볼 때는 형태, 혈색, 주름, 점 총 4가지 요소를 본다.</p>
+      </div>
+
+      <!-- 다이어그램 -->
+      <div class="diag-frame">
+        <!-- 배경 원 -->
+        <img src="images/sijung/diagram-circle-bg.svg" alt="" style="left:115.230px;top:81.534px;width:300.804px;height:300.804px;" />
+        <!-- 큰 내부 원 -->
+        <img src="images/sijung/diagram-circle-lg.svg" alt="" style="left:196.043px;top:162.347px;width:140.300px;height:140.300px;" />
+        <!-- 중간 원 -->
+        <img src="images/sijung/diagram-circle-md.svg" alt="" style="left:238.694px;top:204.999px;width:54.998px;height:54.998px;" />
+        <!-- 중심 점 -->
+        <img src="images/sijung/diagram-dot-center.svg" alt="" style="left:261.133px;top:227.489px;width:9.612px;height:9.612px;" />
+
+        <!-- 수직 축 -->
+        <img src="images/sijung/line-axis-v.svg" alt="" style="
+          position:absolute;
+          width:384.490px;
+          left:73.692px;
+          top:232.296px;
+          transform:rotate(90deg);
+          transform-origin:center center;
+          display:block;
+        " />
+        <!-- 수평 축 -->
+        <div style="left:73.692px;top:232.296px;width:384.490px;height:0;position:absolute;">
+          <img src="images/sijung/line-axis-h.svg" alt="" style="display:block;width:100%;position:absolute;inset:-2.67px -0.69%;" />
+        </div>
+
+        <!-- 라벨: 점 (상단) -->
+        <div class="diag-label" style="left:235.498px;top:0px;width:57.673px;height:27.234px;">점</div>
+        <!-- 라벨: 혈색 (하단) -->
+        <div class="diag-label" style="left:200.252px;top:440.560px;width:126.561px;height:27.234px;">혈색</div>
+        <!-- 라벨: 주름 (우측) -->
+        <div class="diag-label" style="left:470.996px;top:216.274px;width:57.673px;height:27.234px;">주름</div>
+
+        <!-- 점 없음이 (white) -->
+        <div class="diag-dot" data-dir="right" data-tip="텍스트 추가 예정" style="left:310.353px;top:77.606px;"><img src="images/sijung/diagram-dot-white.svg" alt="" /></div>
+        <!-- 점있음이 (black) -->
+        <div class="diag-dot" data-dir="left" data-tip="텍스트 추가 예정" style="left:181.276px;top:77.606px;"><img src="images/sijung/diagram-dot-black.svg" alt="" /></div>
+        <!-- 형태구림 (white) -->
+        <div class="diag-dot" data-dir="left" data-tip="텍스트 추가 예정" style="left:117.414px;top:138.452px;"><img src="images/sijung/diagram-dot-white.svg" alt="" /></div>
+        <!-- 주름잇음 (black) -->
+        <div class="diag-dot" data-dir="right" data-tip="텍스트 추가 예정" style="left:378.179px;top:138.453px;"><img src="images/sijung/diagram-dot-black.svg" alt="" /></div>
+        <!-- 주름없듬 (white) -->
+        <div class="diag-dot" data-dir="right" data-tip="텍스트 추가 예정" style="left:378.179px;top:285.811px;"><img src="images/sijung/diagram-dot-white.svg" alt="" /></div>
+        <!-- 형태좋음 (black) -->
+        <div class="diag-dot" data-dir="left" data-tip="텍스트 추가 예정" style="left:117.109px;top:285.811px;"><img src="images/sijung/diagram-dot-black.svg" alt="" /></div>
+        <!-- 혈색어둡다 (white) -->
+        <div class="diag-dot" data-dir="left" data-tip="텍스트 추가 예정" style="left:181.276px;top:347.250px;"><img src="images/sijung/diagram-dot-white.svg" alt="" /></div>
+        <!-- 혈색좋다 (alt) -->
+        <div class="diag-dot" data-dir="right" data-tip="텍스트 추가 예정" style="left:310.353px;top:347.250px;"><img src="images/sijung/diagram-dot-alt.svg" alt="" /></div>
+
+        <!-- 툴팁 -->
+        <div class="diag-tooltip" id="diagTooltip"></div>
+      </div>
+
+      <!-- 형태 라벨 (frame 외부 좌측) -->
+      <div class="diag-label-left">형태</div>
+
+      <!-- ── 번호 버튼 ── -->
+      <!-- 01 명궁 -->
+      <a class="num-btn" href="sijung-01.html" style="left:369.19px; top:calc(495.93px - 95.87px);">01</a>
+      <!-- 02 형제궁 -->
+      <a class="num-btn" href="sijung-02.html" style="left:499.44px; top:calc(472.93px - 95.87px); text-decoration:none;">02</a>
+      <a class="num-btn" href="sijung-02.html" style="left:245.66px; top:calc(472.93px - 95.87px); text-decoration:none;">02</a>
+      <!-- 03 처첩궁 (active) -->
+      <div class="num-btn active" style="left:171.61px; top:calc(538.93px - 95.87px);">03</div>
+      <div class="num-btn active" style="left:569.61px; top:calc(538.93px - 95.87px);">03</div>
+      <!-- 04 전택궁 -->
+      <div class="num-btn" style="left:370.03px; top:calc(873.87px - 95.87px);">04</div>
+      <div class="num-btn" style="left:273.44px; top:calc(830.87px - 95.87px);">04</div>
+      <div class="num-btn" style="left:464.44px; top:calc(830.87px - 95.87px);">04</div>
+      <div class="num-btn" style="left:216.44px; top:calc(754.9px  - 95.87px);">04</div>
+      <div class="num-btn" style="left:525.44px; top:calc(754.9px  - 95.87px);">04</div>
+      <!-- 05 관록궁 -->
+      <div class="num-btn" style="left:369.19px; top:calc(382.93px - 95.87px);">05</div>
+      <!-- 06 노복궁 -->
+      <div class="num-btn" style="left:255.94px; top:calc(669.93px - 95.87px);">06</div>
+      <div class="num-btn" style="left:490.44px; top:calc(669.93px - 95.87px);">06</div>
+      <!-- 07 천이궁 -->
+      <div class="num-btn" style="left:255.53px; top:calc(414.93px - 95.87px);">07</div>
+      <div class="num-btn" style="left:490.44px; top:calc(414.93px - 95.87px);">07</div>
+      <!-- 08 질액궁 -->
+      <div class="num-btn" style="left:369.19px; top:calc(645.93px - 95.87px);">08</div>
+      <!-- 09 재백궁 -->
+      <div class="num-btn" style="left:272.44px; top:calc(514.93px - 95.87px);">09</div>
+      <div class="num-btn" style="left:464.44px; top:calc(514.93px - 95.87px);">09</div>
+      <!-- 10 자녀궁 -->
+      <div class="num-btn" style="left:369.19px; top:calc(564.93px - 95.87px);">10</div>
+      <!-- 11 처첩궁 -->
+      <div class="num-btn" style="left:263.16px; top:calc(591.93px - 95.87px);">11</div>
+      <div class="num-btn" style="left:481.94px; top:calc(591.93px - 95.87px);">11</div>
+      <!-- 12 남녀궁 -->
+      <div class="num-btn" style="left:182.44px; top:calc(456.93px - 95.87px);">12</div>
+      <div class="num-btn" style="left:560.44px; top:calc(456.93px - 95.87px);">12</div>
+
+    </div>
+
+            <nav class="bottomNav">
+      <div class="bn-inner">
+        <img class="bn-logo-l" style="width:23.456px;height:29.129px;left:40px;top:22.99px" src="images/nav/logo-D.svg" alt="">
+        <img class="bn-logo-l" style="width:29.935px;height:29.935px;left:66.65px;top:22.59px" src="images/nav/logo-O.svg" alt="">
+        <img class="bn-logo-l" style="width:22.571px;height:29.129px;left:98.09px;top:22.99px" src="images/nav/logo-T.svg" alt="">
+        <img class="bn-logo-l" style="width:21.726px;height:30.015px;left:134.06px;top:22.59px" src="images/nav/logo-S.svg" alt="">
+        <img class="bn-logo-l" style="width:23.336px;height:29.129px;left:160.53px;top:22.99px" src="images/nav/logo-H.svg" alt="">
+        <img class="bn-logo-l" style="width:4.426px;height:29.129px;left:189.82px;top:22.99px" src="images/nav/logo-I.svg" alt="">
+        <img class="bn-logo-l" style="width:18.065px;height:29.129px;left:200.16px;top:22.99px" src="images/nav/logo-F.svg" alt="">
+        <img class="bn-logo-l" style="width:22.571px;height:29.129px;left:221.73px;top:22.99px" src="images/nav/logo-T.svg" alt="">
+        <a class="bn-badge bn-badge--h" href="index.html">H</a>
+        <button class="bn-badge bn-badge--b" onclick="history.back()">B</button>
+        <button class="bn-item" style="left:467.15px" onclick="window.location.href='index.html'">
+          <span>프로젝트 알아보기</span>
+          <img src="images/nav/nav-arrow.svg" alt="">
+        </button>
+        <button class="bn-item" style="left:794.15px" onclick="window.location.href='camera.html'">
+          <span>점 패턴 분석하기</span>
+          <img src="images/nav/nav-arrow.svg" alt="">
+        </button>
+        <button class="bn-item" style="left:1106.15px" onclick="window.location.href='facemap.html'">
+          <span>얼굴 지도 살펴보기</span>
+          <img src="images/nav/nav-arrow.svg" alt="">
+        </button>
+        <button class="bn-item" style="left:1439.15px" onclick="window.location.href='gwansang.html'">
+          <span>관상학 알아보기</span>
+          <img src="images/nav/nav-arrow.svg" alt="">
+        </button>
+        <button class="bn-help-btn">?</button>
+      </div>
+    </nav>
+    <script>
+      const tooltip = document.getElementById('diagTooltip');
+
+      document.querySelectorAll('.diag-dot').forEach(dot => {
+        dot.addEventListener('mouseenter', () => {
+          tooltip.textContent = dot.dataset.tip;
+          tooltip.classList.add('show');
+
+          const dir = dot.dataset.dir;
+          const dotL = dot.offsetLeft;
+          const dotT = dot.offsetTop;
+          const dotW = dot.offsetWidth;
+          const dotH = dot.offsetHeight;
+          const tipH = tooltip.offsetHeight;
+
+          const tipTop = dotT + dotH / 2 - tipH / 2;
+
+          if (dir === 'right') {
+            tooltip.style.left = (dotL + dotW + 5) + 'px';
+          } else {
+            tooltip.style.left = (dotL - 5 - 262) + 'px';
+          }
+          tooltip.style.top = tipTop + 'px';
+        });
+
+        dot.addEventListener('mouseleave', () => {
+          tooltip.classList.remove('show');
+        });
+      });
+    </script>
+    <script src="scale.js"></script>
+  </body>
+</html>

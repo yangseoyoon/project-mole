@@ -1,0 +1,7 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Frame 421">
+<rect x="0.5" y="0.5" width="29" height="29" rx="14.5" fill="#EFEFEF" style="fill:#EFEFEF;fill:color(display-p3 0.9391 0.9391 0.9391);fill-opacity:1;"/>
+<rect x="0.5" y="0.5" width="29" height="29" rx="14.5" stroke="black" style="stroke:black;stroke-opacity:1;"/>
+<path id="Arrow 16" d="M7.5 14.25C7.08579 14.25 6.75 14.5858 6.75 15C6.75 15.4142 7.08579 15.75 7.5 15.75V15V14.25ZM23.0303 15.5303C23.3232 15.2374 23.3232 14.7626 23.0303 14.4697L18.2574 9.6967C17.9645 9.40381 17.4896 9.40381 17.1967 9.6967C16.9038 9.98959 16.9038 10.4645 17.1967 10.7574L21.4393 15L17.1967 19.2426C16.9038 19.5355 16.9038 20.0104 17.1967 20.3033C17.4896 20.5962 17.9645 20.5962 18.2574 20.3033L23.0303 15.5303ZM7.5 15V15.75L22.5 15.75V15V14.25L7.5 14.25V15Z" fill="black" style="fill:black;fill-opacity:1;"/>
+</g>
+</svg>

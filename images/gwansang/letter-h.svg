@@ -1,3 +1,5 @@
-<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="30.9219" height="51.1129" viewBox="0 0 30.9219 51.1129" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path id="Vector" d="M6.07142 28.098V51.1129H0V0H6.07142V18.7791H6.56561C8.36586 14.8256 11.7899 12.284 17.8613 12.284C25.6977 12.284 30.9219 16.9082 30.9219 26.7566V51.1129H24.8505V27.1802C24.8505 21.1441 21.5324 17.7201 16.0257 17.7201C10.3073 17.7201 6.07142 21.4618 6.07142 28.098Z" fill="white" style="fill:white;fill-opacity:1;"/>
+<svg width="132" height="132" viewBox="0 0 132 132" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="0.5" y="0.5" width="130.5" height="130.5" fill="black" style="fill:black;fill-opacity:1;"/>
+<rect x="0.5" y="0.5" width="130.5" height="130.5" stroke="black" style="stroke:black;stroke-opacity:1;"/>
+<path d="M56.3605 68.7054V91.7203H50.2891V40.6074H56.3605V59.3865H56.8547C58.6549 55.433 62.0789 52.8915 68.1503 52.8915C75.9867 52.8915 81.211 57.5156 81.211 67.364V91.7203H75.1395V67.7876C75.1395 61.7515 71.8214 58.3275 66.3148 58.3275C60.5964 58.3275 56.3605 62.0692 56.3605 68.7054Z" fill="white" style="fill:white;fill-opacity:1;"/>
 </svg>

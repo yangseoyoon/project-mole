@@ -1,522 +1,474 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <title>관상학 페이지 | DOT SHIFT</title>
+    <title>관상학 | DOT SHIFT</title>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
     />
     <link rel="stylesheet" href="nav.css" />
-    <link rel="stylesheet" href="gwansang.css" />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: 'Pretendard', sans-serif;
+        background: #e9f056;
+        overflow: hidden;
+        width: 100vw;
+        height: 100vh;
+      }
+      .gwPage {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 1920px;
+        height: 1080px;
+        background: #e9f056;
+        overflow: hidden;
+        transform-origin: top left;
+      }
+      /* 기본 그리드 셀 */
+      .gwCell {
+        position: absolute;
+        width: 130.5px;
+        height: 130.5px;
+        border: 1px solid #000;
+        background: transparent;
+        z-index: 0;
+      }
+      /* 이미지 크롭 셀 */
+      .gwCrop {
+        position: absolute;
+        width: 130.5px;
+        height: 130.5px;
+        overflow: hidden;
+        border: 1px solid #000;
+        z-index: 1;
+      }
+      .gwCrop img {
+        position: absolute;
+        display: block;
+        max-width: none;
+      }
+      /* 이미지 셀: gwCell 안에 이미지를 채울 때 사용 */
+      .gwCell.has-img {
+        overflow: hidden;
+        padding: 0;
+      }
+      .gwCell.has-img > img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      /* 레터 셀 (검정 배경 + 흰 글자 SVG) */
+      .gwLetter {
+        position: absolute;
+        width: 130.5px;
+        height: 130.5px;
+        background: #000;
+        overflow: hidden;
+        border: 1px solid #000;
+        z-index: 2;
+      }
+      .gwLetter img {
+        position: absolute;
+        top: -0.5px;
+        left: -0.5px;
+        width: calc(100% + 1px);
+        height: calc(100% + 1px);
+        display: block;
+      }
+      /* 페이스 카드 */
+      .gwFace {
+        position: absolute;
+        width: 261px;
+        height: 261px;
+        border: 1px solid #000;
+        overflow: hidden;
+        background: #000;
+        z-index: 3;
+      }
+      .gwFace[onclick] {
+        cursor: pointer;
+      }
+      /* hover 레이어 공통 */
+      .gf-default,
+      .gf-hover {
+        position: absolute;
+        inset: 0;
+        transition: opacity 0.2s ease;
+      }
+      .gf-default {
+        background: #000;
+        opacity: 1;
+        z-index: 1;
+      }
+      .gf-default img {
+        position: absolute;
+        display: block;
+      }
+      .gf-hover {
+        background: #fff;
+        opacity: 0;
+        z-index: 2;
+        overflow: hidden;
+      }
+      .gwFace:hover .gf-default { opacity: 0; }
+      .gwFace:hover .gf-hover   { opacity: 1; }
+      .gf-hover img {
+        position: absolute;
+        display: block;
+      }
+      .gf-label {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        font-family: 'Pretendard', sans-serif;
+        font-weight: 600;
+        font-size: 32px;
+        color: #000;
+        line-height: 44px;
+        text-align: center;
+        white-space: nowrap;
+        pointer-events: none;
+      }
+      .gf-label-right {
+        text-align: right;
+        white-space: pre;
+      }
+    </style>
   </head>
   <body>
     <nav class="topNav">
       <span class="navLeft">PROJECT: DOT SHIFT</span>
-      <div class="navCenter">
-        <svg
-          width="35"
-          height="7"
-          viewBox="0 0 35 7"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <circle cx="3.5" cy="3.5" r="3.5" fill="black" />
-          <circle cx="17.5" cy="3.5" r="3.5" fill="black" />
-          <circle cx="31.5" cy="3.5" r="3.5" fill="black" />
-        </svg>
-      </div>
       <span class="navRight">Everything starts from a dot</span>
     </nav>
 
-    <div class="gwansangPage">
-      <div style="position:absolute;top:0;left:0;right:0;bottom:-10px;transform:translateY(-10px);">
-      <!-- ── 얼굴 초상 (261×261 = 2×2셀, 예외) ── -->
+    <div class="gwPage page-scale">
 
-      <!-- Frame400 남성(좌향) col1 row1 — 음양오행 -->
-      <div class="gwPhoto" style="left: 242.25px; top: 148.5px; width: 261px; height: 261px">
-        <div class="card-default">
-          <img src="images/gwansang/face-400.png" alt=""
-            style="width: 208.916px; height: 295.733px; left: 25.54px; top: 50%; transform: translateY(-50%) scaleX(-1);" />
-        </div>
-        <div class="card-hover">
-          <img src="images/gwansang/hover-400-circle.png" alt=""
-            style="width: 192px; height: 191px; left: calc(50% - 0.77px); top: calc(50% + 4.55px); transform: translate(-50%, -50%);" />
-          <img src="images/gwansang/hover-400-ohaeng.svg" alt=""
-            style="width: 202.183px; height: 193.806px; left: 28.91px; top: 29.95px;" />
-          <span class="hover-label" style="left: calc(50% + 0.23px); top: calc(50% + 0.55px); bottom: auto; transform: translate(-50%, -50%);">음양오행</span>
-        </div>
-      </div>
+      <!-- ===== 그리드 셀 15×8 = 120개 ===== -->
+      <!-- row0 top:17.59px -->
+      <div class="gwCell" data-cell="col0-row0" style="left: -18.75px; top: 17.59px"></div>
+      <div class="gwCell" data-cell="col1-row0" style="left: 111.75px; top: 17.59px"></div>
+      <div class="gwCell" data-cell="col2-row0" style="left: 242.25px; top: 17.59px"></div>
+      <div class="gwCell" data-cell="col3-row0" style="left: 372.75px; top: 17.59px"></div>
+      <div class="gwCell" data-cell="col4-row0" style="left: 503.25px; top: 17.59px"></div>
+      <div class="gwCell" data-cell="col5-row0" style="left: 633.75px; top: 17.59px"></div>
+      <div class="gwCell" data-cell="col6-row0" style="left: 764.25px; top: 17.59px"></div>
+      <div class="gwCell" data-cell="col7-row0" style="left: 894.75px; top: 17.59px"></div>
+      <div class="gwCell" data-cell="col8-row0" style="left: 1025.25px; top: 17.59px"></div>
+      <div class="gwCell" data-cell="col9-row0" style="left: 1155.75px; top: 17.59px"></div>
+      <div class="gwCell" data-cell="col10-row0" style="left: 1286.25px; top: 17.59px"></div>
+      <div class="gwCell" data-cell="col11-row0" style="left: 1416.75px; top: 17.59px"></div>
+      <div class="gwCell" data-cell="col12-row0" style="left: 1547.25px; top: 17.59px"></div>
+      <div class="gwCell" data-cell="col13-row0" style="left: 1677.75px; top: 17.59px"></div>
+      <div class="gwCell" data-cell="col14-row0" style="left: 1808.25px; top: 17.59px"></div>
+      <!-- row1 top:148.09px -->
+      <div class="gwCell" data-cell="col0-row1" style="left: -18.75px; top: 148.09px"></div>
+      <div class="gwCell" data-cell="col1-row1" style="left: 111.75px; top: 148.09px"></div>
+      <div class="gwCell" data-cell="col2-row1" style="left: 242.25px; top: 148.09px"></div>
+      <div class="gwCell" data-cell="col3-row1" style="left: 372.75px; top: 148.09px"></div>
+      <div class="gwCell" data-cell="col4-row1" style="left: 503.25px; top: 148.09px"></div>
+      <div class="gwCell" data-cell="col5-row1" style="left: 633.75px; top: 148.09px"></div>
+      <div class="gwCell" data-cell="col6-row1" style="left: 764.25px; top: 148.09px"></div>
+      <div class="gwCell" data-cell="col7-row1" style="left: 894.75px; top: 148.09px"></div>
+      <div class="gwCell" data-cell="col8-row1" style="left: 1025.25px; top: 148.09px"></div>
+      <div class="gwCell" data-cell="col9-row1" style="left: 1155.75px; top: 148.09px"></div>
+      <div class="gwCell" data-cell="col10-row1" style="left: 1286.25px; top: 148.09px"></div>
+      <div class="gwCell" data-cell="col11-row1" style="left: 1416.75px; top: 148.09px"></div>
+      <div class="gwCell" data-cell="col12-row1" style="left: 1547.25px; top: 148.09px"></div>
+      <div class="gwCell" data-cell="col13-row1" style="left: 1677.75px; top: 148.09px"></div>
+      <div class="gwCell" data-cell="col14-row1" style="left: 1808.25px; top: 148.09px"></div>
+      <!-- row2 top:278.59px -->
+      <div class="gwCell" data-cell="col0-row2" style="left: -18.75px; top: 278.59px"></div>
+      <div class="gwCell" data-cell="col1-row2" style="left: 111.75px; top: 278.59px"></div>
+      <div class="gwCell" data-cell="col2-row2" style="left: 242.25px; top: 278.59px"></div>
+      <div class="gwCell" data-cell="col3-row2" style="left: 372.75px; top: 278.59px"></div>
+      <div class="gwCell" data-cell="col4-row2" style="left: 503.25px; top: 278.59px"></div>
+      <div class="gwCell" data-cell="col5-row2" style="left: 633.75px; top: 278.59px"></div>
+      <div class="gwCell" data-cell="col6-row2" style="left: 764.25px; top: 278.59px"></div>
+      <div class="gwCell" data-cell="col7-row2" style="left: 894.75px; top: 278.59px"></div>
+      <div class="gwCell" data-cell="col8-row2" style="left: 1025.25px; top: 278.59px"></div>
+      <div class="gwCell" data-cell="col9-row2" style="left: 1155.75px; top: 278.59px"></div>
+      <div class="gwCell" data-cell="col10-row2" style="left: 1286.25px; top: 278.59px"></div>
+      <div class="gwCell" data-cell="col11-row2" style="left: 1416.75px; top: 278.59px"></div>
+      <div class="gwCell" data-cell="col12-row2" style="left: 1547.25px; top: 278.59px"></div>
+      <div class="gwCell" data-cell="col13-row2" style="left: 1677.75px; top: 278.59px"></div>
+      <div class="gwCell" data-cell="col14-row2" style="left: 1808.25px; top: 278.59px"></div>
+      <!-- row3 top:409.09px -->
+      <div class="gwCell" data-cell="col0-row3" style="left: -18.75px; top: 409.09px"></div>
+      <div class="gwCell" data-cell="col1-row3" style="left: 111.75px; top: 409.09px"></div>
+      <div class="gwCell" data-cell="col2-row3" style="left: 242.25px; top: 409.09px"></div>
+      <div class="gwCell" data-cell="col3-row3" style="left: 372.75px; top: 409.09px"></div>
+      <div class="gwCell" data-cell="col4-row3" style="left: 503.25px; top: 409.09px"></div>
+      <div class="gwCell" data-cell="col5-row3" style="left: 633.75px; top: 409.09px"></div>
+      <div class="gwCell" data-cell="col6-row3" style="left: 764.25px; top: 409.09px"></div>
+      <div class="gwCell" data-cell="col7-row3" style="left: 894.75px; top: 409.09px"></div>
+      <div class="gwCell" data-cell="col8-row3" style="left: 1025.25px; top: 409.09px"></div>
+      <div class="gwCell" data-cell="col9-row3" style="left: 1155.75px; top: 409.09px"></div>
+      <div class="gwCell" data-cell="col10-row3" style="left: 1286.25px; top: 409.09px"></div>
+      <div class="gwCell" data-cell="col11-row3" style="left: 1416.75px; top: 409.09px"></div>
+      <div class="gwCell" data-cell="col12-row3" style="left: 1547.25px; top: 409.09px"></div>
+      <div class="gwCell" data-cell="col13-row3" style="left: 1677.75px; top: 409.09px"></div>
+      <div class="gwCell" data-cell="col14-row3" style="left: 1808.25px; top: 409.09px"></div>
+      <!-- row4 top:539.59px -->
+      <div class="gwCell" data-cell="col0-row4" style="left: -18.75px; top: 539.59px"></div>
+      <div class="gwCell" data-cell="col1-row4" style="left: 111.75px; top: 539.59px"></div>
+      <div class="gwCell" data-cell="col2-row4" style="left: 242.25px; top: 539.59px"></div>
+      <div class="gwCell" data-cell="col3-row4" style="left: 372.75px; top: 539.59px"></div>
+      <div class="gwCell" data-cell="col4-row4" style="left: 503.25px; top: 539.59px"></div>
+      <div class="gwCell" data-cell="col5-row4" style="left: 633.75px; top: 539.59px"></div>
+      <div class="gwCell" data-cell="col6-row4" style="left: 764.25px; top: 539.59px"></div>
+      <div class="gwCell" data-cell="col7-row4" style="left: 894.75px; top: 539.59px"></div>
+      <div class="gwCell" data-cell="col8-row4" style="left: 1025.25px; top: 539.59px"></div>
+      <div class="gwCell" data-cell="col9-row4" style="left: 1155.75px; top: 539.59px"></div>
+      <div class="gwCell" data-cell="col10-row4" style="left: 1286.25px; top: 539.59px"></div>
+      <div class="gwCell" data-cell="col11-row4" style="left: 1416.75px; top: 539.59px"></div>
+      <div class="gwCell" data-cell="col12-row4" style="left: 1547.25px; top: 539.59px"></div>
+      <div class="gwCell" data-cell="col13-row4" style="left: 1677.75px; top: 539.59px"></div>
+      <div class="gwCell" data-cell="col14-row4" style="left: 1808.25px; top: 539.59px"></div>
+      <!-- row5 top:670.09px -->
+      <div class="gwCell" data-cell="col0-row5" style="left: -18.75px; top: 670.09px"></div>
+      <div class="gwCell" data-cell="col1-row5" style="left: 111.75px; top: 670.09px"></div>
+      <div class="gwCell" data-cell="col2-row5" style="left: 242.25px; top: 670.09px"></div>
+      <div class="gwCell" data-cell="col3-row5" style="left: 372.75px; top: 670.09px"></div>
+      <div class="gwCell" data-cell="col4-row5" style="left: 503.25px; top: 670.09px"></div>
+      <div class="gwCell" data-cell="col5-row5" style="left: 633.75px; top: 670.09px"></div>
+      <div class="gwCell" data-cell="col6-row5" style="left: 764.25px; top: 670.09px"></div>
+      <div class="gwCell" data-cell="col7-row5" style="left: 894.75px; top: 670.09px"></div>
+      <div class="gwCell" data-cell="col8-row5" style="left: 1025.25px; top: 670.09px"></div>
+      <div class="gwCell" data-cell="col9-row5" style="left: 1155.75px; top: 670.09px"></div>
+      <div class="gwCell" data-cell="col10-row5" style="left: 1286.25px; top: 670.09px"></div>
+      <div class="gwCell" data-cell="col11-row5" style="left: 1416.75px; top: 670.09px"></div>
+      <div class="gwCell" data-cell="col12-row5" style="left: 1547.25px; top: 670.09px"></div>
+      <div class="gwCell" data-cell="col13-row5" style="left: 1677.75px; top: 670.09px"></div>
+      <div class="gwCell" data-cell="col14-row5" style="left: 1808.25px; top: 670.09px"></div>
+      <!-- row6 top:800.59px -->
+      <div class="gwCell" data-cell="col0-row6" style="left: -18.75px; top: 800.59px"></div>
+      <div class="gwCell" data-cell="col1-row6" style="left: 111.75px; top: 800.59px"></div>
+      <div class="gwCell" data-cell="col2-row6" style="left: 242.25px; top: 800.59px"></div>
+      <div class="gwCell" data-cell="col3-row6" style="left: 372.75px; top: 800.59px"></div>
+      <div class="gwCell" data-cell="col4-row6" style="left: 503.25px; top: 800.59px"></div>
+      <div class="gwCell" data-cell="col5-row6" style="left: 633.75px; top: 800.59px"></div>
+      <div class="gwCell" data-cell="col6-row6" style="left: 764.25px; top: 800.59px"></div>
+      <div class="gwCell" data-cell="col7-row6" style="left: 894.75px; top: 800.59px"></div>
+      <div class="gwCell" data-cell="col8-row6" style="left: 1025.25px; top: 800.59px"></div>
+      <div class="gwCell" data-cell="col9-row6" style="left: 1155.75px; top: 800.59px"></div>
+      <div class="gwCell" data-cell="col10-row6" style="left: 1286.25px; top: 800.59px"></div>
+      <div class="gwCell" data-cell="col11-row6" style="left: 1416.75px; top: 800.59px"></div>
+      <div class="gwCell" data-cell="col12-row6" style="left: 1547.25px; top: 800.59px"></div>
+      <div class="gwCell" data-cell="col13-row6" style="left: 1677.75px; top: 800.59px"></div>
+      <div class="gwCell" data-cell="col14-row6" style="left: 1808.25px; top: 800.59px"></div>
+      <!-- row7 top:931.09px -->
+      <div class="gwCell" data-cell="col0-row7" style="left: -18.75px; top: 931.09px"></div>
+      <div class="gwCell" data-cell="col1-row7" style="left: 111.75px; top: 931.09px"></div>
+      <div class="gwCell" data-cell="col2-row7" style="left: 242.25px; top: 931.09px"></div>
+      <div class="gwCell" data-cell="col3-row7" style="left: 372.75px; top: 931.09px"></div>
+      <div class="gwCell" data-cell="col4-row7" style="left: 503.25px; top: 931.09px"></div>
+      <div class="gwCell" data-cell="col5-row7" style="left: 633.75px; top: 931.09px"></div>
+      <div class="gwCell" data-cell="col6-row7" style="left: 764.25px; top: 931.09px"></div>
+      <div class="gwCell" data-cell="col7-row7" style="left: 894.75px; top: 931.09px"></div>
+      <div class="gwCell" data-cell="col8-row7" style="left: 1025.25px; top: 931.09px"></div>
+      <div class="gwCell" data-cell="col9-row7" style="left: 1155.75px; top: 931.09px"></div>
+      <div class="gwCell" data-cell="col10-row7" style="left: 1286.25px; top: 931.09px"></div>
+      <div class="gwCell" data-cell="col11-row7" style="left: 1416.75px; top: 931.09px"></div>
+      <div class="gwCell" data-cell="col12-row7" style="left: 1547.25px; top: 931.09px"></div>
+      <div class="gwCell" data-cell="col13-row7" style="left: 1677.75px; top: 931.09px"></div>
+      <div class="gwCell" data-cell="col14-row7" style="left: 1808.25px; top: 931.09px"></div>
 
-      <!-- Frame401 여성(정면) col4 row2 — 얼굴의 방위체계 -->
-      <div class="gwPhoto" style="left: 633.75px; top: 279px; width: 261px; height: 261px">
-        <div class="card-default">
-          <img src="images/gwansang/face-401.png" alt=""
-            style="width: 194.033px; height: 274.665px; left: 50%; top: 50%; transform: translate(-50%, -50%);" />
-        </div>
-        <div class="card-hover">
-          <img src="images/gwansang/hover-401-compass.svg" alt=""
-            style="position:absolute; width: 326.692px; height: 326.692px; left: 31.15px; top: 18.48px;" />
-          <span class="hover-label" style="left: 50%; top: 50%; bottom: auto; transform: translate(-50%, -50%); text-align: right; white-space: nowrap; line-height: 1.375;">얼굴의<br>방위체계</span>
-        </div>
-      </div>
-
-      <!-- Frame395 여성(측면) col9 row2 — 십이궁 -->
-      <div class="gwPhoto" style="left: 1286.25px; top: 279px; width: 261px; height: 261px">
-        <div class="card-default">
-          <img src="images/gwansang/face-395.png" alt=""
-            style="width: 191.684px; height: 275.432px; left: calc(50% + 0.88px); top: 50%; transform: translate(-50%, -50%);" />
-        </div>
-        <div class="card-hover">
-          <img src="images/gwansang/hover-395-sijung.svg" alt=""
-            style="width: 188.785px; height: 228.944px; left: 36.11px; top: 16.03px;" />
-          <span class="hover-label" style="left: 50%; top: 50%; bottom: auto; transform: translate(-50%, -50%);">십이궁</span>
-        </div>
-      </div>
-
-      <!-- Frame399 남성(정면2) col7 row4 — 점과 관상 -->
-      <div class="gwPhoto" style="left: 1025.25px; top: 540px; width: 261px; height: 261px" onclick="window.location.href='jeom-gwansang.html'">
-        <div class="card-default">
-          <img src="images/gwansang/face-399.png" alt=""
-            style="width: 193.611px; height: 273.865px; left: 33.11px; top: -0.5px;" />
-        </div>
-        <div class="card-hover">
-          <img src="images/gwansang/hover-399-vector.svg" alt=""
-            style="width: 155px; height: 228px; left: 22.22px; top: 15.5px;" />
-          <div style="position:absolute; left:167.22px; top:220.5px; width:7px; height:7px; border-radius:50%; background:#000;"></div>
-          <div style="position:absolute; left:140.22px; top:239.5px; width:8px; height:8px; border-radius:50%; background:#000;"></div>
-          <div style="position:absolute; left:42.22px; top:126.5px; width:7px; height:8px; border-radius:50%; background:#000;"></div>
-          <div style="position:absolute; left:174.22px; top:57.5px; width:8px; height:8px; border-radius:50%; background:#000;"></div>
-          <div style="position:absolute; left:163.22px; top:61.5px; width:7px; height:8px; border-radius:50%; background:#000;"></div>
-          <div style="position:absolute; left:163.22px; top:12.5px; width:7px; height:8px; border-radius:50%; background:#000;"></div>
-          <div style="position:absolute; left:20.22px; top:98.5px; width:7px; height:7px; border-radius:50%; background:#000;"></div>
-          <div style="position:absolute; left:132.22px; top:90.5px; width:8px; height:8px; border-radius:50%; background:#000;"></div>
-          <span class="hover-label" style="left: 50%; top: 50%; bottom: auto; transform: translate(-50%, -50%);">점과 관상</span>
-        </div>
-      </div>
-
-      <!-- ── 신체 클로즈업 크롭 (85624bb2, scaleX(-1)) 모두 130.5×130.5 ── -->
-
-      <!-- col2 row0: 상단 헤어 왼쪽 -->
-      <div class="gwCrop" style="left: 372.75px; top: 18px">
-        <img
-          src="images/gwansang/body-source.png"
-          alt=""
-          style="
-            width: 1495.6%;
-            height: 1940.7%;
-            left: -801.4%;
-            top: -465.0%;
-            transform: scaleX(-1);
-          "
-        />
-      </div>
-
-      <!-- col3 row0: 상단 헤어 오른쪽 -->
-      <div class="gwCrop" style="left: 503.25px; top: 18px">
-        <img
-          src="images/gwansang/body-source.png"
-          alt=""
-          style="
-            width: 1495.6%;
-            height: 1940.7%;
-            left: -901.4%;
-            top: -465.0%;
-            transform: scaleX(-1);
-          "
-        />
-      </div>
-
-      <!-- col0 row2: 눈 클로즈업 -->
-      <div class="gwCrop" style="left: 111.75px; top: 279px">
-        <img
-          src="images/gwansang/body-source.png"
-          alt=""
-          style="
-            width: 1495.57%;
-            height: 1939.76%;
-            left: -1107.94%;
-            top: -664.95%;
-            transform: scaleX(-1);
-          "
-        />
-      </div>
-
-      <!-- col3 row4: 중앙 좌측 -->
-      <div class="gwCrop" style="left: 503.25px; top: 540px">
-        <img
-          src="images/gwansang/body-source.png"
-          alt=""
-          style="
-            width: 1495.57%;
-            height: 1939.76%;
-            left: -795.3%;
-            top: -869.88%;
-            transform: scaleX(-1);
-          "
-        />
-      </div>
-
-      <!-- col-1 row4: 좌측 엣지 -->
-      <div class="gwCrop" style="left: -18.75px; top: 540px">
-        <img
-          src="images/gwansang/body-source.png"
-          alt=""
-          style="
-            width: 1495.57%;
-            height: 1939.76%;
-            left: -1184.57%;
-            top: -869.88%;
-            transform: scaleX(-1);
-          "
-        />
-      </div>
-
-      <!-- col0 row6: 하단 왼쪽 A -->
-      <div class="gwCrop" style="left: 111.75px; top: 801px">
-        <img
-          src="images/gwansang/body-source.png"
-          alt=""
-          style="
-            width: 1483.1%;
-            height: 1923.2%;
-            left: -976.1%;
-            top: -1021.8%;
-            transform: scaleX(-1);
-          "
-        />
-      </div>
-
-      <!-- col1 row6: 하단 왼쪽 B -->
-      <div class="gwCrop" style="left: 242.25px; top: 801px">
-        <img
-          src="images/gwansang/body-source.png"
-          alt=""
-          style="
-            width: 1483.1%;
-            height: 1923.2%;
-            left: -1076.1%;
-            top: -1021.8%;
-            transform: scaleX(-1);
-          "
-        />
-      </div>
-
-      <!-- col1 row7: 최하단 A -->
-      <div class="gwCrop" style="left: 242.25px; top: 931.5px">
-        <img
-          src="images/gwansang/body-source.png"
-          alt=""
-          style="
-            width: 1483.1%;
-            height: 1923.2%;
-            left: -894.9%;
-            top: -1144.3%;
-            transform: scaleX(-1);
-          "
-        />
-      </div>
-
-      <!-- col2 row7: 최하단 B -->
-      <div class="gwCrop" style="left: 372.75px; top: 931.5px">
-        <img
-          src="images/gwansang/body-source.png"
-          alt=""
-          style="
-            width: 1483.1%;
-            height: 1923.2%;
-            left: -994.9%;
-            top: -1144.3%;
-            transform: scaleX(-1);
-          "
-        />
-      </div>
-
-      <!-- ── 피부/입술 크롭 (862d33f8) 모두 130.5×130.5 ── -->
-
-      <!-- col7 row0: 우측 세로 상단 (scaleX-1) -->
-      <div class="gwCrop" style="left: 1025.25px; top: 18px">
-        <img
-          src="images/gwansang/skin-source.png"
-          alt=""
-          style="
-            width: 2041.4%;
-            height: 2729.1%;
-            left: -1176.6%;
-            top: -1088.8%;
-            transform: scaleX(-1);
-          "
-        />
-      </div>
-
-      <!-- col7 row1: 우측 세로 하단 (scaleX-1) -->
-      <div class="gwCrop" style="left: 1025.25px; top: 148.5px">
-        <img
-          src="images/gwansang/skin-source.png"
-          alt=""
-          style="
-            width: 2041.4%;
-            height: 2729.1%;
-            left: -1176.6%;
-            top: -1188.8%;
-            transform: scaleX(-1);
-          "
-        />
-      </div>
-
-      <!-- col11 row0: 우상단 넓은 왼쪽 (scaleX-1) -->
-      <div class="gwCrop" style="left: 1547.25px; top: 18px">
-        <img
-          src="images/gwansang/skin-source.png"
-          alt=""
-          style="
-            width: 4083.3%;
-            height: 1449.7%;
-            left: -2354.3%;
-            top: -585.1%;
-            transform: scaleX(-1);
-          "
-        />
-      </div>
-
-      <!-- col12 row0: 우상단 넓은 오른쪽 (scaleX-1) -->
-      <div class="gwCrop" style="left: 1677.75px; top: 18px">
-        <img
-          src="images/gwansang/skin-source.png"
-          alt=""
-          style="
-            width: 4083.3%;
-            height: 1449.7%;
-            left: -2454.3%;
-            top: -585.1%;
-            transform: scaleX(-1);
-          "
-        />
-      </div>
-
-      <!-- col12 row1: 우측 중단 (scaleX-1) -->
-      <div class="gwCrop" style="left: 1677.75px; top: 148.5px">
-        <img
-          src="images/gwansang/skin-source.png"
-          alt=""
-          style="
-            width: 2041.44%;
-            height: 2534.3%;
-            left: -1047.73%;
-            top: -801.46%;
-            transform: scaleX(-1);
-          "
-        />
-      </div>
-
-      <!-- col8 row2: 우측 중앙 -->
-      <div class="gwCrop" style="left: 1155.75px; top: 279px">
-        <img
-          src="images/gwansang/skin-source.png"
-          alt=""
-          style="
-            width: 2041.44%;
-            height: 2534.3%;
-            left: -1047.73%;
-            top: -801.46%;
-          "
-        />
-      </div>
-
-      <!-- col6 row4: 중앙 입술 -->
-      <div class="gwCrop" style="left: 894.75px; top: 540px">
-        <img
-          src="images/gwansang/skin-source.png"
-          alt=""
-          style="width: 2041.44%; height: 2534.3%; left: -839.3%; top: -991.78%"
-        />
-      </div>
-
-      <!-- col9 row5: 우측 와이드 왼쪽 -->
-      <div class="gwCrop" style="left: 1286.25px; top: 670.5px">
-        <img
-          src="images/gwansang/skin-source.png"
-          alt=""
-          style="width: 2041.4%; height: 2551.1%; left: -1128.6%; top: -1103.7%"
-        />
-      </div>
-
-      <!-- col10 row5: 우측 와이드 오른쪽 -->
-      <div class="gwCrop" style="left: 1416.75px; top: 670.5px">
-        <img
-          src="images/gwansang/skin-source.png"
-          alt=""
-          style="width: 2041.4%; height: 2551.1%; left: -1228.6%; top: -1103.7%"
-        />
-      </div>
-
-      <!-- col7 row7: 하단 중앙 -->
-      <div class="gwCrop" style="left: 1025.25px; top: 931.5px">
-        <img
-          src="images/gwansang/skin-source.png"
-          alt=""
-          style="width: 2041.44%; height: 2534.3%; left: -850.8%; top: -877.0%"
-        />
-      </div>
-
-      <!-- ── 검정 셀 + 레터 (physiognomy) 중앙정렬 ── -->
-
-      <!-- p  col-1 row0 -->
-      <div class="gwBlack" style="left: -18.75px; top: 18px">
+      <!-- ===== 레터 셀 (PHYSIOGNOMY) ===== -->
+      <!-- p: col0, row0 -->
+      <div class="gwLetter" style="left: -18.75px; top: 17.59px">
         <img
           src="images/gwansang/letter-p.svg"
-          alt=""
-          style="width: 33.958px; height: 53.231px"
+          alt="p"
         />
       </div>
-
-      <!-- h  col0 row3 -->
-      <div class="gwBlack" style="left: 111.75px; top: 409.5px">
-        <img
-          src="images/gwansang/letter-h.svg"
-          alt=""
-          style="width: 30.922px; height: 51.113px"
-        />
-      </div>
-
-      <!-- y  col1 row5 -->
-      <div class="gwBlack" style="left: 242.25px; top: 670.5px">
-        <img
-          src="images/gwansang/letter-y.svg"
-          alt=""
-          style="width: 34.593px; height: 52.737px"
-        />
-      </div>
-
-      <!-- s  col2 row5 -->
-      <div class="gwBlack" style="left: 372.75px; top: 670.5px">
-        <img
-          src="images/gwansang/letter-s.svg"
-          alt=""
-          style="width: 29.792px; height: 39.606px"
-        />
-      </div>
-
-      <!-- i  col5 row6 -->
-      <div class="gwBlack" style="left: 764.25px; top: 801px">
-        <img
-          src="images/gwansang/letter-i.svg"
-          alt=""
-          style="width: 8.543px; height: 52.737px"
-        />
-      </div>
-
-      <!-- o  col6 row1 -->
-      <div class="gwBlack" style="left: 894.75px; top: 148.5px">
-        <img
-          src="images/gwansang/letter-o.svg"
-          alt=""
-          style="width: 34.876px; height: 39.606px"
-        />
-      </div>
-
-      <!-- g  col8 row0 -->
-      <div class="gwBlack" style="left: 1155.75px; top: 18px">
+      <!-- g: col9, row0 -->
+      <div class="gwLetter" style="left: 1155.75px; top: 17.59px">
         <img
           src="images/gwansang/letter-g.svg"
-          alt=""
-          style="width: 34.028px; height: 54.007px"
+          alt="g"
         />
       </div>
-
-      <!-- n  col9 row7 -->
-      <div class="gwBlack" style="left: 1286.25px; top: 931.5px">
-        <img
-          src="images/gwansang/letter-n.svg"
-          alt=""
-          style="width: 30.498px; height: 38.829px"
-        />
-      </div>
-
-      <!-- o  col11 row6 -->
-      <div class="gwBlack" style="left: 1547.25px; top: 801px">
+      <!-- o: col7, row1 -->
+      <div class="gwLetter" style="left: 894.75px; top: 148.09px">
         <img
           src="images/gwansang/letter-o.svg"
-          alt=""
-          style="width: 34.876px; height: 39.606px"
+          alt="o"
         />
       </div>
-
-      <!-- m  col12 row4 -->
-      <div class="gwBlack" style="left: 1677.75px; top: 540px">
+      <!-- h: col1, row3 -->
+      <div class="gwLetter" style="left: 111.75px; top: 409.09px">
         <img
-          src="images/gwansang/letter-m.svg"
-          alt=""
-          style="width: 50.548px; height: 38.829px"
+          src="images/gwansang/letter-h.svg"
+          alt="h"
         />
       </div>
-
-      <!-- y  col13 row5 -->
-      <div class="gwBlack" style="left: 1808.25px; top: 670.5px">
+      <!-- s: col2, row5 -->
+      <div class="gwLetter" style="left: 242.25px; top: 670.09px">
+        <img
+          src="images/gwansang/letter-s.svg"
+          alt="s"
+        />
+      </div>
+      <!-- y: col3, row5 -->
+      <div class="gwLetter" style="left: 372.75px; top: 670.09px">
         <img
           src="images/gwansang/letter-y.svg"
-          alt=""
-          style="width: 34.593px; height: 52.737px"
+          alt="y"
+        />
+      </div>
+      <!-- i: col6, row6 -->
+      <div class="gwLetter" style="left: 764.25px; top: 800.59px">
+        <img
+          src="images/gwansang/letter-i.svg"
+          alt="i"
+        />
+      </div>
+      <!-- o: col12, row6 -->
+      <div class="gwLetter" style="left: 1547.25px; top: 800.59px">
+        <img
+          src="images/gwansang/letter-o.svg"
+          alt="o"
+        />
+      </div>
+      <!-- n: col10, row7 -->
+      <div class="gwLetter" style="left: 1286.25px; top: 931.09px">
+        <img
+          src="images/gwansang/letter-n.svg"
+          alt="n"
+        />
+      </div>
+      <!-- m: col13, row4 -->
+      <div class="gwLetter" style="left: 1677.75px; top: 539.59px">
+        <img
+          src="images/gwansang/letter-m.svg"
+          alt="m"
+        />
+      </div>
+      <!-- y: col14, row5 -->
+      <div class="gwLetter" style="left: 1808.25px; top: 670.09px">
+        <img
+          src="images/gwansang/letter-y.svg"
+          alt="y"
         />
       </div>
 
-      <!-- ── 그리드 오버레이: 최상위 레이어 ── -->
-      <div class="gwGrid"></div>
-      </div><!-- /translateY wrapper -->
+      <!-- ===== 페이스 카드 ===== -->
+      <!-- Frame400: 음양오행, col2 row1 (242.25, 147.65) -->
+      <div class="gwFace" style="left: 242.25px; top: 147.65px">
+        <div class="gf-default">
+          <img src="images/gwansang/face-400.png"
+               style="left:25.54px;top:-17.37px;width:208.92px;height:295.73px;transform:scaleX(-1);" />
+        </div>
+        <div class="gf-hover">
+          <img src="images/gwansang/hover-400-circle.png"
+               style="width:192px;height:191px;left:calc(50% - 0.77px);top:calc(50% + 4.55px);transform:translate(-50%,-50%);" />
+          <img src="images/gwansang/hover-400-ohaeng.svg"
+               style="left:28.91px;top:29.95px;width:202.183px;height:193.806px;" />
+          <span class="gf-label">음양오행</span>
+        </div>
+      </div>
+      <!-- Frame401: 방위체계, col5 row2 (633.75, 278.59) -->
+      <div class="gwFace" style="left: 633.75px; top: 278.59px">
+        <div class="gf-default">
+          <img src="images/gwansang/face-401.png"
+               style="left:33.48px;top:-6.83px;width:194.03px;height:274.67px;" />
+        </div>
+        <div class="gf-hover">
+          <img src="images/gwansang/hover-401-compass.svg"
+               style="left:31.15px;top:18.48px;width:326.692px;height:326.692px;" />
+          <span class="gf-label gf-label-right" style="left:auto;right:10px;transform:translate(0,-50%);">얼굴의&#10;방위체계</span>
+        </div>
+      </div>
+      <!-- Frame395: 십이궁, col10 row2 (1286.25, 278.59) → sijung.html -->
+      <div class="gwFace" style="left: 1286.25px; top: 278.59px"
+           onclick="window.location.href = 'sijung.html'">
+        <div class="gf-default">
+          <img src="images/gwansang/face-395.png"
+               style="left:35.54px;top:-7.22px;width:191.68px;height:275.43px;" />
+        </div>
+        <div class="gf-hover">
+          <img src="images/gwansang/hover-395-sijung.svg"
+               style="left:36.11px;top:16.03px;width:188.785px;height:228.944px;" />
+          <span class="gf-label">십이궁</span>
+        </div>
+      </div>
+      <!-- Frame399: 점과관상, col8 row4 (1025.25, 539.59) → jeom-gwansang.html -->
+      <div class="gwFace" style="left: 1025.25px; top: 539.59px"
+           onclick="window.location.href = 'jeom-gwansang.html'">
+        <div class="gf-default">
+          <img src="images/gwansang/face-399.png"
+               style="left:33.11px;top:-0.5px;width:193.61px;height:273.87px;" />
+        </div>
+        <div class="gf-hover">
+          <img src="images/gwansang/hover-399-vector.svg"
+               style="left:22.22px;top:15.5px;width:155px;height:228px;" />
+          <!-- scatter dots -->
+          <img src="images/gwansang/hover-399-dot-a.svg"
+               style="left:167.22px;top:220.5px;width:7px;height:7px;" />
+          <img src="images/gwansang/hover-399-dot-b.svg"
+               style="left:140.22px;top:239.5px;width:8px;height:8px;" />
+          <img src="images/gwansang/hover-399-dot-c.svg"
+               style="left:42.22px;top:126.5px;width:7px;height:8px;" />
+          <img src="images/gwansang/hover-399-dot-b.svg"
+               style="left:174.22px;top:57.5px;width:8px;height:8px;" />
+          <img src="images/gwansang/hover-399-dot-c.svg"
+               style="left:163.22px;top:61.5px;width:7px;height:8px;" />
+          <img src="images/gwansang/hover-399-dot-c.svg"
+               style="left:163.22px;top:12.5px;width:7px;height:8px;" />
+          <img src="images/gwansang/hover-399-dot-a.svg"
+               style="left:20.22px;top:98.5px;width:7px;height:7px;" />
+          <img src="images/gwansang/hover-399-dot-b.svg"
+               style="left:132.22px;top:90.5px;width:8px;height:8px;" />
+          <span class="gf-label">점과 관상</span>
+        </div>
+      </div>
     </div>
+    <!-- /.gwPage -->
 
-    <nav class="bottomNav">
-      <div class="bottomLogo">DOT SHIFT</div>
-      <div class="navBadges">
-        <span
-          class="badge badge--h"
-          onclick="window.location.href = 'index.html'"
-          >H</span
-        >
-        <span class="badge badge--b" onclick="history.back()">B</span>
+    <!-- ===== 하단 네비게이션 ===== -->
+            <nav class="bottomNav">
+      <div class="bn-inner">
+        <img class="bn-logo-l" style="width:23.456px;height:29.129px;left:40px;top:22.99px" src="images/nav/logo-D.svg" alt="">
+        <img class="bn-logo-l" style="width:29.935px;height:29.935px;left:66.65px;top:22.59px" src="images/nav/logo-O.svg" alt="">
+        <img class="bn-logo-l" style="width:22.571px;height:29.129px;left:98.09px;top:22.99px" src="images/nav/logo-T.svg" alt="">
+        <img class="bn-logo-l" style="width:21.726px;height:30.015px;left:134.06px;top:22.59px" src="images/nav/logo-S.svg" alt="">
+        <img class="bn-logo-l" style="width:23.336px;height:29.129px;left:160.53px;top:22.99px" src="images/nav/logo-H.svg" alt="">
+        <img class="bn-logo-l" style="width:4.426px;height:29.129px;left:189.82px;top:22.99px" src="images/nav/logo-I.svg" alt="">
+        <img class="bn-logo-l" style="width:18.065px;height:29.129px;left:200.16px;top:22.99px" src="images/nav/logo-F.svg" alt="">
+        <img class="bn-logo-l" style="width:22.571px;height:29.129px;left:221.73px;top:22.99px" src="images/nav/logo-T.svg" alt="">
+        <a class="bn-badge bn-badge--h" href="index.html">H</a>
+        <button class="bn-badge bn-badge--b" onclick="history.back()">B</button>
+        <button class="bn-item" style="left:467.15px" onclick="window.location.href='index.html'">
+          <span>프로젝트 알아보기</span>
+          <img src="images/nav/nav-arrow.svg" alt="">
+        </button>
+        <button class="bn-item" style="left:794.15px" onclick="window.location.href='camera.html'">
+          <span>점 패턴 분석하기</span>
+          <img src="images/nav/nav-arrow.svg" alt="">
+        </button>
+        <button class="bn-item" style="left:1106.15px" onclick="window.location.href='facemap.html'">
+          <span>얼굴 지도 살펴보기</span>
+          <img src="images/nav/nav-arrow.svg" alt="">
+        </button>
+        <button class="bn-item" style="left:1439.15px" onclick="window.location.href='gwansang.html'">
+          <span>관상학 알아보기</span>
+          <img src="images/nav/nav-arrow.svg" alt="">
+        </button>
+        <button class="bn-help-btn">?</button>
       </div>
-      <button
-        class="bottomNavBtn"
-        onclick="window.location.href = 'index.html'"
-      >
-        <span>프로젝트 알아보기</span>
-        <img
-          src="images/gwansang/nav-arrow.svg"
-          alt=""
-        />
-      </button>
-      <button
-        class="bottomNavBtn"
-        onclick="window.location.href = 'camera.html'"
-      >
-        <span>점 패턴 분석하기</span>
-        <img
-          src="images/gwansang/nav-arrow.svg"
-          alt=""
-        />
-      </button>
-      <button
-        class="bottomNavBtn"
-        onclick="window.location.href = 'facemap.html'"
-      >
-        <span>얼굴 지도 살펴보기</span>
-        <img
-          src="images/gwansang/nav-arrow.svg"
-          alt=""
-        />
-      </button>
-      <button
-        class="bottomNavBtn"
-        onclick="window.location.href = 'gwansang.html'"
-      >
-        <span>관상학 알아보기</span>
-        <img
-          src="images/gwansang/nav-arrow.svg"
-          alt=""
-        />
-      </button>
-      <button class="helpBtn"><span class="helpIcon">?</span></button>
     </nav>
+  <script src="scale.js"></script>
   </body>
 </html>

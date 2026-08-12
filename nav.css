@@ -5,15 +5,15 @@
   position: fixed;
   top: 0; left: 0;
   width: 100%;
-  height: 43px;
+  height: 47px;
   background: white;
   border-bottom: 1px solid black;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
+  padding: 0 50px;
   z-index: 300;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 1px rgba(0,0,0,0.1);
 }
 
 .topNav .navLeft,
@@ -25,120 +25,101 @@
   white-space: nowrap;
 }
 
-.topNav .navCenter { display: flex; align-items: center; }
-
-/* 하단 바 */
+/* ── 하단 바 (1920px 투명 컨테이너, scale.js bottom-left 스케일) ── */
 .bottomNav {
   position: fixed;
-  bottom: 0; left: 0;
-  width: 100%;
-  height: 73px;
-  background: white;
-  border-top: 1px solid black;
-  box-shadow: 0 -4px 6px -2px rgba(0,0,0,0.15);
-  display: flex;
-  align-items: center;
+  bottom: 10px;
+  left: 0;
+  width: 1920px;
+  height: 76px;
+  background: transparent;
+  transform-origin: bottom left;
   z-index: 300;
 }
 
-/* 로고 */
-.bottomLogo {
-  flex-shrink: 0;
-  min-width: 220px;
-  padding: 0 24px;
-  font-family: 'Pretendard', sans-serif;
-  font-weight: 900;
-  font-size: 22px;
-  letter-spacing: 2px;
-  color: black;
-  border-right: 1px solid black;
-  height: 100%;
-  display: flex;
-  align-items: center;
+/* 실제 pill 영역 (1801px 중앙 정렬) */
+.bn-inner {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1801px;
+  height: 76px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  overflow: hidden;
 }
 
-/* 배지 */
-.navBadges {
-  display: flex;
-  gap: 8px;
-  padding: 0 16px;
-  flex-shrink: 0;
-  height: 100%;
-  align-items: center;
-  border-right: 1px solid black;
+/* 로고 글자 SVG들 */
+.bn-logo-l {
+  position: absolute;
+  display: block;
 }
 
-.badge {
-  padding: 0 14px;
-  border-radius: 49px;
-  border: 1px solid black;
-  font-family: 'Pretendard', sans-serif;
-  font-size: 18px;
-  font-weight: 400;
-  line-height: 40px;
-}
-
-.badge--h { background: #e9f056; color: black; }
-.badge--b { background: #757575; color: white; }
-
-/* 네비게이션 버튼 */
-.bottomNavBtn {
-  flex: 1;
-  height: 100%;
-  background: white;
-  border: none;
-  border-right: 1px solid black;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 28px;
-  font-family: 'Pretendard', sans-serif;
-  font-size: clamp(14px, 1.2vw, 24px);
-  font-weight: 600;
-  color: black;
-  cursor: pointer;
-  transition: background 0.15s;
-  white-space: nowrap;
-  text-decoration: none;
-}
-
-.bottomNavBtn:hover:not(:disabled) { background: #f0f0f0; }
-
-.bottomNavBtn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.bottomNavBtn img {
-  width: 28px;
-  height: 28px;
-  flex-shrink: 0;
-  margin-left: 12px;
-}
-
-/* 도움말 버튼 */
-.helpBtn {
-  flex-shrink: 0;
-  width: 100px;
-  height: 100%;
-  background: white;
-  border: none;
-  cursor: pointer;
+/* H / B 배지 */
+.bn-badge {
+  position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 49px;
+  border: 1px solid black;
+  font-family: 'Pretendard', sans-serif;
+  font-size: 20px;
+  line-height: 1;
+  top: 16px;
+  cursor: pointer;
+  text-decoration: none;
 }
 
-.helpBtn .helpIcon {
+.bn-badge--h { left: 299.3px; background: #e9f056; color: black; }
+.bn-badge--b { left: 372.3px; background: #757575; color: white; }
+
+/* ─ 네비게이션 항목 ─ */
+.bn-item {
+  position: absolute;
+  top: 11px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  padding: 12px 10px;
+  background: transparent;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 24px;
+  color: black;
+  white-space: nowrap;
+  transition: background 0.12s ease;
+}
+.bn-item:hover { background: rgba(0, 0, 0, 0.05); }
+.bn-item img {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+}
+
+/* ─ 도움말 버튼 ─ */
+.bn-help-btn {
+  position: absolute;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
   background: #ea5c3a;
   border: 1px solid black;
   border-radius: 49px;
   color: white;
   font-family: 'Pretendard', sans-serif;
-  font-size: 18px;
-  width: 38px;
-  height: 38px;
+  font-size: 20px;
+  line-height: 1;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }

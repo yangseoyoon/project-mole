@@ -1,73 +1,121 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <title>웹캠페이지</title>
+    <title>웹캠 | DOT SHIFT</title>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
     <link rel="stylesheet" href="nav.css" />
     <link rel="stylesheet" href="camera.css" />
   </head>
   <body>
-    <!-- 상단 네비게이션 바 -->
+
     <nav class="topNav">
       <span class="navLeft">PROJECT: DOT SHIFT</span>
-      <div class="navCenter">
-        <svg width="35" height="7" viewBox="0 0 35 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="3.5" cy="3.5" r="3.5" fill="black" />
-          <circle cx="17.5" cy="3.5" r="3.5" fill="black" />
-          <circle cx="31.5" cy="3.5" r="3.5" fill="black" />
-        </svg>
-      </div>
       <span class="navRight">Everything starts from a dot</span>
     </nav>
 
-    <div class="cameraPage">
-      <!-- 카메라 영역 (검정 네모) -->
-      <div class="cameraFrame">
-        <video id="video" autoplay playsinline muted></video>
+    <div class="cameraWrap page-scale">
 
-        <!-- 가이드 오버레이 이미지 -->
-        <img class="guideOverlay" src="images/guide.png" alt="" />
+      <!-- 뒷 배경 이미지 -->
+      <img class="bg-overlay" src="images/cam-bg.png" alt="" />
 
-        <!-- 하단 촬영 버튼 -->
-        <button id="captureBtn" class="captureBtn" title="촬영">
-          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="20" cy="20" r="19" stroke="#e9f056" stroke-width="2"/>
-            <path d="M10 16.5C10 15.4 10.9 14.5 12 14.5H14.5L16 12H24L25.5 14.5H28C29.1 14.5 30 15.4 30 16.5V26C30 27.1 29.1 28 28 28H12C10.9 28 10 27.1 10 26V16.5Z" stroke="#e9f056" stroke-width="1.8"/>
-            <circle cx="20" cy="21" r="4" stroke="#e9f056" stroke-width="1.8"/>
-          </svg>
-        </button>
+      <!-- 좌측 회색 패널 (장식) -->
+      <div class="left-panel"></div>
+
+      <!-- macOS 스타일 브라우저 창 -->
+      <div class="browser-window">
+
+        <!-- 타이틀바 -->
+        <div class="win-titlebar">
+          <img class="win-dot" src="https://www.figma.com/api/mcp/asset/e67014d1-2782-4d8c-8247-7a80f6f220c9.svg" alt="" />
+          <img class="win-dot" src="https://www.figma.com/api/mcp/asset/e67014d1-2782-4d8c-8247-7a80f6f220c9.svg" alt="" />
+          <img class="win-dot" src="https://www.figma.com/api/mcp/asset/e67014d1-2782-4d8c-8247-7a80f6f220c9.svg" alt="" />
+        </div>
+
+        <!-- 카메라 영역 (검정) -->
+        <div class="win-body">
+          <video id="video" autoplay playsinline muted></video>
+          <!-- 가이드 오버레이: 피그마 좌표 그대로 (left=235.22, top=-82, 737×1173) -->
+          <div class="guide-inner">
+            <img src="https://www.figma.com/api/mcp/asset/b3cd2d5e-14fc-4634-869e-0f2304b57235.svg" alt="" />
+          </div>
+        </div>
+
+        <!-- 하단 바 -->
+        <div class="win-footer">
+          <!-- 3-세그먼트 툴바 -->
+          <div class="win-toolbar">
+            <div class="win-seg"></div>
+            <div class="win-seg"></div>
+            <div class="win-seg"></div>
+          </div>
+
+          <!-- 촬영 버튼 (피그마 imgFrame572) -->
+          <button id="captureBtn" class="captureBtn">
+            <img src="https://www.figma.com/api/mcp/asset/5b4b47f0-3572-427e-aec7-1493417e84b5.svg" alt="촬영" />
+          </button>
+
+          <!-- 초기화 버튼 -->
+          <button class="reset-btn" onclick="location.reload()">초기화</button>
+        </div>
       </div>
+
+      <!-- 말풍선: 눈썹 가이드 -->
+      <div class="hint-pill hint-eyebrow">선 사이에 눈썹을 맞추세요!</div>
+
+      <!-- 말풍선: 얼굴 가이드 -->
+      <div class="hint-pill hint-face">노란색 원에 얼굴을 맞추세요!</div>
+
+      <!-- 폴더 장식 (우측 상단 빨강) -->
+      <img class="deco-folder" style="left:1733px; top:calc(113px - 43.446px); width:133px;" src="https://www.figma.com/api/mcp/asset/eac6ab9d-acbd-46ea-af96-d4352e8694a6.svg" alt="" />
+      <!-- 폴더 장식 (우측 중간 빨강) -->
+      <img class="deco-folder" style="left:1553px; top:calc(659px - 43.446px); width:133px;" src="https://www.figma.com/api/mcp/asset/eac6ab9d-acbd-46ea-af96-d4352e8694a6.svg" alt="" />
+      <!-- 폴더 장식 (좌측 하단 빨강 - 화면 밖) -->
+      <img class="deco-folder" style="left:-44px; top:calc(940px - 43.446px); width:133px;" src="https://www.figma.com/api/mcp/asset/eac6ab9d-acbd-46ea-af96-d4352e8694a6.svg" alt="" />
+      <!-- 폴더 장식 (좌측 중간 빨강) -->
+      <img class="deco-folder" style="left:106px; top:calc(816px - 43.446px); width:133px;" src="https://www.figma.com/api/mcp/asset/eac6ab9d-acbd-46ea-af96-d4352e8694a6.svg" alt="" />
+      <!-- 폴더 장식 (우측 최우측 노랑) -->
+      <img class="deco-folder" style="left:1853px; top:calc(307px - 43.446px); width:133px;" src="https://www.figma.com/api/mcp/asset/41002977-557e-49c3-a9b5-4774ce034391.svg" alt="" />
+      <!-- 폴더 장식 (좌측 상단 노랑) -->
+      <img class="deco-folder" style="left:37px; top:calc(77px - 43.446px); width:133px;" src="https://www.figma.com/api/mcp/asset/41002977-557e-49c3-a9b5-4774ce034391.svg" alt="" />
+
     </div>
 
-    <!-- 하단 네비게이션 바 -->
     <nav class="bottomNav">
-      <div class="bottomLogo">DOT SHIFT</div>
-      <div class="navBadges">
-        <span class="badge badge--h" onclick="window.location.href='index.html'">H</span>
-        <span class="badge badge--b" onclick="history.back()">B</span>
+      <div class="bn-inner">
+        <img class="bn-logo-l" style="width:23.456px;height:29.129px;left:40px;top:22.99px" src="images/nav/logo-D.svg" alt="">
+        <img class="bn-logo-l" style="width:29.935px;height:29.935px;left:66.65px;top:22.59px" src="images/nav/logo-O.svg" alt="">
+        <img class="bn-logo-l" style="width:22.571px;height:29.129px;left:98.09px;top:22.99px" src="images/nav/logo-T.svg" alt="">
+        <img class="bn-logo-l" style="width:21.726px;height:30.015px;left:134.06px;top:22.59px" src="images/nav/logo-S.svg" alt="">
+        <img class="bn-logo-l" style="width:23.336px;height:29.129px;left:160.53px;top:22.99px" src="images/nav/logo-H.svg" alt="">
+        <img class="bn-logo-l" style="width:4.426px;height:29.129px;left:189.82px;top:22.99px" src="images/nav/logo-I.svg" alt="">
+        <img class="bn-logo-l" style="width:18.065px;height:29.129px;left:200.16px;top:22.99px" src="images/nav/logo-F.svg" alt="">
+        <img class="bn-logo-l" style="width:22.571px;height:29.129px;left:221.73px;top:22.99px" src="images/nav/logo-T.svg" alt="">
+        <a class="bn-badge bn-badge--h" href="index.html">H</a>
+        <button class="bn-badge bn-badge--b" onclick="history.back()">B</button>
+        <button class="bn-item" style="left:467.15px" onclick="window.location.href='index.html'">
+          <span>프로젝트 알아보기</span>
+          <img src="images/nav/nav-arrow.svg" alt="">
+        </button>
+        <button class="bn-item" style="left:794.15px" onclick="window.location.href='camera.html'">
+          <span>점 패턴 분석하기</span>
+          <img src="images/nav/nav-arrow.svg" alt="">
+        </button>
+        <button class="bn-item" style="left:1106.15px" onclick="window.location.href='facemap.html'">
+          <span>얼굴 지도 살펴보기</span>
+          <img src="images/nav/nav-arrow.svg" alt="">
+        </button>
+        <button class="bn-item" style="left:1439.15px" onclick="window.location.href='gwansang.html'">
+          <span>관상학 알아보기</span>
+          <img src="images/nav/nav-arrow.svg" alt="">
+        </button>
+        <button class="bn-help-btn">?</button>
       </div>
-      <button class="bottomNavBtn" onclick="window.location.href='index.html'">
-        <span>프로젝트 알아보기</span>
-        <img src="https://www.figma.com/api/mcp/asset/7561d293-b240-400a-a8ff-d579225efbb0" alt="" />
-      </button>
-      <button class="bottomNavBtn" onclick="window.location.href='camera.html'">
-        <span>점 패턴 분석하기</span>
-        <img src="https://www.figma.com/api/mcp/asset/7561d293-b240-400a-a8ff-d579225efbb0" alt="" />
-      </button>
-      <button class="bottomNavBtn" onclick="window.location.href='facemap.html'">
-        <span>얼굴 지도 살펴보기</span>
-        <img src="https://www.figma.com/api/mcp/asset/7561d293-b240-400a-a8ff-d579225efbb0" alt="" />
-      </button>
-      <button class="bottomNavBtn" onclick="window.location.href='gwansang.html'">
-        <span>관상학 알아보기</span>
-        <img src="https://www.figma.com/api/mcp/asset/7561d293-b240-400a-a8ff-d579225efbb0" alt="" />
-      </button>
-      <button class="helpBtn"><span class="helpIcon">?</span></button>
     </nav>
 
     <canvas id="photoCanvas" style="display:none;"></canvas>
     <script src="camera.js"></script>
+    <script src="scale.js"></script>
   </body>
 </html>

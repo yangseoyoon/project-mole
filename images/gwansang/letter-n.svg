@@ -1,3 +1,5 @@
-<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="30.4985" height="38.8289" viewBox="0 0 30.4985 38.8289" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path id="Vector" d="M6.07142 15.8139V38.8289H0V0.494186H5.85963V6.49501H6.35382C8.15406 2.57683 11.7546 0 17.5789 0C25.3447 0 30.5336 4.73006 30.4983 14.4726V38.8289H24.4269V14.8962C24.4269 8.96594 21.1794 5.43604 15.7433 5.43604C10.1661 5.43604 6.07142 9.17773 6.07142 15.8139Z" fill="white" style="fill:white;fill-opacity:1;"/>
+<svg width="132" height="132" viewBox="0 0 132 132" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="0.5" y="0.5" width="130.5" height="130.5" fill="black" style="fill:black;fill-opacity:1;"/>
+<rect x="0.5" y="0.5" width="130.5" height="130.5" stroke="black" style="stroke:black;stroke-opacity:1;"/>
+<path d="M56.5714 62.5639V85.5789H50.5V47.2442H56.3596V53.245H56.8538C58.6541 49.3268 62.2546 46.75 68.0789 46.75C75.8447 46.75 81.0336 51.4801 80.9983 61.2226V85.5789H74.9269V61.6462C74.9269 55.7159 71.6794 52.186 66.2433 52.186C60.6661 52.186 56.5714 55.9277 56.5714 62.5639Z" fill="white" style="fill:white;fill-opacity:1;"/>
 </svg>

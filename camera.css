@@ -1,42 +1,98 @@
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   font-family: 'Pretendard', sans-serif;
   background: #e9f056;
+  overflow: hidden;
   width: 100vw;
   height: 100vh;
+}
+
+/* ── 1920×1080 고정 캔버스 ── */
+.cameraWrap {
+  position: fixed;
+  top: 43.446px;
+  left: 0;
+  width: 1920px;
+  height: calc(1080px - 43.446px - 73px);
+  overflow: visible;
+}
+
+/* ── 뒷 배경 오버레이 ── */
+.bg-overlay {
+  position: absolute;
+  inset: 0;
+  width: 1920px;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── 좌측 회색 패널 ── */
+.left-panel {
+  position: absolute;
+  left: 52px;
+  top: calc(335.22px - 43.446px);
+  width: 350px;
+  height: 380px;
+  background: #efefef;
+  border: 1px solid #a6a6a6;
+  border-radius: 10px;
+  z-index: 1;
+}
+
+/* ── 브라우저 창 ── */
+.browser-window {
+  position: absolute;
+  left: 342px;
+  top: calc(58px - 43.446px);
+  width: 1174.2px;
+  height: 836px;
+  background: white;
+  border: 1px solid black;
+  border-radius: 10px;
   overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  z-index: 1;
 }
 
-/* ── 전체 페이지 (노란 테두리 역할) ── */
-.cameraPage {
+/* ── 타이틀바 ── */
+.win-titlebar {
+  position: absolute;
+  left: 0;
+  top: 0;
   width: 100%;
-  height: 100%;
-  padding: 73px 30px 103px;
+  height: 40.492px;
+  background: #d9d9d9;
+  border-bottom: 1px solid #cacaca;
+  box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.4);
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 0;
 }
 
-/* ── 검정 카메라 프레임 ── */
-.cameraFrame {
-  position: relative;
-  width: 100%;
-  height: 100%;
+.win-dot {
+  display: block;
+  width: 13.5px;
+  height: 13.5px;
+  flex-shrink: 0;
+}
+.win-dot:nth-child(1) { margin-left: 29.98px; }
+.win-dot:nth-child(2) { margin-left: 16px; }
+.win-dot:nth-child(3) { margin-left: 16px; }
+
+/* ── 카메라 영역 (검정) ── */
+.win-body {
+  position: absolute;
+  left: 12px;
+  top: 54px;
+  width: 1150.2px;
+  height: 688px;
   background: black;
+  border: 1px solid black;
   overflow: hidden;
 }
 
-/* ── 웹캠 영상 ── */
 #video {
   position: absolute;
   inset: 0;
@@ -46,47 +102,135 @@ body {
   transform: scaleX(-1);
 }
 
-/* ── SVG 오버레이 (그리드 + 타원 가이드) ── */
-.guideOverlay {
+/* 가이드 오버레이: 원본 대비 70% 크기, 중심 유지 */
+.guide-inner {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  left: 316.97px;
+  top: 18.2px;
+  width: 516.27px;
+  height: 821.1px;
   pointer-events: none;
 }
+.guide-inner img {
+  width: 100%;
+  height: 100%;
+}
 
-/* ── 촬영 버튼 ── */
+/* ── 하단 바 ── */
+.win-footer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 86.5px;
+  background: #efefef;
+  box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+}
+
+/* ── 3-세그먼트 툴바 ── */
+.win-toolbar {
+  position: absolute;
+  left: 40px;
+  top: 25.5px;
+  width: 236px;
+  height: 32px;
+  border: 0.5px solid #a6a6a6;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+}
+
+.win-seg {
+  flex: 1;
+  background: white;
+  border-right: 0.5px solid #a6a6a6;
+}
+.win-seg:last-child { border-right: none; }
+
+/* ── 촬영 버튼 (피그마 Frame572) ── */
 .captureBtn {
   position: absolute;
-  bottom: 5%;
   left: 50%;
   transform: translateX(-50%);
-  width: 52px;
-  height: 52px;
+  top: 7px;
+  width: 66px;
+  height: 67px;
   background: transparent;
   border: none;
   cursor: pointer;
   padding: 0;
   z-index: 10;
-  transition:
-    transform 0.1s ease,
-    opacity 0.1s ease;
+  transition: transform 0.1s ease, opacity 0.1s ease;
+}
+.captureBtn:hover  { transform: translateX(-50%) scale(1.1); }
+.captureBtn:active { transform: translateX(-50%) scale(0.93); opacity: 0.7; }
+.captureBtn img { width: 100%; height: 100%; display: block; }
+
+/* ── 초기화 버튼 ── */
+.reset-btn {
+  position: absolute;
+  right: 50px;
+  top: 25.5px;
+  width: 124px;
+  height: 32px;
+  background: white;
+  border: 0.5px solid #a6a6a6;
+  border-radius: 10px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: 22px;
+  color: #8d8d8d;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+.reset-btn:hover {
+  background: #c8c8c8;
+  color: #555;
+}
+.reset-btn:active {
+  background: #aaa;
 }
 
-.captureBtn:hover {
-  transform: translateX(-50%) scale(1.12);
+/* ── 말풍선 힌트 ── */
+.hint-pill,
+.deco-folder {
+  z-index: 1;
+}
+.hint-pill {
+  position: absolute;
+  background: white;
+  border: 0.3px solid #000;
+  border-radius: 100px;
+  padding: 12px 18px;
+  filter: drop-shadow(2px 2px 1px rgba(0,0,0,0.3));
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  color: #000;
+  white-space: nowrap;
+  line-height: 24px;
+  pointer-events: none;
 }
 
-.captureBtn:active {
-  transform: translateX(-50%) scale(0.93);
-  opacity: 0.7;
+.hint-eyebrow {
+  left: 1511px;
+  top: calc(307px - 43.446px);
+  font-size: 22px;
 }
 
-.captureBtn svg {
-  width: 100%;
-  height: 100%;
+.hint-face {
+  left: 127px;
+  top: calc(739px - 43.446px);
+  font-size: 24px;
 }
 
-#photoCanvas {
-  display: none;
+/* ── 폴더 장식 ── */
+.deco-folder {
+  position: absolute;
+  width: 133px;
+  pointer-events: none;
 }

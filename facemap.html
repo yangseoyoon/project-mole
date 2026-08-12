@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
@@ -15,31 +15,14 @@
     <!-- 상단 네비게이션 바 -->
     <nav class="topNav">
       <span class="navLeft">PROJECT: DOT SHIFT</span>
-      <div class="navCenter">
-        <svg
-          width="35"
-          height="7"
-          viewBox="0 0 35 7"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <circle cx="3.5" cy="3.5" r="3.5" fill="black" />
-          <circle cx="17.5" cy="3.5" r="3.5" fill="black" />
-          <circle cx="31.5" cy="3.5" r="3.5" fill="black" />
-        </svg>
-      </div>
       <span class="navRight">Everything starts from a dot</span>
     </nav>
 
     <!-- 메인 콘텐츠 -->
-    <div class="faceMapPage">
+    <div class="faceMapPage page-scale">
       <!-- 얼굴 지도 이미지 + 오렌지 오버레이 -->
       <div class="faceMapBg">
-        <img
-          class="faceMapImg"
-          src="https://www.figma.com/api/mcp/asset/f0e756ad-cfb4-48f1-a9fa-5ea995104177"
-          alt=""
-        />
+        <img class="faceMapImg" src="images/facemap/face-bg.png" alt="" />
         <div class="faceMapOverlay"></div>
       </div>
 
@@ -58,19 +41,23 @@
       </div>
 
       <!-- 왼쪽 범례 -->
-      <div class="legendCircle" style="top: 64.75px; --legend-hover-w: 330px">
+      <div class="legendCircle" style="top: 64.75px; --legend-hover-w: 304px">
         <span class="legend-c" style="color: #fb6d4b">C</span
         ><span class="legend-label">elebrity</span>
       </div>
       <div
         class="legendCircle"
-        style="top: 199.75px; --legend-hover-w: 346px"
+        style="top: 178.75px; --legend-hover-w: 304px"
         onclick="window.location.href = 'facemap-character.html'"
       >
         <span class="legend-c" style="color: #5e9bff">C</span
         ><span class="legend-label">haracter</span>
       </div>
-      <div class="legendCircle" style="top: 334.75px; --legend-hover-w: 292px">
+      <div
+        class="legendCircle"
+        style="top: 292.75px; --legend-hover-w: 254px"
+        onclick="openCustomModal()"
+      >
         <span class="legend-c" style="color: #ff53cb">C</span
         ><span class="legend-label">ustom</span>
       </div>
@@ -80,56 +67,41 @@
       <button
         class="dotBtn"
         data-profile="jenny"
-        style="left: 1212.79px; top: 335.61px"
+        style="left: 1192.79px; top: 285.61px"
       >
-        <img
-          src="https://www.figma.com/api/mcp/asset/66e74519-7e49-4b09-9c21-4545231c3cc5"
-          alt=""
-        />
+        <img src="images/facemap/dot-jenny.svg" alt="" />
       </button>
       <!-- Frame401: 제이 -->
       <button
         class="dotBtn"
         data-profile="jay"
-        style="left: 888px; top: 240.44px"
+        style="left: 868px; top: 190.44px"
       >
-        <img
-          src="https://www.figma.com/api/mcp/asset/7adec1a1-515c-41c4-83c3-f8c071c95485"
-          alt=""
-        />
+        <img src="images/facemap/dot-jay.svg" alt="" />
       </button>
       <!-- Frame402: 가을 -->
       <button
         class="dotBtn"
         data-profile="gaeul"
-        style="left: 1084px; top: 925.77px"
+        style="left: 1064px; top: 835.77px"
       >
-        <img
-          src="https://www.figma.com/api/mcp/asset/6913267d-8b1a-4ab3-9093-df9cfca43e70"
-          alt=""
-        />
+        <img src="images/facemap/dot-gaeul.svg" alt="" />
       </button>
       <!-- Frame410: 신디 크로포드 -->
       <button
         class="dotBtn"
         data-profile="cindy"
-        style="left: 1065.79px; top: 838.12px"
+        style="left: 1045.79px; top: 788.12px"
       >
-        <img
-          src="https://www.figma.com/api/mcp/asset/a0a9ddb0-c38e-4f62-9199-936ea747da96"
-          alt=""
-        />
+        <img src="images/facemap/dot-cindy.svg" alt="" />
       </button>
       <!-- Frame409: 마릴린 먼로 -->
       <button
         class="dotBtn"
         data-profile="marilyn"
-        style="left: 1103.58px; top: 793.3px"
+        style="left: 1083.58px; top: 743.3px"
       >
-        <img
-          src="https://www.figma.com/api/mcp/asset/793d49fd-ff2f-49b9-845e-1784e0ee4b88"
-          alt=""
-        />
+        <img src="images/facemap/dot-marilyn.svg" alt="" />
       </button>
       <!-- Frame399: 비비 -->
       <button
@@ -137,181 +109,179 @@
         data-profile="bibi"
         style="left: 391.02px; top: 673.09px; width: 79px"
       >
-        <img
-          src="https://www.figma.com/api/mcp/asset/f26feb68-35cb-4782-89a9-7952e648414f"
-          alt=""
-        />
+        <img src="images/facemap/dot-bibi.svg" alt="" />
       </button>
       <!-- Frame404: 장원영 -->
       <button
         class="dotBtn"
         data-profile="jangwonyoung"
-        style="left: 1487.5px; top: 654.4px"
+        style="left: 1467.5px; top: 604.4px"
       >
-        <img
-          src="https://www.figma.com/api/mcp/asset/8204edac-9aca-48b0-a1af-3f70d8b59842"
-          alt=""
-        />
+        <img src="images/facemap/dot-jangwonyoung.svg" alt="" />
       </button>
       <!-- Frame405: 장식용 (클릭 불가) -->
-      <div class="dotBtn" style="left: 1239.5px; top: 514.55px">
-        <img
-          src="https://www.figma.com/api/mcp/asset/347059b2-2a38-4b3c-8083-7db005eb8745"
-          alt=""
-        />
+      <div class="dotBtn" style="left: 1209.5px; top: 164.55px">
+        <img src="images/facemap/dot-deco.svg" alt="" />
       </div>
       <!-- Frame412: 이로하 -->
       <button
         class="dotBtn"
         data-profile="iroha"
-        style="left: 1138.79px; top: 452.09px"
+        style="left: 1118.79px; top: 402.09px"
       >
-        <img
-          src="https://www.figma.com/api/mcp/asset/ae62ef5a-e97d-4652-99b5-708f6cbee5d4"
-          alt=""
-        />
+        <img src="images/facemap/dot-iroha.svg" alt="" />
       </button>
       <!-- Frame407: 레이 -->
       <button
         class="dotBtn"
         data-profile="rei"
-        style="left: 1443.58px; top: 864.54px"
+        style="left: 1400px; top: 780px"
       >
-        <img
-          src="https://www.figma.com/api/mcp/asset/2d347cc5-9b93-4918-831a-1af3ea3ebefd"
-          alt=""
-        />
+        <img src="images/facemap/dot-rei.svg" alt="" />
       </button>
       <!-- Frame406: 고소영 -->
       <button
         class="dotBtn"
         data-profile="kosoyoung"
-        style="left: 930.29px; top: 598.71px"
+        style="left: 910.29px; top: 548.71px"
       >
-        <img
-          src="https://www.figma.com/api/mcp/asset/d75d7408-ff61-4642-976c-1a5764303a94"
-          alt=""
-        />
+        <img src="images/facemap/dot-kosoyoung.svg" alt="" />
       </button>
       <!-- Frame411: 이글레시아스 -->
       <button
         class="dotBtnSmall"
         data-profile="enrique"
-        style="left: 1065.79px; top: 514.55px"
+        style="left: 1393.21px; top: 548.71px"
       >
-        <img
-          src="https://www.figma.com/api/mcp/asset/07c4915f-b26a-47c2-981a-29503ebad135"
-          alt=""
-        />
+        <img src="images/facemap/dot-enrique.png" alt="" />
       </button>
       <!-- Frame403: 전지현 -->
       <button
         class="dotBtn"
         data-profile="jeonjihyun"
-        style="left: 1597.08px; top: 723.55px"
+        style="left: 1577.08px; top: 673.55px"
       >
-        <img
-          src="https://www.figma.com/api/mcp/asset/9321b623-e884-4f48-af54-1ce00455a855"
-          alt=""
-        />
+        <img src="images/facemap/dot-jeonjihyun.svg" alt="" />
       </button>
 
-      <!-- 프로필 말풍선 (공유) -->
+      <!-- 프로필 말풍선 -->
       <div class="profile-bubble" id="profileBubble">
-        <div class="bubble-photo-wrap">
-          <img id="bubblePhoto" src="" alt="" />
+        <div class="bubble-union">
+          <img src="images/facemap/bubble-union.svg" alt="" />
         </div>
-        <div class="bubble-text">
-          <p id="bubbleName" class="bubble-name"></p>
-          <p id="bubbleDesc" class="bubble-desc"></p>
+        <div class="bubble-content">
+          <div class="bubble-photo-wrap">
+            <img id="bubblePhoto" src="" alt="" />
+          </div>
+          <div class="bubble-text">
+            <p class="bubble-name" id="bubbleName"></p>
+            <p class="bubble-desc" id="bubbleDesc"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 커스텀 팝업 모달 -->
+      <div
+        id="customModal"
+        class="custom-modal-overlay"
+        onclick="closeCustomModal()"
+      >
+        <div class="custom-modal-popup" onclick="event.stopPropagation()">
+          <div class="custom-modal-titlebar">점 지도 만드는 법</div>
+          <div class="custom-modal-body">
+            <p>
+              + 버튼을 누르고 원하는 위치를 클릭하면 자신만의 점과 프로필을
+              추가할 수 있다.
+            </p>
+          </div>
+          <button class="custom-modal-close" onclick="closeCustomModal()">
+            닫기
+          </button>
         </div>
       </div>
 
       <!-- 좌측 볼 점 클러스터 -->
-      <div class="miniDot" style="left: 316.79px; top: 805.41px"></div>
-      <div class="miniDot" style="left: 331.71px; top: 796.84px"></div>
-      <div class="miniDot" style="left: 344.74px; top: 780.09px"></div>
-      <div class="miniDot" style="left: 356.99px; top: 781.34px"></div>
-      <div class="miniDot" style="left: 364.49px; top: 803.84px"></div>
-      <div class="miniDot" style="left: 350px; top: 794.9px"></div>
-      <div class="miniDot" style="left: 380.5px; top: 766.15px"></div>
-      <div class="miniDot" style="left: 356.99px; top: 828.9px"></div>
-      <div class="miniDot" style="left: 334.22px; top: 812.46px"></div>
+      <div class="miniDot" style="left: 286.79px; top: 425.41px"></div>
+      <div class="miniDot" style="left: 301.71px; top: 416.84px"></div>
+      <div class="miniDot" style="left: 314.74px; top: 400.09px"></div>
+      <div class="miniDot" style="left: 326.99px; top: 401.34px"></div>
+      <div class="miniDot" style="left: 334.49px; top: 423.84px"></div>
+      <div class="miniDot" style="left: 320px; top: 414.9px"></div>
+      <div class="miniDot" style="left: 350.5px; top: 386.15px"></div>
+      <div class="miniDot" style="left: 326.99px; top: 448.9px"></div>
+      <div class="miniDot" style="left: 304.22px; top: 432.46px"></div>
     </div>
+
+    <script>
+      function openCustomModal() {
+        document.getElementById('customModal').classList.add('active');
+      }
+      function closeCustomModal() {
+        document.getElementById('customModal').classList.remove('active');
+      }
+    </script>
 
     <script>
       const PROFILES = {
         jay: {
           name: 'Jay',
-          desc: '대한민국 6인조 보이그룹 엔하이픈의 멤버',
-          photo:
-            'https://www.figma.com/api/mcp/asset/aa217f40-6f2c-4a00-8b59-f99892b5e8d2',
+          desc: '대한민국 6인조 보이그룹 ENHYPEN의 멤버',
+          photo: 'images/facemap/photo-jay.png',
         },
         gaeul: {
           name: 'Gaeul',
-          desc: '대한민국 6인조 걸그룹 아이브의 멤버',
-          photo:
-            'https://www.figma.com/api/mcp/asset/04f630c8-9a14-4e56-94ea-d4e4aec6fc1a',
+          desc: '대한민국 6인조 걸그룹 IVE의 멤버',
+          photo: 'images/facemap/photo-gaeul.png',
         },
         iroha: {
-          name: 'IROHA',
-          desc: '대한민국의 5인조 걸그룹 아일릿의 멤버',
-          photo:
-            'https://www.figma.com/api/mcp/asset/927f6c19-7f5d-40f9-80c3-7b582892ea2e',
+          name: '이로하',
+          desc: '대한민국 5인조 걸그룹 ILLIT의 멤버',
+          photo: 'images/facemap/photo-iroha.png',
         },
         enrique: {
-          name: 'Enrique Iglesias',
-          desc: '스페인의 팝 음악 싱어송라이터',
-          photo:
-            'https://www.figma.com/api/mcp/asset/edf3ec06-4e71-4d7a-97ec-b112d3278a9f',
+          name: '엔리케',
+          desc: '설명 추가 예정',
+          photo: 'images/facemap/photo-enrique.png',
         },
         kosoyoung: {
           name: 'Ko So young',
           desc: '대한민국의 배우',
-          photo:
-            'https://www.figma.com/api/mcp/asset/9182abf5-bdc6-457a-a64a-13c51083b199',
+          photo: 'images/facemap/photo-kosoyoung.png',
         },
         jeonjihyun: {
-          name: 'Jeon Ji hyun',
+          name: '전지현',
           desc: '대한민국의 배우',
-          photo:
-            'https://www.figma.com/api/mcp/asset/c412cb2b-5648-4674-851e-3610ed855564',
+          photo: 'images/facemap/photo-jeonjihyun.png',
         },
         jangwonyoung: {
-          name: 'Jang Won young',
-          desc: '대한민국 6인조 걸그룹 아이브의 멤버',
-          photo:
-            'https://www.figma.com/api/mcp/asset/92b06623-6ed9-4c3d-8b1c-5d72c8a4f287',
+          name: '장원영',
+          desc: '대한민국 6인조 걸그룹 IVE의 멤버',
+          photo: 'images/facemap/photo-jangwonyoung.png',
         },
         rei: {
           name: 'Rei',
-          desc: '대한민국 6인조 걸그룹 아이브의 멤버',
-          photo:
-            'https://www.figma.com/api/mcp/asset/ba1930c2-a19e-47db-9bde-7f91f94ae01c',
+          desc: '대한민국 6인조 걸그룹 IVE의 멤버',
+          photo: 'images/facemap/photo-rei.png',
         },
         marilyn: {
-          name: 'Marilyn Monroe',
-          desc: '미국의 배우이자 가수이자 모델',
-          photo:
-            'https://www.figma.com/api/mcp/asset/abc15e1f-2fb8-43dd-b5f7-50ed78d6714c',
+          name: '마릴린 먼로',
+          desc: '설명 추가 예정',
+          photo: 'images/facemap/photo-marilyn.png',
         },
         cindy: {
-          name: 'Cindy Crawford',
-          desc: '미국의 모델이자 배우',
-          photo:
-            'https://www.figma.com/api/mcp/asset/1269939e-dcc4-4623-af9b-d48bf79cbc40',
+          name: '신디 크로포드',
+          desc: '설명 추가 예정',
+          photo: 'images/facemap/photo-cindy.png',
         },
         bibi: {
           name: 'BIBI',
-          desc: '대한민국 솔로 아티스트이자 배우',
-          photo:
-            'https://www.figma.com/api/mcp/asset/7d975221-a25d-4901-b27e-5f9b7210e081',
+          desc: '설명 추가 예정',
+          photo: 'images/facemap/photo-bibi.png',
         },
         jenny: {
           name: 'Jenny',
-          desc: '대한민국 4인조 걸그룹 블랙핑크의 멤버이자 솔로 아티스트',
-          photo:
-            'https://www.figma.com/api/mcp/asset/604d116d-07d1-4c93-a274-172a5943af23',
+          desc: '설명 추가 예정',
+          photo: 'images/facemap/photo-jenny.png',
         },
       };
 
@@ -321,33 +291,38 @@
       const bDesc = document.getElementById('bubbleDesc');
       const page = document.querySelector('.faceMapPage');
       let activeDot = null;
+      const BUBBLE_W = 418,
+        BUBBLE_H = 172;
 
       document.querySelectorAll('[data-profile]').forEach((btn) => {
         btn.addEventListener('click', (e) => {
           e.stopPropagation();
           if (activeDot === btn && bubble.classList.contains('active')) {
             bubble.classList.remove('active');
+            btn.classList.remove('active');
             activeDot = null;
             return;
           }
+          if (activeDot) activeDot.classList.remove('active');
           activeDot = btn;
+          btn.classList.add('active');
           const p = PROFILES[btn.dataset.profile];
           bPhoto.src = p.photo;
           bName.textContent = p.name;
           bDesc.textContent = p.desc;
 
-          const BUBBLE_W = 436,
-            BUBBLE_H = 156;
+          const s = window.innerWidth / 1920;
           const btnRect = btn.getBoundingClientRect();
           const pageRect = page.getBoundingClientRect();
-          const dotCx = btnRect.left - pageRect.left + btnRect.width / 2;
-          const dotTop = btnRect.top - pageRect.top;
+          const dotCx = (btnRect.left - pageRect.left + btnRect.width / 2) / s;
+          const dotTop = (btnRect.top - pageRect.top) / s;
+          const dotH = btnRect.height / s;
 
           let left = dotCx - BUBBLE_W / 2;
-          let top = dotTop - BUBBLE_H - 18;
+          let top = dotTop - BUBBLE_H + 14;
 
-          left = Math.max(8, Math.min(left, pageRect.width - BUBBLE_W - 8));
-          if (top < 8) top = dotTop + btnRect.height + 18;
+          left = Math.max(8, Math.min(left, 1920 - BUBBLE_W - 8));
+          if (top < 8) top = dotTop + dotH + 2;
 
           bubble.style.left = left + 'px';
           bubble.style.top = top + 'px';
@@ -357,62 +332,119 @@
 
       document.addEventListener('click', () => {
         bubble.classList.remove('active');
+        if (activeDot) activeDot.classList.remove('active');
         activeDot = null;
       });
     </script>
 
     <!-- 하단 네비게이션 바 -->
     <nav class="bottomNav">
-      <div class="bottomLogo">DOT SHIFT</div>
-      <div class="navBadges">
-        <span
-          class="badge badge--h"
+      <div class="bn-inner">
+        <img
+          class="bn-logo-l"
+          style="width: 23.456px; height: 29.129px; left: 40px; top: 22.99px"
+          src="images/nav/logo-D.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="width: 29.935px; height: 29.935px; left: 66.65px; top: 22.59px"
+          src="images/nav/logo-O.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="width: 22.571px; height: 29.129px; left: 98.09px; top: 22.99px"
+          src="images/nav/logo-T.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="
+            width: 21.726px;
+            height: 30.015px;
+            left: 134.06px;
+            top: 22.59px;
+          "
+          src="images/nav/logo-S.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="
+            width: 23.336px;
+            height: 29.129px;
+            left: 160.53px;
+            top: 22.99px;
+          "
+          src="images/nav/logo-H.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="width: 4.426px; height: 29.129px; left: 189.82px; top: 22.99px"
+          src="images/nav/logo-I.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="
+            width: 18.065px;
+            height: 29.129px;
+            left: 200.16px;
+            top: 22.99px;
+          "
+          src="images/nav/logo-F.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="
+            width: 22.571px;
+            height: 29.129px;
+            left: 221.73px;
+            top: 22.99px;
+          "
+          src="images/nav/logo-T.svg"
+          alt=""
+        />
+        <a class="bn-badge bn-badge--h" href="index.html">H</a>
+        <button class="bn-badge bn-badge--b" onclick="history.back()">B</button>
+        <button
+          class="bn-item"
+          style="left: 467.15px"
           onclick="window.location.href = 'index.html'"
-          >H</span
         >
-        <span class="badge badge--b" onclick="history.back()">B</span>
+          <span>프로젝트 알아보기</span>
+          <img src="images/nav/nav-arrow.svg" alt="" />
+        </button>
+        <button
+          class="bn-item"
+          style="left: 794.15px"
+          onclick="window.location.href = 'camera.html'"
+        >
+          <span>점 패턴 분석하기</span>
+          <img src="images/nav/nav-arrow.svg" alt="" />
+        </button>
+        <button
+          class="bn-item"
+          style="left: 1106.15px"
+          onclick="window.location.href = 'facemap.html'"
+        >
+          <span>얼굴 지도 살펴보기</span>
+          <img src="images/nav/nav-arrow.svg" alt="" />
+        </button>
+        <button
+          class="bn-item"
+          style="left: 1439.15px"
+          onclick="window.location.href = 'gwansang.html'"
+        >
+          <span>관상학 알아보기</span>
+          <img src="images/nav/nav-arrow.svg" alt="" />
+        </button>
+        <button class="bn-help-btn">?</button>
       </div>
-      <button
-        class="bottomNavBtn"
-        onclick="window.location.href = 'index.html'"
-      >
-        <span>프로젝트 알아보기</span>
-        <img
-          src="https://www.figma.com/api/mcp/asset/7561d293-b240-400a-a8ff-d579225efbb0"
-          alt=""
-        />
-      </button>
-      <button
-        class="bottomNavBtn"
-        onclick="window.location.href = 'camera.html'"
-      >
-        <span>점 패턴 분석하기</span>
-        <img
-          src="https://www.figma.com/api/mcp/asset/7561d293-b240-400a-a8ff-d579225efbb0"
-          alt=""
-        />
-      </button>
-      <button
-        class="bottomNavBtn"
-        onclick="window.location.href = 'facemap.html'"
-      >
-        <span>얼굴 지도 살펴보기</span>
-        <img
-          src="https://www.figma.com/api/mcp/asset/7561d293-b240-400a-a8ff-d579225efbb0"
-          alt=""
-        />
-      </button>
-      <button
-        class="bottomNavBtn"
-        onclick="window.location.href = 'gwansang.html'"
-      >
-        <span>관상학 알아보기</span>
-        <img
-          src="https://www.figma.com/api/mcp/asset/7561d293-b240-400a-a8ff-d579225efbb0"
-          alt=""
-        />
-      </button>
-      <button class="helpBtn"><span class="helpIcon">?</span></button>
     </nav>
+    <script src="scale.js"></script>
   </body>
 </html>

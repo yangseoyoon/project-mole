@@ -1,4 +1,6 @@
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -17,18 +19,18 @@ body {
   position: fixed;
   top: 43px;
   left: 0;
-  width: 100vw;
-  height: calc(100vh - 43px - 73px);
+  width: 1920px;
+  height: calc(1080px - 43px - 73px);
   overflow: hidden;
 }
 
 /* ── 얼굴 지도 배경 이미지 ── */
 .faceMapBg {
   position: absolute;
-  left: -10px;
-  top: -284px;
-  width: 1935px;
-  height: 1368px;
+  left: -52.55px;
+  top: -70px;
+  width: 1871.1px;
+  height: 1047.9px;
 }
 
 .faceMapImg {
@@ -37,6 +39,7 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: bottom;
   pointer-events: none;
 }
 
@@ -107,40 +110,46 @@ body {
 .legendCircle {
   position: absolute;
   left: 74.5px;
-  width: 105px;
-  height: 105px;
-  border-radius: 71px;
+  width: 84px;
+  height: 84px;
+  border-radius: 57px;
   border: 1px solid black;
   background: #e9f056;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   font-family: 'Pretendard', sans-serif;
   font-weight: 600;
   overflow: hidden;
   cursor: pointer;
   transition: width 0.25s ease;
   white-space: nowrap;
+  padding-right: 8px;
 }
 
 .legend-c {
-  font-size: 96px;
+  font-size: 76.8px;
   line-height: 1;
   flex-shrink: 0;
+  width: 84px;
+  text-align: center;
 }
 
 .legend-label {
-  font-size: 64px;
+  font-size: 51.2px;
   color: #000;
   line-height: 1;
   max-width: 0;
   overflow: hidden;
   opacity: 0;
-  transition: max-width 0.25s ease, opacity 0.2s ease;
+  margin-left: -10px;
+  transition:
+    max-width 0.25s ease,
+    opacity 0.2s ease;
 }
 
 .legendCircle:hover {
-  width: var(--legend-hover-w, 330px);
+  width: var(--legend-hover-w, 264px);
 }
 
 .legendCircle:hover .legend-label {
@@ -167,6 +176,11 @@ body {
   pointer-events: none;
 }
 
+.dotBtn.active img,
+.dotBtnSmall.active img {
+  filter: brightness(0);
+}
+
 /* 작은 원 버튼 */
 .dotBtnSmall {
   position: absolute;
@@ -190,33 +204,15 @@ body {
 /* ── 프로필 말풍선 ── */
 .profile-bubble {
   position: absolute;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  width: 436px;
-  min-height: 120px;
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 16px 20px;
-  border: 1px solid #000;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  width: 418px;
+  height: 156px;
+  background: transparent;
+  border: none;
+  padding: 0;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.18s ease;
   z-index: 200;
-}
-
-.profile-bubble::after {
-  content: '';
-  position: absolute;
-  bottom: -9px;
-  left: 50%;
-  transform: translateX(-50%) rotate(45deg);
-  width: 16px;
-  height: 16px;
-  background: #fff;
-  border-right: 1px solid #000;
-  border-bottom: 1px solid #000;
 }
 
 .profile-bubble.active {
@@ -224,13 +220,38 @@ body {
   pointer-events: auto;
 }
 
+.bubble-union {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.bubble-union img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* 버블 본체(노치 제외) 영역 안에서 수직 중앙 정렬 */
+.bubble-content {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  padding: 10px 21px 10px 21px;
+  gap: 18px;
+}
+
 .bubble-photo-wrap {
   flex-shrink: 0;
-  width: 88px;
-  height: 88px;
+  width: 64px;
+  height: 68px;
   border-radius: 50%;
   overflow: hidden;
-  background: #eee;
+  border: 0.6px solid black;
 }
 
 .bubble-photo-wrap img {
@@ -242,24 +263,25 @@ body {
 
 .bubble-text {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  min-width: 0;
 }
 
 .bubble-name {
   font-family: 'Pretendard', sans-serif;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 18px;
-  color: #111;
+  line-height: 32px;
+  color: black;
+  margin: 0;
 }
 
 .bubble-desc {
   font-family: 'Pretendard', sans-serif;
-  font-weight: 400;
-  font-size: 13px;
-  color: #444;
-  line-height: 1.5;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 32px;
+  color: black;
+  margin: 0;
   word-break: keep-all;
 }
 
@@ -271,4 +293,80 @@ body {
   border-radius: 50%;
   background: #e9f056;
   pointer-events: none;
+}
+
+/* ── 커스텀 팝업 모달 ── */
+.custom-modal-overlay {
+  position: absolute;
+  left: 0;
+  top: -43.446px;
+  width: 1920px;
+  height: 1080px;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.custom-modal-overlay.active {
+  display: flex;
+}
+
+.custom-modal-popup {
+  position: absolute;
+  left: 648.26px;
+  top: 360.51px;
+  width: 585px;
+  height: 248px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 0.5px solid black;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.custom-modal-titlebar {
+  height: 40.492px;
+  background: #d9d9d9;
+  border-bottom: 1px solid #cacaca;
+  box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: 22px;
+  color: black;
+  flex-shrink: 0;
+}
+
+.custom-modal-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 0 40.5px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 32px;
+  color: black;
+}
+
+.custom-modal-close {
+  height: 64px;
+  border: none;
+  border-top: 0.5px solid black;
+  background: transparent;
+  width: 100%;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: 26px;
+  color: black;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.12s ease;
+}
+.custom-modal-close:hover {
+  background: rgba(0, 0, 0, 0.05);
 }
