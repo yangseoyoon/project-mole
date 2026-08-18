@@ -12,6 +12,12 @@
       "runtimeExecutable": "npx",
       "runtimeArgs": ["serve", "-p", "3100", "../Study-Timer"],
       "port": 3100
+    },
+    {
+      "name": "armcandy",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "-p", "3200", "../armcandy-web"],
+      "port": 3200
     }
   ]
 }

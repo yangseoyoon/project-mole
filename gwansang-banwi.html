@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>방위체계 | DOT SHIFT</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+    />
+    <link rel="stylesheet" href="nav.css" />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: #e9f056;
+        overflow: hidden;
+        width: 100vw;
+        height: 100vh;
+        font-family: 'Pretendard', sans-serif;
+      }
+      .banwiPage {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 1920px;
+        height: 1080px;
+        background: #e9f056;
+        transform-origin: top left;
+      }
+      #axisCanvas {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="topNav">
+      <span class="navLeft">PROJECT: DOT SHIFT</span>
+      <span class="navRight">Everything starts from a dot</span>
+    </nav>
+
+    <div class="banwiPage page-scale">
+      <canvas id="axisCanvas" width="1920" height="1080"></canvas>
+    </div>
+
+    <nav class="bottomNav">
+      <div class="bn-inner">
+        <img
+          class="bn-logo-l"
+          style="width: 23.456px; height: 29.129px; left: 40px; top: 22.99px"
+          src="images/nav/logo-D.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="width: 29.935px; height: 29.935px; left: 66.65px; top: 22.59px"
+          src="images/nav/logo-O.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="width: 22.571px; height: 29.129px; left: 98.09px; top: 22.99px"
+          src="images/nav/logo-T.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="
+            width: 21.726px;
+            height: 30.015px;
+            left: 134.06px;
+            top: 22.59px;
+          "
+          src="images/nav/logo-S.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="
+            width: 23.336px;
+            height: 29.129px;
+            left: 160.53px;
+            top: 22.99px;
+          "
+          src="images/nav/logo-H.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="width: 4.426px; height: 29.129px; left: 189.82px; top: 22.99px"
+          src="images/nav/logo-I.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="
+            width: 18.065px;
+            height: 29.129px;
+            left: 200.16px;
+            top: 22.99px;
+          "
+          src="images/nav/logo-F.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="
+            width: 22.571px;
+            height: 29.129px;
+            left: 221.73px;
+            top: 22.99px;
+          "
+          src="images/nav/logo-T.svg"
+          alt=""
+        />
+        <a class="bn-badge bn-badge--h" href="index.html">H</a>
+        <button class="bn-badge bn-badge--b" onclick="history.back()">B</button>
+        <button
+          class="bn-item"
+          style="left: 467.15px"
+          onclick="window.location.href = 'index.html'"
+        >
+          <span>프로젝트 알아보기</span>
+          <img src="images/nav/nav-arrow.svg" alt="" />
+        </button>
+        <button
+          class="bn-item"
+          style="left: 794.15px"
+          onclick="window.location.href = 'camera.html'"
+        >
+          <span>점 패턴 분석하기</span>
+          <img src="images/nav/nav-arrow.svg" alt="" />
+        </button>
+        <button
+          class="bn-item"
+          style="left: 1106.15px"
+          onclick="window.location.href = 'facemap.html'"
+        >
+          <span>얼굴 지도 살펴보기</span>
+          <img src="images/nav/nav-arrow.svg" alt="" />
+        </button>
+        <button
+          class="bn-item"
+          style="left: 1439.15px"
+          onclick="window.location.href = 'gwansang.html'"
+        >
+          <span>관상학 알아보기</span>
+          <img src="images/nav/nav-arrow.svg" alt="" />
+        </button>
+        <button class="bn-help-btn">?</button>
+      </div>
+    </nav>
+
+    <script>
+      const canvas = document.getElementById('axisCanvas');
+      const ctx = canvas.getContext('2d');
+
+      const W = 1920,
+        H = 1080;
+      // 피그마 기준 원점 (X축 중심, Y축 중심 교차점)
+      const cx = 946.5,
+        cy = 513.71;
+
+      // 피그마: X축 814px, Y축 424px, Z축 904px (화면 안에서 최대로 보이는 값)
+      // 평행투영(orthographic) 기준 → 회전해도 절대 화면 밖으로 안 나감
+      const AXIS_X = 780; // X축 (좌우)
+      const AXIS_Y = 420; // Y축 (상하, 높이에 맞게 유지)
+      const AXIS_Z = 680; // Z축 (대각)
+      const ARROW = 16;
+      const LABEL_OFFSET = 44;
+
+      // 피그마 정적 뷰 재현 초기각 (Z축이 155.75° 대각선으로 보이는 각도)
+      // rotY: Y축 회전, rotX: X축 기울기
+      let rotY = 0.55; // ~31.5°
+      let rotX = 0.52; // ~30°
+
+      // ── 평행 투영 (orthographic) ──
+      // 원근 없이 3D → 2D. z 성분은 시각적 깊이 정보에만 사용됨.
+      function project(p) {
+        return { x: cx + p.x, y: cy - p.y };
+      }
+
+      function rotY3d(p, a) {
+        const c = Math.cos(a),
+          s = Math.sin(a);
+        return { x: p.x * c + p.z * s, y: p.y, z: -p.x * s + p.z * c };
+      }
+
+      function rotX3d(p, a) {
+        const c = Math.cos(a),
+          s = Math.sin(a);
+        return { x: p.x, y: p.y * c - p.z * s, z: p.y * s + p.z * c };
+      }
+
+      function transform(p) {
+        return project(rotX3d(rotY3d(p, rotY), rotX));
+      }
+
+      function drawArrow(from, to, size) {
+        const dx = to.x - from.x,
+          dy = to.y - from.y;
+        const len = Math.sqrt(dx * dx + dy * dy);
+        if (len < 1) return;
+        const ux = dx / len,
+          uy = dy / len;
+        ctx.beginPath();
+        ctx.moveTo(to.x, to.y);
+        ctx.lineTo(
+          to.x - ux * size - uy * size * 0.38,
+          to.y - uy * size + ux * size * 0.38,
+        );
+        ctx.lineTo(
+          to.x - ux * size + uy * size * 0.38,
+          to.y - uy * size - ux * size * 0.38,
+        );
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      function drawLabel(pos, text) {
+        ctx.save();
+        ctx.font = '600 32px Pretendard, sans-serif';
+        ctx.fillStyle = '#ea5c3a';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(text, pos.x, pos.y);
+        ctx.restore();
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+        ctx.strokeStyle = '#ea5c3a';
+        ctx.fillStyle = '#ea5c3a';
+        ctx.lineWidth = 1.5;
+
+        // ── X축 (실선, 양방향) ──
+        ctx.setLineDash([]);
+        const xP = transform({ x: AXIS_X, y: 0, z: 0 });
+        const xN = transform({ x: -AXIS_X, y: 0, z: 0 });
+        ctx.beginPath();
+        ctx.moveTo(xN.x, xN.y);
+        ctx.lineTo(xP.x, xP.y);
+        ctx.stroke();
+        drawArrow(xN, xP, ARROW);
+        drawArrow(xP, xN, ARROW);
+        drawLabel(transform({ x: AXIS_X + LABEL_OFFSET, y: 0, z: 0 }), 'X');
+        drawLabel(transform({ x: -AXIS_X - LABEL_OFFSET, y: 0, z: 0 }), "X'");
+
+        // ── Y축 (실선, 위 화살표) ──
+        const yP = transform({ x: 0, y: AXIS_Y, z: 0 });
+        const yN = transform({ x: 0, y: -AXIS_Y, z: 0 });
+        ctx.beginPath();
+        ctx.moveTo(yN.x, yN.y);
+        ctx.lineTo(yP.x, yP.y);
+        ctx.stroke();
+        drawArrow(yN, yP, ARROW);
+        drawArrow(yP, yN, ARROW);
+        drawLabel(transform({ x: 0, y: AXIS_Y + LABEL_OFFSET, z: 0 }), 'Y');
+        drawLabel(transform({ x: 0, y: -AXIS_Y - LABEL_OFFSET, z: 0 }), "Y'");
+
+        // ── Z축 (점선, 양방향) ──
+        ctx.setLineDash([10, 12]);
+        const zP = transform({ x: 0, y: 0, z: AXIS_Z });
+        const zN = transform({ x: 0, y: 0, z: -AXIS_Z });
+        ctx.beginPath();
+        ctx.moveTo(zN.x, zN.y);
+        ctx.lineTo(zP.x, zP.y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        drawArrow(zN, zP, ARROW);
+        drawArrow(zP, zN, ARROW);
+        drawLabel(transform({ x: 0, y: 0, z: AXIS_Z + LABEL_OFFSET }), 'Z');
+        drawLabel(transform({ x: 0, y: 0, z: -AXIS_Z - LABEL_OFFSET }), "Z'");
+
+        // ── 원점 ──
+        const o = transform({ x: 0, y: 0, z: 0 });
+        ctx.beginPath();
+        ctx.arc(o.x, o.y, 4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      let isDragging = false;
+      let lastX = 0,
+        lastY = 0;
+
+      canvas.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        lastX = e.clientX;
+        lastY = e.clientY;
+        canvas.style.cursor = 'grabbing';
+      });
+      window.addEventListener('mouseup', () => {
+        isDragging = false;
+        canvas.style.cursor = 'grab';
+      });
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const dx = e.clientX - lastX;
+        const dy = e.clientY - lastY;
+        rotY += dx * 0.005;
+        rotX -= dy * 0.005;
+        // rotX 범위 제한 (위아래로 뒤집히지 않게)
+        rotX = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, rotX));
+        lastX = e.clientX;
+        lastY = e.clientY;
+      });
+
+      canvas.style.cursor = 'grab';
+
+      function animate() {
+        if (!isDragging) rotY += 0.002;
+        draw();
+        requestAnimationFrame(animate);
+      }
+
+      animate();
+    </script>
+
+    <script src="scale.js"></script>
+  </body>
+</html>

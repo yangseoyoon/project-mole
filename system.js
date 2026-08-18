@@ -40,7 +40,7 @@ const svgW = svg.parentElement.clientWidth || 1000;
 const svgH = svg.parentElement.clientHeight || 1080;
 const centerX = svgW / 2;
 const centerY = svgH / 2;
-const ringGap = 45;
+const ringGap = 28;
 const MAX_RINGS = 8;
 const points = [];
 
