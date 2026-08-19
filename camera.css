@@ -11,83 +11,87 @@ body {
 /* ── 1920×1080 고정 캔버스 ── */
 .cameraWrap {
   position: fixed;
-  top: 43.446px;
+  top: 0;
   left: 0;
   width: 1920px;
-  height: calc(1080px - 43.446px - 73px);
+  height: 1080px;
   overflow: visible;
 }
 
-/* ── 뒷 배경 오버레이 ── */
+/* ── 내부 요소 80% 스케일 (nav 제외) ── */
+.inner-scale {
+  position: absolute;
+  width: 1920px;
+  height: 1080px;
+  top: 0;
+  left: 0;
+  transform: scale(0.95);
+  transform-origin: center center;
+  pointer-events: auto;
+}
+
+/* ── 뒷 배경 이미지: 피그마 1920×1080 center ── */
 .bg-overlay {
   position: absolute;
-  inset: 0;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   width: 1920px;
-  height: 100%;
+  height: 1080px;
   object-fit: cover;
   pointer-events: none;
   z-index: 0;
 }
 
-/* ── 좌측 회색 패널 ── */
-.left-panel {
-  position: absolute;
-  left: 52px;
-  top: calc(335.22px - 43.446px);
-  width: 350px;
-  height: 380px;
-  background: #efefef;
-  border: 1px solid #a6a6a6;
-  border-radius: 10px;
-  z-index: 1;
-}
-
-/* ── 브라우저 창 ── */
+/* ── 브라우저 창: 피그마 center=(960+0.02, 540-42) size=1236×880 ── */
 .browser-window {
   position: absolute;
   left: 342px;
-  top: calc(58px - 43.446px);
-  width: 1174.2px;
-  height: 836px;
+  top: 58px;
+  width: 1236px;
+  height: 880px;
   background: white;
   border: 1px solid black;
   border-radius: 10px;
   overflow: hidden;
-  z-index: 1;
+  z-index: 2;
 }
 
-/* ── 타이틀바 ── */
+/* ── 타이틀바: 피그마 left=-1.02, top=-1, w=1236, h=40.492 ── */
 .win-titlebar {
   position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
+  left: -1.02px;
+  top: -1px;
+  width: 1236px;
   height: 40.492px;
   background: #d9d9d9;
   border-bottom: 1px solid #cacaca;
   box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.4);
-  display: flex;
-  align-items: center;
-  gap: 0;
 }
 
+/* 피그마: dots at left=[28.98, 58.98, 88.98], top=12.5, size=13.5 */
 .win-dot {
+  position: absolute;
   display: block;
   width: 13.5px;
   height: 13.5px;
-  flex-shrink: 0;
+  border-radius: 50%;
+  top: 12.5px;
 }
-.win-dot:nth-child(1) { margin-left: 29.98px; }
-.win-dot:nth-child(2) { margin-left: 16px; }
-.win-dot:nth-child(3) { margin-left: 16px; }
+.win-dot:nth-child(1) { left: 28.98px; }
+.win-dot:nth-child(2) { left: 58.98px; }
+.win-dot:nth-child(3) { left: 88.98px; }
+.win-dot--red    { background: #FF5F57; border: 0.5px solid #E0443E; }
+.win-dot--yellow { background: #FFBD2E; border: 0.5px solid #DEA123; }
+.win-dot--green  { background: #28C840; border: 0.5px solid #1AAB29; }
 
-/* ── 카메라 영역 (검정) ── */
+/* ── 카메라 영역: 피그마 left=12, top=54, w=1212, h=725 ── */
 .win-body {
   position: absolute;
   left: 12px;
   top: 54px;
-  width: 1150.2px;
-  height: 688px;
+  width: 1212px;
+  height: 725px;
   background: black;
   border: 1px solid black;
   overflow: hidden;
@@ -102,13 +106,25 @@ body {
   transform: scaleX(-1);
 }
 
-/* 가이드 오버레이: 원본 대비 70% 크기, 중심 유지 */
+/* ── 가이드 오버레이: 피그마 centered, top=-1, w=743, h=725 ── */
+.guide-wrap {
+  position: absolute;
+  left: 50%;
+  top: -1px;
+  transform: translateX(-50%);
+  width: 743px;
+  height: 725px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* 피그마: left=2.74, top=-76, w=737.523, h=1173 */
 .guide-inner {
   position: absolute;
-  left: 316.97px;
-  top: 18.2px;
-  width: 516.27px;
-  height: 821.1px;
+  left: 2.74px;
+  top: -76px;
+  width: 737.523px;
+  height: 1173px;
   pointer-events: none;
 }
 .guide-inner img {
@@ -116,23 +132,21 @@ body {
   height: 100%;
 }
 
-/* ── 하단 바 ── */
+/* ── 하단 바: 피그마 bottom=-1.5, h=86.5 ── */
 .win-footer {
   position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
+  left: -1.02px;
+  bottom: -1.5px;
+  width: 1236px;
   height: 86.5px;
   background: #efefef;
   box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.4);
-  display: flex;
-  align-items: center;
 }
 
-/* ── 3-세그먼트 툴바 ── */
+/* ── 3-세그먼트 툴바: 피그마 left=39, top=818.5 (footer 내부 기준 top=818.5-793=25.5) ── */
 .win-toolbar {
   position: absolute;
-  left: 40px;
+  left: 39px;
   top: 25.5px;
   width: 236px;
   height: 32px;
@@ -146,20 +160,26 @@ body {
   flex: 1;
   background: white;
   border-right: 0.5px solid #a6a6a6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: #8d8d8d;
 }
 .win-seg:last-child { border-right: none; }
 
-/* ── 촬영 버튼 (피그마 Frame572) ── */
+/* ── 촬영 버튼: 피그마 centered, top=801, w=66, h=67 → footer내부 top=801-793=8 ── */
 .captureBtn {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  top: 7px;
+  top: 8px;
   width: 66px;
   height: 67px;
   background: transparent;
   border: none;
-  cursor: pointer;
   padding: 0;
   z-index: 10;
   transition: transform 0.1s ease, opacity 0.1s ease;
@@ -168,10 +188,10 @@ body {
 .captureBtn:active { transform: translateX(-50%) scale(0.93); opacity: 0.7; }
 .captureBtn img { width: 100%; height: 100%; display: block; }
 
-/* ── 초기화 버튼 ── */
+/* ── 초기화 버튼: 피그마 left=1060, top=818.5 → footer내부 top=25.5 ── */
 .reset-btn {
   position: absolute;
-  right: 50px;
+  left: 1060px;
   top: 25.5px;
   width: 124px;
   height: 32px;
@@ -182,55 +202,62 @@ body {
   font-weight: 500;
   font-size: 22px;
   color: #8d8d8d;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.12s ease, color 0.12s ease;
+  transition: background 0.12s ease;
 }
-.reset-btn:hover {
-  background: #c8c8c8;
-  color: #555;
-}
-.reset-btn:active {
-  background: #aaa;
+.reset-btn:hover { background: #c8c8c8; }
+.reset-btn:active { background: #aaa; }
+
+/* ── 좌측 회색 패널: 피그마 350×380 → 105% ── */
+.left-panel {
+  position: absolute;
+  left: 52px;
+  top: 335.22px;
+  width: 367.5px;   /* 350 × 1.05 */
+  height: 399px;    /* 380 × 1.05 */
+  background: #efefef;
+  border: 1px solid #a6a6a6;
+  border-radius: 10px;
+  z-index: 1;       /* bg-overlay(0) 바로 위 */
 }
 
 /* ── 말풍선 힌트 ── */
-.hint-pill,
-.deco-folder {
-  z-index: 1;
-}
 .hint-pill {
   position: absolute;
   background: white;
   border: 0.3px solid #000;
   border-radius: 100px;
-  padding: 12px 18px;
+  padding: 12px 20px;
   filter: drop-shadow(2px 2px 1px rgba(0,0,0,0.3));
   font-family: 'Pretendard', sans-serif;
   font-weight: 500;
   color: #000;
   white-space: nowrap;
-  line-height: 24px;
   pointer-events: none;
+  z-index: 3;
 }
 
+/* 피그마: left=1494.02, top=307, font=22px */
 .hint-eyebrow {
-  left: 1511px;
-  top: calc(307px - 43.446px);
+  left: 1494.02px;
+  top: 307px;
   font-size: 22px;
 }
 
+/* 피그마: left=123.62, top=739, font=24px */
 .hint-face {
-  left: 127px;
-  top: calc(739px - 43.446px);
+  left: 123.62px;
+  top: 739px;
   font-size: 24px;
 }
 
-/* ── 폴더 장식 ── */
+/* ── 폴더 장식: 피그마 w=133.001, h=105.984 ── */
 .deco-folder {
   position: absolute;
-  width: 133px;
+  width: 133.001px;
+  height: 105.984px;
   pointer-events: none;
+  z-index: 1;
 }

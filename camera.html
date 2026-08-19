@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
@@ -17,68 +17,70 @@
 
     <div class="cameraWrap page-scale">
 
-      <!-- 뒷 배경 이미지 -->
-      <img class="bg-overlay" src="images/cam-bg.png" alt="" />
+      <!-- 뒷 배경 이미지: 1920×1080 전체 (스케일 제외) -->
+      <img class="bg-overlay" src="images/cam/cam-bg.png" alt="" />
 
-      <!-- 좌측 회색 패널 (장식) -->
-      <div class="left-panel"></div>
+      <!-- 내부 요소 80% 스케일 래퍼 -->
+      <div class="inner-scale">
 
-      <!-- macOS 스타일 브라우저 창 -->
-      <div class="browser-window">
+        <!-- 브라우저 창 -->
+        <div class="browser-window">
 
-        <!-- 타이틀바 -->
-        <div class="win-titlebar">
-          <img class="win-dot" src="https://www.figma.com/api/mcp/asset/e67014d1-2782-4d8c-8247-7a80f6f220c9.svg" alt="" />
-          <img class="win-dot" src="https://www.figma.com/api/mcp/asset/e67014d1-2782-4d8c-8247-7a80f6f220c9.svg" alt="" />
-          <img class="win-dot" src="https://www.figma.com/api/mcp/asset/e67014d1-2782-4d8c-8247-7a80f6f220c9.svg" alt="" />
-        </div>
+          <!-- 타이틀바 -->
+          <div class="win-titlebar">
+            <span class="win-dot win-dot--red"></span>
+            <span class="win-dot win-dot--yellow"></span>
+            <span class="win-dot win-dot--green"></span>
+          </div>
 
-        <!-- 카메라 영역 (검정) -->
-        <div class="win-body">
-          <video id="video" autoplay playsinline muted></video>
-          <!-- 가이드 오버레이: 피그마 좌표 그대로 (left=235.22, top=-82, 737×1173) -->
-          <div class="guide-inner">
-            <img src="https://www.figma.com/api/mcp/asset/b3cd2d5e-14fc-4634-869e-0f2304b57235.svg" alt="" />
+          <!-- 카메라 영역 (검정) -->
+          <div class="win-body">
+            <video id="video" autoplay playsinline muted></video>
+            <!-- 가이드 오버레이 -->
+            <div class="guide-wrap">
+              <div class="guide-inner">
+                <img src="images/cam/guide-overlay.svg" alt="" />
+              </div>
+            </div>
+          </div>
+
+          <!-- 하단 바 -->
+          <div class="win-footer">
+            <!-- 3-세그먼트 툴바 -->
+            <div class="win-toolbar">
+              <div class="win-seg"><span>기본</span></div>
+              <div class="win-seg"><span>스티커</span></div>
+              <div class="win-seg"><span>텍스트</span></div>
+            </div>
+
+            <!-- 촬영 버튼 -->
+            <button id="captureBtn" class="captureBtn">
+              <img src="images/cam/cam-btn.svg" alt="촬영" />
+            </button>
+
+            <!-- 초기화 버튼 -->
+            <button class="reset-btn" onclick="location.reload()">초기화</button>
           </div>
         </div>
 
-        <!-- 하단 바 -->
-        <div class="win-footer">
-          <!-- 3-세그먼트 툴바 -->
-          <div class="win-toolbar">
-            <div class="win-seg"></div>
-            <div class="win-seg"></div>
-            <div class="win-seg"></div>
-          </div>
+        <!-- 좌측 회색 패널 -->
+        <div class="left-panel"></div>
 
-          <!-- 촬영 버튼 (피그마 imgFrame572) -->
-          <button id="captureBtn" class="captureBtn">
-            <img src="https://www.figma.com/api/mcp/asset/5b4b47f0-3572-427e-aec7-1493417e84b5.svg" alt="촬영" />
-          </button>
+        <!-- 말풍선: 눈썹 가이드 -->
+        <div class="hint-pill hint-eyebrow">선 사이에 눈썹을 맞추세요!</div>
 
-          <!-- 초기화 버튼 -->
-          <button class="reset-btn" onclick="location.reload()">초기화</button>
-        </div>
+        <!-- 말풍선: 얼굴 가이드 -->
+        <div class="hint-pill hint-face">노란색 원에 얼굴을 맞추세요!</div>
+
+        <!-- 폴더 장식들: Figma 정확 좌표 -->
+        <img class="deco-folder" style="left:1733px; top:113px;" src="images/cam/folder-red.svg" alt="" />
+        <img class="deco-folder" style="left:1553.02px; top:659.01px;" src="images/cam/folder-red.svg" alt="" />
+        <img class="deco-folder" style="left:-43.77px; top:940.75px;" src="images/cam/folder-red.svg" alt="" />
+        <img class="deco-folder" style="left:106.45px; top:816.75px;" src="images/cam/folder-red.svg" alt="" />
+        <img class="deco-folder" style="left:1853.5px; top:307px;" src="images/cam/folder-yellow.svg" alt="" />
+        <img class="deco-folder" style="left:37.74px; top:77.01px;" src="images/cam/folder-yellow.svg" alt="" />
+
       </div>
-
-      <!-- 말풍선: 눈썹 가이드 -->
-      <div class="hint-pill hint-eyebrow">선 사이에 눈썹을 맞추세요!</div>
-
-      <!-- 말풍선: 얼굴 가이드 -->
-      <div class="hint-pill hint-face">노란색 원에 얼굴을 맞추세요!</div>
-
-      <!-- 폴더 장식 (우측 상단 빨강) -->
-      <img class="deco-folder" style="left:1733px; top:calc(113px - 43.446px); width:133px;" src="https://www.figma.com/api/mcp/asset/eac6ab9d-acbd-46ea-af96-d4352e8694a6.svg" alt="" />
-      <!-- 폴더 장식 (우측 중간 빨강) -->
-      <img class="deco-folder" style="left:1553px; top:calc(659px - 43.446px); width:133px;" src="https://www.figma.com/api/mcp/asset/eac6ab9d-acbd-46ea-af96-d4352e8694a6.svg" alt="" />
-      <!-- 폴더 장식 (좌측 하단 빨강 - 화면 밖) -->
-      <img class="deco-folder" style="left:-44px; top:calc(940px - 43.446px); width:133px;" src="https://www.figma.com/api/mcp/asset/eac6ab9d-acbd-46ea-af96-d4352e8694a6.svg" alt="" />
-      <!-- 폴더 장식 (좌측 중간 빨강) -->
-      <img class="deco-folder" style="left:106px; top:calc(816px - 43.446px); width:133px;" src="https://www.figma.com/api/mcp/asset/eac6ab9d-acbd-46ea-af96-d4352e8694a6.svg" alt="" />
-      <!-- 폴더 장식 (우측 최우측 노랑) -->
-      <img class="deco-folder" style="left:1853px; top:calc(307px - 43.446px); width:133px;" src="https://www.figma.com/api/mcp/asset/41002977-557e-49c3-a9b5-4774ce034391.svg" alt="" />
-      <!-- 폴더 장식 (좌측 상단 노랑) -->
-      <img class="deco-folder" style="left:37px; top:calc(77px - 43.446px); width:133px;" src="https://www.figma.com/api/mcp/asset/41002977-557e-49c3-a9b5-4774ce034391.svg" alt="" />
 
     </div>
 
@@ -117,6 +119,6 @@
     <canvas id="photoCanvas" style="display:none;"></canvas>
     <script src="camera.js"></script>
     <script src="scale.js"></script>
-  <script src="cursor.js"></script>
-</body>
+    <script src="cursor.js"></script>
+  </body>
 </html>
