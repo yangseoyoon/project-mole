@@ -218,15 +218,18 @@
       const actCanvas = document.getElementById('activeCanvas');
       const actCtx = actCanvas.getContext('2d');
       const W = 1920, H = 1080;
-      const OX = 946.5, OY = 560;   // 원점 기본 위치
-      const B = 440;
+      const OX = 946.5, OY = 560;
+      const B = 340;
       const BXZ = 625;  // X·Z축: 피그마 기준 가로 1250px / 2
       const ARROW = 20, LOFF = 60;
 
       let rotY = Math.PI / 6, rotX = -Math.PI / 12;
       let zoom = 1, scrollP = 0;
-      let panX = OX, panY = OY;      // 애니메이션 가능한 원점
+      let panX = OX, panY = OY;
       let isDragging = false, dragMoved = false, lastX = 0, lastY = 0;
+
+      // 그리드 전용 회전 — 드래그할 때만 갱신, 자동회전 미적용
+      let gridRotY = Math.PI / 6, gridRotX = -Math.PI / 12;
 
       let anim = null;
       let overlayOpen = false;
@@ -241,6 +244,15 @@
         const el = document.querySelector('.page-scale');
         const m = el && el.style.transform && el.style.transform.match(/scale\(([^)]+)\)/);
         return m ? parseFloat(m[1]) : 1;
+      }
+
+      // 그리드 전용 투영 (gridRotY/X 사용)
+      function tfGrid(p) {
+        const c1=Math.cos(gridRotY), s1=Math.sin(gridRotY);
+        const x1=p.x*c1+p.z*s1, y1=p.y, z1=-p.x*s1+p.z*c1;
+        const c2=Math.cos(gridRotX), s2=Math.sin(gridRotX);
+        const x2=x1, y2=y1*c2-z1*s2;
+        return { x: panX+x2*zoom, y: panY-y2*zoom };
       }
 
       // 3D 투영 (panX/panY 기반)
@@ -375,6 +387,50 @@
         zoom = 1 + scrollP * 0.5;
         ctx.clearRect(0, 0, W, H);
 
+        // ── 3D 그리드 바닥면 (XZ 평면, y = -300) ──
+        {
+          const GY = -300;          // 바닥 높이
+          const GRANGE = 2000;      // 그리드 범위 (±)
+          const GSTEP  = 200;       // 격자 간격
+          const steps = Math.ceil(GRANGE / GSTEP);
+
+          // 그리드를 그린 뒤 방사형 그라디언트로 페이드
+          ctx.save();
+
+          // 클리핑: 화면 전체
+          ctx.beginPath(); ctx.rect(0, 0, W, H); ctx.clip();
+
+          ctx.lineWidth = 0.8;
+
+          for (let i = -steps; i <= steps; i++) {
+            const v = i * GSTEP;
+            // Z 방향 선 (X 고정)
+            const a = tfGrid({x: v, y: GY, z: -GRANGE});
+            const b = tfGrid({x: v, y: GY, z:  GRANGE});
+            // X 방향 선 (Z 고정)
+            const c = tfGrid({x: -GRANGE, y: GY, z: v});
+            const d = tfGrid({x:  GRANGE, y: GY, z: v});
+
+            // 원점에서의 거리 비율로 투명도 결정
+            const dist = Math.abs(v) / GRANGE;
+            const alpha = (1 - dist * dist) * 0.18;
+            ctx.strokeStyle = `rgba(120,110,0,${alpha.toFixed(3)})`;
+
+            ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(c.x, c.y); ctx.lineTo(d.x, d.y); ctx.stroke();
+          }
+
+          // 방사형 그라디언트 페이드 (배경색으로)
+          const grad = ctx.createRadialGradient(panX, panY, 0, panX, panY, Math.max(W, H) * 0.7);
+          grad.addColorStop(0,   'rgba(233,240,86,0)');
+          grad.addColorStop(0.6, 'rgba(233,240,86,0)');
+          grad.addColorStop(1,   'rgba(233,240,86,0.92)');
+          ctx.fillStyle = grad;
+          ctx.fillRect(0, 0, W, H);
+
+          ctx.restore();
+        }
+
         const o  = tf({x:0,y:0,z:0});
         const xP = tf({x:BXZ,y:0,z:0}),  xN = tf({x:-BXZ,y:0,z:0});
         const yP = tf({x:0,y:B,z:0}),    yN = tf({x:0,y:-B,z:0});
@@ -465,12 +521,15 @@
         rotY += dx*0.005;
         rotX -= dy*0.005;
         rotX = Math.max(-Math.PI/2.2, Math.min(Math.PI/2.2, rotX));
+        gridRotY = rotY;
+        gridRotX = rotX;
         lastX=e.clientX; lastY=e.clientY;
       });
 
       canvas.addEventListener('dblclick', () => {
         if (overlayOpen) { closePanel(); return; }
         rotY=Math.PI/6; rotX=-Math.PI/12; scrollP=0; panX=OX; panY=OY;
+        gridRotY=Math.PI/6; gridRotX=-Math.PI/12;
       });
 
       canvas.addEventListener('click', e => {

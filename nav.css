@@ -1,5 +1,19 @@
 /* ── 공유 내비게이션 스타일 ── */
 
+/* 전역 커서 숨김 */
+*, *::before, *::after { cursor: none !important; }
+
+#dot-cursor {
+  position: fixed;
+  width: 8px; height: 8px;
+  background: #000;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 99999;
+  transition: opacity 0.15s;
+}
+
 /* 상단 바 */
 .topNav {
   position: fixed;
