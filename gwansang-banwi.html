@@ -4,40 +4,82 @@
     <meta charset="UTF-8" />
     <title>방위체계 | DOT SHIFT</title>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
-    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard-jp@1.3.9/dist/web/static/pretendardJP.min.css" />
     <link rel="stylesheet" href="nav.css" />
     <style>
-      *,
-      *::before,
-      *::after {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      * { cursor: none !important; }
+      #dot-cursor {
+        position: fixed;
+        width: 8px; height: 8px;
+        background: #000;
+        border-radius: 50%;
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+        z-index: 99999;
       }
       body {
         background: #e9f056;
         overflow: hidden;
         width: 100vw;
         height: 100vh;
-        font-family: 'Pretendard', sans-serif;
       }
       .banwiPage {
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 1920px;
-        height: 1080px;
+        top: 0; left: 0;
+        width: 1920px; height: 1080px;
         background: #e9f056;
         transform-origin: top left;
       }
-      #axisCanvas {
+      #blurOverlay {
         position: absolute;
         inset: 0;
-        width: 1920px;
-        height: 1080px;
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        background: rgba(233,240,86,0.25);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.5s ease;
+        z-index: 10;
+      }
+      #blurOverlay.active { opacity: 1; }
+
+      #axisPanel {
+        position: fixed;
+        right: 60px;
+        top: 50%;
+        transform: translateY(-50%) translateX(120%);
+        width: 360px;
+        min-height: 300px;
+        background: #fff;
+        border: 1.5px solid #000;
+        padding: 48px 40px;
+        opacity: 0;
+        transition: transform 0.65s cubic-bezier(0.16,1,0.3,1), opacity 0.45s ease;
+        z-index: 1000;
+      }
+      #axisPanel.active {
+        transform: translateY(-50%) translateX(0);
+        opacity: 1;
+      }
+      #axisPanel .panel-close {
+        position: absolute;
+        top: 16px; right: 20px;
+        font-size: 18px;
+        cursor: pointer !important;
+        background: none; border: none;
+        color: #000;
+      }
+      #axisPanel .panel-title {
+        font: 700 28px "Pretendard JP","Pretendard",sans-serif;
+        color: #ea5c3a;
+        margin-bottom: 16px;
+      }
+      #axisPanel .panel-body {
+        font: 400 16px "Pretendard",sans-serif;
+        color: #333;
+        line-height: 1.7;
       }
     </style>
   </head>
@@ -47,8 +89,19 @@
       <span class="navRight">Everything starts from a dot</span>
     </nav>
 
+    <div id="dot-cursor"></div>
     <div class="banwiPage page-scale">
-      <canvas id="axisCanvas" width="1920" height="1080"></canvas>
+      <canvas id="axisCanvas" width="1920" height="1080"
+              style="position:absolute;inset:0;width:1920px;height:1080px;"></canvas>
+      <canvas id="activeCanvas" width="1920" height="1080"
+              style="position:absolute;inset:0;width:1920px;height:1080px;pointer-events:none;"></canvas>
+      <div id="blurOverlay"></div>
+    </div>
+
+    <div id="axisPanel">
+      <button class="panel-close" id="panelClose">✕</button>
+      <div class="panel-title" id="panelTitle">—</div>
+      <div class="panel-body" id="panelBody">나중에 수정할 창입니다.</div>
     </div>
 
     <nav class="bottomNav">
@@ -162,166 +215,286 @@
     <script>
       const canvas = document.getElementById('axisCanvas');
       const ctx = canvas.getContext('2d');
+      const actCanvas = document.getElementById('activeCanvas');
+      const actCtx = actCanvas.getContext('2d');
+      const W = 1920, H = 1080;
+      const OX = 946.5, OY = 560;   // 원점 기본 위치
+      const B = 440;
+      const BXZ = 625;  // X·Z축: 피그마 기준 가로 1250px / 2
+      const ARROW = 20, LOFF = 60;
 
-      const W = 1920,
-        H = 1080;
-      // 피그마 기준 원점 (X축 중심, Y축 중심 교차점)
-      const cx = 946.5,
-        cy = 513.71;
+      let rotY = Math.PI / 6, rotX = -Math.PI / 12;
+      let zoom = 1, scrollP = 0;
+      let panX = OX, panY = OY;      // 애니메이션 가능한 원점
+      let isDragging = false, dragMoved = false, lastX = 0, lastY = 0;
 
-      // 피그마: X축 814px, Y축 424px, Z축 904px (화면 안에서 최대로 보이는 값)
-      // 평행투영(orthographic) 기준 → 회전해도 절대 화면 밖으로 안 나감
-      const AXIS_X = 780; // X축 (좌우)
-      const AXIS_Y = 420; // Y축 (상하, 높이에 맞게 유지)
-      const AXIS_Z = 680; // Z축 (대각)
-      const ARROW = 16;
-      const LABEL_OFFSET = 44;
+      let anim = null;
+      let overlayOpen = false;
+      let activeAxisId = null;
+      let activeHitType = null;
+      let descHits = [];
 
-      // 피그마 정적 뷰 재현 초기각 (Z축이 155.75° 대각선으로 보이는 각도)
-      // rotY: Y축 회전, rotX: X축 기울기
-      let rotY = 0.55; // ~31.5°
-      let rotX = 0.52; // ~30°
+      function easeInOut(t) { return t < 0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2; }
+      function lerp(a,b,t) { return a+(b-a)*t; }
 
-      // ── 평행 투영 (orthographic) ──
-      // 원근 없이 3D → 2D. z 성분은 시각적 깊이 정보에만 사용됨.
-      function project(p) {
-        return { x: cx + p.x, y: cy - p.y };
+      function getPageScale() {
+        const el = document.querySelector('.page-scale');
+        const m = el && el.style.transform && el.style.transform.match(/scale\(([^)]+)\)/);
+        return m ? parseFloat(m[1]) : 1;
       }
 
-      function rotY3d(p, a) {
-        const c = Math.cos(a),
-          s = Math.sin(a);
-        return { x: p.x * c + p.z * s, y: p.y, z: -p.x * s + p.z * c };
+      // 3D 투영 (panX/panY 기반)
+      function tf(p) {
+        const c1=Math.cos(rotY), s1=Math.sin(rotY);
+        const x1=p.x*c1+p.z*s1, y1=p.y, z1=-p.x*s1+p.z*c1;
+        const c2=Math.cos(rotX), s2=Math.sin(rotX);
+        const x2=x1, y2=y1*c2-z1*s2;
+        return { x: panX+x2*zoom, y: panY-y2*zoom };
       }
 
-      function rotX3d(p, a) {
-        const c = Math.cos(a),
-          s = Math.sin(a);
-        return { x: p.x, y: p.y * c - p.z * s, z: p.y * s + p.z * c };
+      // 목표 회전 상태에서의 3D→2D (panX/Y 없이 순수 로컬 좌표)
+      function tfAt(p, rY, rX) {
+        const c1=Math.cos(rY), s1=Math.sin(rY);
+        const x1=p.x*c1+p.z*s1, y1=p.y, z1=-p.x*s1+p.z*c1;
+        const c2=Math.cos(rX), s2=Math.sin(rX);
+        return { x2: x1, y2: y1*c2-z1*s2 };
       }
 
-      function transform(p) {
-        return project(rotX3d(rotY3d(p, rotY), rotX));
-      }
-
-      function drawArrow(from, to, size) {
-        const dx = to.x - from.x,
-          dy = to.y - from.y;
-        const len = Math.sqrt(dx * dx + dy * dy);
-        if (len < 1) return;
-        const ux = dx / len,
-          uy = dy / len;
+      function arrow(a,b) {
+        const dx=b.x-a.x, dy=b.y-a.y, len=Math.hypot(dx,dy);
+        if(len<1) return;
+        const ux=dx/len, uy=dy/len;
         ctx.beginPath();
-        ctx.moveTo(to.x, to.y);
-        ctx.lineTo(
-          to.x - ux * size - uy * size * 0.38,
-          to.y - uy * size + ux * size * 0.38,
-        );
-        ctx.lineTo(
-          to.x - ux * size + uy * size * 0.38,
-          to.y - uy * size - ux * size * 0.38,
-        );
-        ctx.closePath();
-        ctx.fill();
+        ctx.moveTo(b.x,b.y);
+        ctx.lineTo(b.x-ux*ARROW-uy*ARROW*0.4, b.y-uy*ARROW+ux*ARROW*0.4);
+        ctx.lineTo(b.x-ux*ARROW+uy*ARROW*0.4, b.y-uy*ARROW-ux*ARROW*0.4);
+        ctx.closePath(); ctx.fill();
       }
 
-      function drawLabel(pos, text) {
-        ctx.save();
-        ctx.font = '600 32px Pretendard, sans-serif';
-        ctx.fillStyle = '#ea5c3a';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(text, pos.x, pos.y);
-        ctx.restore();
+      function label(p3,ch) {
+        const p=tf(p3);
+        ctx.font=`400 ${Math.round(40*zoom)}px "Pretendard JP","Pretendard",sans-serif`;
+        ctx.fillStyle='#ea5c3a';
+        ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.fillText(ch,p.x,p.y);
       }
 
-      function draw() {
-        ctx.clearRect(0, 0, W, H);
-        ctx.strokeStyle = '#ea5c3a';
-        ctx.fillStyle = '#ea5c3a';
-        ctx.lineWidth = 1.5;
-
-        // ── X축 (실선, 양방향) ──
-        ctx.setLineDash([]);
-        const xP = transform({ x: AXIS_X, y: 0, z: 0 });
-        const xN = transform({ x: -AXIS_X, y: 0, z: 0 });
-        ctx.beginPath();
-        ctx.moveTo(xN.x, xN.y);
-        ctx.lineTo(xP.x, xP.y);
-        ctx.stroke();
-        drawArrow(xN, xP, ARROW);
-        drawArrow(xP, xN, ARROW);
-        drawLabel(transform({ x: AXIS_X + LABEL_OFFSET, y: 0, z: 0 }), 'X');
-        drawLabel(transform({ x: -AXIS_X - LABEL_OFFSET, y: 0, z: 0 }), "X'");
-
-        // ── Y축 (실선, 위 화살표) ──
-        const yP = transform({ x: 0, y: AXIS_Y, z: 0 });
-        const yN = transform({ x: 0, y: -AXIS_Y, z: 0 });
-        ctx.beginPath();
-        ctx.moveTo(yN.x, yN.y);
-        ctx.lineTo(yP.x, yP.y);
-        ctx.stroke();
-        drawArrow(yN, yP, ARROW);
-        drawArrow(yP, yN, ARROW);
-        drawLabel(transform({ x: 0, y: AXIS_Y + LABEL_OFFSET, z: 0 }), 'Y');
-        drawLabel(transform({ x: 0, y: -AXIS_Y - LABEL_OFFSET, z: 0 }), "Y'");
-
-        // ── Z축 (점선, 양방향) ──
-        ctx.setLineDash([10, 12]);
-        const zP = transform({ x: 0, y: 0, z: AXIS_Z });
-        const zN = transform({ x: 0, y: 0, z: -AXIS_Z });
-        ctx.beginPath();
-        ctx.moveTo(zN.x, zN.y);
-        ctx.lineTo(zP.x, zP.y);
-        ctx.stroke();
-        ctx.setLineDash([]);
-        drawArrow(zN, zP, ARROW);
-        drawArrow(zP, zN, ARROW);
-        drawLabel(transform({ x: 0, y: 0, z: AXIS_Z + LABEL_OFFSET }), 'Z');
-        drawLabel(transform({ x: 0, y: 0, z: -AXIS_Z - LABEL_OFFSET }), "Z'");
-
-        // ── 원점 ──
-        const o = transform({ x: 0, y: 0, z: 0 });
-        ctx.beginPath();
-        ctx.arc(o.x, o.y, 4, 0, Math.PI * 2);
-        ctx.fill();
+      function desc(p3,text) {
+        const p=tf(p3);
+        ctx.font=`500 ${Math.round(22*zoom)}px "Pretendard","Pretendard JP",sans-serif`;
+        ctx.fillStyle='#000';
+        ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.fillText(text,p.x,p.y);
       }
 
-      let isDragging = false;
-      let lastX = 0,
-        lastY = 0;
+      // 축별 목표 카메라 (scrollP 1.36 → zoom 1.68, 기존 1.4 대비 20% 확대)
+      const AXIS_TARGETS = {
+        x: { rotY:0,          rotX:0,          scrollP:1.36 },
+        y: { rotY:Math.PI/2,  rotX:0,          scrollP:1.36 },
+        z: { rotY:Math.PI,    rotX:-Math.PI/8, scrollP:1.36 },
+      };
+      // 한자 → 축 매핑 (카메라 타겟용)
+      const KANJI_AXIS = { '右':'x','左':'x','上':'y','下':'y','後':'z','前':'z' };
 
-      canvas.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        lastX = e.clientX;
-        lastY = e.clientY;
-        canvas.style.cursor = 'grabbing';
-      });
-      window.addEventListener('mouseup', () => {
+      // 9개 별개 창
+      const PANEL_CONTENT = {
+        '右':    { title:'右', body:'나중에 수정할 창입니다.' },
+        '左':    { title:'左', body:'나중에 수정할 창입니다.' },
+        '上':    { title:'上', body:'나중에 수정할 창입니다.' },
+        '下':    { title:'下', body:'나중에 수정할 창입니다.' },
+        '後':    { title:'後', body:'나중에 수정할 창입니다.' },
+        '前':    { title:'前', body:'나중에 수정할 창입니다.' },
+        x_desc:  { title:'X축 설명', body:'나중에 수정할 창입니다.' },
+        y_desc:  { title:'Y축 설명', body:'나중에 수정할 창입니다.' },
+        z_desc:  { title:'Z축 설명', body:'나중에 수정할 창입니다.' },
+      };
+      const DESC_P3 = {
+        x:{ p3:{x:B*0.55, y:55,     z:0      } },
+        y:{ p3:{x:-55,    y:B*0.55, z:0      } },
+        z:{ p3:{x:0,      y:50,     z:-B*0.45} },
+      };
+
+      // hitId: 한자면 '右'등 문자, desc면 'x'/'y'/'z'
+      function openPanel(hitId, hitType) {
+        overlayOpen = true;
+        activeAxisId = hitType === 'kanji' ? hitId : hitId; // 재렌더용
+        activeHitType = hitType;
         isDragging = false;
-        canvas.style.cursor = 'grab';
-      });
-      window.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        const dx = e.clientX - lastX;
-        const dy = e.clientY - lastY;
-        rotY += dx * 0.005;
-        rotX -= dy * 0.005;
-        // rotX 범위 제한 (위아래로 뒤집히지 않게)
-        rotX = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, rotX));
-        lastX = e.clientX;
-        lastY = e.clientY;
-      });
 
-      canvas.style.cursor = 'grab';
+        const axisId = hitType === 'kanji' ? KANJI_AXIS[hitId] : hitId;
+        const tgt = AXIS_TARGETS[axisId];
+        const tZoom = 1 + tgt.scrollP * 0.5;
+        const dp = DESC_P3[axisId].p3;
+        const { x2, y2 } = tfAt(dp, tgt.rotY, tgt.rotX);
+        const tPanX = W * 0.38 - x2 * tZoom;
+        const tPanY = H * 0.5  + y2 * tZoom;
 
-      function animate() {
-        if (!isDragging) rotY += 0.002;
-        draw();
-        requestAnimationFrame(animate);
+        anim = {
+          fRotY:rotY, fRotX:rotX, fScroll:scrollP, fPanX:panX, fPanY:panY,
+          tRotY:tgt.rotY, tRotX:tgt.rotX, tScroll:tgt.scrollP,
+          tPanX, tPanY, t:0, dur:90, opening:true
+        };
+        const contentKey = hitType === 'kanji' ? hitId : hitId + '_desc';
+        const content = PANEL_CONTENT[contentKey];
+        document.getElementById('panelTitle').textContent = content.title;
+        document.getElementById('panelBody').textContent  = content.body;
+        document.getElementById('axisPanel').classList.add('active');
       }
 
-      animate();
+      function closePanel() {
+        overlayOpen = false;
+        activeAxisId = null;
+        activeHitType = null;
+        canvas.style.filter = 'none';
+        anim = {
+          fRotY:rotY, fRotX:rotX, fScroll:scrollP, fPanX:panX, fPanY:panY,
+          tRotY:Math.PI/6, tRotX:-Math.PI/12, tScroll:0,
+          tPanX:OX, tPanY:OY, t:0, dur:60, opening:false
+        };
+        document.getElementById('axisPanel').classList.remove('active');
+      }
+
+      // ── 메인 루프 ──
+      function draw() {
+        if (anim) {
+          anim.t++;
+          const e = easeInOut(Math.min(anim.t/anim.dur, 1));
+          rotY    = lerp(anim.fRotY,   anim.tRotY,   e);
+          rotX    = lerp(anim.fRotX,   anim.tRotX,   e);
+          scrollP = lerp(anim.fScroll, anim.tScroll,  e);
+          panX    = lerp(anim.fPanX,   anim.tPanX,   e);
+          panY    = lerp(anim.fPanY,   anim.tPanY,   e);
+          // CSS blur 애니메이션 (canvas 요소 자체에 적용 — 번짐 없음)
+          const blurPx = (anim.opening ? e : 1-e) * 5;
+          canvas.style.filter = blurPx > 0.1 ? `blur(${blurPx.toFixed(1)}px)` : 'none';
+          if (anim.t >= anim.dur) anim = null;
+        } else if (!isDragging && !overlayOpen) {
+          rotY += 0.004;
+        }
+
+        zoom = 1 + scrollP * 0.5;
+        ctx.clearRect(0, 0, W, H);
+
+        const o  = tf({x:0,y:0,z:0});
+        const xP = tf({x:BXZ,y:0,z:0}),  xN = tf({x:-BXZ,y:0,z:0});
+        const yP = tf({x:0,y:B,z:0}),    yN = tf({x:0,y:-B,z:0});
+        const zP = tf({x:0,y:0,z:BXZ}),  zN = tf({x:0,y:0,z:-BXZ});
+
+        ctx.strokeStyle='#ea5c3a'; ctx.fillStyle='#ea5c3a'; ctx.lineWidth=2;
+
+        ctx.setLineDash([]);
+        ctx.beginPath(); ctx.moveTo(xN.x,xN.y); ctx.lineTo(xP.x,xP.y); ctx.stroke();
+        arrow(xN,xP); arrow(xP,xN);
+
+        ctx.beginPath(); ctx.moveTo(yN.x,yN.y); ctx.lineTo(yP.x,yP.y); ctx.stroke();
+        arrow(yN,yP); arrow(yP,yN);
+
+        ctx.setLineDash([10,12]);
+        ctx.beginPath(); ctx.moveTo(zN.x,zN.y); ctx.lineTo(zP.x,zP.y); ctx.stroke();
+        ctx.setLineDash([]);
+        arrow(zN,zP); arrow(zP,zN);
+
+        ctx.beginPath(); ctx.arc(o.x,o.y,5,0,Math.PI*2); ctx.fill();
+
+        descHits = [];
+        const labelDefs = [
+          {p3:{x: BXZ+LOFF,y:0,z:0},   ch:'右'},
+          {p3:{x:-BXZ-LOFF,y:0,z:0},   ch:'左'},
+          {p3:{x:0,y: B+LOFF,z:0},     ch:'上'},
+          {p3:{x:0,y:-B-LOFF,z:0},     ch:'下'},
+          {p3:{x:0,y:0,z: BXZ+LOFF},   ch:'後'},
+          {p3:{x:0,y:0,z:-BXZ-LOFF},   ch:'前'},
+        ];
+        for (const l of labelDefs) {
+          if (!(activeHitType === 'kanji' && activeAxisId === l.ch)) {
+            label(l.p3, l.ch);
+          }
+          const p=tf(l.p3);
+          descHits.push({x:p.x, y:p.y, id:l.ch, type:'kanji'});
+        }
+
+        for (const [id, d] of Object.entries(DESC_P3)) {
+          const p=tf(d.p3);
+          if (!(activeHitType === 'desc' && activeAxisId === id)) {
+            desc(d.p3, '이곳은 빈칸입니다.');
+          }
+          descHits.push({x:p.x, y:p.y, id, type:'desc'});
+        }
+
+        // 오버레이 canvas: 클릭된 요소만 선명하게
+        actCtx.clearRect(0, 0, W, H);
+        if (activeAxisId && activeHitType) {
+          if (activeHitType === 'kanji') {
+            const l = labelDefs.find(l => l.ch === activeAxisId);
+            if (l) {
+              const p = tf(l.p3);
+              actCtx.font = `400 ${Math.round(40*zoom)}px "Pretendard JP","Pretendard",sans-serif`;
+              actCtx.fillStyle = '#ea5c3a';
+              actCtx.textAlign = 'center'; actCtx.textBaseline = 'middle';
+              actCtx.fillText(l.ch, p.x, p.y);
+            }
+          } else {
+            const p = tf(DESC_P3[activeAxisId].p3);
+            actCtx.font = `500 ${Math.round(22*zoom)}px "Pretendard","Pretendard JP",sans-serif`;
+            actCtx.fillStyle = '#000';
+            actCtx.textAlign = 'center'; actCtx.textBaseline = 'middle';
+            actCtx.fillText('이곳은 빈칸입니다.', p.x, p.y);
+          }
+        }
+
+        requestAnimationFrame(draw);
+      }
+
+      // ── 이벤트 ──
+      window.addEventListener('wheel', e => {
+        if (overlayOpen) return;
+        e.preventDefault();
+        scrollP = Math.max(-1, Math.min(1, scrollP+e.deltaY*0.0008));
+      }, { passive:false });
+
+      canvas.addEventListener('mousedown', e => {
+        isDragging = true; dragMoved = false;
+        lastX=e.clientX; lastY=e.clientY;
+      });
+      window.addEventListener('mouseup', () => { isDragging = false; });
+      window.addEventListener('mousemove', e => {
+        if (!isDragging) return;
+        const dx=e.clientX-lastX, dy=e.clientY-lastY;
+        if (Math.abs(dx)+Math.abs(dy) > 3) dragMoved = true;
+        if (overlayOpen) return;
+        rotY += dx*0.005;
+        rotX -= dy*0.005;
+        rotX = Math.max(-Math.PI/2.2, Math.min(Math.PI/2.2, rotX));
+        lastX=e.clientX; lastY=e.clientY;
+      });
+
+      canvas.addEventListener('dblclick', () => {
+        if (overlayOpen) { closePanel(); return; }
+        rotY=Math.PI/6; rotX=-Math.PI/12; scrollP=0; panX=OX; panY=OY;
+      });
+
+      canvas.addEventListener('click', e => {
+        if (dragMoved) return;
+        const s = getPageScale();
+        const mx=e.clientX/s, my=e.clientY/s;
+        let nearest=null, minDist=75;
+        for (const h of descHits) {
+          const d=Math.hypot(h.x-mx, h.y-my);
+          if (d<minDist) { minDist=d; nearest=h; }
+        }
+        if (nearest) openPanel(nearest.id, nearest.type);
+      });
+
+      document.getElementById('panelClose').addEventListener('click', closePanel);
+      document.addEventListener('keydown', e => { if (e.key==='Escape') closePanel(); });
+
+      const dot = document.getElementById('dot-cursor');
+      document.addEventListener('mousemove', e => {
+        dot.style.left=e.clientX+'px';
+        dot.style.top=e.clientY+'px';
+      });
+
+      requestAnimationFrame(draw);
     </script>
 
     <script src="scale.js"></script>
