@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
@@ -9,16 +9,6 @@
     <link rel="stylesheet" href="nav.css" />
     <style>
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-      * { cursor: none !important; }
-      #dot-cursor {
-        position: fixed;
-        width: 8px; height: 8px;
-        background: #000;
-        border-radius: 50%;
-        pointer-events: none;
-        transform: translate(-50%, -50%);
-        z-index: 99999;
-      }
       body {
         background: #e9f056;
         overflow: hidden;
@@ -85,11 +75,10 @@
   </head>
   <body>
     <nav class="topNav">
-      <span class="navLeft">PROJECT: DOT SHIFT</span>
+      <a class="navLeft" href="index.html">PROJECT: DOT SHIFT</a>
       <span class="navRight">Everything starts from a dot</span>
     </nav>
 
-    <div id="dot-cursor"></div>
     <div class="banwiPage page-scale">
       <canvas id="axisCanvas" width="1920" height="1080"
               style="position:absolute;inset:0;width:1920px;height:1080px;"></canvas>
@@ -532,6 +521,16 @@
         gridRotY=Math.PI/6; gridRotX=-Math.PI/12;
       });
 
+      canvas.addEventListener('mousemove', e => {
+        const s = getPageScale();
+        const mx = e.clientX / s, my = e.clientY / s;
+        let hit = false;
+        for (const h of descHits) {
+          if (Math.hypot(h.x - mx, h.y - my) < 75) { hit = true; break; }
+        }
+        window.__canvasHoverable = hit;
+      });
+
       canvas.addEventListener('click', e => {
         if (dragMoved) return;
         const s = getPageScale();
@@ -547,15 +546,10 @@
       document.getElementById('panelClose').addEventListener('click', closePanel);
       document.addEventListener('keydown', e => { if (e.key==='Escape') closePanel(); });
 
-      const dot = document.getElementById('dot-cursor');
-      document.addEventListener('mousemove', e => {
-        dot.style.left=e.clientX+'px';
-        dot.style.top=e.clientY+'px';
-      });
-
       requestAnimationFrame(draw);
     </script>
 
     <script src="scale.js"></script>
+    <script src="cursor.js"></script>
   </body>
 </html>

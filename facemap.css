@@ -17,7 +17,7 @@ body {
 /* ── 메인 콘텐츠 영역 ── */
 .faceMapPage {
   position: fixed;
-  top: 43px;
+  top: 48px;
   left: 0;
   width: 1920px;
   height: calc(1080px - 43px - 73px);
@@ -109,7 +109,7 @@ body {
 /* ── 왼쪽 범례 원 ── */
 .legendCircle {
   position: absolute;
-  left: 74.5px;
+  left: 64.5px;
   width: 84px;
   height: 84px;
   border-radius: 57px;

@@ -322,7 +322,7 @@
   </head>
   <body>
     <nav class="topNav">
-      <span class="navLeft">PROJECT: DOT SHIFT</span>
+      <a class="navLeft" href="index.html">PROJECT: DOT SHIFT</a>
       <span class="navRight">Everything starts from a dot</span>
     </nav>
 
@@ -606,7 +606,13 @@
         </div>
 
         <!-- 폴더2: "관상은 과학이다!" -->
-        <div class="jeomFolder" style="left: calc(8.33% + 121px); top: 334px">
+        <div
+          class="jeomFolder"
+          style="left: calc(8.33% + 121px); top: 334px"
+          onclick="openPanel('panel2')"
+          role="button"
+          tabindex="0"
+        >
           <img class="f-base" src="images/jeom/folder-base.svg" alt="" />
           <div class="f-body"></div>
           <img class="f-mask" src="images/jeom/folder-mask.svg" alt="" /><span
@@ -629,7 +635,13 @@
         </div>
 
         <!-- 폴더3: "분수에 맞게 살아라?" -->
-        <div class="jeomFolder" style="left: calc(8.33% + 77px); top: 592px">
+        <div
+          class="jeomFolder"
+          style="left: calc(8.33% + 77px); top: 592px"
+          onclick="openPanel('panel3')"
+          role="button"
+          tabindex="0"
+        >
           <img class="f-base" src="images/jeom/folder-base.svg" alt="" />
           <div class="f-body"></div>
           <img class="f-mask" src="images/jeom/folder-mask.svg" alt="" /><span
@@ -652,7 +664,13 @@
         </div>
 
         <!-- 폴더4: "그릇보다 큰 복은 오래가지 않는다" -->
-        <div class="jeomFolder" style="left: calc(25% + 10px); top: 806px">
+        <div
+          class="jeomFolder"
+          style="left: calc(25% + 10px); top: 806px"
+          onclick="openPanel('panel4')"
+          role="button"
+          tabindex="0"
+        >
           <img class="f-base" src="images/jeom/folder-base.svg" alt="" />
           <div class="f-body"></div>
           <img class="f-mask" src="images/jeom/folder-mask.svg" alt="" /><span
@@ -807,11 +825,14 @@
 
       <!-- ── 상세 패널: 인간 = 소우주? ── -->
       <div class="detail-panel" id="panel5">
-        <div class="dp-portrait" style="top:-51px; transform:none; width:350px; height:799px;">
+        <div
+          class="dp-portrait"
+          style="top: -51px; transform: none; width: 350px; height: 799px"
+        >
           <img
             src="images/jeom/popup-portrait2.png"
             alt=""
-            style="width:200.11%; height:115.39%; top:0; left:-0.05%;"
+            style="width: 200.11%; height: 115.39%; top: 0; left: -0.05%"
           />
         </div>
         <div class="dp-dots">
@@ -831,6 +852,144 @@
           </p>
         </div>
         <button class="dp-close" onclick="closePanel('panel5')">닫기</button>
+      </div>
+
+      <!-- ── 상세 패널: 관상은 과학이다! ── -->
+      <div class="detail-panel" id="panel2">
+        <div
+          class="dp-portrait"
+          style="
+            right: -16px;
+            top: -11px;
+            transform: none;
+            width: 340px;
+            height: 769px;
+          "
+        >
+          <img
+            src="images/jeom/popup-portrait-science.png"
+            alt=""
+            style="width: 190.5%; height: 110.63%; top: 0; left: 0"
+          />
+        </div>
+        <div class="dp-dots">
+          <img src="images/jeom/popup-dots.png" alt="" />
+        </div>
+        <div class="dp-line" style="top: 49px"></div>
+        <p class="dp-sub">About...</p>
+        <div class="dp-line" style="top: 119px"></div>
+        <h2 class="dp-title">관상은 과학이다!</h2>
+        <div class="dp-body">
+          <p>
+            '관상은 과학이다'라는 밈은 외모로 성향을 예측하는 경험칙을 재치 있게
+            표현한 말일 뿐, 학술적 과학은 아니다.
+          </p>
+          <p>&nbsp;</p>
+          <p>
+            관상이 타고난 생김새로 운명이나 성격을 판단하는 것이라면, 인상은
+            대상으로부터 느껴지는 분위기와 느낌을 뜻한다. 관상에서 말하는 "삶의
+            궤적이 얼굴에 남는다"는 말도 관상보다는 후천적인 '인상'에 가깝다.
+            사람은 환경, 생각, 표정 습관에 따라 얼굴 근육과 주름이 변하며,
+            이처럼 축적된 빅데이터가 인상으로 드러나 성격을 직관적으로 읽어낼 수
+            있는 경우들이 발생하는 것이다.
+          </p>
+          <p>&nbsp;</p>
+          <p>
+            관상은 재미있는 개념 중 하나지만 타고난 생김새가 미래를 결정한다는
+            운명론적 해석은 경계해야 할 필요가 있다. 현대의 관상이란 사람의
+            무한한 가능성을 유효한 범위로 그룹화해 타인 파악 시 정보 과부하를
+            줄여주는 효율적인 경험적 도구로 해석하는 것이 적절하다.
+          </p>
+        </div>
+        <button class="dp-close" onclick="closePanel('panel2')">닫기</button>
+      </div>
+
+      <!-- ── 상세 패널: 분수에 맞게 살아라? ── -->
+      <div class="detail-panel" id="panel3">
+        <div
+          class="dp-portrait"
+          style="top: -51px; transform: none; width: 350px; height: 799px"
+        >
+          <img
+            src="images/jeom/popup-portrait2.png"
+            alt=""
+            style="width: 200.11%; height: 115.39%; top: 0; left: -0.05%"
+          />
+        </div>
+        <div class="dp-dots">
+          <img src="images/jeom/popup-dots.png" alt="" />
+        </div>
+        <div class="dp-line" style="top: 49px"></div>
+        <p class="dp-sub">About...</p>
+        <div class="dp-line" style="top: 119px"></div>
+        <h2 class="dp-title">분수에 맞게 살아라?</h2>
+        <div class="dp-body">
+          <p>
+            관상학에서 말하는 '격·복·그릇'은 사람이 살아가며 마주하는 기회와
+            그것을 감당하는 능력의 관계를 설명하는 개념이다. 격은 귀함과 천함을
+            나누는 기준으로, 어떤 환경과 역할 속에서 살아가게 되는지를 결정짓는
+            구조적 조건으로 작용한다. 복은 유복함과 박복함을 드러내는 운으로,
+            재물, 명예, 인간관계와 같은 다양한 형태로 나타난다. 그리고 그릇은
+            이러한 것들을 받아들이고 유지할 수 있는 내적 수용 능력을 의미한다.
+          </p>
+          <p>&nbsp;</p>
+          <p>
+            이 세 요소는 독립적으로 존재하는 것이 아니라 서로 긴밀하게 연결되어
+            작동한다. 특히, 그릇의 크기는 복의 지속 여부를 결정하는 중요한
+            기준이다. 감당할 수 있는 범위를 넘어선 복은 일시적으로는 획득될 수
+            있으나, 장기적으로 유지되기 어렵다는 관점이다.
+          </p>
+          <p>&nbsp;</p>
+          <p>
+            따라서 '분수에 맞게 살아야 한다'는 말은 단순한 도덕적 권고가 아니라,
+            자신의 수용 범위와 균형을 고려하여 삶을 유지해야 한다는 구조적
+            이해에 가깝다.
+          </p>
+        </div>
+        <button class="dp-close" onclick="closePanel('panel3')">닫기</button>
+      </div>
+
+      <!-- ── 상세 패널: 그릇보다 큰 복은 오래가지 않는다 ── -->
+      <div class="detail-panel" id="panel4">
+        <div class="dp-portrait">
+          <img src="images/jeom/popup-portrait.png" alt="" />
+        </div>
+        <div class="dp-dots">
+          <img src="images/jeom/popup-dots.png" alt="" />
+        </div>
+        <div class="dp-line" style="top: 49px"></div>
+        <p class="dp-sub">About...</p>
+        <div class="dp-line" style="top: 119px"></div>
+        <h2 class="dp-title">그릇보다 큰 복은 오래가지 않는다</h2>
+        <div class="dp-body">
+          <p>
+            '격·복·그릇'이라는 개념은 개인의 능력이나 자질을 절대적인 기준으로
+            평가하기보다, 주어진 조건과 그것을 다루는 방식 사이의 관계를
+            설명하는 데 목적이 있다.
+          </p>
+          <p>&nbsp;</p>
+          <p>
+            보통 격과 복은 함께 따르는 경우가 많지만 그릇은 다르다. 아무리 격과
+            복이 넘쳐도 그것을 담을 그릇이 작다면 그 사람의 격과 복은 모두
+            빠져나가 버리는 것이다.
+          </p>
+          <p>&nbsp;</p>
+          <p>
+            따라서 "그릇보다 큰 복은 오래 가지 않는다."라는 말은 격·복·그릇의
+            개념을 함축적으로 표현한 문장이라고 볼 수 있다.
+          </p>
+          <img
+            src="images/jeom/bowl-broken.png"
+            alt=""
+            style="
+              display: block;
+              margin-top: 20px;
+              width: 315px;
+              transform: rotate(180deg) scaleY(-1);
+            "
+          />
+        </div>
+        <button class="dp-close" onclick="closePanel('panel4')">닫기</button>
       </div>
 
       <!-- ── 상세 패널: 관상은 꼴을 보는 것 ── -->
@@ -877,33 +1036,109 @@
     </div>
 
     <!-- ── 하단 내비게이션 ── -->
-            <nav class="bottomNav">
+    <nav class="bottomNav">
       <div class="bn-inner">
-        <img class="bn-logo-l" style="width:23.456px;height:29.129px;left:40px;top:22.99px" src="images/nav/logo-D.svg" alt="">
-        <img class="bn-logo-l" style="width:29.935px;height:29.935px;left:66.65px;top:22.59px" src="images/nav/logo-O.svg" alt="">
-        <img class="bn-logo-l" style="width:22.571px;height:29.129px;left:98.09px;top:22.99px" src="images/nav/logo-T.svg" alt="">
-        <img class="bn-logo-l" style="width:21.726px;height:30.015px;left:134.06px;top:22.59px" src="images/nav/logo-S.svg" alt="">
-        <img class="bn-logo-l" style="width:23.336px;height:29.129px;left:160.53px;top:22.99px" src="images/nav/logo-H.svg" alt="">
-        <img class="bn-logo-l" style="width:4.426px;height:29.129px;left:189.82px;top:22.99px" src="images/nav/logo-I.svg" alt="">
-        <img class="bn-logo-l" style="width:18.065px;height:29.129px;left:200.16px;top:22.99px" src="images/nav/logo-F.svg" alt="">
-        <img class="bn-logo-l" style="width:22.571px;height:29.129px;left:221.73px;top:22.99px" src="images/nav/logo-T.svg" alt="">
+        <img
+          class="bn-logo-l"
+          style="width: 23.456px; height: 29.129px; left: 40px; top: 22.99px"
+          src="images/nav/logo-D.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="width: 29.935px; height: 29.935px; left: 66.65px; top: 22.59px"
+          src="images/nav/logo-O.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="width: 22.571px; height: 29.129px; left: 98.09px; top: 22.99px"
+          src="images/nav/logo-T.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="
+            width: 21.726px;
+            height: 30.015px;
+            left: 134.06px;
+            top: 22.59px;
+          "
+          src="images/nav/logo-S.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="
+            width: 23.336px;
+            height: 29.129px;
+            left: 160.53px;
+            top: 22.99px;
+          "
+          src="images/nav/logo-H.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="width: 4.426px; height: 29.129px; left: 189.82px; top: 22.99px"
+          src="images/nav/logo-I.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="
+            width: 18.065px;
+            height: 29.129px;
+            left: 200.16px;
+            top: 22.99px;
+          "
+          src="images/nav/logo-F.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="
+            width: 22.571px;
+            height: 29.129px;
+            left: 221.73px;
+            top: 22.99px;
+          "
+          src="images/nav/logo-T.svg"
+          alt=""
+        />
         <a class="bn-badge bn-badge--h" href="index.html">H</a>
         <button class="bn-badge bn-badge--b" onclick="history.back()">B</button>
-        <button class="bn-item" style="left:467.15px" onclick="window.location.href='index.html'">
+        <button
+          class="bn-item"
+          style="left: 467.15px"
+          onclick="window.location.href = 'index.html'"
+        >
           <span>프로젝트 알아보기</span>
-          <img src="images/nav/nav-arrow.svg" alt="">
+          <img src="images/nav/nav-arrow.svg" alt="" />
         </button>
-        <button class="bn-item" style="left:794.15px" onclick="window.location.href='camera.html'">
+        <button
+          class="bn-item"
+          style="left: 794.15px"
+          onclick="window.location.href = 'camera.html'"
+        >
           <span>점 패턴 분석하기</span>
-          <img src="images/nav/nav-arrow.svg" alt="">
+          <img src="images/nav/nav-arrow.svg" alt="" />
         </button>
-        <button class="bn-item" style="left:1106.15px" onclick="window.location.href='facemap.html'">
+        <button
+          class="bn-item"
+          style="left: 1106.15px"
+          onclick="window.location.href = 'facemap.html'"
+        >
           <span>얼굴 지도 살펴보기</span>
-          <img src="images/nav/nav-arrow.svg" alt="">
+          <img src="images/nav/nav-arrow.svg" alt="" />
         </button>
-        <button class="bn-item" style="left:1439.15px" onclick="window.location.href='gwansang.html'">
+        <button
+          class="bn-item"
+          style="left: 1439.15px"
+          onclick="window.location.href = 'gwansang.html'"
+        >
           <span>관상학 알아보기</span>
-          <img src="images/nav/nav-arrow.svg" alt="">
+          <img src="images/nav/nav-arrow.svg" alt="" />
         </button>
         <button class="bn-help-btn">?</button>
       </div>
@@ -911,9 +1146,11 @@
 
     <script>
       function openPanel(id) {
-        document.querySelectorAll('.detail-panel.is-open').forEach(function(p) {
-          p.classList.remove('is-open');
-        });
+        document
+          .querySelectorAll('.detail-panel.is-open')
+          .forEach(function (p) {
+            p.classList.remove('is-open');
+          });
         document.getElementById(id).classList.add('is-open');
       }
       function closePanel(id) {
@@ -921,6 +1158,6 @@
       }
     </script>
     <script src="scale.js"></script>
-  <script src="cursor.js"></script>
-</body>
+    <script src="cursor.js"></script>
+  </body>
 </html>

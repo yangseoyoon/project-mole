@@ -5,7 +5,7 @@
 
 #dot-cursor {
   position: fixed;
-  width: 8px; height: 8px;
+  width: 14px; height: 14px;
   background: #000;
   border-radius: 50%;
   pointer-events: none;
@@ -30,6 +30,11 @@
   box-shadow: 0 1px 1px rgba(0,0,0,0.1);
 }
 
+.topNav .navLeft {
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
 .topNav .navLeft,
 .topNav .navRight {
   font-family: 'Pretendard', sans-serif;

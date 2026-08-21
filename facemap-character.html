@@ -4,137 +4,291 @@
     <meta charset="UTF-8" />
     <title>얼굴 지도 : Character | DOT SHIFT</title>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+    />
     <link rel="stylesheet" href="nav.css" />
     <link rel="stylesheet" href="facemap.css" />
   </head>
   <body>
-
     <!-- 상단 네비게이션 바 -->
     <nav class="topNav">
-      <span class="navLeft">PROJECT: DOT SHIFT</span>
+      <a class="navLeft" href="index.html">PROJECT: DOT SHIFT</a>
       <span class="navRight">Everything starts from a dot</span>
     </nav>
 
     <!-- 메인 콘텐츠 -->
     <div class="faceMapPage page-scale">
-
       <!-- 얼굴 지도 이미지 + 파란 오버레이 -->
       <div class="faceMapBg">
         <img class="faceMapImg" src="images/facemap/face-bg.png" alt="" />
-        <div class="faceMapOverlay" style="background:#3a7dea;"></div>
+        <div class="faceMapOverlay" style="background: #3a7dea"></div>
       </div>
 
       <!-- 우측 노란 패널 + 세로 텍스트 -->
       <div class="rightPanel">
-        <div class="verticalText" style="color:#5e9bff;">ICONIC &amp; CHARMING POINT</div>
+        <div class="verticalText" style="color: #5e9bff">
+          ICONIC &amp; CHARMING POINT
+        </div>
       </div>
 
       <!-- 설명 텍스트 (우측 상단) -->
       <div class="descText">
         <p class="descTitle">아이코닉함과 매력 포인트</p>
-        <p class="descBody">현대에 들어서 점은 미신적인 의미를 탈피하고, 개인의 매력 포인트로 완전히 재정의되었다.</p>
+        <p class="descBody">
+          현대에 들어서 점은 미신적인 의미를 탈피하고, 개인의 매력 포인트로
+          완전히 재정의되었다.
+        </p>
       </div>
 
       <!-- 왼쪽 범례 -->
-      <div class="legendCircle" style="top:64.75px; --legend-hover-w:330px;" onclick="window.location.href='facemap.html'">
-        <span class="legend-c" style="color:#fb6d4b;">C</span><span class="legend-label">elebrity</span>
+      <div
+        class="legendCircle"
+        style="top: 64.75px; --legend-hover-w: 330px"
+        onclick="window.location.href = 'facemap.html'"
+      >
+        <span class="legend-c" style="color: #fb6d4b">C</span
+        ><span class="legend-label">elebrity</span>
       </div>
-      <div class="legendCircle" style="top:199.75px; --legend-hover-w:346px;">
-        <span class="legend-c" style="color:#5e9bff;">C</span><span class="legend-label">haracter</span>
+      <div class="legendCircle" style="top: 178.75px; --legend-hover-w: 346px">
+        <span class="legend-c" style="color: #5e9bff">C</span
+        ><span class="legend-label">haracter</span>
       </div>
-      <div class="legendCircle" style="top:334.75px; --legend-hover-w:292px;">
-        <span class="legend-c" style="color:#ff53cb;">C</span><span class="legend-label">ustom</span>
+      <div class="legendCircle" style="top: 292.75px; --legend-hover-w: 292px">
+        <span class="legend-c" style="color: #ff53cb">C</span
+        ><span class="legend-label">ustom</span>
       </div>
 
       <!-- 얼굴 위 점 버튼들 -->
       <!-- Frame408: 오토레이니 -->
-      <button class="dotBtn" data-profile="otorainy" style="left:1043.58px; top:487.09px;">
+      <button
+        class="dotBtn"
+        data-profile="otorainy"
+        style="left: 1043.58px; top: 487.09px"
+      >
         <img src="images/facemap/dot-char-otorainy.svg" alt="" />
       </button>
       <!-- 클러스터 (1140px) -->
-      <button class="dotBtn" data-profile="cluster1" style="left:1080px; top:446.79px; width:36.42px; height:86.42px; display:flex; flex-direction:column; gap:50px; align-items:center; padding:10px;">
-        <img style="width:16.42px; height:16.42px; flex-shrink:0;" src="images/facemap/dot-char-small.svg" alt="" />
-        <img style="width:16.42px; height:16.42px; flex-shrink:0;" src="images/facemap/dot-char-small.svg" alt="" />
+      <button
+        class="dotBtn"
+        data-profile="cluster1"
+        style="
+          left: 1080px;
+          top: 446.79px;
+          width: 36.42px;
+          height: 86.42px;
+          display: flex;
+          flex-direction: column;
+          gap: 50px;
+          align-items: center;
+          padding: 10px;
+        "
+      >
+        <img
+          style="width: 16.42px; height: 16.42px; flex-shrink: 0"
+          src="images/facemap/dot-char-small.svg"
+          alt=""
+        />
+        <img
+          style="width: 16.42px; height: 16.42px; flex-shrink: 0"
+          src="images/facemap/dot-char-small.svg"
+          alt=""
+        />
       </button>
       <!-- 클러스터 (798px) -->
-      <button class="dotBtn" data-profile="cluster2" style="left:738.02px; top:413.46px; width:36.42px; height:55.42px; display:flex; flex-direction:column; gap:19px; align-items:center; padding:10px;">
-        <img style="width:16.42px; height:16.42px; flex-shrink:0;" src="images/facemap/dot-char-small.svg" alt="" />
-        <img style="width:16.42px; height:16.42px; flex-shrink:0;" src="images/facemap/dot-char-small.svg" alt="" />
+      <button
+        class="dotBtn"
+        data-profile="cluster2"
+        style="
+          left: 738.02px;
+          top: 413.46px;
+          width: 36.42px;
+          height: 55.42px;
+          display: flex;
+          flex-direction: column;
+          gap: 19px;
+          align-items: center;
+          padding: 10px;
+        "
+      >
+        <img
+          style="width: 16.42px; height: 16.42px; flex-shrink: 0"
+          src="images/facemap/dot-char-small.svg"
+          alt=""
+        />
+        <img
+          style="width: 16.42px; height: 16.42px; flex-shrink: 0"
+          src="images/facemap/dot-char-small.svg"
+          alt=""
+        />
       </button>
       <!-- Frame412: 시즈쿠 -->
-      <button class="dotBtn" data-profile="shizuku" style="left:780px; top:829.09px;">
+      <button
+        class="dotBtn"
+        data-profile="shizuku"
+        style="left: 780px; top: 829.09px"
+      >
         <img src="images/facemap/dot-char-shizuku.svg" alt="" />
       </button>
       <!-- Frame445: 새 캐릭터 -->
-      <button class="dotBtn" data-profile="char_new1" style="left:930.02px; top:840.58px;">
+      <button
+        class="dotBtn"
+        data-profile="char_new1"
+        style="left: 930.02px; top: 840.58px"
+      >
         <img src="images/facemap/dot-char-new1.svg" alt="" />
       </button>
       <!-- Frame411: 코하쿠 -->
-      <button class="dotBtn" data-profile="kohaku" style="left:991.79px; top:830.58px;">
+      <button
+        class="dotBtn"
+        data-profile="kohaku"
+        style="left: 991.79px; top: 830.58px"
+      >
         <img src="images/facemap/dot-char-kohaku.svg" alt="" />
       </button>
       <!-- Frame409: 힘멜 -->
-      <button class="dotBtn" data-profile="himmel" style="left:1146px; top:402.58px;">
+      <button
+        class="dotBtn"
+        data-profile="himmel"
+        style="left: 1146px; top: 402.58px"
+      >
         <img src="images/facemap/dot-char-himmel.svg" alt="" />
       </button>
       <!-- Frame410: 토모에 -->
-      <button class="dotBtn" data-profile="tomoe" style="left:1208.58px; top:420.79px;">
+      <button
+        class="dotBtn"
+        data-profile="tomoe"
+        style="left: 1208.58px; top: 420.79px"
+      >
         <img src="images/facemap/dot-char-tomoe.svg" alt="" />
       </button>
       <!-- Frame413: 토우야 -->
-      <button class="dotBtn" data-profile="touya" style="left:1190.37px; top:394.37px;">
+      <button
+        class="dotBtn"
+        data-profile="touya"
+        style="left: 1190.37px; top: 394.37px"
+      >
         <img src="images/facemap/dot-char-touya.svg" alt="" />
       </button>
       <!-- Frame416: 사쿠사 (클러스터) -->
-      <button class="dotBtn" data-profile="sakusa" style="left:434px; top:312.09px; width:96px; height:66px;">
-        <img style="position:absolute; left:50px; top:29.58px; width:36.42px; height:36.42px;" src="images/facemap/dot-char-sakusa.svg" alt="" />
-        <img style="position:absolute; left:8px; top:-6.84px; width:36.42px; height:36.42px;" src="images/facemap/dot-char-sakusa.svg" alt="" />
+      <button
+        class="dotBtn"
+        data-profile="sakusa"
+        style="left: 434px; top: 312.09px; width: 96px; height: 66px"
+      >
+        <img
+          style="
+            position: absolute;
+            left: 50px;
+            top: 29.58px;
+            width: 36.42px;
+            height: 36.42px;
+          "
+          src="images/facemap/dot-char-sakusa.svg"
+          alt=""
+        />
+        <img
+          style="
+            position: absolute;
+            left: 8px;
+            top: -6.84px;
+            width: 36.42px;
+            height: 36.42px;
+          "
+          src="images/facemap/dot-char-sakusa.svg"
+          alt=""
+        />
       </button>
 
       <!-- 프로필 말풍선 -->
       <div class="profile-bubble" id="profileBubble">
-        <div class="bubble-union"><img src="images/facemap/bubble-union.svg" alt="" /></div>
+        <div class="bubble-union">
+          <img src="images/facemap/bubble-union.svg" alt="" />
+        </div>
         <div class="bubble-content">
-          <div class="bubble-photo-wrap"><img id="bubblePhoto" src="" alt="" /></div>
+          <div class="bubble-photo-wrap">
+            <img id="bubblePhoto" src="" alt="" />
+          </div>
           <div class="bubble-text">
             <p class="bubble-name" id="bubbleName"></p>
             <p class="bubble-desc" id="bubbleDesc"></p>
           </div>
         </div>
       </div>
-
     </div>
 
     <script>
       const PROFILES = {
-        sakusa:    { name: '사쿠사',    desc: '설명 추가 예정', photo: 'images/facemap/photo-char-sakusa.png' },
-        otorainy:  { name: 'Oto Rainy', desc: '허블사무소 소속 5인 버츄얼 밴드 아이돌 그룹 스코시즘의 멤버이자 버츄얼 유튜버', photo: 'images/facemap/photo-char-otorainy.png' },
-        himmel:    { name: '힘멜',      desc: '설명 추가 예정', photo: 'images/facemap/photo-char-himmel.png' },
-        tomoe:     { name: '토모에',    desc: '설명 추가 예정', photo: 'images/facemap/photo-char-tomoe.png' },
-        touya:     { name: '토우야',    desc: '설명 추가 예정', photo: 'images/facemap/photo-char-touya.png' },
-        kohaku:    { name: '코하쿠',    desc: '설명 추가 예정', photo: 'images/facemap/photo-char-kohaku.png' },
-        shizuku:   { name: '시즈쿠',    desc: '설명 추가 예정', photo: 'images/facemap/photo-char-shizuku.png' },
-        cluster1:  { name: '타츠미',    desc: '설명 추가 예정', photo: 'images/facemap/photo-char-tatsumi.png' },
-        cluster2:  { name: '키요코',    desc: '설명 추가 예정', photo: 'images/facemap/photo-char-kiyoko.png' },
-        char_new1: { name: '베니',      desc: '설명 추가 예정', photo: 'images/facemap/photo-char-beni.png' },
+        sakusa: {
+          name: '사쿠사',
+          desc: '설명 추가 예정',
+          photo: 'images/facemap/photo-char-sakusa.png',
+        },
+        otorainy: {
+          name: 'Oto Rainy',
+          desc: '허블사무소 소속 5인 버츄얼 밴드 아이돌 그룹 스코시즘의 멤버이자 버츄얼 유튜버',
+          photo: 'images/facemap/photo-char-otorainy.png',
+        },
+        himmel: {
+          name: '힘멜',
+          desc: '설명 추가 예정',
+          photo: 'images/facemap/photo-char-himmel.png',
+        },
+        tomoe: {
+          name: '토모에',
+          desc: '설명 추가 예정',
+          photo: 'images/facemap/photo-char-tomoe.png',
+        },
+        touya: {
+          name: '토우야',
+          desc: '설명 추가 예정',
+          photo: 'images/facemap/photo-char-touya.png',
+        },
+        kohaku: {
+          name: '코하쿠',
+          desc: '설명 추가 예정',
+          photo: 'images/facemap/photo-char-kohaku.png',
+        },
+        shizuku: {
+          name: '시즈쿠',
+          desc: '설명 추가 예정',
+          photo: 'images/facemap/photo-char-shizuku.png',
+        },
+        cluster1: {
+          name: '타츠미',
+          desc: '설명 추가 예정',
+          photo: 'images/facemap/photo-char-tatsumi.png',
+        },
+        cluster2: {
+          name: '키요코',
+          desc: '설명 추가 예정',
+          photo: 'images/facemap/photo-char-kiyoko.png',
+        },
+        char_new1: {
+          name: '베니',
+          desc: '설명 추가 예정',
+          photo: 'images/facemap/photo-char-beni.png',
+        },
       };
 
-      const bubble  = document.getElementById('profileBubble');
-      const bPhoto  = document.getElementById('bubblePhoto');
-      const bName   = document.getElementById('bubbleName');
-      const bDesc   = document.getElementById('bubbleDesc');
-      const page    = document.querySelector('.faceMapPage');
+      const bubble = document.getElementById('profileBubble');
+      const bPhoto = document.getElementById('bubblePhoto');
+      const bName = document.getElementById('bubbleName');
+      const bDesc = document.getElementById('bubbleDesc');
+      const page = document.querySelector('.faceMapPage');
       let activeDot = null;
-      const BUBBLE_W = 418, BUBBLE_H = 172;
+      const BUBBLE_W = 418,
+        BUBBLE_H = 172;
 
-      document.querySelectorAll('[data-profile]').forEach(btn => {
-        btn.addEventListener('click', e => {
+      document.querySelectorAll('[data-profile]').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
           e.stopPropagation();
           if (activeDot === btn && bubble.classList.contains('active')) {
             bubble.classList.remove('active');
             btn.classList.remove('active');
-            activeDot = null; return;
+            activeDot = null;
+            return;
           }
           if (activeDot) activeDot.classList.remove('active');
           activeDot = btn;
@@ -145,20 +299,20 @@
           bDesc.textContent = p.desc;
 
           const s = window.innerWidth / 1920;
-          const btnRect  = btn.getBoundingClientRect();
+          const btnRect = btn.getBoundingClientRect();
           const pageRect = page.getBoundingClientRect();
-          const dotCx  = (btnRect.left - pageRect.left + btnRect.width  / 2) / s;
-          const dotTop = (btnRect.top  - pageRect.top) / s;
-          const dotH   = btnRect.height / s;
+          const dotCx = (btnRect.left - pageRect.left + btnRect.width / 2) / s;
+          const dotTop = (btnRect.top - pageRect.top) / s;
+          const dotH = btnRect.height / s;
 
           let left = dotCx - BUBBLE_W / 2;
-          let top  = dotTop - BUBBLE_H + 14;
+          let top = dotTop - BUBBLE_H + 14;
 
           left = Math.max(8, Math.min(left, 1920 - BUBBLE_W - 8));
           if (top < 8) top = dotTop + dotH + 2;
 
           bubble.style.left = left + 'px';
-          bubble.style.top  = top  + 'px';
+          bubble.style.top = top + 'px';
           bubble.classList.add('active');
         });
       });
@@ -171,38 +325,114 @@
     </script>
 
     <!-- 하단 네비게이션 바 -->
-            <nav class="bottomNav">
+    <nav class="bottomNav">
       <div class="bn-inner">
-        <img class="bn-logo-l" style="width:23.456px;height:29.129px;left:40px;top:22.99px" src="images/nav/logo-D.svg" alt="">
-        <img class="bn-logo-l" style="width:29.935px;height:29.935px;left:66.65px;top:22.59px" src="images/nav/logo-O.svg" alt="">
-        <img class="bn-logo-l" style="width:22.571px;height:29.129px;left:98.09px;top:22.99px" src="images/nav/logo-T.svg" alt="">
-        <img class="bn-logo-l" style="width:21.726px;height:30.015px;left:134.06px;top:22.59px" src="images/nav/logo-S.svg" alt="">
-        <img class="bn-logo-l" style="width:23.336px;height:29.129px;left:160.53px;top:22.99px" src="images/nav/logo-H.svg" alt="">
-        <img class="bn-logo-l" style="width:4.426px;height:29.129px;left:189.82px;top:22.99px" src="images/nav/logo-I.svg" alt="">
-        <img class="bn-logo-l" style="width:18.065px;height:29.129px;left:200.16px;top:22.99px" src="images/nav/logo-F.svg" alt="">
-        <img class="bn-logo-l" style="width:22.571px;height:29.129px;left:221.73px;top:22.99px" src="images/nav/logo-T.svg" alt="">
+        <img
+          class="bn-logo-l"
+          style="width: 23.456px; height: 29.129px; left: 40px; top: 22.99px"
+          src="images/nav/logo-D.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="width: 29.935px; height: 29.935px; left: 66.65px; top: 22.59px"
+          src="images/nav/logo-O.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="width: 22.571px; height: 29.129px; left: 98.09px; top: 22.99px"
+          src="images/nav/logo-T.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="
+            width: 21.726px;
+            height: 30.015px;
+            left: 134.06px;
+            top: 22.59px;
+          "
+          src="images/nav/logo-S.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="
+            width: 23.336px;
+            height: 29.129px;
+            left: 160.53px;
+            top: 22.99px;
+          "
+          src="images/nav/logo-H.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="width: 4.426px; height: 29.129px; left: 189.82px; top: 22.99px"
+          src="images/nav/logo-I.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="
+            width: 18.065px;
+            height: 29.129px;
+            left: 200.16px;
+            top: 22.99px;
+          "
+          src="images/nav/logo-F.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="
+            width: 22.571px;
+            height: 29.129px;
+            left: 221.73px;
+            top: 22.99px;
+          "
+          src="images/nav/logo-T.svg"
+          alt=""
+        />
         <a class="bn-badge bn-badge--h" href="index.html">H</a>
         <button class="bn-badge bn-badge--b" onclick="history.back()">B</button>
-        <button class="bn-item" style="left:467.15px" onclick="window.location.href='index.html'">
+        <button
+          class="bn-item"
+          style="left: 467.15px"
+          onclick="window.location.href = 'index.html'"
+        >
           <span>프로젝트 알아보기</span>
-          <img src="images/nav/nav-arrow.svg" alt="">
+          <img src="images/nav/nav-arrow.svg" alt="" />
         </button>
-        <button class="bn-item" style="left:794.15px" onclick="window.location.href='camera.html'">
+        <button
+          class="bn-item"
+          style="left: 794.15px"
+          onclick="window.location.href = 'camera.html'"
+        >
           <span>점 패턴 분석하기</span>
-          <img src="images/nav/nav-arrow.svg" alt="">
+          <img src="images/nav/nav-arrow.svg" alt="" />
         </button>
-        <button class="bn-item" style="left:1106.15px" onclick="window.location.href='facemap.html'">
+        <button
+          class="bn-item"
+          style="left: 1106.15px"
+          onclick="window.location.href = 'facemap.html'"
+        >
           <span>얼굴 지도 살펴보기</span>
-          <img src="images/nav/nav-arrow.svg" alt="">
+          <img src="images/nav/nav-arrow.svg" alt="" />
         </button>
-        <button class="bn-item" style="left:1439.15px" onclick="window.location.href='gwansang.html'">
+        <button
+          class="bn-item"
+          style="left: 1439.15px"
+          onclick="window.location.href = 'gwansang.html'"
+        >
           <span>관상학 알아보기</span>
-          <img src="images/nav/nav-arrow.svg" alt="">
+          <img src="images/nav/nav-arrow.svg" alt="" />
         </button>
         <button class="bn-help-btn">?</button>
       </div>
     </nav>
     <script src="scale.js"></script>
-  <script src="cursor.js"></script>
-</body>
+    <script src="cursor.js"></script>
+  </body>
 </html>

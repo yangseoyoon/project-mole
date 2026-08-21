@@ -14,9 +14,27 @@ body {
   overflow: hidden;
 }
 
+/* ── 패럴랙스 스크롤 컨테이너 ── */
+.scroll-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+.scroll-container::-webkit-scrollbar { display: none; }
+
+.snap-section {
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
 /* ── 메인 히어로 영역 ── */
 .heroMain {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 1920px;
@@ -25,21 +43,67 @@ body {
   overflow: hidden;
 }
 
+/* ── 2번째 섹션: 프로젝트 설명 ── */
+.descSection {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.descSection-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 40px;
+  max-width: 900px;
+}
+
+.descSection-label {
+  font-family: 'Pretendard', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #e9f056;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+.descSection-title {
+  font-family: 'Pretendard', sans-serif;
+  font-size: 72px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.1;
+  letter-spacing: -2px;
+}
+
+.descSection-body {
+  font-family: 'Pretendard', sans-serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.8;
+  max-width: 680px;
+}
+
 /* ── 좌측 인물 ── */
 .portraitLeft {
   position: absolute;
   left: 0;
   top: 0;
-  width: 410.73px;
-  height: 1040px;
-  overflow: hidden;
+  height: 100%;
+  pointer-events: none;
 }
 
 .portraitLeft img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 10%;
+  height: 98%;
+  width: auto;
+  display: block;
 }
 
 /* ── 우측 인물 ── */
@@ -47,16 +111,14 @@ body {
   position: absolute;
   right: 0;
   top: 0;
-  width: 410.73px;
-  height: 1040px;
-  overflow: hidden;
+  height: 100%;
+  pointer-events: none;
 }
 
 .portraitRight img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 10%;
+  height: 98%;
+  width: auto;
+  display: block;
 }
 
 /* ── 중앙 콘텐츠 ── */

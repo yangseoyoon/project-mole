@@ -2,12 +2,654 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <title>Result</title>
-    <link rel="stylesheet" href="css/result.css" />
+    <title>분석 결과 | DOT SHIFT</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+    />
+    <link rel="stylesheet" href="nav.css" />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: 'Pretendard', sans-serif;
+        background: #fff;
+        overflow: hidden;
+        width: 100vw;
+        height: 100vh;
+      }
+
+      .resultPage {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 1920px;
+        height: 1080px;
+      }
+
+      /* 채팅 영역 */
+      .chat-wrap {
+        position: absolute;
+        top: 44px;
+        bottom: 108px;
+        left: 0;
+        right: 0;
+        display: flex;
+        flex-direction: column;
+        background: #fff;
+      }
+
+      /* 헤더 */
+      .chat-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 70px;
+        border-bottom: 1px solid #e5e5e5;
+        flex-shrink: 0;
+        position: relative;
+      }
+      .chat-header-title {
+        font-size: 24px;
+        font-weight: 600;
+        color: #000;
+      }
+      .chat-header-back {
+        position: absolute;
+        left: 48px;
+        font-size: 20px;
+        font-weight: 500;
+        color: #555;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 10px 18px;
+        border-radius: 8px;
+        transition: background 0.15s;
+      }
+      .chat-header-back:hover {
+        background: #f3f3f3;
+      }
+
+      /* 메시지 스크롤 영역 */
+      .chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 64px 400px;
+        display: flex;
+        flex-direction: column;
+        gap: 52px;
+      }
+
+      /* 메시지 공통 */
+      .msg {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        opacity: 0;
+        transform: translateY(14px);
+        animation: msgIn 0.45s ease forwards;
+      }
+      @keyframes msgIn {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* 사용자 메시지 (오른쪽) */
+      .msg--user {
+        align-items: flex-end;
+      }
+      .msg--user .msg-photo {
+        width: 300px;
+        height: 366px;
+        border-radius: 18px;
+        object-fit: cover;
+        border: 1px solid #e0e0e0;
+        background: #f0f0f0;
+      }
+      .msg--user .msg-bubble {
+        background: #f0f0f0;
+        color: #000;
+        font-size: 22px;
+        font-weight: 500;
+        padding: 16px 24px;
+        border-radius: 22px 22px 6px 22px;
+        max-width: 500px;
+        line-height: 1.5;
+      }
+
+      /* AI 메시지 (왼쪽) */
+      .msg--ai {
+        align-items: flex-start;
+      }
+      .msg--ai .msg-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 18px;
+      }
+      .msg-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: #e9f056;
+        border: 1.5px solid #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        font-weight: 800;
+        color: #000;
+        flex-shrink: 0;
+        letter-spacing: -1px;
+      }
+      .msg-bubble-ai {
+        font-size: 22px;
+        font-weight: 400;
+        color: #000;
+        line-height: 1.75;
+        max-width: 920px;
+      }
+
+      /* 타이핑 도트 */
+      .typing-dots {
+        display: flex;
+        gap: 7px;
+        padding: 18px 4px;
+      }
+      .typing-dots span {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+        background: #bbb;
+        animation: dot 1.2s infinite ease-in-out;
+      }
+      .typing-dots span:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .typing-dots span:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+      @keyframes dot {
+        0%,
+        80%,
+        100% {
+          transform: scale(0.7);
+          opacity: 0.4;
+        }
+        40% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      /* 결과 카드 */
+      .result-card {
+        border: 1px solid #e0e0e0;
+        border-radius: 18px;
+        padding: 40px 44px;
+        max-width: 880px;
+        background: #fafafa;
+      }
+      .result-code {
+        font-size: 16px;
+        font-weight: 600;
+        color: #aaa;
+        letter-spacing: 2px;
+        margin-bottom: 8px;
+      }
+      .result-type {
+        font-size: 36px;
+        font-weight: 700;
+        color: #ea5c3a;
+        margin-bottom: 18px;
+        line-height: 1.3;
+      }
+      .result-desc {
+        font-size: 21px;
+        font-weight: 400;
+        color: #222;
+        line-height: 1.8;
+        margin-bottom: 32px;
+      }
+      .result-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .result-tag {
+        background: #e9f056;
+        border: 1px solid #000;
+        border-radius: 100px;
+        padding: 9px 22px;
+        font-size: 19px;
+        font-weight: 600;
+        color: #000;
+      }
+
+      /* 두 번째 AI 메시지: 추가 코멘트 */
+      .comment-bubble {
+        font-size: 22px;
+        font-weight: 400;
+        color: #000;
+        line-height: 1.75;
+        max-width: 880px;
+      }
+
+      /* 하단 액션 */
+      .chat-actions {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 24px;
+        height: 100px;
+        border-top: 1px solid #e5e5e5;
+      }
+      .action-btn {
+        height: 60px;
+        padding: 0 44px;
+        border-radius: 100px;
+        border: 1.5px solid #000;
+        font-family: 'Pretendard', sans-serif;
+        font-size: 22px;
+        font-weight: 600;
+        cursor: pointer;
+        transition:
+          background 0.15s,
+          color 0.15s;
+      }
+      .action-btn--primary {
+        background: #000;
+        color: #fff;
+      }
+      .action-btn--primary:hover {
+        background: #333;
+      }
+      .action-btn--secondary {
+        background: #fff;
+        color: #000;
+      }
+      .action-btn--secondary:hover {
+        background: #f3f3f3;
+      }
+    </style>
   </head>
   <body>
-    <h1 id="typeTitle"></h1>
-    <div id="typeDetail"></div>
-    <script src="result.js"></script>
+    <nav class="topNav">
+      <a class="navLeft" href="index.html">PROJECT: DOT SHIFT</a>
+      <span class="navRight">Everything starts from a dot</span>
+    </nav>
+
+    <div class="resultPage page-scale">
+      <div class="chat-wrap">
+        <!-- 헤더 -->
+        <div class="chat-header">
+          <button class="chat-header-back" onclick="history.back()">
+            ← 다시 분석
+          </button>
+          <span class="chat-header-title">점 패턴 분석 결과</span>
+        </div>
+
+        <!-- 메시지 영역 -->
+        <div class="chat-messages" id="chatMessages">
+          <!-- 사용자: 촬영 사진 -->
+          <div class="msg msg--user" style="animation-delay: 0.1s">
+            <img class="msg-photo" id="userPhoto" src="" alt="촬영 사진" />
+            <div class="msg-bubble">내 점 패턴 분석해줘</div>
+          </div>
+
+          <!-- AI: 타이핑 → 결과 카드 -->
+          <div class="msg msg--ai" style="animation-delay: 0.7s" id="aiMsg1">
+            <div class="msg-row">
+              <div class="msg-avatar">D·</div>
+              <div class="msg-bubble-ai">
+                <div class="typing-dots" id="typingDots1">
+                  <span></span><span></span><span></span>
+                </div>
+                <div id="resultCard" style="display: none">
+                  <div class="result-card">
+                    <div class="result-code" id="resultCode"></div>
+                    <div class="result-type" id="resultType"></div>
+                    <div class="result-desc" id="resultDesc"></div>
+                    <div class="result-tags" id="resultTags"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- AI: 추가 코멘트 (숨겨졌다가 등장) -->
+          <div class="msg msg--ai" id="aiMsg2" style="display: none">
+            <div class="msg-row">
+              <div class="msg-avatar">D·</div>
+              <div class="comment-bubble" id="commentBubble"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 하단 액션 버튼 -->
+        <div class="chat-actions">
+          <button
+            class="action-btn action-btn--secondary"
+            onclick="window.location.href = 'camera.html'"
+          >
+            다시 촬영하기
+          </button>
+          <button
+            class="action-btn action-btn--primary"
+            onclick="window.location.href = 'jeom-gwansang.html'"
+          >
+            관상 더 알아보기 →
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 하단 네비게이션 바 -->
+    <nav class="bottomNav">
+      <div class="bn-inner">
+        <img
+          class="bn-logo-l"
+          style="width: 23.456px; height: 29.129px; left: 40px; top: 22.99px"
+          src="images/nav/logo-D.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="width: 29.935px; height: 29.935px; left: 66.65px; top: 22.59px"
+          src="images/nav/logo-O.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="width: 22.571px; height: 29.129px; left: 98.09px; top: 22.99px"
+          src="images/nav/logo-T.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="
+            width: 21.726px;
+            height: 30.015px;
+            left: 134.06px;
+            top: 22.59px;
+          "
+          src="images/nav/logo-S.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="
+            width: 23.336px;
+            height: 29.129px;
+            left: 160.53px;
+            top: 22.99px;
+          "
+          src="images/nav/logo-H.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="width: 4.426px; height: 29.129px; left: 189.82px; top: 22.99px"
+          src="images/nav/logo-I.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="
+            width: 18.065px;
+            height: 29.129px;
+            left: 200.16px;
+            top: 22.99px;
+          "
+          src="images/nav/logo-F.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="
+            width: 22.571px;
+            height: 29.129px;
+            left: 221.73px;
+            top: 22.99px;
+          "
+          src="images/nav/logo-T.svg"
+          alt=""
+        />
+        <a class="bn-badge bn-badge--h" href="index.html">H</a>
+        <button class="bn-badge bn-badge--b" onclick="history.back()">B</button>
+        <button
+          class="bn-item"
+          style="left: 467.15px"
+          onclick="window.location.href = 'index.html'"
+        >
+          <span>프로젝트 알아보기</span>
+          <img src="images/nav/nav-arrow.svg" alt="" />
+        </button>
+        <button
+          class="bn-item"
+          style="left: 794.15px"
+          onclick="window.location.href = 'camera.html'"
+        >
+          <span>점 패턴 분석하기</span>
+          <img src="images/nav/nav-arrow.svg" alt="" />
+        </button>
+        <button
+          class="bn-item"
+          style="left: 1106.15px"
+          onclick="window.location.href = 'facemap.html'"
+        >
+          <span>얼굴 지도 살펴보기</span>
+          <img src="images/nav/nav-arrow.svg" alt="" />
+        </button>
+        <button
+          class="bn-item"
+          style="left: 1439.15px"
+          onclick="window.location.href = 'gwansang.html'"
+        >
+          <span>관상학 알아보기</span>
+          <img src="images/nav/nav-arrow.svg" alt="" />
+        </button>
+        <button class="bn-help-btn">?</button>
+      </div>
+    </nav>
+
+    <script>
+      // ── 유형 데이터 ──
+      // analyzePattern이 생성하는 코드: {E|C}{D|G}{V|H}{P|L|S} = 24가지 + NONE
+      const TYPE_MAP = {
+        // ── 외곽 분산 (E) ──
+        EDVS: {
+          name: '방랑형 자유인',
+          desc: '점이 얼굴 외곽에 넓고 수직으로 퍼진 유형입니다. 경계를 넘고 새로운 것을 탐색하는 본능이 강합니다. 관상학에서 외곽에 퍼진 점은 넓은 세계를 품는 기질을 나타냅니다.',
+          tags: ['#자유로움', '#탐험가', '#개방성', '#독립심'],
+        },
+        EDHS: {
+          name: '확산형 개척자',
+          desc: '점이 얼굴 외곽에 좌우로 넓게 분산된 유형입니다. 다양한 방향으로 에너지를 뻗어나가며 새 길을 여는 기질이 있습니다.',
+          tags: ['#개척정신', '#다재다능', '#도전', '#외향성'],
+        },
+        EDVL: {
+          name: '성장형 탐구자',
+          desc: '이마에서 턱까지 점이 수직으로 두 곳에 나타난 유형입니다. 끊임없이 배우고 위아래로 성장하려는 강한 내적 동기를 지닙니다.',
+          tags: ['#탐구심', '#학습력', '#성장지향', '#호기심'],
+        },
+        EDHL: {
+          name: '소통형 활동가',
+          desc: '점이 외곽 좌우에 나란한 유형입니다. 표현력이 뛰어나고 넓은 인간관계로 사람을 이끄는 능력이 있습니다.',
+          tags: ['#표현력', '#소통', '#설득력', '#활동적'],
+        },
+        EGVS: {
+          name: '균형형 리더',
+          desc: '점이 얼굴 외곽에 수직으로 적당히 모인 유형입니다. 위와 아래를 모두 살피며 중심을 잡는 리더십이 돋보입니다.',
+          tags: ['#리더십', '#균형감각', '#통찰', '#판단력'],
+        },
+        EGHS: {
+          name: '균형형 조율자',
+          desc: '점이 얼굴 외곽 좌우에 균형 있게 분포한 유형입니다. 조화를 중시하고 갈등을 부드럽게 해소합니다. 볼의 점은 사교 운과 원만한 대인관계를 나타냅니다.',
+          tags: ['#균형감각', '#사교적', '#조화', '#중재력'],
+        },
+        EGVL: {
+          name: '상승형 집중가',
+          desc: '외곽 수직 방향으로 두 점이 놓인 유형입니다. 목표를 정하고 위를 향해 집중적으로 에너지를 모읍니다.',
+          tags: ['#집중력', '#목표지향', '#상승지향', '#끈기'],
+        },
+        EGHL: {
+          name: '연결형 사교가',
+          desc: '외곽 좌우에 두 점이 나란한 유형입니다. 좌우를 연결하며 다리 역할을 하고 넓은 네트워크를 자랑합니다.',
+          tags: ['#네트워크', '#사교성', '#연결자', '#협력'],
+        },
+        EGVP: {
+          name: '집중형 전문가',
+          desc: '얼굴 외곽에 단일 점이 두드러지는 유형입니다. 한 분야를 깊이 파고드는 집중력과 전문성을 갖추고 있습니다.',
+          tags: ['#집중력', '#전문성', '#완벽주의', '#심화'],
+        },
+        EGHP: {
+          name: '감각형 전문가',
+          desc: '얼굴 측면에 단일 점이 위치한 유형입니다. 특정 영역에서 날카로운 감각과 독창성을 발휘합니다.',
+          tags: ['#독창성', '#감각', '#전문성', '#예리함'],
+        },
+        // ── 내부 밀집 (C) ──
+        CDVS: {
+          name: '내면형 사색가',
+          desc: '점이 얼굴 안쪽에 수직으로 모인 유형입니다. 깊이 생각하고 내면에서 답을 찾는 성향이 강합니다. 미간~코 라인의 점은 관록궁과 직결됩니다.',
+          tags: ['#사색', '#내향적', '#지성', '#독립적'],
+        },
+        CDHS: {
+          name: '중심형 안정가',
+          desc: '점이 얼굴 중앙부에 수평으로 모여 있는 유형입니다. 중심을 지키고 주변을 안정시키는 역할을 합니다.',
+          tags: ['#안정성', '#신중함', '#책임감', '#중심잡기'],
+        },
+        CDVL: {
+          name: '의지형 추진가',
+          desc: '얼굴 안쪽 수직 두 곳에 점이 있는 유형입니다. 내부 에너지를 수직으로 모아 강한 추진력을 만들어냅니다.',
+          tags: ['#추진력', '#의지력', '#결단', '#실행력'],
+        },
+        CDHL: {
+          name: '조화형 실행가',
+          desc: '얼굴 중앙부 좌우에 점이 배치된 유형입니다. 내부에서 좌우 균형을 이루며 실질적인 실행력을 발휘합니다.',
+          tags: ['#실행력', '#균형', '#협동', '#안정'],
+        },
+        CGVS: {
+          name: '내성형 전략가',
+          desc: '미간과 이마 중앙에 점이 가깝게 모인 유형입니다. 깊이 생각하고 내부에서 전략을 세우는 능력이 뛰어납니다. 관록궁의 점은 지성과 전략적 사고를 나타냅니다.',
+          tags: ['#전략적사고', '#내향적', '#지성', '#계획력'],
+        },
+        CGHS: {
+          name: '안정형 수호자',
+          desc: '얼굴 중앙 좌우에 점이 밀집된 유형입니다. 신뢰를 쌓고 주변을 안정시키는 역할을 합니다. 남녀궁·처첩궁의 점은 인복을 의미합니다.',
+          tags: ['#신뢰감', '#안정성', '#책임감', '#인복'],
+        },
+        CGVL: {
+          name: '집중형 성장가',
+          desc: '얼굴 중앙 수직 두 곳에 점이 있는 유형입니다. 내부 에너지를 위아래로 집중시켜 꾸준한 성장을 이뤄냅니다.',
+          tags: ['#성장', '#집중', '#꾸준함', '#내공'],
+        },
+        CGHL: {
+          name: '내부형 연결가',
+          desc: '얼굴 안쪽 좌우에 두 점이 있는 유형입니다. 핵심 관계를 중심으로 깊고 견고한 유대를 만들어냅니다.',
+          tags: ['#깊은관계', '#신의', '#연결', '#핵심중시'],
+        },
+        CGVP: {
+          name: '집중형 선각자',
+          desc: '얼굴 중심에 단일 점이 수직 위치한 유형입니다. 핵심을 꿰뚫는 통찰과 조용한 카리스마가 있습니다.',
+          tags: ['#통찰', '#카리스마', '#집중', '#선각자'],
+        },
+        CGHP: {
+          name: '중심형 공감가',
+          desc: '얼굴 정중앙에 단일 점이 위치한 유형입니다. 타인의 감정을 정확히 읽고 중심에서 공감하는 능력이 뛰어납니다.',
+          tags: ['#공감력', '#감수성', '#중심', '#배려'],
+        },
+        NONE: {
+          name: '자유형 잠재력',
+          desc: '점이 찍히지 않은 유형입니다. 관상학에서는 점이 없는 것도 하나의 특성입니다. 어떤 방향으로도 성장할 수 있는 열린 가능성을 지닌 상입니다.',
+          tags: ['#무한가능성', '#자유로움', '#적응력', '#잠재력'],
+        },
+      };
+
+      // 궁별 코멘트
+      const PALACE_COMMENT = {
+        관록궁: '이마 중앙(관록궁)의 점 — 직업운과 사회적 성취를 나타냅니다.',
+        복덕궁: '이마 우측(복덕궁)의 점 — 복과 덕이 쌓이는 위치입니다.',
+        상모궁: '관자놀이(상모궁)의 점 — 외모와 첫인상의 운을 상징합니다.',
+        처첩궁: '눈꼬리(처첩궁)의 점 — 인연과 애정운을 나타냅니다.',
+        남녀궁: '볼 오른쪽(남녀궁)의 점 — 자녀운과 생명력을 의미합니다.',
+        질액궁:
+          '아래 볼(질액궁)의 점 — 건강과 체력 관리에 주의가 필요한 위치입니다.',
+        지각궁: '턱 중앙(지각궁)의 점 — 말년운과 안정적인 토대를 나타냅니다.',
+        전택궁:
+          '왼쪽 아래 볼(전택궁)의 점 — 부동산운과 거주 환경을 상징합니다.',
+        노복궁: '볼 왼쪽(노복궁)의 점 — 아랫사람과의 관계, 인복을 나타냅니다.',
+        재백궁: '눈꼬리 왼쪽(재백궁)의 점 — 재물운과 경제적 능력을 의미합니다.',
+        형제궁: '왼쪽 관자(형제궁)의 점 — 형제·동료와의 관계를 나타냅니다.',
+        천이궁:
+          '이마 좌측(천이궁)의 점 — 이동운과 변화에 강한 기질을 상징합니다.',
+      };
+
+      // ── 유형 매칭 ──
+      function matchType(code) {
+        if (!code || code === 'NONE') return 'NONE';
+        return TYPE_MAP[code] ? code : 'NONE';
+      }
+
+      // ── 초기화 ──
+      const savedFace =
+        localStorage.getItem('capturedDots') ||
+        localStorage.getItem('capturedFace');
+      const rawCode = localStorage.getItem('resultType') || 'NONE';
+      const dominantPalace = localStorage.getItem('dominantPalace') || '';
+      const typeKey = matchType(rawCode);
+      const data = TYPE_MAP[typeKey];
+
+      // 사용자 사진
+      const photoEl = document.getElementById('userPhoto');
+      if (savedFace) photoEl.src = savedFace;
+
+      // 결과 채우기
+      document.getElementById('resultCode').textContent =
+        rawCode !== 'NONE' ? `유형 코드: ${rawCode}` : '';
+      document.getElementById('resultType').textContent = data.name;
+      document.getElementById('resultDesc').textContent = data.desc;
+      const tagsEl = document.getElementById('resultTags');
+      data.tags.forEach((tag) => {
+        const span = document.createElement('span');
+        span.className = 'result-tag';
+        span.textContent = tag;
+        tagsEl.appendChild(span);
+      });
+
+      // 타이핑 도트 → 결과 카드 (1.8초 후)
+      setTimeout(() => {
+        document.getElementById('typingDots1').style.display = 'none';
+        document.getElementById('resultCard').style.display = 'block';
+
+        // 추가 코멘트 (3.5초 후): 궁 정보 우선, 없으면 기본 코멘트
+        setTimeout(() => {
+          const msg2 = document.getElementById('aiMsg2');
+          msg2.style.display = 'flex';
+          msg2.style.animation = 'msgIn 0.45s ease forwards';
+          const comment =
+            dominantPalace && PALACE_COMMENT[dominantPalace]
+              ? PALACE_COMMENT[dominantPalace]
+              : '관상에서 점은 단순한 점이 아니라 기운이 모이는 자리입니다. 변화하는 삶 속에서 점의 의미도 달라질 수 있습니다.';
+          document.getElementById('commentBubble').textContent = comment;
+
+          const chat = document.getElementById('chatMessages');
+          chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' });
+        }, 1700);
+      }, 1800);
+    </script>
+
+    <script src="scale.js"></script>
+    <script src="cursor.js"></script>
   </body>
 </html>

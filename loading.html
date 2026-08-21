@@ -2,11 +2,92 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <title>분석 | DOT SHIFT</title>
+    <title>분석 중 | DOT SHIFT</title>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
     <link rel="stylesheet" href="nav.css" />
-    <link rel="stylesheet" href="system.css" />
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        background: #fff;
+        overflow: hidden;
+        width: 100vw;
+        height: 100vh;
+      }
+      .loadingPage {
+        position: fixed;
+        top: 0; left: 0;
+        width: 1920px;
+        height: 1080px;
+        background: #fff;
+      }
+
+      /* 점 세 개 애니메이션 */
+      .loading-dots {
+        position: absolute;
+        left: calc(50% + 9.65px);
+        top: 268.71px;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+      .loading-dots span {
+        display: block;
+        width: 10px;
+        height: 10px;
+        background: #000;
+        border-radius: 50%;
+        animation: dotBlink 1.2s ease-in-out infinite;
+      }
+      .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+      .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+      @keyframes dotBlink {
+        0%, 80%, 100% { opacity: 0.2; transform: scale(0.8); }
+        40%            { opacity: 1;   transform: scale(1.2); }
+      }
+
+      /* 메인 텍스트 */
+      .loading-text {
+        position: absolute;
+        left: calc(50% - 469.85px);
+        top: 360px;
+        transform: translateY(-50%);
+        font-family: 'Pretendard', sans-serif;
+        font-weight: 300;
+        font-size: 96px;
+        color: #000;
+        white-space: nowrap;
+        line-height: 1;
+        animation: fadeInUp 0.6s ease forwards;
+      }
+
+      /* 얼굴 이미지 */
+      .loading-face {
+        position: absolute;
+        left: calc(50% + 9.65px);
+        top: 494px;
+        transform: translateX(-50%);
+        width: 235px;
+        height: 313.437px;
+        object-fit: cover;
+        animation: fadeInUp 0.8s 0.2s ease both;
+      }
+
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px) translateX(-50%); }
+        to   { opacity: 1; transform: translateY(0)    translateX(-50%); }
+      }
+
+      /* 텍스트는 translateX 없으므로 별도 */
+      .loading-text {
+        animation: fadeInUpText 0.6s ease forwards;
+      }
+      @keyframes fadeInUpText {
+        from { opacity: 0; transform: translateY(30px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+    </style>
   </head>
   <body>
 
@@ -15,45 +96,15 @@
       <span class="navRight">Everything starts from a dot</span>
     </nav>
 
-    <div class="systemPage page-scale">
+    <div class="loadingPage page-scale">
 
-      <!-- 배경 -->
-      <img class="sys-bg" src="images/cam-bg.png" alt="" />
-
-      <!-- 왼쪽 패널: 얼굴 + 그리드 -->
-      <div class="sys-left-panel">
-        <div class="sys-bar sys-bar--top"></div>
-        <div id="faceContainer">
-          <canvas id="savedCanvas"></canvas>
-          <canvas id="dotCanvas"></canvas>
-          <img id="facegridOverlay" src="images/facegrid.png" alt="" />
-          <div id="grid"></div>
-        </div>
-        <div class="sys-bar sys-bar--bottom"></div>
+      <div class="loading-dots">
+        <span></span><span></span><span></span>
       </div>
 
-      <!-- 중간 패널: 버튼 -->
-      <div class="sys-mid-panel">
-        <button id="resetBtn">다시찍기</button>
-        <button id="analyzeBtn">분석하기</button>
-      </div>
+      <p class="loading-text">유형을 분석하는 중입니다</p>
 
-      <!-- 오른쪽 상단 패널: 방사형 차트 -->
-      <div class="sys-right-top">
-        <div class="sys-bar sys-bar--top sys-bar--sm"></div>
-        <div class="sys-chart-area">
-          <svg id="radialSvg" xmlns="http://www.w3.org/2000/svg"></svg>
-          <div id="chartControls">
-            <button id="zoomInBtn">+</button>
-            <button id="zoomOutBtn">−</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- 오른쪽 하단 패널 -->
-      <div class="sys-right-bottom">
-        <div class="sys-bar sys-bar--top sys-bar--sm"></div>
-      </div>
+      <img class="loading-face" src="images/loading-face.png" alt="" />
 
     </div>
 
@@ -90,9 +141,13 @@
       </div>
     </nav>
 
-    <canvas id="photoCanvas" style="display:none;"></canvas>
-    <script src="system.js"></script>
+    <script>
+      setTimeout(() => {
+        window.location.href = 'result.html';
+      }, 4000);
+    </script>
+
     <script src="scale.js"></script>
-  <script src="cursor.js"></script>
-</body>
+    <script src="cursor.js"></script>
+  </body>
 </html>

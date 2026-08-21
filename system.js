@@ -15,14 +15,13 @@ const savedImage = localStorage.getItem('capturedFace');
 if (savedImage) {
   const img = new Image();
   img.onload = () => {
-    // object-fit: cover 방식으로 중앙 크롭
-    const iw = img.width;
-    const ih = img.height;
+    const iw = img.width,
+      ih = img.height;
     const scale = Math.max(CANVAS_W / iw, CANVAS_H / ih);
-    const sw = iw * scale;
-    const sh = ih * scale;
-    const sx = (CANVAS_W - sw) / 2;
-    const sy = (CANVAS_H - sh) / 2;
+    const sw = iw * scale,
+      sh = ih * scale;
+    const sx = (CANVAS_W - sw) / 2,
+      sy = (CANVAS_H - sh) / 2;
     savedCtx.drawImage(img, sx, sy, sw, sh);
   };
   img.src = savedImage;
@@ -31,33 +30,35 @@ if (savedImage) {
 // ── GRID ──
 const GRID_COLS = 18;
 const GRID_ROWS = 23;
-const ORIGIN = { x: 8.5, y: 8.5 };
+// 얼굴 중심: 캔버스 중앙 (col 9, row 11.5)
+const ORIGIN = { col: 9, row: 11.5 };
 const grid = document.getElementById('grid');
 
 // ── 방사형 SVG ──
 const svg = document.getElementById('radialSvg');
-const svgW = svg.parentElement.clientWidth || 1000;
-const svgH = svg.parentElement.clientHeight || 1080;
+const svgW = svg.parentElement.clientWidth || 600;
+const svgH = svg.parentElement.clientHeight || 700;
 const centerX = svgW / 2;
 const centerY = svgH / 2;
 const ringGap = 28;
 const MAX_RINGS = 8;
 const points = [];
 
-// ── 궁 각도 ──
+// ── 궁 각도 (얼굴 해부학 기준) ──
+// 90°=위(관록/이마), 270°=아래(지각/턱), 0°/180°=좌우
 const PALACE_ANGLES = {
-  관록궁: 90,
-  복덕궁: 60,
-  상모궁: 30,
-  처첩궁: 0,
-  남녀궁: 330,
-  질액궁: 300,
-  공백: 270,
-  전택궁: 240,
-  노복궁: 210,
-  재백궁: 180,
-  형제궁: 150,
-  천이궁: 120,
+  관록궁: 90, // 이마 중앙
+  복덕궁: 60, // 이마 우상
+  상모궁: 30, // 오른쪽 관자
+  처첩궁: 0, // 오른쪽 눈꼬리
+  남녀궁: 330, // 오른쪽 볼
+  질액궁: 300, // 오른쪽 턱
+  지각궁: 270, // 턱 중앙
+  전택궁: 240, // 왼쪽 턱
+  노복궁: 210, // 왼쪽 볼
+  재백궁: 180, // 왼쪽 눈꼬리
+  형제궁: 150, // 왼쪽 관자
+  천이궁: 120, // 이마 좌상
 };
 
 svg.setAttribute('viewBox', `0 0 ${svgW} ${svgH}`);
@@ -65,7 +66,10 @@ svg.setAttribute('viewBox', `0 0 ${svgW} ${svgH}`);
 // ── 동심원 그리기 ──
 function drawRings() {
   for (let i = 1; i <= MAX_RINGS; i++) {
-    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    const circle = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'circle',
+    );
     circle.setAttribute('cx', centerX);
     circle.setAttribute('cy', centerY);
     circle.setAttribute('r', i * ringGap);
@@ -74,10 +78,12 @@ function drawRings() {
     circle.setAttribute('stroke-width', '0.6');
     svg.appendChild(circle);
 
-    // 숫자 레이블 (수직 방향)
     if (i >= 2) {
-      const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      label.setAttribute('x', centerX + 6);
+      const label = document.createElementNS(
+        'http://www.w3.org/2000/svg',
+        'text',
+      );
+      label.setAttribute('x', centerX + 5);
       label.setAttribute('y', centerY - i * ringGap + 4);
       label.setAttribute('font-size', '11');
       label.setAttribute('fill', '#555');
@@ -88,17 +94,16 @@ function drawRings() {
   }
 }
 
-// ── 축 선 + 궁 필 레이블 ──
+// ── 축 선 + 궁 레이블 ──
 function drawAxes() {
   const maxR = MAX_RINGS * ringGap;
-  const labelR = maxR + 68;
+  const labelR = maxR + 60;
 
   Object.entries(PALACE_ANGLES).forEach(([name, angle]) => {
     const rad = (angle * Math.PI) / 180;
     const ex = centerX + Math.cos(rad) * maxR;
     const ey = centerY - Math.sin(rad) * maxR;
 
-    // 축 선
     const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     line.setAttribute('x1', centerX);
     line.setAttribute('y1', centerY);
@@ -108,19 +113,19 @@ function drawAxes() {
     line.setAttribute('stroke-width', '0.8');
     svg.appendChild(line);
 
-    // 레이블 위치
     const lx = centerX + Math.cos(rad) * labelR;
     const ly = centerY - Math.sin(rad) * labelR;
 
-    // 검정 점
-    const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    const dot = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'circle',
+    );
     dot.setAttribute('cx', centerX + Math.cos(rad) * (maxR + 12));
     dot.setAttribute('cy', centerY - Math.sin(rad) * (maxR + 12));
     dot.setAttribute('r', '5');
     dot.setAttribute('fill', '#111');
     svg.appendChild(dot);
 
-    // 흰 필 배경
     const pillW = name.length <= 2 ? 64 : name.length <= 3 ? 76 : 88;
     const pillH = 26;
     const pill = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
@@ -134,9 +139,8 @@ function drawAxes() {
     pill.setAttribute('stroke-width', '1');
     svg.appendChild(pill);
 
-    // 궁 이름 텍스트
     const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    text.setAttribute('x', lx - 8);
+    text.setAttribute('x', lx);
     text.setAttribute('y', ly + 5);
     text.setAttribute('text-anchor', 'middle');
     text.setAttribute('font-size', '13');
@@ -144,25 +148,40 @@ function drawAxes() {
     text.setAttribute('fill', '#111');
     text.textContent = name;
     svg.appendChild(text);
-
-    // × 버튼 텍스트
-    const xBtn = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    xBtn.setAttribute('x', lx + pillW / 2 - 14);
-    xBtn.setAttribute('y', ly + 5);
-    xBtn.setAttribute('text-anchor', 'middle');
-    xBtn.setAttribute('font-size', '11');
-    xBtn.setAttribute('fill', '#888');
-    xBtn.setAttribute('cursor', 'pointer');
-    xBtn.textContent = '×';
-    svg.appendChild(xBtn);
   });
 }
 
 drawRings();
 drawAxes();
 
-// ── 방사형 점 계산 ──
-function drawRadialPoint(angle, radius) {
+// ── 클릭 좌표 → 가장 가까운 궁 각도 매핑 ──
+// 얼굴 캔버스 좌표계: 중앙(0,0), x 오른쪽+, y 위+
+// atan2(y, x)로 각도 계산 후 12궁 중 가장 가까운 각도로 스냅
+function snapToPalaceAngle(normX, normY) {
+  // normX: -1(왼쪽) ~ +1(오른쪽), normY: -1(아래) ~ +1(위)
+  const rawAngle = Math.atan2(normY, normX) * (180 / Math.PI);
+  const angles = Object.values(PALACE_ANGLES);
+  let best = angles[0];
+  let bestDiff = Infinity;
+  angles.forEach((a) => {
+    let diff = Math.abs(rawAngle - a);
+    if (diff > 180) diff = 360 - diff;
+    if (diff < bestDiff) {
+      bestDiff = diff;
+      best = a;
+    }
+  });
+  return best;
+}
+
+// ── 반지름: 중심에서 얼마나 떨어졌는지 (0~8링) ──
+function calcRadius(normX, normY) {
+  const dist = Math.sqrt(normX * normX + normY * normY); // 0~√2
+  return Math.min(Math.round((dist * MAX_RINGS) / Math.SQRT2), MAX_RINGS);
+}
+
+// ── 방사형 점 좌표 계산 ──
+function radialCoord(angle, radius) {
   const rad = (angle * Math.PI) / 180;
   return {
     px: centerX + Math.cos(rad) * radius * ringGap,
@@ -175,8 +194,14 @@ function redrawRadial() {
   document.querySelectorAll('.dynamic').forEach((el) => el.remove());
 
   if (points.length >= 3) {
-    const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-    polygon.setAttribute('points', points.map((p) => `${p.px},${p.py}`).join(' '));
+    const polygon = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'polygon',
+    );
+    polygon.setAttribute(
+      'points',
+      points.map((p) => `${p.px},${p.py}`).join(' '),
+    );
     polygon.setAttribute('fill', 'rgba(255,92,52,0.15)');
     polygon.setAttribute('stroke', '#ff5c34');
     polygon.setAttribute('stroke-width', '1.5');
@@ -184,8 +209,10 @@ function redrawRadial() {
     svg.appendChild(polygon);
   } else if (points.length === 2) {
     const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    line.setAttribute('x1', points[0].px); line.setAttribute('y1', points[0].py);
-    line.setAttribute('x2', points[1].px); line.setAttribute('y2', points[1].py);
+    line.setAttribute('x1', points[0].px);
+    line.setAttribute('y1', points[0].py);
+    line.setAttribute('x2', points[1].px);
+    line.setAttribute('y2', points[1].py);
     line.setAttribute('stroke', '#ff5c34');
     line.setAttribute('stroke-width', '1.5');
     line.classList.add('dynamic');
@@ -193,33 +220,48 @@ function redrawRadial() {
   }
 
   points.forEach((p) => {
-    const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    const dot = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'circle',
+    );
     dot.setAttribute('cx', p.px);
     dot.setAttribute('cy', p.py);
     dot.setAttribute('r', '5');
     dot.setAttribute('fill', '#ff5c34');
     dot.classList.add('dynamic');
     svg.appendChild(dot);
+
+    // 궁 이름 툴팁
+    const label = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'text',
+    );
+    label.setAttribute('x', p.px + 8);
+    label.setAttribute('y', p.py - 8);
+    label.setAttribute('font-size', '12');
+    label.setAttribute('fill', '#ff5c34');
+    label.setAttribute('font-family', 'Pretendard, sans-serif');
+    label.textContent = p.palace;
+    label.classList.add('dynamic');
+    svg.appendChild(label);
   });
 }
 
-// ── dotCanvas: 점 + 연결 도형 글로우 렌더링 ──
+// ── dotCanvas: 점 + 연결 글로우 렌더링 ──
 function redrawDots() {
   dotCtx.clearRect(0, 0, CANVAS_W, CANVAS_H);
   if (points.length === 0) return;
 
   const COLOR = '#ff5c34';
 
-  // 폴리곤 / 선 그리기
   if (points.length >= 2) {
-    // 외곽 글로우 (여러 겹으로 번짐 효과)
     [40, 25, 12].forEach((blur, i) => {
       dotCtx.save();
       dotCtx.shadowColor = COLOR;
       dotCtx.shadowBlur = blur;
       dotCtx.beginPath();
       dotCtx.moveTo(points[0].dotX, points[0].dotY);
-      points.forEach(p => dotCtx.lineTo(p.dotX, p.dotY));
+      points.forEach((p) => dotCtx.lineTo(p.dotX, p.dotY));
       if (points.length >= 3) dotCtx.closePath();
       dotCtx.strokeStyle = `rgba(255,92,52,${0.6 - i * 0.15})`;
       dotCtx.lineWidth = 1.5;
@@ -227,12 +269,11 @@ function redrawDots() {
       dotCtx.restore();
     });
 
-    // 내부 반투명 채우기
     if (points.length >= 3) {
       dotCtx.save();
       dotCtx.beginPath();
       dotCtx.moveTo(points[0].dotX, points[0].dotY);
-      points.forEach(p => dotCtx.lineTo(p.dotX, p.dotY));
+      points.forEach((p) => dotCtx.lineTo(p.dotX, p.dotY));
       dotCtx.closePath();
       dotCtx.fillStyle = 'rgba(255,92,52,0.12)';
       dotCtx.fill();
@@ -240,8 +281,7 @@ function redrawDots() {
     }
   }
 
-  // 점 그리기 (글로우 포함)
-  points.forEach(p => {
+  points.forEach((p) => {
     dotCtx.save();
     dotCtx.shadowColor = COLOR;
     dotCtx.shadowBlur = 18;
@@ -253,33 +293,43 @@ function redrawDots() {
   });
 }
 
-// ── 자유 클릭: 클릭 위치에 점 표시, 판정은 그리드 칸으로 ──
+// ── 클릭 핸들러 ──
 const cellW = CANVAS_W / GRID_COLS;
 const cellH = CANVAS_H / GRID_ROWS;
-
-// grid div를 투명한 단일 클릭 영역으로 사용
 grid.style.cursor = 'crosshair';
 
 grid.addEventListener('click', (e) => {
   const rect = grid.getBoundingClientRect();
-
-  // 클릭한 실제 픽셀 좌표 (faceContainer 기준)
   const clickX = (e.clientX - rect.left) * (CANVAS_W / rect.width);
-  const clickY = (e.clientY - rect.top)  * (CANVAS_H / rect.height);
+  const clickY = (e.clientY - rect.top) * (CANVAS_H / rect.height);
 
-  // 속한 그리드 칸으로 좌표 판정
+  // 그리드 칸 좌표
   const col = Math.floor(clickX / cellW);
   const row = Math.floor(clickY / cellH);
-  const x = Math.round(col - ORIGIN.x);
-  const y = Math.round(ORIGIN.y - row);
 
-  let angle = 270;
-  if (x > 0) angle += 15;
-  if (x < 0) angle -= 15;
-  const radius = Math.abs(y);
+  // 중심 기준 정규화: x 오른쪽+, y 위+ (최대 ±1)
+  const normX = (col - ORIGIN.col) / (GRID_COLS / 2);
+  const normY = -(row - ORIGIN.row) / (GRID_ROWS / 2);
 
-  const radial = drawRadialPoint(angle, radius);
-  points.push({ x, y, px: radial.px, py: radial.py, dotX: clickX, dotY: clickY });
+  const angle = snapToPalaceAngle(normX, normY);
+  const radius = calcRadius(normX, normY);
+
+  // 어떤 궁인지 역매핑
+  const palaceName =
+    Object.entries(PALACE_ANGLES).find(([, a]) => a === angle)?.[0] || '';
+
+  const { px, py } = radialCoord(angle, radius);
+  points.push({
+    normX,
+    normY,
+    angle,
+    radius,
+    px,
+    py,
+    dotX: clickX,
+    dotY: clickY,
+    palace: palaceName,
+  });
   redrawRadial();
   redrawDots();
 });
@@ -299,36 +349,72 @@ document.getElementById('zoomOutBtn').addEventListener('click', () => {
 function analyzePattern() {
   if (points.length === 0) {
     localStorage.setItem('resultType', 'NONE');
+    localStorage.setItem('palaceCount', JSON.stringify({}));
     window.location.href = 'result.html';
     return;
   }
 
-  const distances = points.map((p) => Math.sqrt(p.x * p.x + p.y * p.y));
-  const avgDistance = distances.reduce((a, b) => a + b, 0) / distances.length;
-  const position = avgDistance > 3 ? 'E' : 'C';
+  // ① 위치: 얼굴 중심(반지름 ≤ 3)에 집중 vs 외곽
+  const avgRadius = points.reduce((s, p) => s + p.radius, 0) / points.length;
+  const position = avgRadius > 3 ? 'E' : 'C';
 
-  let totalDistance = 0, pairCount = 0;
+  // ② 밀도: 점이 서로 얼마나 가까운가 (radial 좌표계 거리)
+  let totalDist = 0,
+    pairCount = 0;
   for (let i = 0; i < points.length; i++) {
     for (let j = i + 1; j < points.length; j++) {
-      const dx = points[i].px - points[j].px;
-      const dy = points[i].py - points[j].py;
-      totalDistance += Math.sqrt(dx * dx + dy * dy);
+      const da = (points[i].angle - points[j].angle + 360) % 360;
+      const angleDiff = da > 180 ? 360 - da : da;
+      const radDiff = Math.abs(points[i].radius - points[j].radius);
+      totalDist += Math.sqrt(angleDiff * angleDiff + radDiff * radDiff);
       pairCount++;
     }
   }
-  const density = pairCount > 0 && totalDistance / pairCount > 100 ? 'D' : 'G';
+  // 각도 차이 기준: 평균 > 60° 이상이면 분산(D), 아니면 밀집(G)
+  const density = pairCount > 0 && totalDist / pairCount > 60 ? 'D' : 'G';
 
-  const xs = points.map((p) => p.x);
-  const ys = points.map((p) => p.y);
-  const width = Math.max(...xs) - Math.min(...xs);
-  const height = Math.max(...ys) - Math.min(...ys);
-  const direction = height > width ? 'V' : 'H';
+  // ③ 방향: 점 분포가 수직(이마↔턱) vs 수평(좌↔우)
+  let direction;
+  if (points.length === 1) {
+    // 단일 점: 위치 기반 — 좌우 치우침이 더 크면 H
+    direction =
+      Math.abs(points[0].normX) > Math.abs(points[0].normY) ? 'H' : 'V';
+  } else {
+    const meanX = points.reduce((s, p) => s + p.normX, 0) / points.length;
+    const meanY = points.reduce((s, p) => s + p.normY, 0) / points.length;
+    const varX = points.reduce((s, p) => s + (p.normX - meanX) ** 2, 0);
+    const varY = points.reduce((s, p) => s + (p.normY - meanY) ** 2, 0);
+    direction = varY >= varX ? 'V' : 'H';
+  }
 
+  // ④ 구조
   const structure = points.length === 1 ? 'P' : points.length === 2 ? 'L' : 'S';
+
   const resultType = `${position}${density}${direction}${structure}`;
 
+  // 궁별 점 개수 저장 (result.html에서 활용 가능)
+  const palaceCount = {};
+  points.forEach((p) => {
+    palaceCount[p.palace] = (palaceCount[p.palace] || 0) + 1;
+  });
+  // 가장 많이 찍힌 궁
+  const dominantPalace =
+    Object.entries(palaceCount).sort((a, b) => b[1] - a[1])[0]?.[0] || '';
+
+  // 흰 배경 + 점 패턴만 따로 저장
+  const exportCanvas = document.createElement('canvas');
+  exportCanvas.width = CANVAS_W;
+  exportCanvas.height = CANVAS_H;
+  const exportCtx = exportCanvas.getContext('2d');
+  exportCtx.fillStyle = '#ffffff';
+  exportCtx.fillRect(0, 0, CANVAS_W, CANVAS_H);
+  exportCtx.drawImage(dotCanvas, 0, 0);
+  localStorage.setItem('capturedDots', exportCanvas.toDataURL('image/png'));
+
   localStorage.setItem('resultType', resultType);
-  window.location.href = 'result.html';
+  localStorage.setItem('dominantPalace', dominantPalace);
+  localStorage.setItem('palaceCount', JSON.stringify(palaceCount));
+  window.location.href = 'loading.html';
 }
 
 document.getElementById('analyzeBtn').addEventListener('click', analyzePattern);
