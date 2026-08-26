@@ -167,6 +167,11 @@ body {
   padding: 0;
   cursor: pointer;
   display: block;
+  transition: transform 0.15s;
+}
+
+.dotBtn:hover {
+  transform: scale(1.3);
 }
 
 .dotBtn img {
@@ -193,6 +198,11 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.15s;
+}
+
+.dotBtnSmall:hover {
+  transform: scale(1.3);
 }
 
 .dotBtnSmall img {
@@ -295,42 +305,67 @@ body {
   pointer-events: none;
 }
 
-/* ── 커스텀 팝업 모달 ── */
-.custom-modal-overlay {
+/* ── 점 추가 버튼 ── */
+.add-dot-btn {
+  position: absolute;
+  left: 76.5px;
+  top: 406.75px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 1px solid black;
+  background: white;
+  color: black;
+  font-size: 52px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 100;
+  transition: background 0.15s, transform 0.15s;
+  padding-bottom: 4px;
+}
+.add-dot-btn:hover {
+  background: #f0f0f0;
+  transform: scale(1.08);
+}
+.faceMapPage.placement-mode .add-dot-btn {
+  background: #222;
+  color: white;
+}
+
+/* ── 진입 안내 팝업 ── */
+.welcome-overlay {
   position: absolute;
   left: 0;
   top: -43.446px;
   width: 1920px;
   height: 1080px;
-  background: rgba(0, 0, 0, 0.3);
-  z-index: 200;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 500;
   display: none;
   align-items: center;
   justify-content: center;
 }
-.custom-modal-overlay.active {
+.welcome-overlay.active {
   display: flex;
 }
-
-.custom-modal-popup {
-  position: absolute;
-  left: 648.26px;
-  top: 360.51px;
+.welcome-popup {
   width: 585px;
   height: 248px;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.95);
   border: 0.5px solid black;
   border-radius: 10px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
 }
-
-.custom-modal-titlebar {
-  height: 40.492px;
+.welcome-titlebar {
+  height: 40px;
   background: #d9d9d9;
   border-bottom: 1px solid #cacaca;
-  box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.4);
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -340,20 +375,18 @@ body {
   color: black;
   flex-shrink: 0;
 }
-
-.custom-modal-body {
+.welcome-body {
   flex: 1;
   display: flex;
   align-items: center;
-  padding: 0 40.5px;
+  padding: 0 40px;
   font-family: 'Pretendard', sans-serif;
   font-weight: 500;
   font-size: 20px;
   line-height: 32px;
   color: black;
 }
-
-.custom-modal-close {
+.welcome-close {
   height: 64px;
   border: none;
   border-top: 0.5px solid black;
@@ -365,8 +398,261 @@ body {
   color: black;
   cursor: pointer;
   flex-shrink: 0;
-  transition: background 0.12s ease;
+  transition: background 0.12s;
 }
-.custom-modal-close:hover {
+.welcome-close:hover {
   background: rgba(0, 0, 0, 0.05);
+}
+
+/* ── 커스텀 모드 상태 표시 ── */
+.faceMapPage.placement-mode .faceMapBg {
+  cursor: crosshair !important;
+}
+.faceMapPage.placement-mode * {
+  cursor: crosshair !important;
+}
+
+.placement-hint {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ff53cb;
+  color: white;
+  padding: 10px 28px;
+  border-radius: 30px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+  white-space: nowrap;
+  z-index: 300;
+}
+.faceMapPage.placement-mode .placement-hint {
+  opacity: 1;
+}
+
+/* ── 커스텀 점 컨테이너 ── */
+#customDotsContainer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+}
+#customDotsContainer .custom-dot-btn {
+  pointer-events: auto;
+}
+
+/* ── 커스텀 점 버튼 ── */
+.custom-dot-btn {
+  position: absolute;
+  background: none;
+  border: none;
+  padding: 0;
+  width: 14px;
+  height: 14px;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+  cursor: pointer;
+}
+.custom-dot-circle {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: white;
+  border-radius: 50%;
+  border: 2px solid #ff53cb;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.3), 0 2px 6px rgba(0,0,0,0.4);
+  transition: transform 0.15s;
+}
+.custom-dot-btn:hover .custom-dot-circle,
+.custom-dot-btn.active .custom-dot-circle {
+  transform: scale(1.5);
+  background: #ff53cb;
+}
+
+/* ── 커스텀 입력 폼 모달 ── */
+.dot-input-overlay {
+  position: absolute;
+  left: 0;
+  top: -43.446px;
+  width: 1920px;
+  height: 1080px;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 400;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.dot-input-overlay.active {
+  display: flex;
+}
+
+.dot-input-popup {
+  width: 520px;
+  background: white;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.dot-input-titlebar {
+  height: 52px;
+  background: #ff53cb;
+  display: flex;
+  align-items: center;
+  padding: 0 28px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: white;
+  flex-shrink: 0;
+}
+
+.dot-input-body {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dot-input-body label {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: #555;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.dot-input-body input,
+.dot-input-body textarea {
+  width: 100%;
+  border: 1px solid #ccc;
+  padding: 10px 14px;
+  font-family: 'Pretendard', sans-serif;
+  font-size: 17px;
+  color: black;
+  background: #fafafa;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.dot-input-body input:focus,
+.dot-input-body textarea:focus {
+  border-color: #ff53cb;
+  background: white;
+}
+.dot-input-body textarea {
+  height: 90px;
+  resize: none;
+}
+
+/* ── 사진 선택 그리드 ── */
+.photo-picker-label {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: #555;
+  margin-bottom: 8px;
+  display: block;
+}
+.photo-picker-grid {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.photo-option {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: 2.5px solid transparent;
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.12s;
+  flex-shrink: 0;
+  outline: none;
+  background: none;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+}
+.photo-option:hover {
+  transform: scale(1.08);
+}
+.photo-option.selected {
+  border-color: #ff53cb;
+  box-shadow: 0 0 0 2px #ff53cb44;
+}
+.photo-option .photo-shape {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: block;
+}
+
+.dot-input-actions {
+  display: flex;
+  border-top: 1px solid #e0e0e0;
+}
+.dot-input-cancel {
+  flex: 1;
+  height: 60px;
+  background: white;
+  border: none;
+  border-right: 1px solid #e0e0e0;
+  font-family: 'Pretendard', sans-serif;
+  font-size: 18px;
+  color: #888;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.dot-input-cancel:hover { background: #f5f5f5; }
+.dot-input-save {
+  flex: 1;
+  height: 60px;
+  background: #ff53cb;
+  border: none;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: white;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.dot-input-save:hover { background: #e040b5; }
+
+/* ── 커스텀 버블 삭제 버튼 ── */
+.bubble-delete-btn {
+  position: absolute;
+  right: 16px;
+  bottom: 28px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 1;
+  transition: color 0.12s;
+  z-index: 10;
+}
+.bubble-delete-btn:hover {
+  color: #ff53cb;
+}
+.profile-bubble.custom-active .bubble-delete-btn {
+  display: flex;
+}
+.profile-bubble.custom-active .bubble-photo-wrap {
+  background: #ffe0f6;
+  border-color: #ff53cb;
+}
+.profile-bubble.custom-active .bubble-photo-placeholder {
+  display: flex;
 }

@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>커스텀 점 지도 | DOT SHIFT</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+    />
+    <link rel="stylesheet" href="nav.css" />
+    <link rel="stylesheet" href="facemap.css" />
+    <style>
+      .faceMapOverlay { background: #ff53cb !important; }
+      .verticalText { color: #ff53cb !important; }
+    </style>
+  </head>
+  <body>
+    <nav class="topNav">
+      <a class="navLeft" href="index.html">PROJECT: DOT SHIFT</a>
+      <span class="navRight">Everything starts from a dot</span>
+    </nav>
+
+    <div class="faceMapPage page-scale">
+      <div class="faceMapBg">
+        <img class="faceMapImg" src="images/facemap/face-bg.png" alt="" />
+        <div class="faceMapOverlay"></div>
+      </div>
+
+      <div class="rightPanel">
+        <div class="verticalText">ICONIC &amp; CHARMING POINT</div>
+      </div>
+
+      <div class="descText">
+        <p class="descTitle">나만의 점 지도</p>
+        <p class="descBody">
+          얼굴 위 원하는 위치에 점을 찍고<br />나만의 관상 기록을 남겨보세요.
+        </p>
+      </div>
+
+      <!-- 왼쪽 범례 -->
+      <div class="legendCircle" style="top: 64.75px; --legend-hover-w: 304px"
+        onclick="window.location.href='facemap-celeb.html'">
+        <span class="legend-c" style="color: #fb6d4b">C</span
+        ><span class="legend-label">elebrity</span>
+      </div>
+      <div class="legendCircle" style="top: 178.75px; --legend-hover-w: 304px"
+        onclick="window.location.href='facemap-character.html'">
+        <span class="legend-c" style="color: #5e9bff">C</span
+        ><span class="legend-label">haracter</span>
+      </div>
+      <div class="legendCircle" style="top: 292.75px; --legend-hover-w: 254px">
+        <span class="legend-c" style="color: #ff53cb">C</span
+        ><span class="legend-label">ustom</span>
+      </div>
+
+      <!-- 진입 안내 팝업 -->
+      <div id="welcomeOverlay" class="welcome-overlay">
+        <div class="welcome-popup">
+          <div class="welcome-titlebar">점 지도 만드는 법</div>
+          <div class="welcome-body">
+            <p>+ 버튼을 누르고 원하는 위치를 클릭하면<br>자신만의 점과 프로필을 추가할 수 있다.</p>
+          </div>
+          <button class="welcome-close" id="welcomeClose">닫기</button>
+        </div>
+      </div>
+
+      <!-- 점 추가 버튼 -->
+      <button class="add-dot-btn" id="addDotBtn" onclick="togglePlacementMode()">+</button>
+
+      <!-- 배치 모드 안내 힌트 -->
+      <div class="placement-hint">얼굴 위를 클릭해 점을 추가하세요 · ESC로 취소</div>
+
+      <!-- 커스텀 점 컨테이너 -->
+      <div id="customDotsContainer"></div>
+
+      <!-- 프로필 말풍선 -->
+      <div class="profile-bubble" id="profileBubble">
+        <button class="bubble-delete-btn" id="bubbleDeleteBtn">삭제</button>
+        <div class="bubble-union">
+          <img src="images/facemap/bubble-union.svg" alt="" />
+        </div>
+        <div class="bubble-content">
+          <div class="bubble-photo-wrap" id="bubblePhotoWrap">
+            <img id="bubblePhoto" src="" alt="" />
+          </div>
+          <div class="bubble-text">
+            <p class="bubble-name" id="bubbleName"></p>
+            <p class="bubble-desc" id="bubbleDesc"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 입력 폼 모달 -->
+      <div id="dotInputOverlay" class="dot-input-overlay">
+        <div class="dot-input-popup" onclick="event.stopPropagation()">
+          <div class="dot-input-titlebar">내 점 추가하기</div>
+          <div class="dot-input-body">
+            <div>
+              <label>프로필 사진</label>
+              <div class="photo-picker-grid" id="photoPickerGrid"></div>
+            </div>
+            <div>
+              <label>이름 (필수)</label>
+              <input type="text" id="dotInputName" placeholder="예: 홍길동" maxlength="30" />
+            </div>
+            <div>
+              <label>설명</label>
+              <textarea id="dotInputDesc" placeholder="간단한 프로필을 작성하세요"></textarea>
+            </div>
+          </div>
+          <div class="dot-input-actions">
+            <button class="dot-input-cancel" id="dotInputCancel">취소</button>
+            <button class="dot-input-save" id="dotInputSave">저장</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const bubble = document.getElementById('profileBubble');
+      const bPhoto = document.getElementById('bubblePhoto');
+      const bPhotoWrap = document.getElementById('bubblePhotoWrap');
+      const bName = document.getElementById('bubbleName');
+      const bDesc = document.getElementById('bubbleDesc');
+      const page = document.querySelector('.faceMapPage');
+      let activeCustomDot = null;
+      let currentCustomDotId = null;
+      let placementMode = false;
+      let pendingPos = null;
+      const BUBBLE_W = 418, BUBBLE_H = 172;
+
+      const PHOTO_OPTIONS = [
+        { id: 'none', color: '#e0e0e0' },
+        { id: 'ph1',  color: '#ffb3ba' },
+        { id: 'ph2',  color: '#bae1ff' },
+      ];
+      let selectedPhoto = 'none';
+
+      (function buildPhotoPicker() {
+        const grid = document.getElementById('photoPickerGrid');
+        PHOTO_OPTIONS.forEach(opt => {
+          const btn = document.createElement('button');
+          btn.className = 'photo-option' + (opt.id === 'none' ? ' selected' : '');
+          btn.dataset.photoId = opt.id;
+          if (opt.id === 'none') {
+            btn.innerHTML = `<span class="photo-shape" style="background:${opt.color};display:flex;align-items:center;justify-content:center;font-size:20px;color:#aaa;">✕</span>`;
+          } else {
+            btn.innerHTML = `<span class="photo-shape" style="background:${opt.color};"></span>`;
+          }
+          btn.addEventListener('click', () => {
+            grid.querySelectorAll('.photo-option').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            selectedPhoto = opt.id;
+          });
+          grid.appendChild(btn);
+        });
+      })();
+
+      const CUSTOM_KEY = 'facemapCustomDots';
+      function getCustomDots() {
+        try { return JSON.parse(localStorage.getItem(CUSTOM_KEY) || '[]'); }
+        catch { return []; }
+      }
+      function saveCustomDots(dots) {
+        localStorage.setItem(CUSTOM_KEY, JSON.stringify(dots));
+      }
+
+      function togglePlacementMode() {
+        placementMode ? exitPlacementMode() : enterPlacementMode();
+      }
+      function enterPlacementMode() {
+        placementMode = true;
+        page.classList.add('placement-mode');
+        closeBubble();
+      }
+      function exitPlacementMode() {
+        placementMode = false;
+        page.classList.remove('placement-mode');
+      }
+
+      function positionBubble(btn) {
+        const s = window.innerWidth / 1920;
+        const btnRect = btn.getBoundingClientRect();
+        const pageRect = page.getBoundingClientRect();
+        const dotCx = (btnRect.left - pageRect.left + btnRect.width / 2) / s;
+        const dotTop = (btnRect.top - pageRect.top) / s;
+        const dotH = btnRect.height / s;
+        let left = dotCx - BUBBLE_W / 2;
+        let top = dotTop - BUBBLE_H + 14;
+        left = Math.max(8, Math.min(left, 1920 - BUBBLE_W - 8));
+        if (top < 8) top = dotTop + dotH + 2;
+        bubble.style.left = left + 'px';
+        bubble.style.top = top + 'px';
+      }
+      function closeBubble() {
+        bubble.classList.remove('active', 'custom-active');
+        if (activeCustomDot) { activeCustomDot.classList.remove('active'); activeCustomDot = null; }
+        currentCustomDotId = null;
+        bPhotoWrap.style.background = '';
+        bPhotoWrap.style.border = '';
+      }
+
+      document.querySelector('.faceMapBg').addEventListener('click', (e) => {
+        if (!placementMode) return;
+        e.stopPropagation();
+        const s = window.innerWidth / 1920;
+        const pageRect = page.getBoundingClientRect();
+        pendingPos = {
+          x: (e.clientX - pageRect.left) / s,
+          y: (e.clientY - pageRect.top) / s,
+        };
+        exitPlacementMode();
+        openDotInputForm();
+      });
+
+      function openDotInputForm() {
+        document.getElementById('dotInputName').value = '';
+        document.getElementById('dotInputDesc').value = '';
+        selectedPhoto = 'none';
+        document.querySelectorAll('.photo-option').forEach(b => b.classList.remove('selected'));
+        document.querySelector('.photo-option[data-photo-id="none"]').classList.add('selected');
+        document.getElementById('dotInputOverlay').classList.add('active');
+        setTimeout(() => document.getElementById('dotInputName').focus(), 50);
+      }
+      function closeDotInputForm() {
+        document.getElementById('dotInputOverlay').classList.remove('active');
+        pendingPos = null;
+      }
+
+      document.getElementById('dotInputCancel').addEventListener('click', closeDotInputForm);
+      document.getElementById('dotInputOverlay').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('dotInputOverlay')) closeDotInputForm();
+      });
+      document.getElementById('dotInputSave').addEventListener('click', () => {
+        const name = document.getElementById('dotInputName').value.trim();
+        if (!name) { document.getElementById('dotInputName').focus(); return; }
+        const desc = document.getElementById('dotInputDesc').value.trim();
+        const dot = { id: Date.now(), x: pendingPos.x, y: pendingPos.y, name, desc, photo: selectedPhoto };
+        const dots = getCustomDots();
+        dots.push(dot);
+        saveCustomDots(dots);
+        renderCustomDot(dot);
+        closeDotInputForm();
+      });
+      document.getElementById('dotInputName').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') document.getElementById('dotInputSave').click();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          if (document.getElementById('dotInputOverlay').classList.contains('active')) {
+            closeDotInputForm();
+          } else {
+            exitPlacementMode();
+          }
+        }
+      });
+
+      function renderCustomDot(dot) {
+        const container = document.getElementById('customDotsContainer');
+        const btn = document.createElement('button');
+        btn.className = 'custom-dot-btn';
+        btn.dataset.customId = String(dot.id);
+        btn.style.left = dot.x + 'px';
+        btn.style.top = dot.y + 'px';
+        btn.innerHTML = '<span class="custom-dot-circle"></span>';
+        container.appendChild(btn);
+
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (placementMode) return;
+          if (activeCustomDot === btn && bubble.classList.contains('active')) {
+            closeBubble(); return;
+          }
+          closeBubble();
+          activeCustomDot = btn;
+          btn.classList.add('active');
+          const photoOpt = PHOTO_OPTIONS.find(p => p.id === (dot.photo || 'none'));
+          bPhoto.src = '';
+          bPhotoWrap.style.background = photoOpt ? photoOpt.color : '#ffe0f6';
+          bPhotoWrap.style.border = '1.5px solid #ff53cb';
+          bName.textContent = dot.name;
+          bDesc.textContent = dot.desc || '';
+          positionBubble(btn);
+          bubble.classList.add('active', 'custom-active');
+          currentCustomDotId = dot.id;
+        });
+      }
+
+      document.getElementById('bubbleDeleteBtn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (currentCustomDotId === null) return;
+        saveCustomDots(getCustomDots().filter(d => d.id !== currentCustomDotId));
+        const el = document.querySelector(`.custom-dot-btn[data-custom-id="${currentCustomDotId}"]`);
+        if (el) el.remove();
+        closeBubble();
+      });
+
+      document.addEventListener('click', () => {
+        if (placementMode) return;
+        closeBubble();
+      });
+
+      getCustomDots().forEach(renderCustomDot);
+
+      /* 웰컴 팝업 */
+      document.getElementById('welcomeClose').addEventListener('click', () => {
+        document.getElementById('welcomeOverlay').classList.remove('active');
+      });
+      document.getElementById('welcomeOverlay').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('welcomeOverlay'))
+          document.getElementById('welcomeOverlay').classList.remove('active');
+      });
+      document.getElementById('welcomeOverlay').classList.add('active');
+    </script>
+
+    <nav class="bottomNav">
+      <div class="bn-inner">
+        <img class="bn-logo-l" style="width: 23.456px; height: 29.129px; left: 40px; top: 22.99px" src="images/nav/logo-D.svg" alt="" />
+        <img class="bn-logo-l" style="width: 29.935px; height: 29.935px; left: 66.65px; top: 22.59px" src="images/nav/logo-O.svg" alt="" />
+        <img class="bn-logo-l" style="width: 22.571px; height: 29.129px; left: 98.09px; top: 22.99px" src="images/nav/logo-T.svg" alt="" />
+        <img class="bn-logo-l" style="width: 21.726px; height: 30.015px; left: 134.06px; top: 22.59px" src="images/nav/logo-S.svg" alt="" />
+        <img class="bn-logo-l" style="width: 23.336px; height: 29.129px; left: 160.53px; top: 22.99px" src="images/nav/logo-H.svg" alt="" />
+        <img class="bn-logo-l" style="width: 4.426px; height: 29.129px; left: 189.82px; top: 22.99px" src="images/nav/logo-I.svg" alt="" />
+        <img class="bn-logo-l" style="width: 18.065px; height: 29.129px; left: 200.16px; top: 22.99px" src="images/nav/logo-F.svg" alt="" />
+        <img class="bn-logo-l" style="width: 22.571px; height: 29.129px; left: 221.73px; top: 22.99px" src="images/nav/logo-T.svg" alt="" />
+        <a class="bn-badge bn-badge--h" href="index.html">H</a>
+        <button class="bn-badge bn-badge--b" onclick="history.back()">B</button>
+        <button class="bn-item" style="left: 467.15px" onclick="window.location.href='index.html'">
+          <span>프로젝트 알아보기</span><img src="images/nav/nav-arrow.svg" alt="" />
+        </button>
+        <button class="bn-item" style="left: 794.15px" onclick="window.location.href='camera.html'">
+          <span>점 패턴 분석하기</span><img src="images/nav/nav-arrow.svg" alt="" />
+        </button>
+        <button class="bn-item" style="left: 1106.15px" onclick="window.location.href='facemap-celeb.html'">
+          <span>얼굴 지도 살펴보기</span><img src="images/nav/nav-arrow.svg" alt="" />
+        </button>
+        <button class="bn-item" style="left: 1439.15px" onclick="window.location.href='gwansang.html'">
+          <span>관상학 알아보기</span><img src="images/nav/nav-arrow.svg" alt="" />
+        </button>
+        <button class="bn-help-btn">?</button>
+      </div>
+    </nav>
+    <script src="scale.js"></script>
+    <script src="cursor.js"></script>
+  </body>
+</html>

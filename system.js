@@ -44,13 +44,13 @@ const ringGap = 28;
 const MAX_RINGS = 8;
 const points = [];
 
-// ── 궁 각도 (얼굴 해부학 기준) ──
-// 90°=위(관록/이마), 270°=아래(지각/턱), 0°/180°=좌우
+// ── 궁 → 방사형 차트 각도 (커밋 버전 기준 12궁) ──
+// 명궁은 PALACE_ANGLES에 없음 → 클릭 시 중앙(radius=0)에 표시
 const PALACE_ANGLES = {
-  관록궁: 90, // 이마 중앙
-  복덕궁: 60, // 이마 우상
-  상모궁: 30, // 오른쪽 관자
-  처첩궁: 0, // 오른쪽 눈꼬리
+  관록궁: 90,  // 이마 중앙
+  복덕궁: 60,  // 이마 우상
+  상모궁: 30,  // 오른쪽 관자
+  처첩궁: 0,   // 오른쪽 눈꼬리
   남녀궁: 330, // 오른쪽 볼
   질액궁: 300, // 오른쪽 턱
   지각궁: 270, // 턱 중앙
@@ -154,22 +154,77 @@ function drawAxes() {
 drawRings();
 drawAxes();
 
-// ── 클릭 좌표 → 가장 가까운 궁 각도 매핑 ──
-// 얼굴 캔버스 좌표계: 중앙(0,0), x 오른쪽+, y 위+
-// atan2(y, x)로 각도 계산 후 12궁 중 가장 가까운 각도로 스냅
+// ── 얼굴 구역 → 궁 이름 매핑 ──
+// ORIGIN=row11.5 기준, 오벌 가이드(ovalCY=360, ovalRY=340, 출력 830px)에서
+// 실제 얼굴 비율 계산값으로 경계 설정
+// normY: +1=이마상단, 0=콧대(오벌중심), -0.74=턱
+// normX: 0=중앙, ±1=얼굴 좌우 끝
+function getPalaceName(normX, normY) {
+  const ax = Math.abs(normX);
+
+  // 얼굴 외곽 → 공백
+  if (ax > 0.85) return '공백';
+
+  // ── 이마 (row 0~6, normY > +0.48) ──
+  if (normY > 0.48) {
+    if (ax < 0.30) return '관록궁'; // 이마 중앙
+    if (ax < 0.68) return '복덕궁'; // 이마 측면
+    return '천이궁';                 // 관자 상단
+  }
+
+  // ── 눈썹 (row 6~8, normY +0.30~+0.48) ──
+  if (normY > 0.30) {
+    if (ax < 0.18) return '관록궁'; // 미간 위
+    if (ax < 0.58) return '형제궁'; // 눈썹
+    if (ax < 0.82) return '천이궁'; // 관자
+    return '공백';
+  }
+
+  // ── 눈 / 미간 (row 8~11, normY +0.04~+0.30) ──
+  if (normY > 0.04) {
+    if (ax < 0.16) return '명궁';   // 미간
+    if (ax < 0.48) return '전택궁'; // 눈두덩
+    if (ax < 0.74) return '처첩궁'; // 눈꼬리
+    return '공백';
+  }
+
+  // ── 코 윗부분~코끝 (row 11~14, normY -0.26~+0.04) ──
+  if (normY > -0.26) {
+    if (ax < 0.16) return '질액궁'; // 코 (콧대~코끝)
+    if (ax < 0.52) return '남녀궁'; // 볼 / 광대
+    if (ax < 0.76) return '처첩궁'; // 볼 외곽
+    return '공백';
+  }
+
+  // ── 코 아래 / 인중 (row 14~16, normY -0.43~-0.26) ──
+  if (normY > -0.43) {
+    if (ax < 0.20) return '재백궁'; // 코 아래 (인중 위)
+    if (ax < 0.55) return '남녀궁'; // 아랫볼
+    return '공백';
+  }
+
+  // ── 입 (row 16~18, normY -0.57~-0.43) ──
+  if (normY > -0.57) {
+    if (ax < 0.28) return '상모궁'; // 입술
+    if (ax < 0.58) return '노복궁'; // 볼 하단
+    return '공백';
+  }
+
+  // ── 턱 (row 18~23, normY < -0.57) ──
+  if (ax < 0.50) return '노복궁';
+  return '공백';
+}
+
+// 커밋 버전 기준: 기하학적 각도로 가장 가까운 궁 arm에 스냅
 function snapToPalaceAngle(normX, normY) {
-  // normX: -1(왼쪽) ~ +1(오른쪽), normY: -1(아래) ~ +1(위)
   const rawAngle = Math.atan2(normY, normX) * (180 / Math.PI);
   const angles = Object.values(PALACE_ANGLES);
   let best = angles[0];
   let bestDiff = Infinity;
   angles.forEach((a) => {
-    let diff = Math.abs(rawAngle - a);
+    let diff = Math.abs(rawAngle - a) % 360;
     if (diff > 180) diff = 360 - diff;
-    if (diff < bestDiff) {
-      bestDiff = diff;
-      best = a;
-    }
+    if (diff < bestDiff) { bestDiff = diff; best = a; }
   });
   return best;
 }
@@ -311,14 +366,21 @@ grid.addEventListener('click', (e) => {
   const normX = (col - ORIGIN.col) / (GRID_COLS / 2);
   const normY = -(row - ORIGIN.row) / (GRID_ROWS / 2);
 
-  const angle = snapToPalaceAngle(normX, normY);
-  const radius = calcRadius(normX, normY);
+  // 구역 매핑으로 궁 이름 결정 (표시·저장용)
+  const palaceName = getPalaceName(normX, normY);
+  if (palaceName === '공백') return; // 얼굴 외곽 클릭 무시
 
-  // 어떤 궁인지 역매핑
-  const palaceName =
-    Object.entries(PALACE_ANGLES).find(([, a]) => a === angle)?.[0] || '';
-
-  const { px, py } = radialCoord(angle, radius);
+  let angle, radius, px, py;
+  if (palaceName === '명궁') {
+    // 명궁(미간)은 방사형 차트 중앙에 표시
+    angle = 0; radius = 0;
+    px = centerX; py = centerY;
+  } else {
+    // 커밋 버전 기준: 기하학적 각도로 arm에 스냅
+    angle = snapToPalaceAngle(normX, normY);
+    radius = calcRadius(normX, normY);
+    ({ px, py } = radialCoord(angle, radius));
+  }
   points.push({
     normX,
     normY,
