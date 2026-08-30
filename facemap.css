@@ -342,66 +342,54 @@ body {
   top: -43.446px;
   width: 1920px;
   height: 1080px;
-  background: rgba(0, 0, 0, 0.55);
   z-index: 500;
   display: none;
   align-items: center;
   justify-content: center;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background: transparent;
 }
 .welcome-overlay.active {
   display: flex;
 }
 .welcome-popup {
-  width: 585px;
-  height: 248px;
-  background: rgba(255, 255, 255, 0.95);
-  border: 0.5px solid black;
-  border-radius: 10px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
+  position: relative;
+  width: 560px;
+  background: #e9f056;
+  border: 1.5px solid #000;
+  padding: 50px 40px 36px 40px;
+  transform: translateY(-20px);
 }
-.welcome-titlebar {
-  height: 40px;
-  background: #d9d9d9;
-  border-bottom: 1px solid #cacaca;
-  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.welcome-body-text {
   font-family: 'Pretendard', sans-serif;
   font-weight: 500;
   font-size: 22px;
-  color: black;
-  flex-shrink: 0;
-}
-.welcome-body {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  padding: 0 40px;
-  font-family: 'Pretendard', sans-serif;
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 32px;
-  color: black;
+  line-height: 36px;
+  color: #000;
+  margin-top: 12px;
 }
 .welcome-close {
-  height: 64px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 80px;
+  height: 44px;
+  background: #ff5c34;
   border: none;
-  border-top: 0.5px solid black;
-  background: transparent;
-  width: 100%;
+  border-left: 1.5px solid #000;
+  border-bottom: 1.5px solid #000;
   font-family: 'Pretendard', sans-serif;
-  font-weight: 500;
-  font-size: 26px;
-  color: black;
+  font-weight: 700;
+  font-size: 16px;
+  color: #fff;
   cursor: pointer;
-  flex-shrink: 0;
-  transition: background 0.12s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .welcome-close:hover {
-  background: rgba(0, 0, 0, 0.05);
+  background: #e04a24;
 }
 
 /* ── 커스텀 모드 상태 표시 ── */
@@ -491,82 +479,53 @@ body {
 }
 
 .dot-input-popup {
-  width: 520px;
-  background: white;
-  border: 1px solid black;
+  width: 688px;
+  background: #fff;
+  border: 1px solid #000;
+  position: relative;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
 
 .dot-input-titlebar {
-  height: 52px;
+  position: absolute;
+  left: -1px;
+  top: -1px;
   background: #ff53cb;
-  display: flex;
-  align-items: center;
-  padding: 0 28px;
+  padding: 10px 25px;
   font-family: 'Pretendard', sans-serif;
-  font-weight: 700;
-  font-size: 20px;
-  color: white;
-  flex-shrink: 0;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 44px;
+  color: #fff;
+  white-space: nowrap;
+  z-index: 1;
 }
 
 .dot-input-body {
-  padding: 28px;
+  padding: 70px 40px 20px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 55px;
 }
 
-.dot-input-body label {
+.dot-input-label {
   font-family: 'Pretendard', sans-serif;
-  font-weight: 600;
-  font-size: 15px;
-  color: #555;
-  margin-bottom: 4px;
-  display: block;
-}
-
-.dot-input-body input,
-.dot-input-body textarea {
-  width: 100%;
-  border: 1px solid #ccc;
-  padding: 10px 14px;
-  font-family: 'Pretendard', sans-serif;
-  font-size: 17px;
-  color: black;
-  background: #fafafa;
-  outline: none;
-  transition: border-color 0.15s;
-}
-.dot-input-body input:focus,
-.dot-input-body textarea:focus {
-  border-color: #ff53cb;
-  background: white;
-}
-.dot-input-body textarea {
-  height: 90px;
-  resize: none;
-}
-
-/* ── 사진 선택 그리드 ── */
-.photo-picker-label {
-  font-family: 'Pretendard', sans-serif;
-  font-weight: 600;
-  font-size: 15px;
-  color: #555;
+  font-weight: 500;
+  font-size: 22px;
+  color: #000;
+  line-height: 32px;
   margin-bottom: 8px;
   display: block;
 }
+
 .photo-picker-grid {
   display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+  gap: 16px;
 }
 .photo-option {
-  width: 54px;
-  height: 54px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
   border: 2.5px solid transparent;
   cursor: pointer;
@@ -576,15 +535,9 @@ body {
   background: none;
   padding: 0;
   overflow: hidden;
-  position: relative;
 }
-.photo-option:hover {
-  transform: scale(1.08);
-}
-.photo-option.selected {
-  border-color: #ff53cb;
-  box-shadow: 0 0 0 2px #ff53cb44;
-}
+.photo-option:hover { transform: scale(1.06); }
+.photo-option.selected { border-color: #ff53cb; }
 .photo-option .photo-shape {
   width: 100%;
   height: 100%;
@@ -592,36 +545,70 @@ body {
   display: block;
 }
 
+.dot-input-body input {
+  width: 100%;
+  height: 48px;
+  border: 1px solid #000;
+  background: #fff;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: 22px;
+  color: #000;
+  padding: 0 14px;
+  outline: none;
+}
+.dot-input-body input::placeholder { color: #959595; }
+.dot-input-body input:focus { border-color: #ff53cb; }
+
+.dot-input-body textarea {
+  width: 100%;
+  height: 132px;
+  border: 1px solid #000;
+  background: #fff;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: 22px;
+  color: #000;
+  padding: 12px 14px;
+  resize: none;
+  outline: none;
+}
+.dot-input-body textarea::placeholder { color: #959595; }
+.dot-input-body textarea:focus { border-color: #ff53cb; }
+
+/* ── 하단 버튼 ── */
 .dot-input-actions {
   display: flex;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid #b6b6b6;
 }
 .dot-input-cancel {
   flex: 1;
-  height: 60px;
-  background: white;
-  border: none;
-  border-right: 1px solid #e0e0e0;
-  font-family: 'Pretendard', sans-serif;
-  font-size: 18px;
-  color: #888;
-  cursor: pointer;
-  transition: background 0.12s;
-}
-.dot-input-cancel:hover { background: #f5f5f5; }
-.dot-input-save {
-  flex: 1;
-  height: 60px;
-  background: #ff53cb;
-  border: none;
+  background: #fff;
+  border: 1px solid #b6b6b6;
+  border-right: none;
+  padding: 15px 40px;
   font-family: 'Pretendard', sans-serif;
   font-weight: 700;
-  font-size: 18px;
-  color: white;
+  font-size: 24px;
+  line-height: 32px;
+  color: #b6b6b6;
+  text-align: center;
   cursor: pointer;
-  transition: background 0.12s;
 }
-.dot-input-save:hover { background: #e040b5; }
+.dot-input-save {
+  flex: 1;
+  background: #ff53cb;
+  border: 1px solid #ff53cb;
+  padding: 15px 40px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 32px;
+  color: #fff;
+  text-align: center;
+  cursor: pointer;
+}
+.dot-input-save:hover { background: #e040b5; border-color: #e040b5; }
 
 /* ── 커스텀 버블 삭제 버튼 ── */
 .bubble-delete-btn {

@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>점 패턴 분석하기 — DOT SHIFT</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard-jp/dist/web/variable/pretendardvariable-jp.css"/>
+<link rel="stylesheet" href="nav.css"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+
+body{
+  width:100vw;height:100vh;overflow:hidden;
+  background:#e2ec00;
+}
+
+/* 상단 nav 아래, 하단 nav 위 콘텐츠 영역 */
+#content{
+  position:fixed;
+  top:47px;
+  bottom:0;
+  left:0;
+  width:100%;
+  display:flex;
+  overflow:hidden;
+}
+
+/* 노란 캔버스 영역 */
+#canvas-area{
+  flex:1;
+  position:relative;
+  background:#e2ec00;
+}
+
+/* 세로 구분선 */
+#divider{
+  width:1px;
+  background:#000;
+  flex-shrink:0;
+}
+
+/* 오른쪽 회색 패널: Figma 454/1920 ≈ 23.65% */
+#right-panel{
+  width:23.65%;
+  height:100%;
+  background:#efefea;
+  flex-shrink:0;
+  overflow:hidden;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+}
+#panel-words{
+  width:100%;
+  height:1080px;
+  overflow:hidden;
+  position:relative;
+}
+
+/* 버블 공통 베이스 */
+.bubble,.cbubble,.drag-ghost{
+  width:65px;height:65px;
+  min-width:65px;min-height:65px;
+  max-width:65px;max-height:65px;
+  border-radius:50%;
+  background-color:#fff;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 65 65'%3E%3Ccircle cx='32.5' cy='32.5' r='31.5' fill='none' stroke='%23000' stroke-width='1' stroke-dasharray='4 4'/%3E%3C/svg%3E");
+  background-size:100% 100%;
+  border:none;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Pretendard JP Variable','Pretendard JP',sans-serif;
+  font-size:16px;font-weight:500;
+  text-align:center;
+  padding:0;
+  word-break:keep-all;
+  line-height:1.2;
+  color:#000;
+  box-sizing:border-box;
+  overflow:hidden;
+}
+.bubble{
+  user-select:none;
+  cursor:grab;
+  flex-shrink:0;
+}
+.bubble:active{cursor:grabbing;}
+
+/* 2단계 발견 버블 */
+.bubble.d2,.cbubble.d2{
+  width:75px;height:75px;
+  min-width:75px;min-height:75px;
+  max-width:75px;max-height:75px;
+  background-color:#56F063;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 75 75'%3E%3Ccircle cx='37.5' cy='37.5' r='36.5' fill='none' stroke='%23000' stroke-width='1'/%3E%3C/svg%3E");
+  font-size:16px;
+}
+
+/* 3단계 발견 버블 */
+.bubble.d3,.cbubble.d3{
+  width:80px;height:80px;
+  min-width:80px;min-height:80px;
+  max-width:80px;max-height:80px;
+  background-color:#FF5C34;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='39' fill='none' stroke='%23000' stroke-width='1'/%3E%3C/svg%3E");
+  font-size:16px;
+  color:#fff;
+}
+
+/* 캔버스 위 버블 */
+.cbubble{
+  position:absolute;
+  user-select:none;
+  cursor:grab;
+  z-index:10;
+  transition:box-shadow .12s;
+}
+.cbubble:active{cursor:grabbing;}
+.cbubble.new-b{animation:popIn .35s ease;}
+@keyframes popIn{
+  0%{transform:translate(-50%,-50%) scale(0);opacity:0;}
+  70%{transform:translate(-50%,-50%) scale(1.15);}
+  100%{transform:translate(-50%,-50%) scale(1);opacity:1;}
+}
+
+.drag-ghost.highlight{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 65 65'%3E%3Ccircle cx='32.5' cy='32.5' r='31.5' fill='none' stroke='%23FF5C34' stroke-width='2.5'/%3E%3C/svg%3E");
+}
+.cbubble.hint-active{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 65 65'%3E%3Ccircle cx='32.5' cy='32.5' r='31.5' fill='none' stroke='%23FF5C34' stroke-width='1.5' stroke-dasharray='4 4'/%3E%3C/svg%3E");
+}
+.cbubble.d2.hint-active{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 75 75'%3E%3Ccircle cx='37.5' cy='37.5' r='36.5' fill='none' stroke='%23FF5C34' stroke-width='1.5' stroke-dasharray='4 4'/%3E%3C/svg%3E");
+}
+.cbubble.d3.hint-active{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='39' fill='none' stroke='%23FF5C34' stroke-width='1.5' stroke-dasharray='4 4'/%3E%3C/svg%3E");
+}
+/* highlight가 hint-active 덮어쓰기 — 실선 주황 */
+.cbubble.highlight,.cbubble.hint-active.highlight{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 65 65'%3E%3Ccircle cx='32.5' cy='32.5' r='31.5' fill='none' stroke='%23FF5C34' stroke-width='2.5'/%3E%3C/svg%3E");
+}
+.cbubble.d2.highlight,.cbubble.d2.hint-active.highlight{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 75 75'%3E%3Ccircle cx='37.5' cy='37.5' r='36.5' fill='none' stroke='%23FF5C34' stroke-width='2.5'/%3E%3C/svg%3E");
+}
+.cbubble.d3.highlight,.cbubble.d3.hint-active.highlight{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='39' fill='none' stroke='%23FF5C34' stroke-width='2.5'/%3E%3C/svg%3E");
+}
+
+/* 드래그 유령 */
+.drag-ghost{
+  position:fixed;
+  pointer-events:none;
+  z-index:9999;
+  opacity:0.85;
+  transform:translate(-50%,-50%);
+}
+
+/* 힌트 아이콘 */
+.hint-icon{
+  position:absolute;
+  width:40px;height:40px;
+  background:#fff;
+  border:0.5px solid #000;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Pretendard JP Variable','Pretendard JP','Pretendard',sans-serif;
+  font-size:14px;font-weight:700;
+  color:#F04E2D;
+  cursor:pointer;
+  z-index:50;
+  transform:translate(-50%,-50%);
+  pointer-events:all;
+  user-select:none;
+  box-shadow:0 2px 6px rgba(0,0,0,0.15);
+}
+/* ! 팝업 */
+#tier3-popup{
+  position:fixed;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:572px;
+  background:#fff;
+  border:1px solid #000;
+  z-index:1000;
+  font-family:'Pretendard JP Variable','Pretendard JP','Pretendard',sans-serif;
+  box-shadow:0 4px 24px rgba(0,0,0,0.15);
+}
+#tier3-popup .popup-header{
+  background:#FF5C34;
+  display:flex;align-items:stretch;
+  height:62px;
+}
+#tier3-popup .popup-title{
+  flex:1;
+  display:flex;align-items:center;
+  padding:0 25px;
+  font-size:24px;font-weight:600;color:#fff;
+  white-space:nowrap;overflow:hidden;
+}
+#tier3-popup .popup-close{
+  width:80px;
+  display:flex;align-items:center;justify-content:center;
+  background:#FF5C34;
+  color:#fff;font-size:24px;font-weight:400;
+  cursor:pointer;flex-shrink:0;
+  border-left:1px solid rgba(255,255,255,0.3);
+}
+#tier3-popup .popup-body{
+  padding:20px 34px 28px;
+  font-size:20px;line-height:32px;color:#000;
+  font-weight:500;
+}
+#tier3-popup .popup-body .kw{
+  display:inline-block;
+  background:#e9f056;
+  border-radius:30px;
+  padding:0 10px;
+  font-weight:600;
+}
+/* 힌트 선 SVG */
+#hint-lines{
+  position:absolute;
+  top:0;left:0;
+  width:100%;height:100%;
+  pointer-events:none;
+  z-index:40;
+}
+
+/* 배경 이미지 */
+#puzzle-bg-img{
+  position:absolute;
+  top:0;left:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  pointer-events:none;
+  z-index:0;
+  transform:scale(0.95);
+  transform-origin:center center;
+}
+
+</style>
+</head>
+<body>
+
+<!-- 상단 nav -->
+<nav class="topNav">
+  <a class="navLeft" href="index.html">PROJECT: DOT SHIFT</a>
+  <span class="navRight">Everything starts from a dot</span>
+</nav>
+
+<!-- 메인 콘텐츠 -->
+<div id="content">
+
+  <div id="canvas-area">
+    <img id="puzzle-bg-img" src="images/puzzle-bg.png" alt=""/>
+  </div>
+
+  <div id="divider"></div>
+  <div id="right-panel">
+    <div id="panel-words"></div>
+  </div>
+
+</div>
+
+<!-- 하단 nav -->
+<nav class="bottomNav">
+  <div class="bn-inner">
+    <img class="bn-logo-l" style="width:23.456px;height:29.129px;left:40px;top:22.99px"    src="images/nav/logo-D.svg" alt=""/>
+    <img class="bn-logo-l" style="width:29.935px;height:29.935px;left:66.65px;top:22.59px" src="images/nav/logo-O.svg" alt=""/>
+    <img class="bn-logo-l" style="width:22.571px;height:29.129px;left:98.09px;top:22.99px" src="images/nav/logo-T.svg" alt=""/>
+    <img class="bn-logo-l" style="width:21.726px;height:30.015px;left:134.06px;top:22.59px" src="images/nav/logo-S.svg" alt=""/>
+    <img class="bn-logo-l" style="width:23.336px;height:29.129px;left:160.53px;top:22.99px" src="images/nav/logo-H.svg" alt=""/>
+    <img class="bn-logo-l" style="width:4.426px;height:29.129px;left:189.82px;top:22.99px"  src="images/nav/logo-I.svg" alt=""/>
+    <img class="bn-logo-l" style="width:18.065px;height:29.129px;left:200.16px;top:22.99px" src="images/nav/logo-F.svg" alt=""/>
+    <img class="bn-logo-l" style="width:22.571px;height:29.129px;left:221.73px;top:22.99px" src="images/nav/logo-T.svg" alt=""/>
+    <a class="bn-badge bn-badge--h" href="index.html">H</a>
+    <button class="bn-badge bn-badge--b" onclick="history.back()">B</button>
+    <button class="bn-item" style="left:450px"  onclick="window.location.href='index.html'">
+      <span>프로젝트 알아보기</span>
+      <img src="images/nav/nav-arrow.svg" alt=""/>
+    </button>
+    <button class="bn-item" style="left:790px" onclick="window.location.href='dot-pattern.html'">
+      <span>점 패턴 분석하기</span>
+      <img src="images/nav/nav-arrow.svg" alt=""/>
+    </button>
+    <button class="bn-item" style="left:1130px" onclick="window.location.href='facemap-celeb.html'">
+      <span>얼굴 지도 살펴보기</span>
+      <img src="images/nav/nav-arrow.svg" alt=""/>
+    </button>
+    <button class="bn-item" style="left:1470px" onclick="window.location.href='gwansang.html'">
+      <span>관상학 알아보기</span>
+      <img src="images/nav/nav-arrow.svg" alt=""/>
+    </button>
+    <div class="bn-right-bg"></div>
+    <button class="bn-help-btn">?</button>
+  </div>
+</nav>
+
+<div id="dot-cursor"></div>
+<script src="scale.js"></script>
+<script src="cursor.js"></script>
+<script>
+(function(){
+  /* ── 3단계 팝업 데이터 ── */
+  const TIER3_INFO = {
+    '오악사독': {
+      title: '오악사독 (五嶽四瀆)',
+      html: `<span class="kw">오악(五嶽)</span>은 얼굴의 돌출된 다섯 부분인 이마, 코, 양볼의 광대, 턱을 다섯 개의 산으로 비유한 것이다. <span class="kw">사독(四瀆)</span>은 얼굴의 들어간 네 부분인 눈, 귀, 입, 콧구멍 주변을 물길과 흐름에 비유한 것이다. 오악이 산의 구조라면 사독은 산에 흐르는 물길, 즉 얼굴에 흐르는 에너지의 흐름이다.`
+    },
+    '음양오행': {
+      title: '음양오행 (陰陽五行)',
+      html: `<span class="kw">음양(陰陽)</span>은 세상 모든 것을 상반된 두 기운으로 나누는 원리이고, <span class="kw">오행(五行)</span>은 木·火·土·金·水 다섯 가지 기운의 순환이다. 관상학에서는 이 두 체계를 결합하여 얼굴의 형태, 색, 기운을 분석한다.`
+    },
+    '자신': {
+      title: '자신 (自身)',
+      html: `관상학에서 얼굴의 <span class="kw">좌측(左)</span>은 <span class="kw">양(陽)</span>의 기운을 담으며 자신의 내면과 본성을 나타낸다. 왼쪽 면을 보면 그 사람의 내적 성향과 자아를 읽을 수 있다.`
+    },
+    '타인': {
+      title: '타인 (他人)',
+      html: `관상학에서 얼굴의 <span class="kw">우측(右)</span>은 <span class="kw">음(陰)</span>의 기운을 담으며 타인과의 관계, 사회적 면을 나타낸다. 오른쪽 면을 보면 그 사람이 세상과 어떻게 관계 맺는지를 읽을 수 있다.`
+    },
+    '기색론': {
+      title: '기색론 (氣色論)',
+      html: `<span class="kw">기색론(氣色論)</span>은 얼굴에 나타나는 기운과 색을 통해 건강, 운세, 심리 상태를 읽는 이론이다. <span class="kw">오행(五行)</span>의 색이 얼굴 각 부위에 어떻게 나타나는지를 오악·사독과 연결하여 종합적으로 분석한다.`
+    },
+    '좌양우음': {
+      title: '좌양우음 (左陽右陰)',
+      html: `얼굴의 <span class="kw">왼쪽은 양(陽)</span>, <span class="kw">오른쪽은 음(陰)</span>으로 구분하는 관상학의 기본 원리다. 이 원리를 통해 자신과 타인, 능동과 수동, 내면과 외면을 얼굴에서 나누어 읽는다.`
+    },
+    '동양방위': {
+      title: '동양방위 (東洋方位)',
+      html: `<span class="kw">동양방위</span>는 음양오행·오악사독·기색론·좌양우음의 원리를 종합하여 얼굴을 동서남북과 중앙의 방위 체계로 분석하는 관상학의 통합 개념이다. 얼굴 전체를 하나의 지형도로 보아 기운의 흐름을 파악한다.`
+    },
+  };
+
+  function showTier3Popup(word){
+    const info = TIER3_INFO[word];
+    if(!info) return;
+    document.getElementById('tier3-popup')&&document.getElementById('tier3-popup').remove();
+    const popup = document.createElement('div');
+    popup.id = 'tier3-popup';
+    popup.innerHTML = `
+      <div class="popup-header">
+        <span class="popup-title">${info.title}</span>
+        <div class="popup-close">X</div>
+      </div>
+      <div class="popup-body">${info.html}</div>`;
+    document.body.appendChild(popup);
+    popup.querySelector('.popup-close').addEventListener('click',()=>popup.remove());
+  }
+
+  const RULES = [
+    { in:['土','土'],                                          out:'산'      },
+    { in:['水','水'],                                          out:'물길'    },
+    { in:['물길','기운'],                                      out:'사독'    },
+    { in:['산','기운'],                                        out:'오악'    },
+    { in:['사독','오악'],                                      out:'오악사독'},
+    { in:['산','물길'],                                        out:'오악사독'},
+    { in:['밝음','확산','상승','외부'],                        out:'양'      },
+    { in:['어둠','응집','하강','내부'],                        out:'음'      },
+    { in:['밝음','어둠'],                                      out:'음양'    },
+    { in:['확산','응집'],                                      out:'음양'    },
+    { in:['상승','하강'],                                      out:'음양'    },
+    { in:['외부','내부'],                                      out:'음양'    },
+    { in:['음','양'],                                          out:'음양'    },
+    { in:['金','土','水','火','木'],                           out:'오행'    },
+    { in:['음양','오행'],                                      out:'음양오행'},
+    { in:['오행','응집'],                                      out:'취'      },
+    { in:['오행','확산'],                                      out:'산'      },
+    { in:['취','산','기운'],                                   out:'기색론'  },
+    { in:['좌','양'],                                          out:'자신'    },
+    { in:['우','음'],                                          out:'타인'    },
+    { in:['자신','타인'],                                      out:'좌양우음'},
+    { in:['좌','우','음양'],                                   out:'좌양우음'},
+    { in:['기색론','오악사독','좌양우음','음양오행'],          out:'동양방위'},
+  ];
+
+  const BASE  = ['기운','좌','우','金','土','火','木','水','밝음','확산','상승','외부','어둠','응집','하강','내부'];
+  const TIER2 = ['산','물길','양','음','음양','오행','취','사독','오악'];
+  const TIER3 = ['오악사독','음양오행','자신','타인','기색론','좌양우음','동양방위'];
+
+  function tierClass(word){
+    if(TIER3.includes(word)) return 'd3';
+    if(TIER2.includes(word)) return 'd2';
+    return '';
+  }
+
+  // 4열 배치: 1단계 col1·col2, 2단계 col3, 3단계 col4
+  const BASE_COL1 = ['金','土','火','木','水','밝음','어둠','확산'];
+  const BASE_COL2 = ['좌','우','상승','하강','기운','외부','내부','응집'];
+  const B_SIZE=65, B_YGAP=90, B_START_Y=25;
+  const T2_SIZE=75;
+  const T3_SIZE=80;
+
+  function getColX(){
+    const pw = panelEl.offsetWidth || 454;
+    const col1 = 30;
+    const col2 = col1 + B_SIZE + 15;
+    const col2r = col2 + B_SIZE;
+    const col3 = col2r + 20;
+    const col4 = col3 + T2_SIZE + 20;
+    return [col1, col2, col3, col4];
+  }
+  const THRESH = 80; // 조합 감지 반경 px
+
+  let discovered = new Set(BASE);
+  let items = []; // { id, word, x, y, el }
+  let uid = 0;
+  let drag = null; // { type:'panel'|'canvas', word, itemId, ghost, offX, offY }
+
+  const canvasEl = document.getElementById('canvas-area');
+  const panelEl  = document.getElementById('panel-words');
+
+  /* ── 유틸 ── */
+  function dist(a,b){ return Math.hypot(a.x-b.x, a.y-b.y); }
+
+  function combs(arr, k){
+    if(k===0) return [[]];
+    if(arr.length<k) return [];
+    const [h,...t] = arr;
+    return [...combs(t,k-1).map(c=>[h,...c]), ...combs(t,k)];
+  }
+
+  function sortedKey(words){ return [...words].sort().join('|'); }
+  const ruleMap = new Map(RULES.map(r=>[sortedKey(r.in), r.out]));
+
+  /* ── 패널 렌더 ── */
+  function renderPanel(){
+    panelEl.innerHTML='';
+    const CX = getColX();
+    let t2Row=0, t3Row=0;
+
+    [...discovered].forEach(word=>{
+      const el=document.createElement('div');
+      const tc=tierClass(word);
+      el.className='bubble'+(tc?' '+tc:'');
+      el.textContent=word;
+      el.style.position='absolute';
+
+      const c1=BASE_COL1.indexOf(word);
+      const c2=BASE_COL2.indexOf(word);
+      if(c1>=0){
+        el.style.left=CX[0]+'px';
+        el.style.top=(B_START_Y+c1*B_YGAP)+'px';
+      } else if(c2>=0){
+        el.style.left=CX[1]+'px';
+        el.style.top=(B_START_Y+c2*B_YGAP)+'px';
+      } else if(tc==='d2'){
+        el.style.left=CX[2]+'px';
+        el.style.top=(B_START_Y+t2Row*B_YGAP)+'px';
+        t2Row++;
+      } else if(tc==='d3'){
+        el.style.left=CX[3]+'px';
+        el.style.top=(B_START_Y+t3Row*B_YGAP)+'px';
+        t3Row++;
+      }
+
+      el.addEventListener('mousedown',e=>startDrag(e,'panel',word,null));
+      panelEl.appendChild(el);
+    });
+  }
+
+  /* ── 캔버스 아이템 ── */
+  function spawnItem(word, x, y, isNew){
+    const id=uid++;
+    const el=document.createElement('div');
+    const tc = tierClass(word);
+    el.className='cbubble'+(tc?' '+tc:'')+(isNew?' new-b':'');
+    el.textContent=word;
+    el.style.left=x+'px';
+    el.style.top=y+'px';
+    el.style.transform='translate(-50%,-50%)';
+    el.addEventListener('mousedown', e=>startDrag(e,'canvas',word,id));
+    canvasEl.appendChild(el);
+    const item={id,word,x,y,el};
+    items.push(item);
+
+    if(TIER3.includes(word)){
+      const exIcon = document.createElement('div');
+      exIcon.className='hint-icon';
+      exIcon.textContent='!';
+      exIcon.style.left = (x + 30) + 'px';
+      exIcon.style.top  = (y - 45) + 'px';
+      canvasEl.appendChild(exIcon);
+      exIcon.addEventListener('click', e=>{
+        e.stopPropagation();
+        showTier3Popup(word);
+        exIcon.remove();
+      });
+    }
+
+    return item;
+  }
+
+  function removeItem(id){
+    const i=items.findIndex(i=>i.id===id);
+    if(i<0)return;
+    clearTimeout(items[i].hintTimer);
+    // 이 아이템이 포함된 hint 그룹 제거
+    hintGroups = hintGroups.filter(ids=>!ids.includes(id));
+    items[i].el.remove();
+    items.splice(i,1);
+    redrawHintLines();
+  }
+
+  function moveItem(item,x,y){
+    item.x=x; item.y=y;
+    item.el.style.left=x+'px';
+    item.el.style.top=y+'px';
+  }
+
+  /* ── 조합 시도 ── */
+  function tryCombo(word, selfId, dropX, dropY){
+    const nearby = items.filter(i=>i.id!==selfId && dist(i,{x:dropX,y:dropY})<THRESH);
+    // 가장 많은 조합부터 시도
+    for(let n=nearby.length; n>=1; n--){
+      for(const sub of combs(nearby,n)){
+        const words=[word,...sub.map(i=>i.word)];
+        const key=sortedKey(words);
+        if(ruleMap.has(key)){
+          const out=ruleMap.get(key);
+          const allIds=[selfId,...sub.map(i=>i.id)].filter(id=>id!==null);
+          const cx=(dropX+sub.reduce((s,i)=>s+i.x,0))/(sub.length+1);
+          const cy=(dropY+sub.reduce((s,i)=>s+i.y,0))/(sub.length+1);
+          allIds.forEach(id=>removeItem(id));
+          const isNew=!discovered.has(out);
+          discovered.add(out);
+          spawnItem(out,cx,cy,true);
+          if(isNew) renderPanel();
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  /* ── 드래그 ── */
+  function startDrag(e, type, word, itemId){
+    e.preventDefault(); e.stopPropagation();
+    const ghost=document.createElement('div');
+    ghost.className='drag-ghost';
+    ghost.textContent=word;
+    ghost.style.left=e.clientX+'px';
+    ghost.style.top=e.clientY+'px';
+    document.body.appendChild(ghost);
+
+    if(type==='canvas'){
+      const item=items.find(i=>i.id===itemId);
+      if(item) item.el.style.opacity='0.2';
+    }
+    drag={type,word,itemId,ghost};
+  }
+
+  document.addEventListener('mousemove',e=>{
+    if(!drag)return;
+    drag.ghost.style.left=e.clientX+'px';
+    drag.ghost.style.top=e.clientY+'px';
+
+    // 가까운 캔버스 버블 하이라이트
+    if(drag.type==='panel'||drag.type==='canvas'){
+      const rect=canvasEl.getBoundingClientRect();
+      const mx=e.clientX-rect.left, my=e.clientY-rect.top;
+      const dragWord = drag.type==='panel' ? drag.word : (items.find(i=>i.id===drag.itemId)||{}).word;
+      let anyComboNear = false;
+      items.forEach(i=>{
+        if(i.id===drag.itemId)return;
+        const d=Math.hypot(i.x-mx, i.y-my);
+        const canCombo = dragWord && RULES.some(r=>r.in.includes(dragWord)&&r.in.includes(i.word));
+        const on = d<THRESH && canCombo;
+        i.el.classList.toggle('highlight', on);
+        if(on) anyComboNear=true;
+      });
+      // 드래그 중인 원도 같이 강조
+      if(drag.type==='canvas'){
+        const dragItem=items.find(i=>i.id===drag.itemId);
+        if(dragItem) dragItem.el.classList.toggle('highlight', anyComboNear);
+      }
+      drag.ghost.classList.toggle('highlight', anyComboNear);
+
+      // 드래그 중인 버블 위치 실시간 반영 → 힌트 선 업데이트
+      if(drag.type==='canvas'){
+        const dragItem=items.find(i=>i.id===drag.itemId);
+        if(dragItem){ dragItem.x=mx; dragItem.y=my; }
+      }
+      if(hintGroups.length>0) redrawHintLines();
+    }
+  });
+
+  document.addEventListener('mouseup',e=>{
+    if(!drag)return;
+    drag.ghost.remove();
+    items.forEach(i=>i.el.classList.remove('highlight'));
+
+    const rect=canvasEl.getBoundingClientRect();
+    const cx=e.clientX-rect.left, cy=e.clientY-rect.top;
+    const inCanvas=cx>=0&&cy>=0&&cx<=rect.width&&cy<=rect.height;
+
+    if(inCanvas){
+      if(drag.type==='panel'){
+        // 패널 → 캔버스: 새 아이템 생성 후 조합 시도
+        const newItem=spawnItem(drag.word,cx,cy,false);
+        if(!tryCombo(drag.word,newItem.id,cx,cy)){
+          scheduleHintForItem(newItem);
+        }
+      } else {
+        // 캔버스 → 캔버스: 이동 후 조합 시도
+        const item=items.find(i=>i.id===drag.itemId);
+        if(item){
+          moveItem(item,cx,cy);
+          item.el.style.opacity='1';
+          tryCombo(item.word,item.id,cx,cy);
+        }
+      }
+    } else {
+      if(drag.type==='canvas'){
+        const item=items.find(i=>i.id===drag.itemId);
+        if(item) item.el.style.opacity='1';
+      }
+    }
+    drag=null;
+  });
+
+  // 더블클릭으로 캔버스 아이템 삭제
+  canvasEl.addEventListener('dblclick',e=>{
+    const el=e.target.closest('.cbubble');
+    if(!el)return;
+    const item=items.find(i=>i.el===el);
+    if(item) removeItem(item.id);
+  });
+
+  /* ── 힌트 시스템 (per-item 독립 타이머) ── */
+  let hintGroups = []; // [[id,id,...], ...]
+
+  function getHintSvg(){
+    let svg = document.getElementById('hint-lines');
+    if(!svg){
+      svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+      svg.id = 'hint-lines';
+      svg.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:5;overflow:visible;';
+      canvasEl.appendChild(svg);
+    }
+    return svg;
+  }
+
+  function redrawHintLines(){
+    const svg = getHintSvg();
+    svg.innerHTML = '';
+    items.forEach(i=>i.el.classList.remove('hint-active'));
+    hintGroups.forEach(ids=>{
+      const grp = ids.map(id=>items.find(i=>i.id===id)).filter(Boolean);
+      if(grp.length<2) return;
+      grp.forEach(i=>i.el.classList.add('hint-active'));
+      for(let k=1;k<grp.length;k++){
+        const a=grp[0], b=grp[k];
+        const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+        line.setAttribute('x1', a.x); line.setAttribute('y1', a.y);
+        line.setAttribute('x2', b.x); line.setAttribute('y2', b.y);
+        line.setAttribute('stroke','#FF5C34');
+        line.setAttribute('stroke-width','1.5');
+        line.setAttribute('stroke-dasharray','6 4');
+        svg.appendChild(line);
+      }
+    });
+  }
+
+  // 특정 아이템에 대한 힌트 활성화 (3초 뒤 호출)
+  function activateHintForItem(itemId){
+    const item = items.find(i=>i.id===itemId);
+    if(!item) return;
+    const drawn = new Set();
+    RULES.forEach(r=>{
+      if(!r.in.includes(item.word)) return;
+      const needed = [...r.in];
+      const matched = [];
+      const usedIds = new Set();
+      const ok = needed.every(w=>{
+        const found = items.find(i=>i.word===w && !usedIds.has(i.id));
+        if(found){ usedIds.add(found.id); matched.push(found); return true; }
+        return false;
+      });
+      if(!ok || matched.length<2) return;
+      const key = matched.map(i=>i.id).sort().join('-');
+      if(drawn.has(key)) return;
+      // 이미 있는 그룹 중복 방지
+      const alreadyExists = hintGroups.some(g=>g.sort().join('-')===key);
+      if(alreadyExists) return;
+      drawn.add(key);
+      hintGroups.push(matched.map(i=>i.id));
+    });
+    redrawHintLines();
+  }
+
+  // 패널에서 놓을 때 호출 — 3초 후 해당 버블의 힌트 표시
+  function scheduleHintForItem(item){
+    item.hintTimer = setTimeout(()=>activateHintForItem(item.id), 3000);
+  }
+
+  renderPanel();
+})();
+</script>
+</body>
+</html>

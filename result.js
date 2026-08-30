@@ -60,15 +60,6 @@ const TYPE_DATABASE = {
     desc: '인간관계 기반의 안정된 영역을 형성하는 유형. 친밀한 공동체나 소속 안에서 강한 안정감을 느낌.',
   },
 
-  CDVP: {
-    position: '중심',
-    density: '분산',
-    direction: '수직',
-    structure: '점',
-
-    desc: '자신의 가능성과 관심사가 여러 방향으로 퍼져 있는 유형. 중심은 유지하지만 목표가 자주 변화할 수 있음.',
-  },
-
   CDVL: {
     position: '중심',
     density: '분산',
@@ -85,15 +76,6 @@ const TYPE_DATABASE = {
     structure: '면',
 
     desc: '스스로의 세계를 넓게 확장하려는 경향이 강한 유형. 다방면의 관심과 경험이 하나의 구조를 형성함.',
-  },
-
-  CDHP: {
-    position: '중심',
-    density: '분산',
-    direction: '수평',
-    structure: '점',
-
-    desc: '관계 속에서 다양한 감정과 연결을 탐색하는 유형. 감정 변화와 인간관계 폭이 넓은 편.',
   },
 
   CDHL: {
@@ -168,15 +150,6 @@ const TYPE_DATABASE = {
     desc: '넓은 사회적 네트워크와 관계 기반을 안정적으로 구축하는 유형. 공동체 안에서 중심 역할을 하기도 함.',
   },
 
-  EDVP: {
-    position: '외곽',
-    density: '분산',
-    direction: '수직',
-    structure: '점',
-
-    desc: '외부 환경과 다양한 목표 사이에서 끊임없이 움직이는 유형. 새로운 가능성을 탐색하려는 욕구가 큼.',
-  },
-
   EDVL: {
     position: '외곽',
     density: '분산',
@@ -195,13 +168,22 @@ const TYPE_DATABASE = {
     desc: '외부 세계의 다양한 경험을 넓게 흡수해 자신만의 영역을 형성하는 유형. 변화 적응력이 높음.',
   },
 
-  EDHP: {
+  EDHL: {
     position: '외곽',
     density: '분산',
     direction: '수평',
-    structure: '점',
+    structure: '선',
 
-    desc: '다양한 사람과 감정적 교류를 시도하는 유형. 새로운 관계와 자극에 쉽게 끌리는 경향이 있음.',
+    desc: '다양한 사람과의 관계가 이어지며 삶을 이끄는 유형. 폭넓은 교류와 이동 속에서 에너지를 얻음.',
+  },
+
+  EDHS: {
+    position: '외곽',
+    density: '분산',
+    direction: '수평',
+    structure: '면',
+
+    desc: '사회적으로 넓은 관계망을 형성하며 다양한 외부 영역에서 자신만의 구조를 구축하는 유형.',
   },
 };
 

@@ -50,9 +50,9 @@ document.getElementById('captureBtn').addEventListener('click', () => {
   const svgOfsY   = (SVG_H * svgScale - frameH) / 2;
 
   const ovalCX = 900 * svgScale - svgOfsX;
-  const ovalCY = 360 * svgScale - svgOfsY;
-  const ovalRX = 275 * svgScale;
-  const ovalRY = 340 * svgScale;
+  const ovalCY = 442 * svgScale - svgOfsY;
+  const ovalRX = 319 * svgScale;
+  const ovalRY = 412 * svgScale;
 
   const cropW = ovalRX * 2 * 1.1;
   const cropH = ovalRY * 2 * 1.1;

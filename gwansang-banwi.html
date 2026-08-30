@@ -167,7 +167,7 @@
         <button class="bn-badge bn-badge--b" onclick="history.back()">B</button>
         <button
           class="bn-item"
-          style="left: 467.15px"
+          style="left:450px"
           onclick="window.location.href = 'index.html'"
         >
           <span>프로젝트 알아보기</span>
@@ -175,7 +175,7 @@
         </button>
         <button
           class="bn-item"
-          style="left: 794.15px"
+          style="left:790px"
           onclick="window.location.href = 'camera.html'"
         >
           <span>점 패턴 분석하기</span>
@@ -183,7 +183,7 @@
         </button>
         <button
           class="bn-item"
-          style="left: 1106.15px"
+          style="left:1130px"
           onclick="window.location.href = 'facemap-celeb.html'"
         >
           <span>얼굴 지도 살펴보기</span>
@@ -191,13 +191,13 @@
         </button>
         <button
           class="bn-item"
-          style="left: 1439.15px"
+          style="left:1470px"
           onclick="window.location.href = 'gwansang.html'"
         >
           <span>관상학 알아보기</span>
           <img src="images/nav/nav-arrow.svg" alt="" />
         </button>
-        <button class="bn-help-btn">?</button>
+        <div class="bn-right-bg"></div><button class="bn-help-btn">?</button>
       </div>
     </nav>
 
@@ -233,6 +233,15 @@
         const el = document.querySelector('.page-scale');
         const m = el && el.style.transform && el.style.transform.match(/scale\(([^)]+)\)/);
         return m ? parseFloat(m[1]) : 1;
+      }
+
+      // 점 전용 투영 — zoom 항상 1 고정 (확대해도 위치 불변)
+      function tfDot(p) {
+        const c1=Math.cos(rotY), s1=Math.sin(rotY);
+        const x1=p.x*c1+p.z*s1, y1=p.y, z1=-p.x*s1+p.z*c1;
+        const c2=Math.cos(rotX), s2=Math.sin(rotX);
+        const x2=x1, y2=y1*c2-z1*s2;
+        return { x: OX+x2, y: OY-y2 };
       }
 
       // 그리드 전용 투영 (gridRotY/X 사용)
@@ -296,6 +305,42 @@
       };
       // 한자 → 축 매핑 (카메라 타겟용)
       const KANJI_AXIS = { '右':'x','左':'x','上':'y','下':'y','後':'z','前':'z' };
+
+      // ── 캔버스 원형 점들 — 피그마 레이아웃 기준 3D 좌표 ──
+      // 상/하: Y가 크고 X로 좌우 분포 / 좌/우: X가 크고 / 전/후: Z가 크고
+      const AXIS_DOTS = [
+        // 상 — 상단 두 군데 클러스터
+        {label:'상', p3:{x:-200, y:430, z: 20}},
+        {label:'상', p3:{x:-240, y:415, z:-30}},
+        {label:'상', p3:{x:-170, y:420, z: 50}},
+        {label:'상', p3:{x: 180, y:430, z: 30}},
+        {label:'상', p3:{x: 210, y:415, z:-40}},
+        {label:'상', p3:{x: 150, y:420, z: 60}},
+        // 하 — 하단 클러스터
+        {label:'하', p3:{x:  30, y:-420, z: 20}},
+        {label:'하', p3:{x:  60, y:-405, z:-40}},
+        {label:'하', p3:{x:  -20,y:-430, z: 50}},
+        {label:'하', p3:{x: 200, y:-415, z:-20}},
+        {label:'하', p3:{x: 230, y:-425, z: 40}},
+        // 좌 — 좌측 클러스터
+        {label:'좌', p3:{x:-900, y: 20,  z: 30}},
+        {label:'좌', p3:{x:-920, y:-50,  z:-30}},
+        {label:'좌', p3:{x:-880, y: 60,  z:-20}},
+        {label:'좌', p3:{x:-910, y:-20,  z: 60}},
+        // 우 — 우측 클러스터
+        {label:'우', p3:{x: 900, y: 20,  z:-30}},
+        {label:'우', p3:{x: 920, y:-50,  z: 30}},
+        {label:'우', p3:{x: 880, y: 60,  z: 20}},
+        {label:'우', p3:{x: 910, y:-20,  z:-60}},
+        // 전 — 전면 클러스터
+        {label:'전', p3:{x: -30, y: 20, z:-900}},
+        {label:'전', p3:{x:  50, y:-40, z:-920}},
+        {label:'전', p3:{x: -60, y:-30, z:-880}},
+        // 후 — 후면 클러스터
+        {label:'후', p3:{x:  30, y:-20, z: 900}},
+        {label:'후', p3:{x: -50, y: 40, z: 920}},
+        {label:'후', p3:{x:  60, y: 30, z: 880}},
+      ];
 
       // 9개 별개 창
       const PANEL_CONTENT = {
@@ -376,44 +421,63 @@
         zoom = 1 + scrollP * 0.5;
         ctx.clearRect(0, 0, W, H);
 
+        // ── 배경 채우기 ──
+        ctx.fillStyle = '#e9f056';
+        ctx.fillRect(0, 0, W, H);
+
         // ── 3D 그리드 바닥면 (XZ 평면, y = -300) ──
         {
-          const GY = -300;          // 바닥 높이
-          const GRANGE = 2000;      // 그리드 범위 (±)
-          const GSTEP  = 200;       // 격자 간격
+          const GY = -300;
+          const GRANGE = 2200;
+          const GSTEP  = 190;
           const steps = Math.ceil(GRANGE / GSTEP);
 
-          // 그리드를 그린 뒤 방사형 그라디언트로 페이드
           ctx.save();
-
-          // 클리핑: 화면 전체
           ctx.beginPath(); ctx.rect(0, 0, W, H); ctx.clip();
 
-          ctx.lineWidth = 0.8;
-
+          // 그리드 선
           for (let i = -steps; i <= steps; i++) {
             const v = i * GSTEP;
-            // Z 방향 선 (X 고정)
+            const dist = Math.abs(v) / GRANGE;
+            const alpha = (1 - dist * dist) * 0.3;
+            ctx.strokeStyle = `rgba(0,0,0,${alpha.toFixed(3)})`;
+            ctx.lineWidth = 0.6;
+
             const a = tfGrid({x: v, y: GY, z: -GRANGE});
             const b = tfGrid({x: v, y: GY, z:  GRANGE});
-            // X 방향 선 (Z 고정)
             const c = tfGrid({x: -GRANGE, y: GY, z: v});
             const d = tfGrid({x:  GRANGE, y: GY, z: v});
-
-            // 원점에서의 거리 비율로 투명도 결정
-            const dist = Math.abs(v) / GRANGE;
-            const alpha = (1 - dist * dist) * 0.18;
-            ctx.strokeStyle = `rgba(120,110,0,${alpha.toFixed(3)})`;
 
             ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
             ctx.beginPath(); ctx.moveTo(c.x, c.y); ctx.lineTo(d.x, d.y); ctx.stroke();
           }
 
-          // 방사형 그라디언트 페이드 (배경색으로)
-          const grad = ctx.createRadialGradient(panX, panY, 0, panX, panY, Math.max(W, H) * 0.7);
+          // 교점 X 마크
+          for (let i = -steps; i <= steps; i++) {
+            for (let j = -steps; j <= steps; j++) {
+              const ix = i * GSTEP, iz = j * GSTEP;
+              const distN = Math.max(Math.abs(ix), Math.abs(iz)) / GRANGE;
+              if (distN > 0.88) continue;
+              const alpha = (1 - distN * 1.15) * 0.3;
+              if (alpha <= 0) continue;
+              const p = tfGrid({x: ix, y: GY, z: iz});
+              const s = 3 + (1 - distN) * 6;
+              ctx.strokeStyle = `rgba(0,0,0,${alpha.toFixed(3)})`;
+              ctx.lineWidth = 1.1;
+              ctx.beginPath();
+              ctx.moveTo(p.x - s, p.y - s); ctx.lineTo(p.x + s, p.y + s);
+              ctx.stroke();
+              ctx.beginPath();
+              ctx.moveTo(p.x + s, p.y - s); ctx.lineTo(p.x - s, p.y + s);
+              ctx.stroke();
+            }
+          }
+
+          // 방사형 엣지 페이드
+          const grad = ctx.createRadialGradient(panX, panY, 200, panX, panY, Math.max(W, H) * 0.72);
           grad.addColorStop(0,   'rgba(233,240,86,0)');
-          grad.addColorStop(0.6, 'rgba(233,240,86,0)');
-          grad.addColorStop(1,   'rgba(233,240,86,0.92)');
+          grad.addColorStop(0.55,'rgba(233,240,86,0)');
+          grad.addColorStop(1,   'rgba(233,240,86,0.96)');
           ctx.fillStyle = grad;
           ctx.fillRect(0, 0, W, H);
 
@@ -464,6 +528,25 @@
             desc(d.p3, '이곳은 빈칸입니다.');
           }
           descHits.push({x:p.x, y:p.y, id, type:'desc'});
+        }
+
+        // ── 캔버스 원형 점 그리기 (크기·간격 zoom 무관 고정) ──
+        const DR = 25 * zoom;
+        const DFS = Math.round(22 * zoom);
+        ctx.font = `400 ${DFS}px "Pretendard",sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        for (const dot of AXIS_DOTS) {
+          const p = tfDot(dot.p3);
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, DR, 0, Math.PI * 2);
+          ctx.fillStyle = '#ea5c3a';
+          ctx.fill();
+          ctx.strokeStyle = '#000';
+          ctx.lineWidth = 0.3;
+          ctx.stroke();
+          ctx.fillStyle = '#000';
+          ctx.fillText(dot.label, p.x, p.y);
         }
 
         // 오버레이 canvas: 클릭된 요소만 선명하게

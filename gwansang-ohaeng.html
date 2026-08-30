@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"/>
+  <title>음양오행 | DOT SHIFT</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"/>
+  <link rel="stylesheet" href="nav.css"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{background:#e9f056;overflow:hidden;width:100vw;height:100vh;}
+    .ohaengPage{
+      position:fixed;top:0;left:0;
+      width:1920px;height:1080px;
+      background:#e9f056;
+      transform-origin:top left;
+    }
+    #dotCanvas{position:absolute;left:0;top:0;}
+
+    /* ── 상세 패널 ── */
+    .detail-panel {
+      position: absolute;
+      right: 162px;
+      top: 50%;
+      transform: translateY(-50%) translateX(100%);
+      width: 935px;
+      height: 749px;
+      background: #fff;
+      border: 1px solid #000;
+      overflow: hidden;
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1),
+                  opacity 0.25s ease;
+    }
+    .detail-panel.is-open {
+      transform: translateY(-50%) translateX(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .dp-header {
+      position: absolute;
+      left: -1px; top: -1px;
+      background: #e9f056;
+      padding: 5px 25px;
+      z-index: 3;
+    }
+    .dp-header span {
+      font-family: 'Pretendard', sans-serif;
+      font-weight: 600;
+      font-size: 24px;
+      color: #000;
+      line-height: 44px;
+      white-space: nowrap;
+    }
+    .dp-close {
+      position: absolute;
+      right: -1px; top: -1px;
+      width: 80px;
+      height: 54px;
+      background: #e9f056;
+      border: none;
+      border-left: 1px solid #000;
+      font-family: 'Pretendard', sans-serif;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 3;
+    }
+    .dp-body {
+      position: absolute;
+      left: 40px; top: 70px;
+      right: 40px; bottom: 40px;
+      font-family: 'Pretendard', sans-serif;
+      font-size: 18px;
+      line-height: 1.8;
+      color: #000;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+<nav class="topNav">
+  <a class="navLeft" href="index.html">PROJECT: DOT SHIFT</a>
+  <span class="navRight">Everything starts from a dot</span>
+</nav>
+
+<div class="ohaengPage page-scale">
+  <canvas id="dotCanvas" width="1920" height="1080"></canvas>
+
+  <!-- ── 상세 패널 4개 ── -->
+  <div class="detail-panel" id="ohaeng-panel-0">
+    <div class="dp-header"><span>음양오행(陰陽五行)</span></div>
+    <button class="dp-close" onclick="closeOhaengPanel()">✕</button>
+    <div class="dp-body"><p>내용을 여기에 입력하세요.</p></div>
+  </div>
+  <div class="detail-panel" id="ohaeng-panel-1">
+    <div class="dp-header"><span>오악사독(五嶽四瀆)</span></div>
+    <button class="dp-close" onclick="closeOhaengPanel()">✕</button>
+    <div class="dp-body"><p>내용을 여기에 입력하세요.</p></div>
+  </div>
+  <div class="detail-panel" id="ohaeng-panel-2">
+    <div class="dp-header"><span>얼굴 위에서의 방위체계</span></div>
+    <button class="dp-close" onclick="closeOhaengPanel()">✕</button>
+    <div class="dp-body"><p>내용을 여기에 입력하세요.</p></div>
+  </div>
+  <div class="detail-panel" id="ohaeng-panel-3">
+    <div class="dp-header"><span>기색론(氣色論)</span></div>
+    <button class="dp-close" onclick="closeOhaengPanel()">✕</button>
+    <div class="dp-body"><p>내용을 여기에 입력하세요.</p></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const cv  = document.getElementById('dotCanvas');
+  const ctx = cv.getContext('2d');
+  const W = 1920, H = 1080;
+
+  // 텍스트 존 4개 — Figma 1656-5460 기준 (텍스트 중심좌표)
+  const zones = [
+    { label: '음양오행(陰陽五行)',    x:  314, y: 284, rx: 220, ry: 75 },
+    { label: '오악사독(五嶽四瀆)',    x:  818, y: 531, rx: 200, ry: 70 },
+    { label: '얼굴 위에서의 방위체계', x: 1633, y: 678, rx: 230, ry: 75 },
+    { label: '기색론(氣色論)',        x: 1407, y: 188, rx: 180, ry: 65 },
+  ];
+
+  // 음양오행 호버 시 색상 전환 (0=기본, 1=검정배경/흰점)
+  let colorT = 0;
+  const TOTAL = 1000;
+
+  // 블롭용 랜덤 위치 (타원 균등분포) — 존마다 TOTAL개 생성
+  function genBlob(zone, n) {
+    const pts = [];
+    for (let i = 0; i < n; i++) {
+      const ang = Math.random() * Math.PI * 2;
+      const r   = Math.sqrt(Math.random());
+      pts.push({
+        x: zone.x + r * zone.rx * Math.cos(ang) + (Math.random()-0.5)*10,
+        y: zone.y + r * zone.ry * Math.sin(ang) + (Math.random()-0.5)*10,
+      });
+    }
+    return pts;
+  }
+
+  // 각 존의 blob 위치 미리 생성
+  const blobs = zones.map(z => genBlob(z, TOTAL));
+
+  // 파티클 생성 — 캔버스보다 넓게 분포해 줌아웃해도 빈 공간 없음
+  const particles = [];
+  for (let i = 0; i < TOTAL; i++) {
+    const hx = (Math.random() - 0.5) * W * 3 + W / 2;
+    const hy = (Math.random() - 0.5) * H * 3 + H / 2;
+    particles.push({
+      x: hx, y: hy,
+      homeX: hx, homeY: hy,
+      r: 7 + Math.random() * 9,
+      spd: 0.07 + Math.random() * 0.04,
+      phase: Math.random() * Math.PI * 2,   // 각자 다른 위상
+      freq:  0.008 + Math.random() * 0.006, // 진동 속도
+      amp:   6 + Math.random() * 10,        // 진동 폭
+    });
+  }
+
+  // ── 3D 카메라 ──
+  let rotX = 0, rotY = 0;          // 현재 회전각
+  let tgtRotX = 0, tgtRotY = 0;    // 목표 회전각 (관성용)
+  let camDist = 900;               // 카메라 거리 (줌)
+  const FOV = 900;
+
+  // 3D 회전 (Y축 → X축 순서)
+  function rot3(x, y, z, rx, ry) {
+    const cy = Math.cos(ry), sy = Math.sin(ry);
+    const x1 =  x*cy + z*sy, z1 = -x*sy + z*cy;
+    const cx = Math.cos(rx), sx = Math.sin(rx);
+    return { x: x1, y: y*cx - z1*sx, z: y*sx + z1*cx };
+  }
+
+  // 원근 투영 → 캔버스 좌표
+  function proj(x, y, z) {
+    const d = FOV / (FOV + z + camDist);
+    return { sx: W/2 + x*d, sy: H/2 + y*d, d };
+  }
+
+  // 파티클에 3D 홈 위치 추가 (z 깊이 랜덤)
+  particles.forEach(p => {
+    p.hx3 = p.homeX - W/2;
+    p.hy3 = p.homeY - H/2;
+    p.hz3 = (Math.random()-0.5) * 2400;
+    p.x3 = p.hx3; p.y3 = p.hy3; p.z3 = p.hz3;
+  });
+
+  // blob도 3D로 — z는 얕게
+  blobs.forEach(blob => blob.forEach(b => {
+    b.x3 = b.x - W/2;
+    b.y3 = b.y - H/2;
+    b.z3 = (Math.random()-0.5) * 60;
+  }));
+
+  // 텍스트 존 3D 위치
+  zones.forEach(z => {
+    z.x3 = z.x - W/2;
+    z.y3 = z.y - H/2;
+    z.z3 = 0;
+  });
+
+  // ── 드래그 ──
+  // 기색론(zone 3) 전용 폭발 상태
+  const GISAEK_IDX = 3;
+  let gisaekState = 'idle'; // 'idle' | 'gather' | 'explode'
+  let gisaekTick  = 0;
+  const GATHER_FRAMES  = 90;  // 모이는 시간
+  const EXPLODE_FRAMES = 80;  // 폭발 지속
+  // 폭발용 랜덤 방향 벡터 (파티클마다)
+  particles.forEach(p => {
+    const ang = Math.random() * Math.PI * 2;
+    const spd = 400 + Math.random() * 800;
+    p.ex3 = Math.cos(ang) * spd;
+    p.ey3 = Math.sin(ang) * spd * 0.6;
+    p.ez3 = (Math.random() - 0.5) * 600;
+  });
+
+  let dragging = false, lastMX = 0, lastMY = 0;
+  let velX = 0, velY = 0;
+
+  function pageScale() {
+    return document.querySelector('.ohaengPage').getBoundingClientRect().width / W;
+  }
+
+  let dragMoved = false; // 드래그로 움직였는지 여부
+
+  cv.addEventListener('mousedown', e => {
+    dragging  = true;
+    dragMoved = false;
+    lastMX = e.clientX; lastMY = e.clientY;
+    velX = 0; velY = 0;
+    cv.style.cursor = 'grabbing';
+  });
+  document.addEventListener('mouseup', e => {
+    if (!dragMoved && hovered >= 0) {
+      // 드래그 없이 클릭 → 패널 열기
+      openOhaengPanel(hovered);
+    }
+    dragging = false;
+    cv.style.cursor = 'default';
+  });
+
+  // 스크롤 줌
+  cv.addEventListener('wheel', e => {
+    e.preventDefault();
+    camDist = Math.min(1400, Math.max(200, camDist + e.deltaY * 1.5));
+  }, { passive: false });
+
+  let hovered = -1;
+  let mouseX3 = 0, mouseY3 = 0; // 마우스 3D 좌표 (z=0 평면)
+  const REPEL_RADIUS = 180;  // 밀어내는 반경(3D)
+  const REPEL_FORCE  = 320;  // 밀어내는 강도
+
+  document.addEventListener('mousemove', e => {
+    const ps = pageScale();
+    if (dragging) {
+      const dx = (e.clientX - lastMX) / ps;
+      const dy = (e.clientY - lastMY) / ps;
+      if (Math.abs(e.clientX - lastMX) + Math.abs(e.clientY - lastMY) > 3) dragMoved = true;
+      velX = dy * 0.003;
+      velY = dx * 0.003;
+      tgtRotX += velX;
+      tgtRotY += velY;
+      lastMX = e.clientX; lastMY = e.clientY;
+    }
+
+    // 호버 감지: 존의 3D 위치를 현재 회전 기준으로 투영
+    const pr = document.querySelector('.ohaengPage').getBoundingClientRect();
+    const mx = (e.clientX - pr.left) / ps;
+    const my = (e.clientY - pr.top)  / ps;
+
+    // 마우스 → 3D 역투영 (z=0 평면 가정)
+    const d0 = FOV / (FOV + camDist);
+    mouseX3 = (mx - W/2) / d0;
+    mouseY3 = (my - H/2) / d0;
+
+    hovered = -1;
+    zones.forEach((z, i) => {
+      const r = rot3(z.x3, z.y3, z.z3, rotX, rotY);
+      const p = proj(r.x, r.y, r.z);
+      const dx = mx - p.sx, dy = my - p.sy;
+      if (Math.sqrt(dx*dx+dy*dy) < 120) hovered = i;
+    });
+  });
+
+  function lerp(a, b, t){ return a + (b-a)*t; }
+
+  let tick = 0;
+
+  function update() {
+    tick++;
+
+    // 회전 관성
+    if (!dragging) {
+      velX *= 0.92; velY *= 0.92;
+      tgtRotX += velX; tgtRotY += velY;
+    }
+    rotX = lerp(rotX, tgtRotX, 0.12);
+    rotY = lerp(rotY, tgtRotY, 0.12);
+
+    // 음양오행(zone 0) 호버 시 색상 전환
+    colorT = lerp(colorT, hovered === 0 ? 1 : 0, 0.06);
+
+    // 기색론 호버 상태 머신
+    if (hovered === GISAEK_IDX) {
+      if (gisaekState === 'idle') { gisaekState = 'gather'; gisaekTick = 0; }
+      gisaekTick++;
+      if (gisaekState === 'gather' && gisaekTick >= GATHER_FRAMES) {
+        gisaekState = 'explode'; gisaekTick = 0;
+      }
+      // explode 상태는 호버 유지하는 한 tick 계속 증가 → 계속 퍼짐
+    } else {
+      gisaekState = 'idle';
+    }
+
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      let tx3, ty3, tz3, spd;
+
+      if (gisaekState === 'gather') {
+        // 기색론 blob으로 빠르게 모임
+        tx3 = blobs[GISAEK_IDX][i].x3;
+        ty3 = blobs[GISAEK_IDX][i].y3;
+        tz3 = blobs[GISAEK_IDX][i].z3;
+        spd = p.spd * 0.5;
+      } else if (gisaekState === 'explode') {
+        // 상한 없이 계속 커져서 파티클이 무한히 퍼짐
+        const ep = gisaekTick / EXPLODE_FRAMES;
+        tx3 = blobs[GISAEK_IDX][i].x3 + p.ex3 * ep;
+        ty3 = blobs[GISAEK_IDX][i].y3 + p.ey3 * ep;
+        tz3 = blobs[GISAEK_IDX][i].z3 + p.ez3 * ep;
+        spd = 0.06; // 느리게 따라가서 퍼지는 느낌 유지
+      } else if (hovered >= 0 && hovered !== GISAEK_IDX) {
+        tx3 = blobs[hovered][i].x3;
+        ty3 = blobs[hovered][i].y3;
+        tz3 = blobs[hovered][i].z3;
+        spd = p.spd * 0.4;
+      } else {
+        const osc  = Math.sin(tick * p.freq + p.phase) * p.amp;
+        const osc2 = Math.cos(tick * p.freq * 0.7 + p.phase) * p.amp * 0.6;
+        tx3 = p.hx3 + osc;
+        ty3 = p.hy3 + osc2;
+        tz3 = p.hz3;
+        spd = p.spd;
+      }
+
+      p.x3 = lerp(p.x3, tx3, spd);
+      p.y3 = lerp(p.y3, ty3, spd);
+      p.z3 = lerp(p.z3, tz3, spd);
+
+      // 마우스 커서 반발 (호버 클러스터 중이 아닐 때)
+      if (hovered < 0 || gisaekState === 'explode') {
+        const rdx = p.x3 - mouseX3;
+        const rdy = p.y3 - mouseY3;
+        const dist2 = rdx*rdx + rdy*rdy;
+        if (dist2 < REPEL_RADIUS * REPEL_RADIUS && dist2 > 0.01) {
+          const dist = Math.sqrt(dist2);
+          const force = (1 - dist / REPEL_RADIUS) * REPEL_FORCE;
+          p.x3 += (rdx / dist) * force * 0.04;
+          p.y3 += (rdy / dist) * force * 0.04;
+        }
+      }
+    }
+  }
+
+  function lerpColor(c1, c2, t) {
+    // c1, c2: [r,g,b]
+    return c1.map((v, i) => Math.round(v + (c2[i] - v) * t));
+  }
+
+  function draw() {
+    // 배경 보간: 노란색 ↔ 검정
+    const bgRGB = lerpColor([233,240,86], [0,0,0], colorT);
+    const dotRGB = lerpColor([0,0,0], [255,255,255], colorT);
+    const bgCol  = `rgb(${bgRGB.join(',')})`;
+    const dotCol = `rgb(${dotRGB.join(',')})`;
+    const strokeCol = dotCol;
+
+    ctx.fillStyle = bgCol;
+    ctx.fillRect(0, 0, W, H);
+    // CSS 배경도 동기화
+    document.querySelector('.ohaengPage').style.background = bgCol;
+
+    // 3D 투영 → 2D 좌표 계산 + z 깊이 기준 정렬
+    const projected = particles.map(p => {
+      const r = rot3(p.x3, p.y3, p.z3, rotX, rotY);
+      const s = proj(r.x, r.y, r.z);
+      return { p, sx: s.sx, sy: s.sy, d: s.d, rz: r.z };
+    });
+    projected.sort((a, b) => a.rz - b.rz); // 먼 것 먼저
+
+    for (const { p, sx, sy, d } of projected) {
+      const r = p.r * d;
+      ctx.beginPath();
+      ctx.arc(sx, sy, Math.max(0.5, r), 0, Math.PI*2);
+      ctx.fillStyle = dotCol;
+      ctx.fill();
+      ctx.strokeStyle = strokeCol;
+      ctx.lineWidth = 1.2 * d;
+      ctx.stroke();
+    }
+
+    // 텍스트 레이블 — 카메라 거리에 따라 크기도 비례 축소
+    const camScale = 1800 / (FOV + camDist); // camDist=900 기준 1.0
+    zones.forEach((z, i) => {
+      const r = rot3(z.x3, z.y3, z.z3, rotX, rotY);
+      const s = proj(r.x, r.y, r.z);
+      const isHov = (i === hovered);
+      const fs = Math.max(8, Math.round((isHov ? 28 : 25) * camScale));
+      ctx.save();
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.font      = `700 ${fs}px Pretendard, sans-serif`;
+      ctx.fillStyle = isHov ? '#000' : 'rgba(0,0,0,0.5)';
+      ctx.fillText(z.label, s.sx, s.sy);
+      ctx.restore();
+    });
+  }
+
+  function loop(){ update(); draw(); requestAnimationFrame(loop); }
+  loop();
+})();
+
+function openOhaengPanel(idx) {
+  document.querySelectorAll('.detail-panel').forEach(p => p.classList.remove('is-open'));
+  const el = document.getElementById('ohaeng-panel-' + idx);
+  if (el) el.classList.add('is-open');
+}
+function closeOhaengPanel() {
+  document.querySelectorAll('.detail-panel').forEach(p => p.classList.remove('is-open'));
+}
+</script>
+<script src="scale.js"></script>
+<script src="cursor.js"></script>
+</body>
+</html>

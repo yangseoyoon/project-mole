@@ -28,10 +28,9 @@ if (savedImage) {
 }
 
 // ── GRID ──
-const GRID_COLS = 18;
-const GRID_ROWS = 23;
-// 얼굴 중심: 캔버스 중앙 (col 9, row 11.5)
-const ORIGIN = { col: 9, row: 11.5 };
+const GRID_COLS = 23;
+const GRID_ROWS = 19;
+const ORIGIN = { col: 12, row: 8 };
 const grid = document.getElementById('grid');
 
 // ── 방사형 SVG ──
@@ -44,21 +43,20 @@ const ringGap = 28;
 const MAX_RINGS = 8;
 const points = [];
 
-// ── 궁 → 방사형 차트 각도 (커밋 버전 기준 12궁) ──
-// 명궁은 PALACE_ANGLES에 없음 → 클릭 시 중앙(radius=0)에 표시
+// ── 궁 → 방사형 차트 각도 ──
 const PALACE_ANGLES = {
-  관록궁: 90,  // 이마 중앙
-  복덕궁: 60,  // 이마 우상
-  상모궁: 30,  // 오른쪽 관자
-  처첩궁: 0,   // 오른쪽 눈꼬리
-  남녀궁: 330, // 오른쪽 볼
-  질액궁: 300, // 오른쪽 턱
-  지각궁: 270, // 턱 중앙
-  전택궁: 240, // 왼쪽 턱
-  노복궁: 210, // 왼쪽 볼
-  재백궁: 180, // 왼쪽 눈꼬리
-  형제궁: 150, // 왼쪽 관자
-  천이궁: 120, // 이마 좌상
+  관록궁: 90,
+  복덕궁: 60,
+  상모궁: 30,
+  처첩궁: 0,
+  남녀궁: 330,
+  질액궁: 300,
+  공백: 270,
+  전택궁: 240,
+  노복궁: 210,
+  재백궁: 180,
+  형제궁: 150,
+  천이궁: 120,
 };
 
 svg.setAttribute('viewBox', `0 0 ${svgW} ${svgH}`);
@@ -155,84 +153,65 @@ drawRings();
 drawAxes();
 
 // ── 얼굴 구역 → 궁 이름 매핑 ──
-// ORIGIN=row11.5 기준, 오벌 가이드(ovalCY=360, ovalRY=340, 출력 830px)에서
-// 실제 얼굴 비율 계산값으로 경계 설정
-// normY: +1=이마상단, 0=콧대(오벌중심), -0.74=턱
-// normX: 0=중앙, ±1=얼굴 좌우 끝
-function getPalaceName(normX, normY) {
-  const ax = Math.abs(normX);
+// dx = col - ORIGIN.col, dy = ORIGIN.row - row (정수 그리드 단위)
+// 좌우 대칭: |dx|로 거리 판별, dx 부호는 방사형 ±15° offset에 사용
+function getPalaceName(dx, dy) {
+  const adx = Math.abs(dx);
 
-  // 얼굴 외곽 → 공백
-  if (ax > 0.85) return '공백';
-
-  // ── 이마 (row 0~6, normY > +0.48) ──
-  if (normY > 0.48) {
-    if (ax < 0.30) return '관록궁'; // 이마 중앙
-    if (ax < 0.68) return '복덕궁'; // 이마 측면
-    return '천이궁';                 // 관자 상단
-  }
-
-  // ── 눈썹 (row 6~8, normY +0.30~+0.48) ──
-  if (normY > 0.30) {
-    if (ax < 0.18) return '관록궁'; // 미간 위
-    if (ax < 0.58) return '형제궁'; // 눈썹
-    if (ax < 0.82) return '천이궁'; // 관자
+  // 이마 상단 (dy > 3)
+  if (dy > 3) {
+    if (adx <= 2) return '관록궁';
+    if (adx <= 6) return '복덕궁';
+    if (adx <= 9) return '천이궁';
     return '공백';
   }
 
-  // ── 눈 / 미간 (row 8~11, normY +0.04~+0.30) ──
-  if (normY > 0.04) {
-    if (ax < 0.16) return '명궁';   // 미간
-    if (ax < 0.48) return '전택궁'; // 눈두덩
-    if (ax < 0.74) return '처첩궁'; // 눈꼬리
+  // 이마 하단 / 관자 상단 (dy 2~3)
+  if (dy >= 2) {
+    if (adx <= 2) return '관록궁';
+    if (adx <= 6) return '복덕궁';
+    if (adx <= 9) return '천이궁';
     return '공백';
   }
 
-  // ── 코 윗부분~코끝 (row 11~14, normY -0.26~+0.04) ──
-  if (normY > -0.26) {
-    if (ax < 0.16) return '질액궁'; // 코 (콧대~코끝)
-    if (ax < 0.52) return '남녀궁'; // 볼 / 광대
-    if (ax < 0.76) return '처첩궁'; // 볼 외곽
+  // 눈썹 (dy 1~2, 미포함)
+  if (dy >= 1) {
+    if (adx <= 1) return '명궁';
+    if (adx <= 4) return '형제궁';
+    if (adx <= 9) return '천이궁';
     return '공백';
   }
 
-  // ── 코 아래 / 인중 (row 14~16, normY -0.43~-0.26) ──
-  if (normY > -0.43) {
-    if (ax < 0.20) return '재백궁'; // 코 아래 (인중 위)
-    if (ax < 0.55) return '남녀궁'; // 아랫볼
+  // 미간 / 눈 (dy -1~1)
+  if (dy >= -1) {
+    if (adx <= 1) return '명궁';
+    if (adx <= 4) return '전택궁';
+    if (adx <= 8) return '처첩궁';
     return '공백';
   }
 
-  // ── 입 (row 16~18, normY -0.57~-0.43) ──
-  if (normY > -0.57) {
-    if (ax < 0.28) return '상모궁'; // 입술
-    if (ax < 0.58) return '노복궁'; // 볼 하단
+  // 코 (dy -4~-1, 미포함)
+  if (dy >= -4) {
+    if (adx <= 2) return '질액궁';
+    if (adx <= 6) return '남녀궁';
     return '공백';
   }
 
-  // ── 턱 (row 18~23, normY < -0.57) ──
-  if (ax < 0.50) return '노복궁';
+  // 인중 (dy -6~-4, 미포함)
+  if (dy >= -6) {
+    if (adx <= 2) return '재백궁';
+    return '공백';
+  }
+
+  // 입 (dy -7~-6, 미포함)
+  if (dy >= -7) {
+    if (adx <= 3) return '상모궁';
+    return '공백';
+  }
+
+  // 턱 (dy < -7)
+  if (adx <= 4) return '노복궁';
   return '공백';
-}
-
-// 커밋 버전 기준: 기하학적 각도로 가장 가까운 궁 arm에 스냅
-function snapToPalaceAngle(normX, normY) {
-  const rawAngle = Math.atan2(normY, normX) * (180 / Math.PI);
-  const angles = Object.values(PALACE_ANGLES);
-  let best = angles[0];
-  let bestDiff = Infinity;
-  angles.forEach((a) => {
-    let diff = Math.abs(rawAngle - a) % 360;
-    if (diff > 180) diff = 360 - diff;
-    if (diff < bestDiff) { bestDiff = diff; best = a; }
-  });
-  return best;
-}
-
-// ── 반지름: 중심에서 얼마나 떨어졌는지 (0~8링) ──
-function calcRadius(normX, normY) {
-  const dist = Math.sqrt(normX * normX + normY * normY); // 0~√2
-  return Math.min(Math.round((dist * MAX_RINGS) / Math.SQRT2), MAX_RINGS);
 }
 
 // ── 방사형 점 좌표 계산 ──
@@ -358,40 +337,30 @@ grid.addEventListener('click', (e) => {
   const clickX = (e.clientX - rect.left) * (CANVAS_W / rect.width);
   const clickY = (e.clientY - rect.top) * (CANVAS_H / rect.height);
 
-  // 그리드 칸 좌표
+  // 그리드 칸 → 원점 기준 정수 좌표
   const col = Math.floor(clickX / cellW);
   const row = Math.floor(clickY / cellH);
+  const dx = col - ORIGIN.col;       // 양(+)=오른쪽, 음(-)=왼쪽
+  const dy = ORIGIN.row - row;       // 양(+)=위, 음(-)=아래
 
-  // 중심 기준 정규화: x 오른쪽+, y 위+ (최대 ±1)
-  const normX = (col - ORIGIN.col) / (GRID_COLS / 2);
-  const normY = -(row - ORIGIN.row) / (GRID_ROWS / 2);
-
-  // 구역 매핑으로 궁 이름 결정 (표시·저장용)
-  const palaceName = getPalaceName(normX, normY);
-  if (palaceName === '공백') return; // 얼굴 외곽 클릭 무시
+  const palaceName = getPalaceName(dx, dy);
+  if (palaceName === '공백') return;
 
   let angle, radius, px, py;
+
   if (palaceName === '명궁') {
-    // 명궁(미간)은 방사형 차트 중앙에 표시
     angle = 0; radius = 0;
     px = centerX; py = centerY;
   } else {
-    // 커밋 버전 기준: 기하학적 각도로 arm에 스냅
-    angle = snapToPalaceAngle(normX, normY);
-    radius = calcRadius(normX, normY);
+    const baseAngle = PALACE_ANGLES[palaceName];
+    const offset = dx > 0 ? 15 : dx < 0 ? -15 : 0;
+    angle = (baseAngle + offset + 360) % 360;
+    radius = Math.min(Math.abs(dy), MAX_RINGS);
+    if (radius === 0) radius = 1;
     ({ px, py } = radialCoord(angle, radius));
   }
-  points.push({
-    normX,
-    normY,
-    angle,
-    radius,
-    px,
-    py,
-    dotX: clickX,
-    dotY: clickY,
-    palace: palaceName,
-  });
+
+  points.push({ dx, dy, angle, radius, px, py, dotX: clickX, dotY: clickY, palace: palaceName });
   redrawRadial();
   redrawDots();
 });
@@ -416,36 +385,31 @@ function analyzePattern() {
     return;
   }
 
-  // ① 위치: 얼굴 중심(반지름 ≤ 3)에 집중 vs 외곽
+  // ① 위치: 평균 반지름 ≤ 3 → C(중심), > 3 → E(외곽)
   const avgRadius = points.reduce((s, p) => s + p.radius, 0) / points.length;
   const position = avgRadius > 3 ? 'E' : 'C';
 
-  // ② 밀도: 점이 서로 얼마나 가까운가 (radial 좌표계 거리)
-  let totalDist = 0,
-    pairCount = 0;
+  // ② 밀도: 방사형 점 간 pixel 거리 평균 ≤ 100 → G(집중), > 100 → D(분산)
+  let totalDist = 0, pairCount = 0;
   for (let i = 0; i < points.length; i++) {
     for (let j = i + 1; j < points.length; j++) {
-      const da = (points[i].angle - points[j].angle + 360) % 360;
-      const angleDiff = da > 180 ? 360 - da : da;
-      const radDiff = Math.abs(points[i].radius - points[j].radius);
-      totalDist += Math.sqrt(angleDiff * angleDiff + radDiff * radDiff);
+      const ddx = points[i].px - points[j].px;
+      const ddy = points[i].py - points[j].py;
+      totalDist += Math.sqrt(ddx * ddx + ddy * ddy);
       pairCount++;
     }
   }
-  // 각도 차이 기준: 평균 > 60° 이상이면 분산(D), 아니면 밀집(G)
-  const density = pairCount > 0 && totalDist / pairCount > 60 ? 'D' : 'G';
+  const density = pairCount > 0 && totalDist / pairCount > 100 ? 'D' : 'G';
 
-  // ③ 방향: 점 분포가 수직(이마↔턱) vs 수평(좌↔우)
+  // ③ 방향: 그리드 좌표 분산 기준 (dy 분산 > dx 분산 → V, 아니면 H)
   let direction;
   if (points.length === 1) {
-    // 단일 점: 위치 기반 — 좌우 치우침이 더 크면 H
-    direction =
-      Math.abs(points[0].normX) > Math.abs(points[0].normY) ? 'H' : 'V';
+    direction = Math.abs(points[0].dy) >= Math.abs(points[0].dx) ? 'V' : 'H';
   } else {
-    const meanX = points.reduce((s, p) => s + p.normX, 0) / points.length;
-    const meanY = points.reduce((s, p) => s + p.normY, 0) / points.length;
-    const varX = points.reduce((s, p) => s + (p.normX - meanX) ** 2, 0);
-    const varY = points.reduce((s, p) => s + (p.normY - meanY) ** 2, 0);
+    const mnDx = points.reduce((s, p) => s + p.dx, 0) / points.length;
+    const mnDy = points.reduce((s, p) => s + p.dy, 0) / points.length;
+    const varX = points.reduce((s, p) => s + (p.dx - mnDx) ** 2, 0);
+    const varY = points.reduce((s, p) => s + (p.dy - mnDy) ** 2, 0);
     direction = varY >= varX ? 'V' : 'H';
   }
 

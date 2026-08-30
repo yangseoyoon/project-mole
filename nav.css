@@ -10,6 +10,7 @@
   border-radius: 50%;
   pointer-events: none;
   transform: translate(-50%, -50%);
+  box-shadow: 0 0 0 1.5px #fff;
   z-index: 99999;
   transition: opacity 0.15s;
 }
@@ -44,34 +45,46 @@
   white-space: nowrap;
 }
 
-/* ── 하단 바 (1920px 투명 컨테이너, scale.js bottom-left 스케일) ── */
+/* ── 하단 바 (1920px 고정, scale.js bottom-left 스케일) ── */
 .bottomNav {
   position: fixed;
-  bottom: 10px;
+  bottom: 0;
   left: 0;
   width: 1920px;
-  height: 76px;
+  height: 73px;
   background: transparent;
   transform-origin: bottom left;
   z-index: 300;
 }
 
-/* 실제 pill 영역 (1801px 중앙 정렬) */
 .bn-inner {
   position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 1801px;
-  height: 76px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 20px;
-  overflow: hidden;
+  left: 0;
+  bottom: 0;
+  width: 1920px;
+  height: 73px;
+  overflow: visible;
+}
+
+/* 왼쪽 로고 영역 (450px): 배경+테두리 */
+.bn-inner::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0;
+  width: 450px;
+  height: 73px;
+  background: #fff;
+  border-top: 1px solid #000;
+  border-right: 1px solid #000;
+  box-shadow: 0px -4px 6px -2px rgba(0,0,0,0.15);
+  z-index: 0;
 }
 
 /* 로고 글자 SVG들 */
 .bn-logo-l {
   position: absolute;
   display: block;
+  z-index: 1;
 }
 
 /* H / B 배지 */
@@ -87,47 +100,55 @@
   font-family: 'Pretendard', sans-serif;
   font-size: 20px;
   line-height: 1;
-  top: 16px;
+  top: 14.5px;
   cursor: pointer;
   text-decoration: none;
+  z-index: 2;
 }
 
-.bn-badge--h { left: 299.3px; background: #e9f056; color: black; }
-.bn-badge--b { left: 372.3px; background: #757575; color: white; }
+.bn-badge--h { left: 331px; background: #e9f056; color: black; }
+.bn-badge--b { left: 389px; background: #757575; color: white; }
 
-/* ─ 네비게이션 항목 ─ */
+/* ─ 네비게이션 항목 (각 340px 박스) ─ */
 .bn-item {
   position: absolute;
-  top: 11px;
-  height: 54px;
+  top: 0;
+  width: 340px;
+  height: 73px;
   display: flex;
   align-items: center;
-  gap: 25px;
-  padding: 12px 15px;
-  background: transparent;
+  justify-content: space-between;
+  padding: 0 30px;
+  background: #fff;
   border: none;
-  border-radius: 20px;
+  border-top: 1px solid #000;
+  border-left: 1px solid #000;
+  border-right: 1px solid #000;
+  filter: drop-shadow(0px -4px 3px rgba(0,0,0,0.15));
   cursor: pointer;
   font-family: 'Pretendard', sans-serif;
   font-weight: 600;
   font-size: 24px;
   color: black;
   white-space: nowrap;
+  text-decoration: none;
   transition: background 0.12s ease;
+  z-index: 1;
 }
-.bn-item:hover { background: #D5D5D5; }
+.bn-item:hover { background: #f0f0f0; }
+.bn-item span { pointer-events: none; }
 .bn-item img {
   width: 30px;
   height: 30px;
   flex-shrink: 0;
+  pointer-events: none;
 }
 
-/* ─ 도움말 버튼 ─ */
+/* ─ 도움말 버튼 (오른쪽 섹션) ─ */
 .bn-help-btn {
   position: absolute;
-  right: 40px;
-  top: 50%;
-  transform: translateY(-50%);
+  left: 1843px;
+  top: 14.5px;
   background: #ea5c3a;
   border: 1px solid black;
   border-radius: 49px;
@@ -141,4 +162,19 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  z-index: 2;
+}
+
+/* 오른쪽 ? 섹션 배경 */
+.bn-right-bg {
+  position: absolute;
+  left: 1810px;
+  top: 0;
+  width: 110px;
+  height: 73px;
+  background: #fff;
+  border-top: 1px solid #000;
+  border-left: 1px solid #000;
+  filter: drop-shadow(0px -4px 3px rgba(0,0,0,0.15));
+  z-index: 0;
 }

@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
@@ -57,11 +57,8 @@
       <!-- 진입 안내 팝업 -->
       <div id="welcomeOverlay" class="welcome-overlay">
         <div class="welcome-popup">
-          <div class="welcome-titlebar">점 지도 만드는 법</div>
-          <div class="welcome-body">
-            <p>+ 버튼을 누르고 원하는 위치를 클릭하면<br>자신만의 점과 프로필을 추가할 수 있다.</p>
-          </div>
-          <button class="welcome-close" id="welcomeClose">닫기</button>
+          <button class="welcome-close" id="welcomeClose">X</button>
+          <p class="welcome-body-text">+ 버튼을 누르고 원하는 위치를 클릭하면 자신만의 점과 프로필을 추가할 수 있습니다.</p>
         </div>
       </div>
 
@@ -94,24 +91,24 @@
       <!-- 입력 폼 모달 -->
       <div id="dotInputOverlay" class="dot-input-overlay">
         <div class="dot-input-popup" onclick="event.stopPropagation()">
-          <div class="dot-input-titlebar">내 점 추가하기</div>
+          <div class="dot-input-titlebar">내 점 등록하기</div>
           <div class="dot-input-body">
             <div>
-              <label>프로필 사진</label>
+              <label class="dot-input-label">프로필 사진</label>
               <div class="photo-picker-grid" id="photoPickerGrid"></div>
             </div>
             <div>
-              <label>이름 (필수)</label>
+              <label class="dot-input-label">이름(필수)</label>
               <input type="text" id="dotInputName" placeholder="예: 홍길동" maxlength="30" />
             </div>
             <div>
-              <label>설명</label>
-              <textarea id="dotInputDesc" placeholder="간단한 프로필을 작성하세요"></textarea>
+              <label class="dot-input-label">설명</label>
+              <textarea id="dotInputDesc" placeholder="간단한 프로필을 작성하세요."></textarea>
             </div>
           </div>
           <div class="dot-input-actions">
-            <button class="dot-input-cancel" id="dotInputCancel">취소</button>
-            <button class="dot-input-save" id="dotInputSave">저장</button>
+            <button class="dot-input-cancel" id="dotInputCancel">취소하기</button>
+            <button class="dot-input-save" id="dotInputSave">등록하기</button>
           </div>
         </div>
       </div>
@@ -131,9 +128,11 @@
       const BUBBLE_W = 418, BUBBLE_H = 172;
 
       const PHOTO_OPTIONS = [
-        { id: 'none', color: '#e0e0e0' },
-        { id: 'ph1',  color: '#ffb3ba' },
-        { id: 'ph2',  color: '#bae1ff' },
+        { id: 'none', color: '#d9d9d9' },
+        { id: 'ph1',  color: '#d9d9d9' },
+        { id: 'ph2',  color: '#d9d9d9' },
+        { id: 'ph3',  color: '#d9d9d9' },
+        { id: 'ph4',  color: '#d9d9d9' },
       ];
       let selectedPhoto = 'none';
 
@@ -326,19 +325,19 @@
         <img class="bn-logo-l" style="width: 22.571px; height: 29.129px; left: 221.73px; top: 22.99px" src="images/nav/logo-T.svg" alt="" />
         <a class="bn-badge bn-badge--h" href="index.html">H</a>
         <button class="bn-badge bn-badge--b" onclick="history.back()">B</button>
-        <button class="bn-item" style="left: 467.15px" onclick="window.location.href='index.html'">
+        <button class="bn-item" style="left:450px" onclick="window.location.href='index.html'">
           <span>프로젝트 알아보기</span><img src="images/nav/nav-arrow.svg" alt="" />
         </button>
-        <button class="bn-item" style="left: 794.15px" onclick="window.location.href='camera.html'">
+        <button class="bn-item" style="left:790px" onclick="window.location.href='camera.html'">
           <span>점 패턴 분석하기</span><img src="images/nav/nav-arrow.svg" alt="" />
         </button>
-        <button class="bn-item" style="left: 1106.15px" onclick="window.location.href='facemap-celeb.html'">
+        <button class="bn-item" style="left:1130px" onclick="window.location.href='facemap-celeb.html'">
           <span>얼굴 지도 살펴보기</span><img src="images/nav/nav-arrow.svg" alt="" />
         </button>
-        <button class="bn-item" style="left: 1439.15px" onclick="window.location.href='gwansang.html'">
+        <button class="bn-item" style="left:1470px" onclick="window.location.href='gwansang.html'">
           <span>관상학 알아보기</span><img src="images/nav/nav-arrow.svg" alt="" />
         </button>
-        <button class="bn-help-btn">?</button>
+        <div class="bn-right-bg"></div><button class="bn-help-btn">?</button>
       </div>
     </nav>
     <script src="scale.js"></script>

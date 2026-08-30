@@ -14,23 +14,17 @@ body {
   overflow: hidden;
 }
 
-/* ── 패럴랙스 스크롤 컨테이너 ── */
-.scroll-container {
+/* ── 두 섹션 모두 고정 레이어 ── */
+.snap-section {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100vh;
-  overflow-y: scroll;
-  scrollbar-width: none;
-}
-.scroll-container::-webkit-scrollbar { display: none; }
-
-.snap-section {
-  height: 100vh;
-  position: relative;
   overflow: hidden;
 }
+#section1 { z-index: 1; }
+#section2 { z-index: 2; transform: translateY(100vh); }
 
 /* ── 메인 히어로 영역 ── */
 .heroMain {
@@ -50,7 +44,7 @@ body {
   left: 0;
   width: 1920px;
   height: 1080px;
-  background: #000;
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -101,7 +95,7 @@ body {
 }
 
 .portraitLeft img {
-  height: 98%;
+  height: 95%;
   width: auto;
   display: block;
 }
@@ -135,10 +129,29 @@ body {
   pointer-events: none;
 }
 
-.titleImg {
-  width: 43vw;
-  max-width: 828px;
+.titleText {
+  display: flex;
+  align-items: flex-end;
+  gap: 0;
+  white-space: nowrap;
+}
+
+/* 피그마 프레임 882×179, 글자 높이 ~122px */
+.tl {
   display: block;
+  height: 122px;
+  width: auto;
+  animation: logoFloat 3.2s ease-in-out infinite;
+}
+
+.titleSub {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 22px;
+  color: #000;
+  text-align: center;
+  margin-top: 16px;
+  letter-spacing: 0;
 }
 
 .subtitleRow {
@@ -161,6 +174,21 @@ body {
   white-space: nowrap;
 }
 
+@keyframes scrollHint {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%       { transform: translateX(-50%) translateY(8px); }
+}
+
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-30px); }
+}
+
+@keyframes dotFloat {
+  0%, 100% { margin-top: 0; }
+  50%       { margin-top: -12px; }
+}
+
 /* ── 장식 점 (hover 툴팁 포함) ── */
 .heroDot {
   position: absolute;
@@ -168,6 +196,7 @@ body {
   height: 20.648px;
   cursor: default;
   z-index: 10;
+  animation: dotFloat var(--dot-dur, 3s) ease-in-out var(--dot-delay, 0s) infinite;
 }
 
 .heroDot > img {
