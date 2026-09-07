@@ -157,6 +157,10 @@
         color: #000;
         line-height: 1.75;
         max-width: 920px;
+        background: #fafafa;
+        border: 1px solid #e0e0e0;
+        border-radius: 18px;
+        padding: 28px 36px;
       }
 
       /* 타이핑 도트 */
@@ -213,12 +217,27 @@
         margin-bottom: 18px;
         line-height: 1.3;
       }
-      .result-desc {
-        font-size: 21px;
+      .result-pattern {
+        font-size: 18px;
         font-weight: 400;
-        color: #222;
-        line-height: 1.8;
-        margin-bottom: 32px;
+        color: #666;
+        line-height: 1.7;
+        margin-bottom: 20px;
+      }
+      .result-palaces {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 28px;
+      }
+      .result-palace {
+        background: #fff;
+        border: 1px solid #000;
+        border-radius: 100px;
+        padding: 7px 18px;
+        font-size: 17px;
+        font-weight: 500;
+        color: #000;
       }
       .result-tags {
         display: flex;
@@ -307,28 +326,61 @@
             <div class="msg-bubble">내 점 패턴 분석해줘</div>
           </div>
 
-          <!-- AI: 타이핑 → 결과 카드 -->
-          <div class="msg msg--ai" style="animation-delay: 0.7s" id="aiMsg1">
+          <!-- 말풍선 1: 유형 코드 + 수식어 -->
+          <div class="msg msg--ai" id="aiMsg1">
             <div class="msg-row">
               <div class="msg-avatar">D·</div>
               <div class="msg-bubble-ai">
-                <div class="typing-dots" id="typingDots1">
-                  <span></span><span></span><span></span>
-                </div>
-                <div id="resultCard" style="display: none">
-                  <div class="result-card">
-                    <div class="result-code" id="resultCode"></div>
-                    <div class="result-type" id="resultType"></div>
-                    <div class="result-desc" id="resultDesc"></div>
-                    <div class="result-tags" id="resultTags"></div>
-                  </div>
+                <div class="typing-dots" id="typingDots1"><span></span><span></span><span></span></div>
+                <div id="bubble1" style="display:none">
+                  <div class="result-code" id="resultCode"></div>
+                  <div class="result-type" id="resultType"></div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- AI: 추가 코멘트 (숨겨졌다가 등장) -->
-          <div class="msg msg--ai" id="aiMsg2" style="display: none">
+          <!-- 말풍선 2: 패턴 모양 -->
+          <div class="msg msg--ai" id="aiMsg2" style="display:none">
+            <div class="msg-row">
+              <div class="msg-avatar">D·</div>
+              <div class="msg-bubble-ai">
+                <div class="typing-dots" id="typingDots2"><span></span><span></span><span></span></div>
+                <div id="bubble2" style="display:none">
+                  <div class="result-pattern" id="resultPattern"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 말풍선 3: 십이궁 -->
+          <div class="msg msg--ai" id="aiMsg3" style="display:none">
+            <div class="msg-row">
+              <div class="msg-avatar">D·</div>
+              <div class="msg-bubble-ai">
+                <div class="typing-dots" id="typingDots3"><span></span><span></span><span></span></div>
+                <div id="bubble3" style="display:none">
+                  <div class="result-palaces" id="resultPalaces"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 말풍선 4: 해시태그 -->
+          <div class="msg msg--ai" id="aiMsg4" style="display:none">
+            <div class="msg-row">
+              <div class="msg-avatar">D·</div>
+              <div class="msg-bubble-ai">
+                <div class="typing-dots" id="typingDots4"><span></span><span></span><span></span></div>
+                <div id="bubble4" style="display:none">
+                  <div class="result-tags" id="resultTags"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 말풍선 5: 궁 코멘트 -->
+          <div class="msg msg--ai" id="aiMsg5" style="display:none">
             <div class="msg-row">
               <div class="msg-avatar">D·</div>
               <div class="comment-bubble" id="commentBubble"></div>
@@ -464,116 +516,48 @@
     </nav>
 
     <script>
+      // ── 알파벳 → 해시태그 매핑 ──
+      const LETTER_TAG = { C:'#자기중심', E:'#관계중심', G:'#내부몰입', D:'#외부확장', V:'#성취지향', H:'#관계지향', P:'#본질', L:'#연결', S:'#안정' };
+
+      // 코드에서 해시태그 4개 추출 (NONE → 빈 배열)
+      function codeToTags(code) {
+        if (!code || code === 'NONE') return [];
+        return [...code].map(c => LETTER_TAG[c]).filter(Boolean);
+      }
+
+      // 패턴 모양 설명 자동 생성
+      function codeToPattern(code) {
+        if (!code || code === 'NONE') return '';
+        const pos  = code[0] === 'E' ? '얼굴 외곽' : '얼굴 중앙부';
+        const den  = code[1] === 'D' ? '분산된' : '집중된';
+        const dir  = code[2] === 'V' ? '수직 방향' : '수평 방향';
+        const cnt  = code[3] === 'P' ? '점 1개' : code[3] === 'L' ? '점 2개' : '점 3개 이상';
+        return `${pos}에 ${den} ${dir}의 ${cnt}`;
+      }
+
       // ── 유형 데이터 ──
-      // analyzePattern이 생성하는 코드: {E|C}{D|G}{V|H}{P|L|S} = 24가지 + NONE
       const TYPE_MAP = {
-        // ── 외곽 분산 (E) ──
-        EDVS: {
-          name: '방랑형 자유인',
-          desc: '점이 얼굴 외곽에 넓고 수직으로 퍼진 유형입니다. 경계를 넘고 새로운 것을 탐색하는 본능이 강합니다. 관상학에서 외곽에 퍼진 점은 넓은 세계를 품는 기질을 나타냅니다.',
-          tags: ['#자유로움', '#탐험가', '#개방성', '#독립심'],
-        },
-        EDHS: {
-          name: '확산형 개척자',
-          desc: '점이 얼굴 외곽에 좌우로 넓게 분산된 유형입니다. 다양한 방향으로 에너지를 뻗어나가며 새 길을 여는 기질이 있습니다.',
-          tags: ['#개척정신', '#다재다능', '#도전', '#외향성'],
-        },
-        EDVL: {
-          name: '성장형 탐구자',
-          desc: '이마에서 턱까지 점이 수직으로 두 곳에 나타난 유형입니다. 끊임없이 배우고 위아래로 성장하려는 강한 내적 동기를 지닙니다.',
-          tags: ['#탐구심', '#학습력', '#성장지향', '#호기심'],
-        },
-        EDHL: {
-          name: '소통형 활동가',
-          desc: '점이 외곽 좌우에 나란한 유형입니다. 표현력이 뛰어나고 넓은 인간관계로 사람을 이끄는 능력이 있습니다.',
-          tags: ['#표현력', '#소통', '#설득력', '#활동적'],
-        },
-        EGVS: {
-          name: '균형형 리더',
-          desc: '점이 얼굴 외곽에 수직으로 적당히 모인 유형입니다. 위와 아래를 모두 살피며 중심을 잡는 리더십이 돋보입니다.',
-          tags: ['#리더십', '#균형감각', '#통찰', '#판단력'],
-        },
-        EGHS: {
-          name: '균형형 조율자',
-          desc: '점이 얼굴 외곽 좌우에 균형 있게 분포한 유형입니다. 조화를 중시하고 갈등을 부드럽게 해소합니다. 볼의 점은 사교 운과 원만한 대인관계를 나타냅니다.',
-          tags: ['#균형감각', '#사교적', '#조화', '#중재력'],
-        },
-        EGVL: {
-          name: '상승형 집중가',
-          desc: '외곽 수직 방향으로 두 점이 놓인 유형입니다. 목표를 정하고 위를 향해 집중적으로 에너지를 모읍니다.',
-          tags: ['#집중력', '#목표지향', '#상승지향', '#끈기'],
-        },
-        EGHL: {
-          name: '연결형 사교가',
-          desc: '외곽 좌우에 두 점이 나란한 유형입니다. 좌우를 연결하며 다리 역할을 하고 넓은 네트워크를 자랑합니다.',
-          tags: ['#네트워크', '#사교성', '#연결자', '#협력'],
-        },
-        EGVP: {
-          name: '집중형 전문가',
-          desc: '얼굴 외곽에 단일 점이 두드러지는 유형입니다. 한 분야를 깊이 파고드는 집중력과 전문성을 갖추고 있습니다.',
-          tags: ['#집중력', '#전문성', '#완벽주의', '#심화'],
-        },
-        EGHP: {
-          name: '감각형 전문가',
-          desc: '얼굴 측면에 단일 점이 위치한 유형입니다. 특정 영역에서 날카로운 감각과 독창성을 발휘합니다.',
-          tags: ['#독창성', '#감각', '#전문성', '#예리함'],
-        },
-        // ── 내부 밀집 (C) ──
-        CDVS: {
-          name: '내면형 사색가',
-          desc: '점이 얼굴 안쪽에 수직으로 모인 유형입니다. 깊이 생각하고 내면에서 답을 찾는 성향이 강합니다. 미간~코 라인의 점은 관록궁과 직결됩니다.',
-          tags: ['#사색', '#내향적', '#지성', '#독립적'],
-        },
-        CDHS: {
-          name: '중심형 안정가',
-          desc: '점이 얼굴 중앙부에 수평으로 모여 있는 유형입니다. 중심을 지키고 주변을 안정시키는 역할을 합니다.',
-          tags: ['#안정성', '#신중함', '#책임감', '#중심잡기'],
-        },
-        CDVL: {
-          name: '의지형 추진가',
-          desc: '얼굴 안쪽 수직 두 곳에 점이 있는 유형입니다. 내부 에너지를 수직으로 모아 강한 추진력을 만들어냅니다.',
-          tags: ['#추진력', '#의지력', '#결단', '#실행력'],
-        },
-        CDHL: {
-          name: '조화형 실행가',
-          desc: '얼굴 중앙부 좌우에 점이 배치된 유형입니다. 내부에서 좌우 균형을 이루며 실질적인 실행력을 발휘합니다.',
-          tags: ['#실행력', '#균형', '#협동', '#안정'],
-        },
-        CGVS: {
-          name: '내성형 전략가',
-          desc: '미간과 이마 중앙에 점이 가깝게 모인 유형입니다. 깊이 생각하고 내부에서 전략을 세우는 능력이 뛰어납니다. 관록궁의 점은 지성과 전략적 사고를 나타냅니다.',
-          tags: ['#전략적사고', '#내향적', '#지성', '#계획력'],
-        },
-        CGHS: {
-          name: '안정형 수호자',
-          desc: '얼굴 중앙 좌우에 점이 밀집된 유형입니다. 신뢰를 쌓고 주변을 안정시키는 역할을 합니다. 남녀궁·처첩궁의 점은 인복을 의미합니다.',
-          tags: ['#신뢰감', '#안정성', '#책임감', '#인복'],
-        },
-        CGVL: {
-          name: '집중형 성장가',
-          desc: '얼굴 중앙 수직 두 곳에 점이 있는 유형입니다. 내부 에너지를 위아래로 집중시켜 꾸준한 성장을 이뤄냅니다.',
-          tags: ['#성장', '#집중', '#꾸준함', '#내공'],
-        },
-        CGHL: {
-          name: '내부형 연결가',
-          desc: '얼굴 안쪽 좌우에 두 점이 있는 유형입니다. 핵심 관계를 중심으로 깊고 견고한 유대를 만들어냅니다.',
-          tags: ['#깊은관계', '#신의', '#연결', '#핵심중시'],
-        },
-        CGVP: {
-          name: '집중형 선각자',
-          desc: '얼굴 중심에 단일 점이 수직 위치한 유형입니다. 핵심을 꿰뚫는 통찰과 조용한 카리스마가 있습니다.',
-          tags: ['#통찰', '#카리스마', '#집중', '#선각자'],
-        },
-        CGHP: {
-          name: '중심형 공감가',
-          desc: '얼굴 정중앙에 단일 점이 위치한 유형입니다. 타인의 감정을 정확히 읽고 중심에서 공감하는 능력이 뛰어납니다.',
-          tags: ['#공감력', '#감수성', '#중심', '#배려'],
-        },
-        NONE: {
-          name: '자유형 잠재력',
-          desc: '점이 찍히지 않은 유형입니다. 관상학에서는 점이 없는 것도 하나의 특성입니다. 어떤 방향으로도 성장할 수 있는 열린 가능성을 지닌 상입니다.',
-          tags: ['#무한가능성', '#자유로움', '#적응력', '#잠재력'],
-        },
+        CGVP: { name: '흔들림없는 확신으로 정상을 향해 돌진하는 독주자' },
+        CGVL: { name: '신뢰하는 사람들과 함께 정상까지 파고드는 신념가' },
+        CGVS: { name: '하나에 몰입하면서 전체 판의 흐름을 그리는 전략가' },
+        CGHP: { name: '확신을 갖고 내 사람에게 헌신하는 순정파' },
+        CGHL: { name: '사람들과 깊이 연결되어 관계를 지키는 헌신가' },
+        CGHS: { name: '신뢰와 의리를 지키며 주변까지 아우르는 버팀목' },
+        CDVL: { name: '강한 확신과 효율로 여러 목표를 동시에 정복하는 모험가' },
+        CDVS: { name: '넓은 시야와 강한 확신으로 판을 짜는 계략가' },
+        CDHL: { name: '자신과 주변인을 모두 동시에 골고루 챙기는 마당발' },
+        CDHS: { name: '자신의 기준으로 폭넓은 관계를 아우르는 조율자' },
+        EDVL: { name: '관계와 효율을 무기로 여러 성취를 동시에 쌓는 야심가' },
+        EDVS: { name: '관계 속에서 넓게 판을 짜며 그림을 그리는 기획자' },
+        EDHL: { name: '여러 관계를 동시에 살뜰히 챙기는 인싸 네트워커' },
+        EDHS: { name: '모두를 아우르며 전체 흐름을 중재하는 타고난 관리자' },
+        EGVP: { name: '집요하게 목표를 파고들어 이루는 불굴의 집념가' },
+        EGVL: { name: '사람들과의 관계에 깊이 몰입해 함께 목표를 완성하려는 동반자' },
+        EGVS: { name: '관계를 발판 삼아 넓은 시야로 성취를 그리는 사업가' },
+        EGHP: { name: '관계를 위해 헌신하는 정 많은 외골수' },
+        EGHL: { name: '관계 속에서 함께 성장하는 신뢰의 아이콘' },
+        EGHS: { name: '하나의 관계에 집중하면서도 모두를 아우르는 사교의 달인' },
+        NONE: { name: '타고난 운을 막힘없이 온전히 펼쳐내는 맑은 사람' },
       };
 
       // 궁별 코멘트
@@ -618,38 +602,85 @@
       document.getElementById('resultCode').textContent =
         rawCode !== 'NONE' ? `유형 코드: ${rawCode}` : '';
       document.getElementById('resultType').textContent = data.name;
-      document.getElementById('resultDesc').textContent = data.desc;
+
+      // 패턴 모양 설명
+      document.getElementById('resultPattern').textContent = codeToPattern(rawCode);
+
+      // 십이궁
+      const palaceCount = JSON.parse(localStorage.getItem('palaceCount') || '{}');
+      const palacesEl = document.getElementById('resultPalaces');
+      Object.keys(palaceCount).forEach((palace) => {
+        const span = document.createElement('span');
+        span.className = 'result-palace';
+        span.textContent = `${palace} ×${palaceCount[palace]}`;
+        palacesEl.appendChild(span);
+      });
+
+      // 해시태그 (알파벳 기반)
       const tagsEl = document.getElementById('resultTags');
-      data.tags.forEach((tag) => {
+      codeToTags(rawCode).forEach((tag) => {
         const span = document.createElement('span');
         span.className = 'result-tag';
         span.textContent = tag;
         tagsEl.appendChild(span);
       });
 
-      // 타이핑 도트 → 결과 카드 (1.8초 후)
-      setTimeout(() => {
-        document.getElementById('typingDots1').style.display = 'none';
-        document.getElementById('resultCard').style.display = 'block';
+      const chat = document.getElementById('chatMessages');
+      function scrollBottom() { chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' }); }
 
-        // 추가 코멘트 (3.5초 후): 궁 정보 우선, 없으면 기본 코멘트
+      function showBubble(typingId, bubbleId, msgId, delay, cb) {
         setTimeout(() => {
-          const msg2 = document.getElementById('aiMsg2');
-          msg2.style.display = 'flex';
-          msg2.style.animation = 'msgIn 0.45s ease forwards';
-          const comment =
-            dominantPalace && PALACE_COMMENT[dominantPalace]
-              ? PALACE_COMMENT[dominantPalace]
-              : '관상에서 점은 단순한 점이 아니라 기운이 모이는 자리입니다. 변화하는 삶 속에서 점의 의미도 달라질 수 있습니다.';
-          document.getElementById('commentBubble').textContent = comment;
+          const msg = document.getElementById(msgId);
+          if (msg) { msg.style.display = 'flex'; msg.style.animation = 'msgIn 0.45s ease forwards'; }
+          scrollBottom();
+          setTimeout(() => {
+            document.getElementById(typingId).style.display = 'none';
+            document.getElementById(bubbleId).style.display = 'block';
+            scrollBottom();
+            if (cb) cb();
+          }, 1200);
+        }, delay);
+      }
 
-          const chat = document.getElementById('chatMessages');
-          chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' });
-        }, 1700);
-      }, 1800);
+      // 말풍선 1: 수식어 (1.5초 후)
+      showBubble('typingDots1', 'bubble1', null, 1500, () => {
+        // 말풍선 2: 패턴 모양
+        showBubble('typingDots2', 'bubble2', 'aiMsg2', 800, () => {
+          // 말풍선 3: 십이궁 (팔레스가 있을 때만)
+          const hasPalaces = Object.keys(palaceCount).length > 0;
+          if (hasPalaces) {
+            showBubble('typingDots3', 'bubble3', 'aiMsg3', 800, () => {
+              showBubble('typingDots4', 'bubble4', 'aiMsg4', 800, () => {
+                // 말풍선 5: 궁 코멘트
+                setTimeout(() => {
+                  const msg5 = document.getElementById('aiMsg5');
+                  msg5.style.display = 'flex';
+                  msg5.style.animation = 'msgIn 0.45s ease forwards';
+                  const comment = dominantPalace && PALACE_COMMENT[dominantPalace]
+                    ? PALACE_COMMENT[dominantPalace]
+                    : '관상에서 점은 단순한 점이 아니라 기운이 모이는 자리입니다.';
+                  document.getElementById('commentBubble').textContent = comment;
+                  scrollBottom();
+                }, 800);
+              });
+            });
+          } else {
+            showBubble('typingDots4', 'bubble4', 'aiMsg4', 800, () => {
+              setTimeout(() => {
+                const msg5 = document.getElementById('aiMsg5');
+                msg5.style.display = 'flex';
+                msg5.style.animation = 'msgIn 0.45s ease forwards';
+                document.getElementById('commentBubble').textContent = '관상에서 점은 단순한 점이 아니라 기운이 모이는 자리입니다.';
+                scrollBottom();
+              }, 800);
+            });
+          }
+        });
+      });
     </script>
 
     <script src="scale.js"></script>
     <script src="cursor.js"></script>
+    <script src="help.js"></script>
   </body>
 </html>

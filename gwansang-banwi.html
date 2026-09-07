@@ -40,11 +40,9 @@
         right: 60px;
         top: 50%;
         transform: translateY(-50%) translateX(120%);
-        width: 360px;
-        min-height: 300px;
+        width: 600px;
         background: #fff;
-        border: 1.5px solid #000;
-        padding: 48px 40px;
+        outline: 1px solid #000;
         opacity: 0;
         transition: transform 0.65s cubic-bezier(0.16,1,0.3,1), opacity 0.45s ease;
         z-index: 1000;
@@ -53,23 +51,37 @@
         transform: translateY(-50%) translateX(0);
         opacity: 1;
       }
+      #axisPanel .panel-titlebar {
+        position: absolute;
+        top: 0; left: 0;
+        height: 32px;
+        background: #ea5c3a;
+        padding: 0 25px;
+        display: flex;
+        align-items: center;
+        font: 600 24px "Pretendard",sans-serif;
+        color: #fff;
+        white-space: nowrap;
+      }
       #axisPanel .panel-close {
         position: absolute;
-        top: 16px; right: 20px;
-        font-size: 18px;
+        top: 0; right: 0;
+        width: 80px;
+        height: 32px;
+        background: #ea5c3a;
+        border: none;
         cursor: pointer !important;
-        background: none; border: none;
-        color: #000;
-      }
-      #axisPanel .panel-title {
-        font: 700 28px "Pretendard JP","Pretendard",sans-serif;
-        color: #ea5c3a;
-        margin-bottom: 16px;
+        font: 400 24px "Pretendard",sans-serif;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
       #axisPanel .panel-body {
-        font: 400 16px "Pretendard",sans-serif;
-        color: #333;
-        line-height: 1.7;
+        padding: 60px 34px 30px;
+        font: 500 20px "Pretendard",sans-serif;
+        color: #000;
+        line-height: 32px;
       }
     </style>
   </head>
@@ -85,11 +97,24 @@
       <canvas id="activeCanvas" width="1920" height="1080"
               style="position:absolute;inset:0;width:1920px;height:1080px;pointer-events:none;"></canvas>
       <div id="blurOverlay"></div>
+
+      <!-- 고정 텍스트 요소 — 줄 단위 주황 박스 -->
+      <!-- 고정 텍스트 요소 — 줄 단위 주황 박스 -->
+      <div style="position:absolute;left:100px;top:170px;display:flex;flex-direction:column;align-items:flex-start;gap:4px;pointer-events:none;z-index:5;">
+        <div style="background:#ea5c3a;padding:0 14px;font-family:'Pretendard',sans-serif;font-weight:500;font-size:20px;color:#fff;white-space:nowrap;height:27px;line-height:27px;">관상학에서 얼굴은 상·하, 좌·우, 전·후의 축을 기준으로</div>
+        <div style="background:#ea5c3a;padding:0 14px;font-family:'Pretendard',sans-serif;font-weight:500;font-size:20px;color:#fff;white-space:nowrap;height:27px;line-height:27px;">음(陰)과 양(陽)으로 나누어진다.</div>
+      </div>
+
+      <div style="position:absolute;right:60px;bottom:270px;display:flex;flex-direction:column;align-items:flex-end;gap:10px;pointer-events:none;z-index:5;">
+        <div style="background:#ea5c3a;padding:0 14px;font-family:'Pretendard',sans-serif;font-weight:500;font-size:20px;color:#fff;white-space:nowrap;height:27px;line-height:27px;">1. 귀를 중심축으로 얼굴을 전·후로 나눔</div>
+        <div style="background:#ea5c3a;padding:0 14px;font-family:'Pretendard',sans-serif;font-weight:500;font-size:20px;color:#fff;white-space:nowrap;height:27px;line-height:27px;margin-right:70px;">2. 콧등을 중심축으로 얼굴을 좌·우로 나눔</div>
+        <div style="background:#ea5c3a;padding:0 14px;font-family:'Pretendard',sans-serif;font-weight:500;font-size:20px;color:#fff;white-space:nowrap;height:27px;line-height:27px;">3. 콧등을 중심축으로 얼굴을 상·하로 나눔</div>
+      </div>
     </div>
 
     <div id="axisPanel">
-      <button class="panel-close" id="panelClose">✕</button>
-      <div class="panel-title" id="panelTitle">—</div>
+      <div class="panel-titlebar" id="panelTitle">—</div>
+      <button class="panel-close" id="panelClose">X</button>
       <div class="panel-body" id="panelBody">나중에 수정할 창입니다.</div>
     </div>
 
@@ -207,7 +232,7 @@
       const actCanvas = document.getElementById('activeCanvas');
       const actCtx = actCanvas.getContext('2d');
       const W = 1920, H = 1080;
-      const OX = 946.5, OY = 560;
+      const OX = 946.5, OY = 540;
       const B = 340;
       const BXZ = 625;  // X·Z축: 피그마 기준 가로 1250px / 2
       const ARROW = 20, LOFF = 60;
@@ -216,6 +241,7 @@
       let zoom = 1, scrollP = 0;
       let panX = OX, panY = OY;
       let isDragging = false, dragMoved = false, lastX = 0, lastY = 0;
+
 
       // 그리드 전용 회전 — 드래그할 때만 갱신, 자동회전 미적용
       let gridRotY = Math.PI / 6, gridRotX = -Math.PI / 12;
@@ -346,18 +372,26 @@
       const PANEL_CONTENT = {
         '右':    { title:'右', body:'나중에 수정할 창입니다.' },
         '左':    { title:'左', body:'나중에 수정할 창입니다.' },
-        '上':    { title:'上', body:'나중에 수정할 창입니다.' },
-        '下':    { title:'下', body:'나중에 수정할 창입니다.' },
+        '上':    { title:'上: 상부', body:'상부는 하늘의 영역으로 명예, 이상, 포부를 상징한다. 특히 이마는 학문이나 사고 같은 사회적 성취와 깊이 연결되어 있어, 학문적 뜻이 높고 두뇌를 쓰는 분야에서 두각을 나타낸다고 본다.' },
+        '下':    { title:'下: 하부', body:'하부는 땅의 영역으로 제물, 현실성, 실질적 기반을 상징한다. 특히 턱을 포함한 하관은 현실 감각과 생활력과 깊이 연결되어 있어, 손재주가 좋거나 몸을 쓰는 일처럼 실질적 능력이 요구되는 분야에서 두각을 나타낸다고 본다.' },
         '後':    { title:'後', body:'나중에 수정할 창입니다.' },
         '前':    { title:'前', body:'나중에 수정할 창입니다.' },
         x_desc:  { title:'X축 설명', body:'나중에 수정할 창입니다.' },
-        y_desc:  { title:'Y축 설명', body:'나중에 수정할 창입니다.' },
-        z_desc:  { title:'Z축 설명', body:'나중에 수정할 창입니다.' },
+        y_desc:  { title:'상·하 구조: 하늘과 땅', body:'콧등을 기준으로 상부는 양(陽), 하부는 음(陰)에 해당한다. 하늘에 해당하는 상부가 \'이상\'을 의미하는 반면, 땅에 해당하는 하부는 \'현실\'을 의미하며 두 영역은 서로 하늘과 땅, 이상과 현실이라는 대립 구조를 지니고 있다.' },
+        z_desc:  { title:'전면과 후면: 외부성과 내부성', body:'귀를 기준으로 얼굴 앞면은 양(陽), 뒷면(통수)은 음(陰)에 해당한다. 외부에 드러나는 영역인 앞면이 타인과의 관계 및 외부 활동성을 나타낸다면, 드러나지 않는 뒷면은 내면과 숨겨진 본연의 성질을 의미한다. 즉, 두 영역은 타인과 자아라는 대립 구도를 이루고 있다.' },
       };
       const DESC_P3 = {
         x:{ p3:{x:B*0.55, y:55,     z:0      } },
         y:{ p3:{x:-55,    y:B*0.55, z:0      } },
         z:{ p3:{x:0,      y:50,     z:-B*0.45} },
+      };
+      const KANJI_P3 = {
+        '右': {x: BXZ+LOFF, y:0,       z:0},
+        '左': {x:-BXZ-LOFF, y:0,       z:0},
+        '上': {x:0,          y: B+LOFF, z:0},
+        '下': {x:0,          y:-B-LOFF, z:0},
+        '後': {x:0,          y:0,       z: BXZ+LOFF},
+        '前': {x:0,          y:0,       z:-BXZ-LOFF},
       };
 
       // hitId: 한자면 '右'등 문자, desc면 'x'/'y'/'z'
@@ -370,7 +404,7 @@
         const axisId = hitType === 'kanji' ? KANJI_AXIS[hitId] : hitId;
         const tgt = AXIS_TARGETS[axisId];
         const tZoom = 1 + tgt.scrollP * 0.5;
-        const dp = DESC_P3[axisId].p3;
+        const dp = hitType === 'kanji' ? KANJI_P3[hitId] : DESC_P3[axisId].p3;
         const { x2, y2 } = tfAt(dp, tgt.rotY, tgt.rotX);
         const tPanX = W * 0.38 - x2 * tZoom;
         const tPanY = H * 0.5  + y2 * tZoom;
@@ -452,26 +486,6 @@
             ctx.beginPath(); ctx.moveTo(c.x, c.y); ctx.lineTo(d.x, d.y); ctx.stroke();
           }
 
-          // 교점 X 마크
-          for (let i = -steps; i <= steps; i++) {
-            for (let j = -steps; j <= steps; j++) {
-              const ix = i * GSTEP, iz = j * GSTEP;
-              const distN = Math.max(Math.abs(ix), Math.abs(iz)) / GRANGE;
-              if (distN > 0.88) continue;
-              const alpha = (1 - distN * 1.15) * 0.3;
-              if (alpha <= 0) continue;
-              const p = tfGrid({x: ix, y: GY, z: iz});
-              const s = 3 + (1 - distN) * 6;
-              ctx.strokeStyle = `rgba(0,0,0,${alpha.toFixed(3)})`;
-              ctx.lineWidth = 1.1;
-              ctx.beginPath();
-              ctx.moveTo(p.x - s, p.y - s); ctx.lineTo(p.x + s, p.y + s);
-              ctx.stroke();
-              ctx.beginPath();
-              ctx.moveTo(p.x + s, p.y - s); ctx.lineTo(p.x - s, p.y + s);
-              ctx.stroke();
-            }
-          }
 
           // 방사형 엣지 페이드
           const grad = ctx.createRadialGradient(panX, panY, 200, panX, panY, Math.max(W, H) * 0.72);
@@ -525,28 +539,45 @@
         for (const [id, d] of Object.entries(DESC_P3)) {
           const p=tf(d.p3);
           if (!(activeHitType === 'desc' && activeAxisId === id)) {
-            desc(d.p3, '이곳은 빈칸입니다.');
+            if (id === 'y') {
+              // Y축 텍스트 90도 회전
+              ctx.save();
+              ctx.translate(p.x, p.y);
+              ctx.rotate(-Math.PI / 2);
+              ctx.font=`500 ${Math.round(22*zoom)}px "Pretendard","Pretendard JP",sans-serif`;
+              ctx.fillStyle='#000';
+              ctx.textAlign='center'; ctx.textBaseline='middle';
+              ctx.fillText('상·하 구조: 하늘과 땅', 0, 0);
+              ctx.restore();
+            } else if (id === 'z') {
+              desc(d.p3, '전면과 후면: 외부성과 내부성');
+            } else {
+              desc(d.p3, '좌우구조: 좌양우음');
+            }
           }
           descHits.push({x:p.x, y:p.y, id, type:'desc'});
         }
 
-        // ── 캔버스 원형 점 그리기 (크기·간격 zoom 무관 고정) ──
+        // ── 캔버스 원형 점 그리기 — 임시 비활성화 (SHOW_DOTS = true 로 복구)
+        const SHOW_DOTS = false;
         const DR = 25 * zoom;
         const DFS = Math.round(22 * zoom);
-        ctx.font = `400 ${DFS}px "Pretendard",sans-serif`;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        for (const dot of AXIS_DOTS) {
-          const p = tfDot(dot.p3);
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, DR, 0, Math.PI * 2);
-          ctx.fillStyle = '#ea5c3a';
-          ctx.fill();
-          ctx.strokeStyle = '#000';
-          ctx.lineWidth = 0.3;
-          ctx.stroke();
-          ctx.fillStyle = '#000';
-          ctx.fillText(dot.label, p.x, p.y);
+        if (SHOW_DOTS) {
+          ctx.font = `400 ${DFS}px "Pretendard",sans-serif`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          for (const dot of AXIS_DOTS) {
+            const p = tfDot(dot.p3);
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, DR, 0, Math.PI * 2);
+            ctx.fillStyle = '#ea5c3a';
+            ctx.fill();
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 0.3;
+            ctx.stroke();
+            ctx.fillStyle = '#000';
+            ctx.fillText(dot.label, p.x, p.y);
+          }
         }
 
         // 오버레이 canvas: 클릭된 요소만 선명하게
@@ -563,10 +594,25 @@
             }
           } else {
             const p = tf(DESC_P3[activeAxisId].p3);
-            actCtx.font = `500 ${Math.round(22*zoom)}px "Pretendard","Pretendard JP",sans-serif`;
-            actCtx.fillStyle = '#000';
-            actCtx.textAlign = 'center'; actCtx.textBaseline = 'middle';
-            actCtx.fillText('이곳은 빈칸입니다.', p.x, p.y);
+            if (activeAxisId === 'y') {
+              actCtx.save();
+              actCtx.translate(p.x, p.y);
+              actCtx.rotate(-Math.PI / 2);
+              actCtx.font = `500 ${Math.round(22*zoom)}px "Pretendard","Pretendard JP",sans-serif`;
+              actCtx.fillStyle = '#000';
+              actCtx.textAlign = 'center'; actCtx.textBaseline = 'middle';
+              actCtx.fillText('상·하 구조: 하늘과 땅', 0, 0);
+              actCtx.restore();
+            } else {
+              actCtx.font = `500 ${Math.round(22*zoom)}px "Pretendard","Pretendard JP",sans-serif`;
+              actCtx.fillStyle = '#000';
+              actCtx.textAlign = 'center'; actCtx.textBaseline = 'middle';
+              if (activeAxisId === 'z') {
+                actCtx.fillText('전면과 후면: 외부성과 내부성', p.x, p.y);
+              } else {
+                actCtx.fillText('좌우구조: 좌양우음', p.x, p.y);
+              }
+            }
           }
         }
 
@@ -634,5 +680,6 @@
 
     <script src="scale.js"></script>
     <script src="cursor.js"></script>
+    <script src="help.js"></script>
   </body>
 </html>

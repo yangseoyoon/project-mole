@@ -26,7 +26,7 @@
       width: 935px;
       height: 749px;
       background: #fff;
-      border: 1px solid #000;
+      outline: 1px solid #000;
       overflow: hidden;
       z-index: 200;
       opacity: 0;
@@ -41,7 +41,7 @@
     }
     .dp-header {
       position: absolute;
-      left: -1px; top: -1px;
+      left: 0; top: 0;
       background: #e9f056;
       padding: 5px 25px;
       z-index: 3;
@@ -56,7 +56,7 @@
     }
     .dp-close {
       position: absolute;
-      right: -1px; top: -1px;
+      right: 0; top: 0;
       width: 80px;
       height: 54px;
       background: #e9f056;
@@ -117,13 +117,17 @@
   const ctx = cv.getContext('2d');
   const W = 1920, H = 1080;
 
-  // 텍스트 존 4개 — Figma 1656-5460 기준 (텍스트 중심좌표)
+  // 텍스트 존 6개 — 기운+물길+산 합치면 오악사독 패널 오픈
   const zones = [
-    { label: '음양오행(陰陽五行)',    x:  314, y: 284, rx: 220, ry: 75 },
-    { label: '오악사독(五嶽四瀆)',    x:  818, y: 531, rx: 200, ry: 70 },
-    { label: '얼굴 위에서의 방위체계', x: 1633, y: 678, rx: 230, ry: 75 },
-    { label: '기색론(氣色論)',        x: 1407, y: 188, rx: 180, ry: 65 },
+    { label: '음양오행(陰陽五行)',    x:  314, y: 284, rx: 220, ry: 75,  panelId: 'ohaeng-panel-0' },
+    { label: '기운(氣運)',           x:  670, y: 440, rx: 140, ry: 60,  panelId: null },
+    { label: '물길(水路)',           x:  820, y: 640, rx: 130, ry: 55,  panelId: null },
+    { label: '산(山)',               x:  980, y: 440, rx: 140, ry: 60,  panelId: null },
+    { label: '얼굴 위에서의 방위체계', x: 1633, y: 678, rx: 230, ry: 75,  panelId: 'ohaeng-panel-2' },
+    { label: '기색론(氣色論)',        x: 1407, y: 188, rx: 180, ry: 65,  panelId: 'ohaeng-panel-3' },
   ];
+  // 오악사독 — 기운+물길+산 모두 클릭 시 열리는 결과 존 (클릭 불가, 시각적 힌트만)
+  const OAKSADOK_POS = { x: 818, y: 531 };
 
   // 음양오행 호버 시 색상 전환 (0=기본, 1=검정배경/흰점)
   let colorT = 0;
@@ -204,9 +208,23 @@
     z.z3 = 0;
   });
 
+  // 오악사독 blob (기운+물길+산 합류 애니메이션 타깃)
+  const oaksadokBlob = genBlob({ x: OAKSADOK_POS.x, y: OAKSADOK_POS.y, rx: 200, ry: 70 }, TOTAL);
+  oaksadokBlob.forEach(b => { b.x3 = b.x - W/2; b.y3 = b.y - H/2; b.z3 = (Math.random()-0.5)*60; });
+  // 오악사독 3D 위치 (텍스트 레이블용)
+  const oaksadokZ = { x3: OAKSADOK_POS.x - W/2, y3: OAKSADOK_POS.y - H/2, z3: 0 };
+
+  // 콤보 상태
+  const COMBO_IDXS = new Set([1, 2, 3]); // 기운, 물길, 산
+  let comboVisited = new Set();
+  let comboComplete = false;
+
   // ── 드래그 ──
-  // 기색론(zone 3) 전용 폭발 상태
-  const GISAEK_IDX = 3;
+  let lineAlpha = 0; // 선 페이드인 (0~1)
+  const LINE_DIST = 80;
+
+  // 기색론(zone 5) 전용 폭발 상태
+  const GISAEK_IDX = 5;
   let gisaekState = 'idle'; // 'idle' | 'gather' | 'explode'
   let gisaekTick  = 0;
   const GATHER_FRAMES  = 90;  // 모이는 시간
@@ -238,8 +256,16 @@
   });
   document.addEventListener('mouseup', e => {
     if (!dragMoved && hovered >= 0) {
-      // 드래그 없이 클릭 → 패널 열기
-      openOhaengPanel(hovered);
+      if (COMBO_IDXS.has(hovered)) {
+        comboVisited.add(hovered);
+        if ([...COMBO_IDXS].every(i => comboVisited.has(i))) {
+          comboComplete = true;
+          openOhaengPanel('ohaeng-panel-1');
+        }
+      } else {
+        const pid = zones[hovered].panelId;
+        if (pid) openOhaengPanel(pid);
+      }
     }
     dragging = false;
     cv.style.cursor = 'default';
@@ -306,6 +332,9 @@
     // 음양오행(zone 0) 호버 시 색상 전환
     colorT = lerp(colorT, hovered === 0 ? 1 : 0, 0.06);
 
+    // 파티클이 클러스터로 모일 때 선 페이드인 (기색론 폭발 제외)
+    lineAlpha = lerp(lineAlpha, (hovered >= 0 && gisaekState === 'idle') ? 1 : 0, 0.025);
+
     // 기색론 호버 상태 머신
     if (hovered === GISAEK_IDX) {
       if (gisaekState === 'idle') { gisaekState = 'gather'; gisaekTick = 0; }
@@ -335,6 +364,11 @@
         ty3 = blobs[GISAEK_IDX][i].y3 + p.ey3 * ep;
         tz3 = blobs[GISAEK_IDX][i].z3 + p.ez3 * ep;
         spd = 0.06; // 느리게 따라가서 퍼지는 느낌 유지
+      } else if (comboComplete && hovered < 0) {
+        tx3 = oaksadokBlob[i].x3;
+        ty3 = oaksadokBlob[i].y3;
+        tz3 = oaksadokBlob[i].z3;
+        spd = p.spd * 0.3;
       } else if (hovered >= 0 && hovered !== GISAEK_IDX) {
         tx3 = blobs[hovered][i].x3;
         ty3 = blobs[hovered][i].y3;
@@ -405,29 +439,67 @@
       ctx.stroke();
     }
 
+    // 오악사독 선 연결 — 파티클 그린 뒤 인접한 점끼리 선
+    if (lineAlpha > 0.01) {
+      for (let i = 0; i < projected.length; i++) {
+        for (let j = i + 1; j < projected.length; j++) {
+          const dx = projected[i].sx - projected[j].sx;
+          const dy = projected[i].sy - projected[j].sy;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+          if (dist < LINE_DIST) {
+            const fade = (1 - dist / LINE_DIST) * lineAlpha;
+            ctx.beginPath();
+            ctx.moveTo(projected[i].sx, projected[i].sy);
+            ctx.lineTo(projected[j].sx, projected[j].sy);
+            ctx.strokeStyle = `rgba(${dotRGB.join(',')},${(fade * 0.5).toFixed(3)})`;
+            ctx.lineWidth = 0.8;
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
     // 텍스트 레이블 — 카메라 거리에 따라 크기도 비례 축소
     const camScale = 1800 / (FOV + camDist); // camDist=900 기준 1.0
     zones.forEach((z, i) => {
       const r = rot3(z.x3, z.y3, z.z3, rotX, rotY);
       const s = proj(r.x, r.y, r.z);
       const isHov = (i === hovered);
+      const isVisited = comboVisited.has(i);
       const fs = Math.max(8, Math.round((isHov ? 28 : 25) * camScale));
       ctx.save();
       ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
       ctx.font      = `700 ${fs}px Pretendard, sans-serif`;
-      ctx.fillStyle = isHov ? '#000' : 'rgba(0,0,0,0.5)';
+      // 기운/물길/산: 방문했으면 진하게, 아니면 반투명
+      if (COMBO_IDXS.has(i)) {
+        ctx.fillStyle = isHov ? '#000' : (isVisited ? 'rgba(0,0,0,0.85)' : 'rgba(0,0,0,0.35)');
+      } else {
+        ctx.fillStyle = isHov ? '#000' : 'rgba(0,0,0,0.5)';
+      }
       ctx.fillText(z.label, s.sx, s.sy);
       ctx.restore();
     });
+    // 오악사독 레이블 — 힌트(dim), 콤보 완성 시 밝게
+    {
+      const r = rot3(oaksadokZ.x3, oaksadokZ.y3, oaksadokZ.z3, rotX, rotY);
+      const s = proj(r.x, r.y, r.z);
+      const fs = Math.max(8, Math.round(25 * camScale));
+      ctx.save();
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.font = `700 ${fs}px Pretendard, sans-serif`;
+      ctx.fillStyle = comboComplete ? '#000' : 'rgba(0,0,0,0.18)';
+      ctx.fillText('오악사독(五嶽四瀆)', s.sx, s.sy);
+      ctx.restore();
+    }
   }
 
   function loop(){ update(); draw(); requestAnimationFrame(loop); }
   loop();
 })();
 
-function openOhaengPanel(idx) {
+function openOhaengPanel(panelId) {
   document.querySelectorAll('.detail-panel').forEach(p => p.classList.remove('is-open'));
-  const el = document.getElementById('ohaeng-panel-' + idx);
+  const el = document.getElementById(panelId);
   if (el) el.classList.add('is-open');
 }
 function closeOhaengPanel() {

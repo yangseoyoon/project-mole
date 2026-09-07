@@ -10,6 +10,7 @@
     />
     <link rel="stylesheet" href="nav.css" />
     <link rel="stylesheet" href="main.css" />
+    <style>body { background: #e7f024; }</style>
   </head>
   <body>
     <!-- ── 상단 네비게이션 바 ── -->
@@ -46,11 +47,6 @@
             <p class="titleSub">관상학 기반 점 패턴 분석 프로젝트</p>
           </div>
 
-          <!-- 스크롤 힌트 -->
-          <div style="position:absolute; bottom:200px; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:6px; animation:scrollHint 1.6s ease-in-out infinite; pointer-events:none;">
-            <span style="font-family:'Pretendard',sans-serif; font-weight:400; font-size:16px; color:#fff; letter-spacing:2px;">SCROLL!</span>
-            <span style="font-family:'Pretendard',sans-serif; font-weight:400; font-size:16px; color:#fff; line-height:1; display:block; transform:rotate(90deg);">&#x276F;</span>
-          </div>
         </main>
       </section>
 
@@ -245,47 +241,6 @@
       </div>
     </nav>
     <script>
-    (function () {
-      const s1   = document.getElementById('section1');
-      const s2   = document.getElementById('section2');
-      const hero = document.querySelector('.heroMain');
-      if (!s1 || !s2) return;
-
-      let vScroll = 0;
-      const MAX   = window.innerHeight;
-      let ticking = false;
-
-      function update() {
-        const p = Math.min(vScroll / MAX, 1);
-
-        // 섹션2: 아래서 위로 올라옴
-        s2.style.transform = `translateY(${((1 - p) * 100).toFixed(2)}vh)`;
-
-        // 섹션1: 블러
-        if (hero) hero.style.filter = p > 0.02 ? `blur(${(p * 16).toFixed(1)}px)` : '';
-
-        ticking = false;
-      }
-
-      window.addEventListener('wheel', e => {
-        e.preventDefault();
-        vScroll = Math.max(0, Math.min(MAX, vScroll + e.deltaY * 1.2));
-        if (!ticking) { ticking = true; requestAnimationFrame(update); }
-      }, { passive: false });
-
-      // 터치 지원
-      let touchStartY = 0;
-      window.addEventListener('touchstart', e => { touchStartY = e.touches[0].clientY; }, { passive: true });
-      window.addEventListener('touchmove', e => {
-        e.preventDefault();
-        const dy = touchStartY - e.touches[0].clientY;
-        touchStartY = e.touches[0].clientY;
-        vScroll = Math.max(0, Math.min(MAX, vScroll + dy * 1.5));
-        if (!ticking) { ticking = true; requestAnimationFrame(update); }
-      }, { passive: false });
-    })();
-    </script>
-    <script>
     (function() {
       const W = 1920, H = 1080, CX = W/2, CY = H/2;
       const dots = Array.from(document.querySelectorAll('.heroDot'));
@@ -365,5 +320,6 @@
     </script>
     <script src="scale.js"></script>
     <script src="cursor.js"></script>
+    <script src="help.js"></script>
   </body>
 </html>

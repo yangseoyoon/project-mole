@@ -82,7 +82,7 @@ body {
 /* ── 우측 상단 설명 텍스트 ── */
 .descText {
   position: absolute;
-  right: 141px;
+  right: 171px;
   top: 22px;
   width: 200px;
   color: #e9f056;
@@ -486,20 +486,48 @@ body {
   display: flex;
   flex-direction: column;
 }
+.dot-input-popup::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border: 1px solid #000;
+  pointer-events: none;
+  z-index: 10;
+}
 
 .dot-input-titlebar {
   position: absolute;
   left: -1px;
   top: -1px;
   background: #ff53cb;
-  padding: 10px 25px;
+  height: 34px;
+  padding: 0 38px;
+  display: flex;
+  align-items: center;
   font-family: 'Pretendard', sans-serif;
   font-weight: 600;
   font-size: 24px;
-  line-height: 44px;
+  line-height: 34px;
   color: #fff;
   white-space: nowrap;
   z-index: 1;
+}
+.dot-input-close-btn {
+  position: absolute;
+  right: -1px;
+  top: -1px;
+  width: 80px;
+  height: 32px;
+  background: #ff53cb;
+  border: none;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 24px;
+  color: #fff;
+  line-height: 32px;
+  text-align: center;
+  cursor: pointer;
+  z-index: 2;
 }
 
 .dot-input-body {

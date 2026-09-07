@@ -108,10 +108,11 @@
         right: 162px;
         top: 50%;
         transform: translateY(-50%);
-        width: 935px;
-        height: 749px;
+        width: 600px;
+        height: auto;
+        min-height: 560px;
         background: rgba(255, 255, 255, 0.9);
-        border: 1px solid #000;
+        outline: 1px solid #000;
         overflow: hidden;
         z-index: 200;
         opacity: 0;
@@ -187,14 +188,14 @@
         position: absolute;
         left: 29px;
         top: 155px;
-        width: 504px;
-        height: 470px;
+        right: 29px;
+        bottom: 32px;
         font-family: 'Pretendard', sans-serif;
         font-weight: 500;
         font-size: 20px;
         color: #000;
         line-height: 32px;
-        overflow: hidden;
+        overflow-y: auto;
       }
       .dp-body p {
         margin: 0;
@@ -395,11 +396,11 @@
         <!-- dot 6: 자연과 신체의 대응체계 上 → -102.29° -->
         <div class="jeomDot" style="left: 1220px; top: 758px; transform: rotate(-102.29deg);" onclick="openPanel('panel6', this)"><span class="dot-label">자연과 신체의 대응체계 (上)</span></div>
         <!-- dot 7: 자연과 신체의 대응체계 下 → -10.22° -->
-        <div class="jeomDot" style="left: 1108px; top: 233px; transform: rotate(-10.22deg);" onclick="openPanel('panel7', this)"><span class="dot-label">자연과 신체의 대응체계 (下)</span></div>
+        <div class="jeomDot" style="left: 1108px; top: 233px; transform: rotate(-10.22deg);"><span class="dot-label">자연과 신체의 대응체계 (下)</span></div>
         <!-- dot 8: 복점? 흉점? → 103.7° -->
-        <div class="jeomDot" style="left: 1641px; top: 160px; transform: rotate(103.7deg);" onclick="openPanel('panel8', this)"><span class="dot-label">복점? 흉점?</span></div>
+        <div class="jeomDot" style="left: 1641px; top: 160px; transform: rotate(103.7deg);"><span class="dot-label">복점? 흉점?</span></div>
         <!-- dot 9: 관상은 끊임없이 변한다 → 54.84° -->
-        <div class="jeomDot" style="left: 1561px; top: 487px; transform: rotate(54.84deg);" onclick="openPanel('panel9', this)"><span class="dot-label">관상은 끊임없이 변한다</span></div>
+        <div class="jeomDot" style="left: 1561px; top: 487px; transform: rotate(54.84deg);"><span class="dot-label">관상은 끊임없이 변한다</span></div>
       </div>
       <!-- /content-layer -->
 
@@ -407,54 +408,14 @@
       <div
         class="detail-panel"
         id="panel5"
-        style="background: #fe6c48; border: 1px solid #000; isolation: isolate"
+        style="background:#fe6c48;outline:1px solid #000;isolation:isolate;min-height:0;height:273px;top:calc(50% + 200px);right:82px;"
       >
-        <!-- 노란 헤더 배지 -->
-        <div
-          style="
-            position: absolute;
-            left: -1px;
-            top: -1px;
-            background: #e9f056;
-            padding: 5px 25px;
-            z-index: 3;
-          "
-        >
-          <span
-            style="
-              font-family: 'Pretendard', sans-serif;
-              font-weight: 600;
-              font-size: 24px;
-              color: #fe6c48;
-              line-height: 44px;
-              white-space: nowrap;
-            "
-            >인간 = 소우주?</span
-          >
+        <!-- 제목 -->
+        <div style="position:absolute;left:-1px;top:-1px;background:#e9f056;height:34px;padding:0 38px;display:flex;align-items:center;z-index:3;">
+          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:24px;color:#fe6c48;line-height:34px;white-space:nowrap;">인간 = 소우주?</span>
         </div>
         <!-- X 버튼 -->
-        <button
-          onclick="closePanel('panel5')"
-          style="
-            position: absolute;
-            right: -1px;
-            top: -1px;
-            width: 80px;
-            background: #e9f056;
-            border: none;
-            font-family: 'Pretendard', sans-serif;
-            font-weight: 400;
-            font-size: 24px;
-            color: #fe6c48;
-            cursor: pointer;
-            padding: 5px 0;
-            line-height: 44px;
-            text-align: center;
-            z-index: 3;
-          "
-        >
-          X
-        </button>
+        <button onclick="closePanel('panel5')" style="position:absolute;right:-1px;top:-1px;width:80px;height:34px;background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:24px;color:#fe6c48;cursor:pointer;line-height:34px;text-align:center;z-index:3;">X</button>
         <!-- 레이어 1: 흰 줄 -->
         <div
           style="position: absolute; inset: 0; z-index: 0; pointer-events: none"
@@ -555,10 +516,9 @@
         <div
           style="
             position: absolute;
-            top: 83px;
+            top: 88px;
             left: 34px;
             width: 504px;
-            padding-bottom: 50px;
             font-family: 'Pretendard', sans-serif;
             font-weight: 500;
             font-size: 20px;
@@ -577,815 +537,149 @@
         </div>
       </div>
 
-      <!-- ── 상세 패널: 관상은 과학이다! ── -->
+      <!-- ── 상세 패널: 관상은 과학이다! (REBUILT) ── -->
       <div
         class="detail-panel"
         id="panel2"
-        style="background: #fe6c48; border: 1px solid #000; isolation: isolate"
+        style="background: #fe6c48; outline: 1px solid #000; isolation: isolate; min-height: 0; height: 594px; right: 662px;"
       >
-        <div
-          style="
-            position: absolute;
-            left: -1px;
-            top: -1px;
-            background: #e9f056;
-            padding: 5px 25px;
-            z-index: 3;
-          "
-        >
-          <span
-            style="
-              font-family: 'Pretendard', sans-serif;
-              font-weight: 600;
-              font-size: 24px;
-              color: #fe6c48;
-              line-height: 44px;
-              white-space: nowrap;
-            "
-            >관상은 과학이다!</span
-          >
+        <!-- 제목 프레임: height 32px 고정, 좌우 38px 패딩 -->
+        <div style="position:absolute;left:-1px;top:-1px;background:#e9f056;height:34px;padding:0 38px;display:flex;align-items:center;z-index:3;">
+          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:24px;color:#fe6c48;line-height:34px;white-space:nowrap;">관상은 과학이다!</span>
         </div>
         <button
           onclick="closePanel('panel2')"
-          style="
-            position: absolute;
-            right: -1px;
-            top: -1px;
-            width: 80px;
-            background: #e9f056;
-            border: none;
-            font-family: 'Pretendard', sans-serif;
-            font-weight: 400;
-            font-size: 24px;
-            color: #fe6c48;
-            cursor: pointer;
-            padding: 5px 0;
-            line-height: 44px;
-            text-align: center;
-            z-index: 3;
-          "
-        >
-          X
-        </button>
-        <!-- 레이어 1: 흰 줄 -->
-        <div
-          style="position: absolute; inset: 0; z-index: 0; pointer-events: none"
-        >
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 88px;
-              width: 507px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 120px;
-              width: 507px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 152px;
-              width: 300px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 216px;
-              width: 507px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 248px;
-              width: 507px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 280px;
-              width: 507px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 312px;
-              width: 507px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 344px;
-              width: 507px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 376px;
-              width: 380px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 408px;
-              width: 507px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 440px;
-              width: 507px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 472px;
-              width: 507px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 504px;
-              width: 300px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
+          style="position:absolute;right:-1px;top:-1px;width:80px;height:34px;background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:24px;color:#fe6c48;cursor:pointer;line-height:34px;text-align:center;z-index:3;"
+        >X</button>
+        <!-- 레이어 1: 흰 줄 (Figma +1px) -->
+        <div style="position:absolute;inset:0;z-index:0;pointer-events:none;">
+          <div style="position:absolute;left:32px;top:89px;width:507px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:121px;width:364px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:185px;width:497px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:217px;width:492px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:249px;width:503px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:281px;width:503px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:313px;width:492px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:345px;width:443px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:409px;width:492px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:441px;width:497px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:473px;width:497px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:505px;width:491px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:537px;width:81px;height:27px;background:#fff;"></div>
         </div>
-        <!-- 레이어 2: 노란 점들 -->
-        <div
-          style="position: absolute; inset: 0; z-index: 1; pointer-events: none"
-        >
-          <div
-            style="
-              position: absolute;
-              left: 350px;
-              top: 78px;
-              width: 45px;
-              height: 45px;
-              border-radius: 50%;
-              background: #e9f056;
-              border: 0.3px solid #000;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 420px;
-              top: 120px;
-              width: 45px;
-              height: 45px;
-              border-radius: 50%;
-              background: #e9f056;
-              border: 0.3px solid #000;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 50px;
-              top: 270px;
-              width: 45px;
-              height: 45px;
-              border-radius: 50%;
-              background: #e9f056;
-              border: 0.3px solid #000;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 390px;
-              top: 340px;
-              width: 45px;
-              height: 45px;
-              border-radius: 50%;
-              background: #e9f056;
-              border: 0.3px solid #000;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 80px;
-              top: 460px;
-              width: 45px;
-              height: 45px;
-              border-radius: 50%;
-              background: #e9f056;
-              border: 0.3px solid #000;
-            "
-          ></div>
+        <!-- 레이어 2: 노란 점들 (Figma 정확한 수치) -->
+        <div style="position:absolute;inset:0;z-index:1;pointer-events:none;">
+          <!-- 과학 -->
+          <div style="position:absolute;left:91px;top:78px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <!-- 빅데이터가 -->
+          <div style="position:absolute;left:264px;top:302px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:298px;top:302px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <!-- 효율적인 경험적 도구로 -->
+          <div style="position:absolute;left:216px;top:494px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:250px;top:494px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:283px;top:494px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:317px;top:494px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:349px;top:494px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
         </div>
-        <!-- 레이어 3: 텍스트 -->
-        <div
-          style="
-            position: absolute;
-            top: 83px;
-            left: 34px;
-            width: 504px;
-            padding-bottom: 50px;
-            font-family: 'Pretendard', sans-serif;
-            font-weight: 500;
-            font-size: 20px;
-            color: #000;
-            line-height: 32px;
-            z-index: 2;
-          "
-        >
-          <p>
-            '관상은 과학이다'라는 밈은 외모로 성향을 예측하는 경험칙을 재치 있게
-            표현한 말일 뿐, 학술적 과학은 아니다.
-          </p>
-          <p>&nbsp;</p>
-          <p>
-            관상이 타고난 생김새로 운명이나 성격을 판단하는 것이라면, 인상은
-            대상으로부터 느껴지는 분위기와 느낌을 뜻한다. 관상에서 말하는 "삶의
-            궤적이 얼굴에 남는다"는 말도 관상보다는 후천적인 '인상'에 가깝다.
-            사람은 환경, 생각, 표정 습관에 따라 얼굴 근육과 주름이 변하며,
-            이처럼 축적된 빅데이터가 인상으로 드러나 성격을 직관적으로 읽어낼 수
-            있는 경우들이 발생하는 것이다.
-          </p>
-          <p>&nbsp;</p>
-          <p>
-            관상은 재미있는 개념 중 하나지만 타고난 생김새가 미래를 결정한다는
-            운명론적 해석은 경계해야 할 필요가 있다. 현대의 관상이란 사람의
-            무한한 가능성을 유효한 범위로 그룹화해 타인 파악 시 정보 과부하를
-            줄여주는 효율적인 경험적 도구로 해석하는 것이 적절하다.
-          </p>
+        <!-- 레이어 3: 텍스트 (흰줄 기준 top:88) -->
+        <div style="position:absolute;top:88px;left:34px;width:504px;z-index:2;font-family:'Pretendard',sans-serif;font-weight:500;font-size:20px;color:#000;line-height:32px;">
+          <p style="margin:0;">'관상은 과학이다'라는 밈은 외모로 성향을 예측하는 경험칙을 재치 있게 표현한 말일 뿐, 학술적 과학은 아니다. </p>
+          <p style="margin:0;line-height:32px;">&nbsp;</p>
+          <p style="margin:0;">관상이 타고난 생김새로 운명이나 성격을 판단하는 것이라면, 인상은 대상으로부터 느껴지는 분위기와 느낌을 뜻한다. 관상에서 말하는 "삶의 궤적이 얼굴에 남는다"는 말도 관상보다는 후천적인 '인상'에 가깝다. 사람은 환경, 생각, 표정 습관에 따라 얼굴 근육과 주름이 변하며, 이처럼 축적된 빅데이터가 인상으로 드러나 성격을 직관적으로 읽어낼 수 있는 경우들이 발생하는 것이다. </p>
+          <p style="margin:0;line-height:32px;">&nbsp;</p>
+          <p style="margin:0;">관상은 재미있는 개념 중 하나지만 타고난 생김새가 미래를 결정한다는 운명론적 해석은 경계해야 할 필요가 있다. 현대의 관상이란 사람의 무한한 가능성을 유효한 범위로 그룹화해 타인 파악 시 정보 과부하를 줄여주는 효율적인 경험적 도구로 해석하는 것이 적절하다.</p>
         </div>
       </div>
 
       <!-- ── 상세 패널: 분수에 맞게 살아라? ── -->
-      <div
-        class="detail-panel"
-        id="panel3"
-        style="background: #fe6c48; border: 1px solid #000; isolation: isolate"
-      >
-        <div
-          style="
-            position: absolute;
-            left: -1px;
-            top: -1px;
-            background: #e9f056;
-            padding: 5px 25px;
-            z-index: 3;
-          "
-        >
-          <span
-            style="
-              font-family: 'Pretendard', sans-serif;
-              font-weight: 600;
-              font-size: 24px;
-              color: #fe6c48;
-              line-height: 44px;
-              white-space: nowrap;
-            "
-            >분수에 맞게 살아라?</span
-          >
+      <div class="detail-panel" id="panel3" style="background:#fe6c48;outline:1px solid #000;isolation:isolate;min-height:0;height:626px;right:662px;">
+        <div style="position:absolute;left:-1px;top:-1px;background:#e9f056;height:34px;padding:0 38px;display:flex;align-items:center;z-index:3;">
+          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:24px;color:#fe6c48;line-height:34px;white-space:nowrap;">분수에 맞게 살아라?</span>
         </div>
-        <button
-          onclick="closePanel('panel3')"
-          style="
-            position: absolute;
-            right: -1px;
-            top: -1px;
-            width: 80px;
-            background: #e9f056;
-            border: none;
-            font-family: 'Pretendard', sans-serif;
-            font-weight: 400;
-            font-size: 24px;
-            color: #fe6c48;
-            cursor: pointer;
-            padding: 5px 0;
-            line-height: 44px;
-            text-align: center;
-            z-index: 3;
-          "
-        >
-          X
-        </button>
-        <!-- 레이어 1: 흰 줄 -->
-        <div
-          style="position: absolute; inset: 0; z-index: 0; pointer-events: none"
-        >
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 88px;
-              width: 507px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 120px;
-              width: 507px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 152px;
-              width: 507px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 184px;
-              width: 507px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 216px;
-              width: 507px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 248px;
-              width: 380px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 312px;
-              width: 507px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 344px;
-              width: 507px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 376px;
-              width: 507px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 408px;
-              width: 300px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 472px;
-              width: 507px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 504px;
-              width: 507px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 536px;
-              width: 380px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
+        <button onclick="closePanel('panel3')" style="position:absolute;right:-1px;top:-1px;width:80px;height:34px;background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:24px;color:#fe6c48;cursor:pointer;line-height:34px;text-align:center;z-index:3;">X</button>
+        <!-- 레이어 1: 흰 줄 (+1px) — P1:7줄 P2:4줄 P3:3줄 -->
+        <div style="position:absolute;inset:0;z-index:0;pointer-events:none;">
+          <!-- P1: 7줄 -->
+          <div style="position:absolute;left:32px;top:89px;width:500px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:121px;width:497px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:153px;width:501px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:185px;width:492px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:217px;width:507px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:249px;width:497px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:281px;width:235px;height:27px;background:#fff;"></div>
+          <!-- P2: 4줄 (gap at 313) -->
+          <div style="position:absolute;left:32px;top:345px;width:496px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:377px;width:502px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:409px;width:497px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:441px;width:480px;height:27px;background:#fff;"></div>
+          <!-- P3: 3줄 (gap at 473) -->
+          <div style="position:absolute;left:32px;top:505px;width:504px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:537px;width:497px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:569px;width:174px;height:27px;background:#fff;"></div>
         </div>
-        <!-- 레이어 2: 노란 점들 -->
-        <div
-          style="position: absolute; inset: 0; z-index: 1; pointer-events: none"
-        >
-          <div
-            style="
-              position: absolute;
-              left: 340px;
-              top: 78px;
-              width: 45px;
-              height: 45px;
-              border-radius: 50%;
-              background: #e9f056;
-              border: 0.3px solid #000;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 180px;
-              top: 130px;
-              width: 45px;
-              height: 45px;
-              border-radius: 50%;
-              background: #e9f056;
-              border: 0.3px solid #000;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 410px;
-              top: 230px;
-              width: 45px;
-              height: 45px;
-              border-radius: 50%;
-              background: #e9f056;
-              border: 0.3px solid #000;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 50px;
-              top: 360px;
-              width: 45px;
-              height: 45px;
-              border-radius: 50%;
-              background: #e9f056;
-              border: 0.3px solid #000;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 300px;
-              top: 490px;
-              width: 45px;
-              height: 45px;
-              border-radius: 50%;
-              background: #e9f056;
-              border: 0.3px solid #000;
-            "
-          ></div>
+        <!-- 레이어 2: 노란 원 (격·복·그릇 각 등장마다) -->
+        <div style="position:absolute;inset:0;z-index:1;pointer-events:none;">
+          <!-- P1 line1: 格 -->
+          <div style="position:absolute;left:168px;top:81px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <!-- P1 line1: 복 -->
+          <div style="position:absolute;left:200px;top:81px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <!-- P1 line1: 그릇 -->
+          <div style="position:absolute;left:230px;top:81px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <!-- P1 line2: 格은 -->
+          <div style="position:absolute;left:416px;top:113px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <!-- P1 line4: 복은 -->
+          <div style="position:absolute;left:348px;top:177px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <!-- P1 line6: 그릇은 -->
+          <div style="position:absolute;left:158px;top:241px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <!-- P2 line2: 그릇의 -->
+          <div style="position:absolute;left:208px;top:369px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <!-- P2 line2: 복의 -->
+          <div style="position:absolute;left:292px;top:369px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
         </div>
         <!-- 레이어 3: 텍스트 -->
-        <div
-          style="
-            position: absolute;
-            top: 83px;
-            left: 34px;
-            width: 504px;
-            padding-bottom: 50px;
-            font-family: 'Pretendard', sans-serif;
-            font-weight: 500;
-            font-size: 20px;
-            color: #000;
-            line-height: 32px;
-            z-index: 2;
-          "
-        >
-          <p>
-            관상학에서 말하는 '격·복·그릇'은 사람이 살아가며 마주하는 기회와
-            그것을 감당하는 능력의 관계를 설명하는 개념이다. 격은 귀함과 천함을
-            나누는 기준으로, 어떤 환경과 역할 속에서 살아가게 되는지를 결정짓는
-            구조적 조건으로 작용한다. 복은 유복함과 박복함을 드러내는 운으로,
-            재물, 명예, 인간관계와 같은 다양한 형태로 나타난다. 그리고 그릇은
-            이러한 것들을 받아들이고 유지할 수 있는 내적 수용 능력을 의미한다.
-          </p>
-          <p>&nbsp;</p>
-          <p>
-            이 세 요소는 독립적으로 존재하는 것이 아니라 서로 긴밀하게 연결되어
-            작동한다. 특히, 그릇의 크기는 복의 지속 여부를 결정하는 중요한
-            기준이다. 감당할 수 있는 범위를 넘어선 복은 일시적으로는 획득될 수
-            있으나, 장기적으로 유지되기 어렵다는 관점이다.
-          </p>
-          <p>&nbsp;</p>
-          <p>
-            따라서 '분수에 맞게 살아야 한다'는 말은 단순한 도덕적 권고가 아니라,
-            자신의 수용 범위와 균형을 고려하여 삶을 유지해야 한다는 구조적
-            이해에 가깝다.
-          </p>
+        <div style="position:absolute;top:88px;left:34px;width:504px;z-index:2;font-family:'Pretendard',sans-serif;font-weight:500;font-size:20px;color:#000;line-height:32px;">
+          <p style="margin:0;">관상학에서 말하는 '격·복·그릇'은 사람이 살아가며 마주하는 기회와 그것을 감당하는 능력의 관계를 설명하는 개념이다. 격은 귀함과 천함을 나누는 기준으로, 어떤 환경과 역할 속에서 살아가게 되는지를 결정짓는 구조적 조건으로 작용한다. 복은 유복함과 박복함을 드러내는 운으로, 재물, 명예, 인간관계와 같은 다양한 형태로 나타난다. 그리고 그릇은 이러한 것들을 받아들이고 유지할 수 있는 내적 수용 능력을 의미한다.</p>
+          <p style="margin:0;line-height:32px;">&nbsp;</p>
+          <p style="margin:0;">이 세 요소는 독립적으로 존재하는 것이 아니라 서로 긴밀하게 연결되어 작동한다. 특히, 그릇의 크기는 복의 지속 여부를 결정하는 중요한 기준이다. 감당할 수 있는 범위를 넘어선 복은 일시적으로는 획득될 수 있으나, 장기적으로 유지되기 어렵다는 관점이다.</p>
+          <p style="margin:0;line-height:32px;">&nbsp;</p>
+          <p style="margin:0;">따라서 '분수에 맞게 살아야 한다'는 말은 단순한 도덕적 권고가 아니라, 자신의 수용 범위와 균형을 고려하여 삶을 유지해야 한다는 구조적 이해에 가깝다.</p>
         </div>
       </div>
 
       <!-- ── 상세 패널: 그릇보다 큰 복은 오래가지 않는다 ── -->
-      <div
-        class="detail-panel"
-        id="panel4"
-        style="background: #fe6c48; border: 1px solid #000; isolation: isolate"
-      >
-        <div
-          style="
-            position: absolute;
-            left: -1px;
-            top: -1px;
-            background: #e9f056;
-            padding: 5px 25px;
-            z-index: 3;
-          "
-        >
-          <span
-            style="
-              font-family: 'Pretendard', sans-serif;
-              font-weight: 600;
-              font-size: 24px;
-              color: #fe6c48;
-              line-height: 44px;
-              white-space: nowrap;
-            "
-            >그릇보다 큰 복은 오래가지 않는다</span
-          >
+      <div class="detail-panel" id="panel4" style="background:#fe6c48;outline:1px solid #000;isolation:isolate;min-height:0;height:434px;right:562px;top:calc(50% + 50px);">
+        <div style="position:absolute;left:-1px;top:-1px;background:#e9f056;height:34px;padding:0 38px;display:flex;align-items:center;z-index:3;">
+          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:24px;color:#fe6c48;line-height:34px;white-space:nowrap;">그릇보다 큰 복은 오래가지 않는다</span>
         </div>
-        <button
-          onclick="closePanel('panel4')"
-          style="
-            position: absolute;
-            right: -1px;
-            top: -1px;
-            width: 80px;
-            background: #e9f056;
-            border: none;
-            font-family: 'Pretendard', sans-serif;
-            font-weight: 400;
-            font-size: 24px;
-            color: #fe6c48;
-            cursor: pointer;
-            padding: 5px 0;
-            line-height: 44px;
-            text-align: center;
-            z-index: 3;
-          "
-        >
-          X
-        </button>
-        <!-- 레이어 1: 흰 줄 -->
-        <div
-          style="position: absolute; inset: 0; z-index: 0; pointer-events: none"
-        >
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 88px;
-              width: 507px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 120px;
-              width: 507px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 152px;
-              width: 380px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 216px;
-              width: 507px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 248px;
-              width: 507px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 280px;
-              width: 350px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 344px;
-              width: 507px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 376px;
-              width: 507px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 408px;
-              width: 400px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
+        <button onclick="closePanel('panel4')" style="position:absolute;right:-1px;top:-1px;width:80px;height:34px;background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:24px;color:#fe6c48;cursor:pointer;line-height:34px;text-align:center;z-index:3;">X</button>
+        <!-- 레이어 1: 흰 줄 (+1px) — P1:3줄 P2:3줄 P3:2줄 -->
+        <div style="position:absolute;inset:0;z-index:0;pointer-events:none;">
+          <!-- P1: 3줄 -->
+          <div style="position:absolute;left:32px;top:89px;width:500px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:121px;width:497px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:153px;width:235px;height:27px;background:#fff;"></div>
+          <!-- P2: 3줄 (gap at 185) -->
+          <div style="position:absolute;left:32px;top:217px;width:501px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:249px;width:501px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:281px;width:230px;height:27px;background:#fff;"></div>
+          <!-- P3: 2줄 (gap at 313) -->
+          <div style="position:absolute;left:32px;top:345px;width:503px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:377px;width:405px;height:27px;background:#fff;"></div>
         </div>
         <!-- 레이어 2: 노란 점들 -->
-        <div
-          style="position: absolute; inset: 0; z-index: 1; pointer-events: none"
-        >
-          <div
-            style="
-              position: absolute;
-              left: 360px;
-              top: 78px;
-              width: 45px;
-              height: 45px;
-              border-radius: 50%;
-              background: #e9f056;
-              border: 0.3px solid #000;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 200px;
-              top: 140px;
-              width: 45px;
-              height: 45px;
-              border-radius: 50%;
-              background: #e9f056;
-              border: 0.3px solid #000;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 430px;
-              top: 240px;
-              width: 45px;
-              height: 45px;
-              border-radius: 50%;
-              background: #e9f056;
-              border: 0.3px solid #000;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 70px;
-              top: 360px;
-              width: 45px;
-              height: 45px;
-              border-radius: 50%;
-              background: #e9f056;
-              border: 0.3px solid #000;
-            "
-          ></div>
+        <div style="position:absolute;inset:0;z-index:1;pointer-events:none;">
+          <div style="position:absolute;left:360px;top:78px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:200px;top:140px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:430px;top:240px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:70px;top:360px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
         </div>
         <!-- 레이어 3: 텍스트 -->
-        <div
-          style="
-            position: absolute;
-            top: 83px;
-            left: 34px;
-            width: 504px;
-            padding-bottom: 50px;
-            font-family: 'Pretendard', sans-serif;
-            font-weight: 500;
-            font-size: 20px;
-            color: #000;
-            line-height: 32px;
-            z-index: 2;
-          "
-        >
-          <p>
-            '격·복·그릇'이라는 개념은 개인의 능력이나 자질을 절대적인 기준으로
-            평가하기보다, 주어진 조건과 그것을 다루는 방식 사이의 관계를
-            설명하는 데 목적이 있다.
-          </p>
-          <p>&nbsp;</p>
-          <p>
-            보통 격과 복은 함께 따르는 경우가 많지만 그릇은 다르다. 아무리 격과
-            복이 넘쳐도 그것을 담을 그릇이 작다면 그 사람의 격과 복은 모두
-            빠져나가 버리는 것이다.
-          </p>
-          <p>&nbsp;</p>
-          <p>
-            따라서 "그릇보다 큰 복은 오래 가지 않는다."라는 말은 격·복·그릇의
-            개념을 함축적으로 표현한 문장이라고 볼 수 있다.
-          </p>
+        <div style="position:absolute;top:88px;left:34px;width:504px;z-index:2;font-family:'Pretendard',sans-serif;font-weight:500;font-size:20px;color:#000;line-height:32px;">
+          <p style="margin:0;">'격·복·그릇'이라는 개념은 개인의 능력이나 자질을 절대적인 기준으로 평가하기보다, 주어진 조건과 그것을 다루는 방식 사이의 관계를 설명하는 데 목적이 있다.</p>
+          <p style="margin:0;line-height:32px;">&nbsp;</p>
+          <p style="margin:0;">보통 격과 복은 함께 따르는 경우가 많지만 그릇은 다르다. 아무리 격과 복이 넘쳐도 그것을 담을 그릇이 작다면 그 사람의 격과 복은 모두 빠져나가 버리는 것이다.</p>
+          <p style="margin:0;line-height:32px;">&nbsp;</p>
+          <p style="margin:0;">따라서 "그릇보다 큰 복은 오래 가지 않는다."라는 말은 격·복·그릇의 개념을 함축적으로 표현한 문장이라고 볼 수 있다.</p>
         </div>
       </div>
 
@@ -1393,202 +687,27 @@
       <div
         class="detail-panel"
         id="panel1"
-        style="
-          background: #fe6c48;
-          width: 600px;
-          height: auto;
-          min-height: 560px;
-          border: 1px solid #000;
-          right: auto;
-          left: 470px;
-          top: 190px;
-          transform: none;
-          isolation: isolate;
-        "
+        style="background:#fe6c48;width:600px;height:562px;min-height:0;outline:1px solid #000;right:auto;left:670px;top:190px;transform:none;isolation:isolate;"
       >
-        <!-- 노란 헤더 뱃지 (왼쪽 자동너비) -->
-        <div
-          style="
-            position: absolute;
-            left: -1px;
-            top: -1px;
-            background: #e9f056;
-            padding: 5px 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-          "
-        >
-          <h2
-            style="
-              font-family: 'Pretendard', sans-serif;
-              font-weight: 600;
-              font-size: 24px;
-              color: #fe6c48;
-              white-space: nowrap;
-              line-height: 32px;
-            "
-          >
-            관상은 꼴을 보는 것
-          </h2>
+        <div style="position:absolute;left:-1px;top:-1px;background:#e9f056;height:34px;padding:0 38px;display:flex;align-items:center;z-index:3;">
+          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:24px;color:#fe6c48;line-height:34px;white-space:nowrap;">관상은 꼴을 보는 것</span>
         </div>
-        <!-- X버튼 (노란 배경, 주황 X) -->
-        <button
-          onclick="closePanel('panel1')"
-          style="
-            position: absolute;
-            right: -1px;
-            top: -1px;
-            width: 80px;
-            background: #e9f056;
-            border: none;
-            border-left: none;
-            font-family: 'Pretendard', sans-serif;
-            font-weight: 400;
-            font-size: 24px;
-            color: #fe6c48;
-            cursor: pointer;
-            padding: 5px 0;
-            line-height: 32px;
-            text-align: center;
-          "
-        >
-          X
-        </button>
-        <!-- 레이어 1: 흰 줄 (Figma 좌표 기준) -->
-        <div
-          style="position: absolute; inset: 0; z-index: 0; pointer-events: none"
-        >
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 88px;
-              width: 507px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 120px;
-              width: 507px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 152px;
-              width: 349px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 216px;
-              width: 492px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 248px;
-              width: 492px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 280px;
-              width: 499px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 312px;
-              width: 499px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 344px;
-              width: 499px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 376px;
-              width: 492px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 408px;
-              width: 503px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 440px;
-              width: 497px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 472px;
-              width: 497px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
-          <div
-            style="
-              position: absolute;
-              left: 32px;
-              top: 504px;
-              width: 65px;
-              height: 27px;
-              background: #fff;
-            "
-          ></div>
+        <button onclick="closePanel('panel1')" style="position:absolute;right:-1px;top:-1px;width:80px;height:34px;background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:24px;color:#fe6c48;cursor:pointer;line-height:34px;text-align:center;z-index:3;">X</button>
+        <!-- 레이어 1: 흰 줄 (+1px) -->
+        <div style="position:absolute;inset:0;z-index:0;pointer-events:none;">
+          <div style="position:absolute;left:32px;top:89px;width:507px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:121px;width:507px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:153px;width:349px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:217px;width:492px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:249px;width:492px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:281px;width:499px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:313px;width:499px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:345px;width:499px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:377px;width:492px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:409px;width:503px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:441px;width:497px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:473px;width:497px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:505px;width:65px;height:27px;background:#fff;"></div>
         </div>
 
         <!-- 레이어 2: 노란 점들 -->
@@ -1693,122 +812,143 @@
           ></div>
         </div>
 
-        <!-- 레이어 3: 텍스트 (배경 없음) -->
-        <div
-          style="
-            position: absolute;
-            top: 83px;
-            left: 34px;
-            width: 504px;
-            padding-bottom: 50px;
-            font-family: 'Pretendard', sans-serif;
-            font-weight: 500;
-            font-size: 20px;
-            color: #000;
-            line-height: 32px;
-            z-index: 2;
-          "
-        >
-          <p>
-            볼 관(觀) + 꼴, 모양 상(相)으로 얼굴의 형상과 꼴을 본다는 뜻이다.
-            다만 관상은 얼굴만 보는 것이 아니라 머리끝부터 발끝까지, 행동거지를
-            포함한 사람의 전체를 읽는 것이다.
-          </p>
-          <p style="line-height: 32px">&nbsp;</p>
-          <p>
-            관상학(觀相學, Physiognomy)은 겉으로 드러난 인간의 얼굴 생김새를
-            관찰하여 그 사람의 성격, 기질, 운명을 판단하려는 점(占)을 말한다. 이
-            용어는 고대 그리스어로 자연이나 본성을 의미하는 'physis'와 지식 혹은
-            판단을 의미하는 'gnomon'이 결합하여 만들어졌다. 관상은 문명이 발생한
-            시기와 비슷한 때에 생겨났고, 마의 상법으로부터 체계화되어 현재까지
-            내려오는 점술로서 역사적으로 동서양을 막론하고 고대부터 근대까지
-            인간을 이해하는 하나의 방법론으로 통용되었다. 그러나 현대 과학의
-            발달과 함께 그 타당성이 검증되지 않아 현재는 대표적인 의사과학으로
-            분류된다.
-          </p>
+        <!-- 레이어 3: 텍스트 -->
+        <div style="position:absolute;top:88px;left:34px;width:504px;z-index:2;font-family:'Pretendard',sans-serif;font-weight:500;font-size:20px;color:#000;line-height:32px;">
+          <p style="margin:0;">볼 관(觀) + 꼴, 모양 상(相)으로 얼굴의 형상과 꼴을 본다는 뜻이다. 다만 관상은 얼굴만 보는 것이 아니라 머리끝부터 발끝까지, 행동거지를 포함한 사람의 전체를 읽는 것이다.</p>
+          <p style="margin:0;line-height:32px;">&nbsp;</p>
+          <p style="margin:0;">관상학(觀相學, Physiognomy)은 겉으로 드러난 인간의 얼굴 생김새를 관찰하여 그 사람의 성격, 기질, 운명을 판단하려는 점(占)을 말한다. 이 용어는 고대 그리스어로 자연이나 본성을 의미하는 'physis'와 지식 혹은 판단을 의미하는 'gnomon'이 결합하여 만들어졌다. 관상은 문명이 발생한 시기와 비슷한 때에 생겨났고, 마의 상법으로부터 체계화되어 현재까지 내려오는 점술로서 역사적으로 동서양을 막론하고 고대부터 근대까지 인간을 이해하는 하나의 방법론으로 통용되었다. 그러나 현대 과학의 발달과 함께 그 타당성이 검증되지 않아 현재는 대표적인 의사과학으로 분류된다.</p>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════════════════════
+           패널 스펙 (panel1~5 기준 — 모든 패널이 이 구조를 따름)
+           ═══════════════════════════════════════════════════════════
+           컨테이너:  class="detail-panel"
+                      style="background:#fe6c48; outline:1px solid #000;
+                             isolation:isolate; min-height:0; height:XXXpx;
+                             [필요시 right/left/top 추가]"
+
+           제목바:    position:absolute; left:-1px; top:-1px;
+                      background:#e9f056; height:34px; padding:0 38px;
+                      display:flex; align-items:center; z-index:3;
+                      <span> font-size:24px; font-weight:600; color:#fe6c48;
+                             line-height:34px; white-space:nowrap;
+
+           X버튼:     position:absolute; right:-1px; top:-1px;
+                      width:80px; height:34px; background:#e9f056;
+                      font-size:24px; font-weight:400; color:#fe6c48;
+                      line-height:34px; text-align:center; z-index:3;
+
+           레이어1(흰줄):  z-index:0; 각줄 left:32px; height:27px;
+                            top = 텍스트줄top+1 (89, 121, 153... +32씩)
+                            width = 해당 줄 텍스트 길이에 맞게
+
+           레이어2(노란점): z-index:1; 각원 width:45px; height:45px;
+                             border-radius:50%; background:#e9f056;
+                             border:0.3px solid #000;
+                             top = 해당줄top-10 (원 세로 중앙 맞춤)
+
+           레이어3(텍스트): position:absolute; top:88px; left:34px;
+                             width:504px; z-index:2;
+                             font-family:'Pretendard'; font-weight:500;
+                             font-size:20px; color:#000; line-height:32px;
+                             단락간 빈줄: <p style="margin:0;line-height:32px;">&nbsp;</p>
+
+           height 계산: 마지막 흰줄 top + 27 + 30(하단패딩) = height
+           ══════════════════════════════════════════════════════════ -->
+
+      <!-- ── 상세 패널 6: 자연과 신체의 대응체계 (上) ── -->
+      <!-- height = 마지막흰줄(473)+27+30 = 530 -->
+      <div class="detail-panel" id="panel6" style="background:#fe6c48;outline:1px solid #000;isolation:isolate;min-height:0;height:530px;right:882px;top:calc(50% - 50px);">
+        <div style="position:absolute;left:-1px;top:-1px;background:#e9f056;height:34px;padding:0 38px;display:flex;align-items:center;z-index:3;">
+          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:24px;color:#fe6c48;line-height:34px;white-space:nowrap;">자연과 신체의 대응체계 (上)</span>
+        </div>
+        <button onclick="closePanel('panel6')" style="position:absolute;right:-1px;top:-1px;width:80px;height:34px;background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:24px;color:#fe6c48;cursor:pointer;line-height:34px;text-align:center;z-index:3;">X</button>
+        <div style="position:absolute;inset:0;z-index:0;pointer-events:none;">
+          <div style="position:absolute;left:32px;top:89px;width:507px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:121px;width:450px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:185px;width:507px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:217px;width:430px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:281px;width:507px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:313px;width:507px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:345px;width:340px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:409px;width:507px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:441px;width:507px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:473px;width:65px;height:27px;background:#fff;"></div>
+        </div>
+        <div style="position:absolute;inset:0;z-index:1;pointer-events:none;">
+          <!-- 노란 원: left/top 수정하여 위치 조정 -->
+        </div>
+        <div style="position:absolute;top:88px;left:34px;width:504px;z-index:2;font-family:'Pretendard',sans-serif;font-weight:500;font-size:20px;color:#000;line-height:32px;">
+          <p style="margin:0;">하늘은 두상과 이마에 대응한다. 이마는 하늘의 기운을 받는 곳으로, 둥글고 네모진 형태가 가장 이상적이라 여겨진다.</p>
+          <p style="margin:0;line-height:32px;">&nbsp;</p>
+          <p style="margin:0;">땅은 발에 대응하며 땅의 지혜를 받는 곳으로, 발등이 두툼하고 발가락이 길쭉할수록 땅의 기운을 넉넉하게 받는다.</p>
+          <p style="margin:0;line-height:32px;">&nbsp;</p>
+          <p style="margin:0;">해와 달은 두 눈이며 해는 눈에서 뿜어져 나오는 빛이고, 달은 눈의 검은 동자이다. 하늘의 해와 달이 지구를 균일하게 비추며 만물을 조화롭게 하듯, 두 눈 또한 그렇다.</p>
+          <p style="margin:0;line-height:32px;">&nbsp;</p>
+          <p style="margin:0;">바다는 입에 대응하며 치아와 혀, 입술을 모두 포함한 입 전체를 칭한다. 눈과 입이 서로 조화롭게 소통할 때 비로소 사람 안에 균형이 생긴다.</p>
+        </div>
+      </div>
+
+      <!-- ── 상세 패널 7: 자연과 신체의 대응체계 (下) ── -->
+      <!-- height = 마지막흰줄(153)+27+30 = 210 -->
+      <div class="detail-panel" id="panel7" style="background:#fe6c48;outline:1px solid #000;isolation:isolate;min-height:0;height:210px;">
+        <div style="position:absolute;left:-1px;top:-1px;background:#e9f056;height:34px;padding:0 38px;display:flex;align-items:center;z-index:3;">
+          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:24px;color:#fe6c48;line-height:34px;white-space:nowrap;">자연과 신체의 대응체계 (下)</span>
+        </div>
+        <button onclick="closePanel('panel7')" style="position:absolute;right:-1px;top:-1px;width:80px;height:34px;background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:24px;color:#fe6c48;cursor:pointer;line-height:34px;text-align:center;z-index:3;">X</button>
+        <div style="position:absolute;inset:0;z-index:0;pointer-events:none;">
+          <div style="position:absolute;left:32px;top:89px;width:507px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:121px;width:507px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:153px;width:300px;height:27px;background:#fff;"></div>
+        </div>
+        <div style="position:absolute;inset:0;z-index:1;pointer-events:none;">
+          <!-- 노란 원: left/top 수정하여 위치 조정 -->
+        </div>
+        <div style="position:absolute;top:88px;left:34px;width:504px;z-index:2;font-family:'Pretendard',sans-serif;font-weight:500;font-size:20px;color:#000;line-height:32px;">
+          <p style="margin:0;">오행(五行) — 목·화·토·금·수 — 은 얼굴의 각 부위와 대응된다. 이마는 화(火), 코는 토(土), 귀는 수(水)에 해당한다.</p>
+        </div>
+      </div>
+
+      <!-- ── 상세 패널 8: 복점? 흉점? ── -->
+      <!-- height = 마지막흰줄(153)+27+30 = 210 -->
+      <div class="detail-panel" id="panel8" style="background:#fe6c48;outline:1px solid #000;isolation:isolate;min-height:0;height:210px;">
+        <div style="position:absolute;left:-1px;top:-1px;background:#e9f056;height:34px;padding:0 38px;display:flex;align-items:center;z-index:3;">
+          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:24px;color:#fe6c48;line-height:34px;white-space:nowrap;">복점? 흉점?</span>
+        </div>
+        <button onclick="closePanel('panel8')" style="position:absolute;right:-1px;top:-1px;width:80px;height:34px;background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:24px;color:#fe6c48;cursor:pointer;line-height:34px;text-align:center;z-index:3;">X</button>
+        <div style="position:absolute;inset:0;z-index:0;pointer-events:none;">
+          <div style="position:absolute;left:32px;top:89px;width:507px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:121px;width:507px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:153px;width:200px;height:27px;background:#fff;"></div>
+        </div>
+        <div style="position:absolute;inset:0;z-index:1;pointer-events:none;">
+          <!-- 노란 원: left/top 수정하여 위치 조정 -->
+        </div>
+        <div style="position:absolute;top:88px;left:34px;width:504px;z-index:2;font-family:'Pretendard',sans-serif;font-weight:500;font-size:20px;color:#000;line-height:32px;">
+          <p style="margin:0;">얼굴의 점(痣)은 위치에 따라 복을 부르거나 액을 부른다고 여겼다. 눈 밑의 눈물점, 인중의 점 등 각 위치마다 고유한 의미가 있다.</p>
+        </div>
+      </div>
+
+      <!-- ── 상세 패널 9: 관상은 끊임없이 변한다 ── -->
+      <!-- height = 마지막흰줄(121)+27+30 = 178 -->
+      <div class="detail-panel" id="panel9" style="background:#fe6c48;outline:1px solid #000;isolation:isolate;min-height:0;height:178px;">
+        <div style="position:absolute;left:-1px;top:-1px;background:#e9f056;height:34px;padding:0 38px;display:flex;align-items:center;z-index:3;">
+          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:24px;color:#fe6c48;line-height:34px;white-space:nowrap;">관상은 끊임없이 변한다</span>
+        </div>
+        <button onclick="closePanel('panel9')" style="position:absolute;right:-1px;top:-1px;width:80px;height:34px;background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:24px;color:#fe6c48;cursor:pointer;line-height:34px;text-align:center;z-index:3;">X</button>
+        <div style="position:absolute;inset:0;z-index:0;pointer-events:none;">
+          <div style="position:absolute;left:32px;top:89px;width:507px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:121px;width:300px;height:27px;background:#fff;"></div>
+        </div>
+        <div style="position:absolute;inset:0;z-index:1;pointer-events:none;">
+          <!-- 노란 원: left/top 수정하여 위치 조정 -->
+        </div>
+        <div style="position:absolute;top:88px;left:34px;width:504px;z-index:2;font-family:'Pretendard',sans-serif;font-weight:500;font-size:20px;color:#000;line-height:32px;">
+          <p style="margin:0;">관상은 고정된 운명이 아니다. 마음가짐, 습관, 수양에 따라 얼굴은 변하고 관상도 바뀐다.</p>
         </div>
       </div>
     </div>
-
-      <!-- ── 상세 패널: 관상은 꼴을 보는 것 ── -->
-      <div class="detail-panel" id="panel1" style="background: #fe6c48; border: 1px solid #000; isolation: isolate">
-        <div style="position:absolute;left:-1px;top:-1px;background:#e9f056;padding:5px 25px;z-index:3;">
-          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:24px;color:#fe6c48;line-height:44px;white-space:nowrap;">관상은 꼴을 보는 것</span>
-        </div>
-        <button onclick="closePanel('panel1')" style="position:absolute;right:-1px;top:-1px;width:80px;background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:24px;color:#fe6c48;cursor:pointer;padding:5px 0;line-height:44px;text-align:center;z-index:3;">X</button>
-        <div class="dp-title">관상은 꼴을 보는 것</div>
-        <div class="dp-body"><p>관상(觀相)은 말 그대로 사람의 '꼴'을 보는 것이다. 얼굴, 체형, 몸짓, 눈빛 등 외면에서 그 사람의 성품과 운명을 읽어내는 동양의 전통 학문이다.</p></div>
-      </div>
-
-      <!-- ── 상세 패널: 관상은 과학이다! ── -->
-      <div class="detail-panel" id="panel2" style="background: #fe6c48; border: 1px solid #000; isolation: isolate">
-        <div style="position:absolute;left:-1px;top:-1px;background:#e9f056;padding:5px 25px;z-index:3;">
-          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:24px;color:#fe6c48;line-height:44px;white-space:nowrap;">관상은 과학이다!</span>
-        </div>
-        <button onclick="closePanel('panel2')" style="position:absolute;right:-1px;top:-1px;width:80px;background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:24px;color:#fe6c48;cursor:pointer;padding:5px 0;line-height:44px;text-align:center;z-index:3;">X</button>
-        <div class="dp-title">관상은 과학이다!</div>
-        <div class="dp-body"><p>현대 연구에 따르면 인간의 얼굴은 유전자, 호르몬, 생활습관 등의 영향을 받는다. 관상은 그 패턴을 경험적으로 축적한 관찰의 학문이다.</p></div>
-      </div>
-
-      <!-- ── 상세 패널: 분수에 맞게 살아라? ── -->
-      <div class="detail-panel" id="panel3" style="background: #fe6c48; border: 1px solid #000; isolation: isolate">
-        <div style="position:absolute;left:-1px;top:-1px;background:#e9f056;padding:5px 25px;z-index:3;">
-          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:24px;color:#fe6c48;line-height:44px;white-space:nowrap;">분수에 맞게 살아라?</span>
-        </div>
-        <button onclick="closePanel('panel3')" style="position:absolute;right:-1px;top:-1px;width:80px;background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:24px;color:#fe6c48;cursor:pointer;padding:5px 0;line-height:44px;text-align:center;z-index:3;">X</button>
-        <div class="dp-title">분수에 맞게 살아라?</div>
-        <div class="dp-body"><p>관상에서 '분수(分數)'는 각자에게 주어진 그릇의 크기를 의미한다. 자신의 그릇 이상을 탐하면 탈이 난다고 보았다.</p></div>
-      </div>
-
-      <!-- ── 상세 패널: 그릇보다 큰 복은 오래가지 않는다 ── -->
-      <div class="detail-panel" id="panel4" style="background: #fe6c48; border: 1px solid #000; isolation: isolate">
-        <div style="position:absolute;left:-1px;top:-1px;background:#e9f056;padding:5px 25px;z-index:3;">
-          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:24px;color:#fe6c48;line-height:44px;white-space:nowrap;">그릇보다 큰 복은</span>
-        </div>
-        <button onclick="closePanel('panel4')" style="position:absolute;right:-1px;top:-1px;width:80px;background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:24px;color:#fe6c48;cursor:pointer;padding:5px 0;line-height:44px;text-align:center;z-index:3;">X</button>
-        <div class="dp-title">그릇보다 큰 복은 오래가지 않는다</div>
-        <div class="dp-body"><p>'격·복·그릇'이라는 개념은 개인의 능력이나 덕이 아니라 그것을 담을 수 있는 그릇의 크기로 평가한다. 그릇보다 큰 복은 결국 넘쳐 사라진다.</p></div>
-      </div>
-
-      <!-- ── 상세 패널: 자연과 신체의 대응체계 (上) ── -->
-      <div class="detail-panel" id="panel6" style="background: #fe6c48; border: 1px solid #000; isolation: isolate">
-        <div style="position:absolute;left:-1px;top:-1px;background:#e9f056;padding:5px 25px;z-index:3;">
-          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:24px;color:#fe6c48;line-height:44px;white-space:nowrap;">자연과 신체의 대응체계 (上)</span>
-        </div>
-        <button onclick="closePanel('panel6')" style="position:absolute;right:-1px;top:-1px;width:80px;background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:24px;color:#fe6c48;cursor:pointer;padding:5px 0;line-height:44px;text-align:center;z-index:3;">X</button>
-        <div class="dp-title">자연과 신체의 대응체계 (上)</div>
-        <div class="dp-body"><p>동양 관상학은 자연의 이치와 인체를 대응시켰다. 이마는 하늘, 코는 산, 입은 바다에 비유하며 자연의 균형이 얼굴에 반영된다고 보았다.</p></div>
-      </div>
-
-      <!-- ── 상세 패널: 자연과 신체의 대응체계 (下) ── -->
-      <div class="detail-panel" id="panel7" style="background: #fe6c48; border: 1px solid #000; isolation: isolate">
-        <div style="position:absolute;left:-1px;top:-1px;background:#e9f056;padding:5px 25px;z-index:3;">
-          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:24px;color:#fe6c48;line-height:44px;white-space:nowrap;">자연과 신체의 대응체계 (下)</span>
-        </div>
-        <button onclick="closePanel('panel7')" style="position:absolute;right:-1px;top:-1px;width:80px;background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:24px;color:#fe6c48;cursor:pointer;padding:5px 0;line-height:44px;text-align:center;z-index:3;">X</button>
-        <div class="dp-title">자연과 신체의 대응체계 (下)</div>
-        <div class="dp-body"><p>오행(五行) — 목·화·토·금·수 — 은 얼굴의 각 부위와 대응된다. 이 균형이 잘 맞을수록 성격과 운이 안정적이라고 해석한다.</p></div>
-      </div>
-
-      <!-- ── 상세 패널: 복점? 흉점? ── -->
-      <div class="detail-panel" id="panel8" style="background: #fe6c48; border: 1px solid #000; isolation: isolate">
-        <div style="position:absolute;left:-1px;top:-1px;background:#e9f056;padding:5px 25px;z-index:3;">
-          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:24px;color:#fe6c48;line-height:44px;white-space:nowrap;">복점? 흉점?</span>
-        </div>
-        <button onclick="closePanel('panel8')" style="position:absolute;right:-1px;top:-1px;width:80px;background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:24px;color:#fe6c48;cursor:pointer;padding:5px 0;line-height:44px;text-align:center;z-index:3;">X</button>
-        <div class="dp-title">복점? 흉점?</div>
-        <div class="dp-body"><p>얼굴의 점(痣)은 위치에 따라 복을 부르거나 액을 부른다고 여겼다. 눈 밑의 눈물점, 인중의 점 등 각각의 위치마다 고유한 의미가 있다.</p></div>
-      </div>
-
-      <!-- ── 상세 패널: 관상은 끊임없이 변한다 ── -->
-      <div class="detail-panel" id="panel9" style="background: #fe6c48; border: 1px solid #000; isolation: isolate">
-        <div style="position:absolute;left:-1px;top:-1px;background:#e9f056;padding:5px 25px;z-index:3;">
-          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:24px;color:#fe6c48;line-height:44px;white-space:nowrap;">관상은 끊임없이 변한다</span>
-        </div>
-        <button onclick="closePanel('panel9')" style="position:absolute;right:-1px;top:-1px;width:80px;background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:24px;color:#fe6c48;cursor:pointer;padding:5px 0;line-height:44px;text-align:center;z-index:3;">X</button>
-        <div class="dp-title">관상은 끊임없이 변한다</div>
-        <div class="dp-body"><p>관상은 고정된 운명이 아니다. 마음가짐, 습관, 수양에 따라 얼굴은 변하고 관상도 바뀐다. "마음이 바뀌면 얼굴이 바뀐다"는 말이 그것이다.</p></div>
-      </div>
 
     <!-- ── 하단 내비게이션 ── -->
     <nav class="bottomNav">
@@ -1930,7 +1070,7 @@
           d.style.width = '';
         });
 
-        // document.getElementById(id).classList.add('is-open');
+        document.getElementById(id).classList.add('is-open');
 
         if (dotEl) {
           var label = dotEl.querySelector('.dot-label');
@@ -1958,5 +1098,6 @@
     </script>
     <script src="scale.js"></script>
     <script src="cursor.js"></script>
+    <script src="help.js"></script>
   </body>
 </html>
