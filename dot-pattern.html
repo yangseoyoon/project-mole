@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -176,37 +176,39 @@ body{
 /* ! 팝업 */
 #tier3-popup{
   position:fixed;
-  top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  width:572px;
+  width:600px;
   background:#fff;
-  border:1px solid #000;
+  outline:1px solid #000;
   z-index:1000;
   font-family:'Pretendard JP Variable','Pretendard JP','Pretendard',sans-serif;
-  box-shadow:0 4px 24px rgba(0,0,0,0.15);
+  animation:none !important;
+  transition:none !important;
 }
 #tier3-popup .popup-header{
-  background:#FF5C34;
-  display:flex;align-items:stretch;
-  height:62px;
-}
-#tier3-popup .popup-title{
-  flex:1;
+  position:absolute;
+  top:0;left:0;
+  height:32px;
+  background:#ea5c3a;
   display:flex;align-items:center;
   padding:0 25px;
+  white-space:nowrap;
+}
+#tier3-popup .popup-title{
   font-size:24px;font-weight:600;color:#fff;
-  white-space:nowrap;overflow:hidden;
+  white-space:nowrap;
 }
 #tier3-popup .popup-close{
-  width:80px;
+  position:absolute;
+  top:0;right:0;
+  width:80px;height:32px;
   display:flex;align-items:center;justify-content:center;
-  background:#FF5C34;
+  background:#ea5c3a;
   color:#fff;font-size:24px;font-weight:400;
-  cursor:pointer;flex-shrink:0;
-  border-left:1px solid rgba(255,255,255,0.3);
+  cursor:pointer;
+  border:none;
 }
 #tier3-popup .popup-body{
-  padding:20px 34px 28px;
+  padding:60px 34px 30px;
   font-size:20px;line-height:32px;color:#000;
   font-weight:500;
 }
@@ -334,17 +336,21 @@ body{
     },
   };
 
-  function showTier3Popup(word){
+  function showTier3Popup(word, iconLeft, iconTop){
     const info = TIER3_INFO[word];
     if(!info) return;
     document.getElementById('tier3-popup')&&document.getElementById('tier3-popup').remove();
     const popup = document.createElement('div');
     popup.id = 'tier3-popup';
+    const POPUP_W = 600;
+    const openLeft = (iconLeft + POPUP_W > window.innerWidth) ? iconLeft - POPUP_W : iconLeft;
+    popup.style.left = openLeft + 'px';
+    popup.style.top  = iconTop + 'px';
     popup.innerHTML = `
       <div class="popup-header">
         <span class="popup-title">${info.title}</span>
-        <div class="popup-close">X</div>
       </div>
+      <button class="popup-close">X</button>
       <div class="popup-body">${info.html}</div>`;
     document.body.appendChild(popup);
     popup.querySelector('.popup-close').addEventListener('click',()=>popup.remove());
@@ -485,7 +491,8 @@ body{
       canvasEl.appendChild(exIcon);
       exIcon.addEventListener('click', e=>{
         e.stopPropagation();
-        showTier3Popup(word);
+        const rect = exIcon.getBoundingClientRect();
+        showTier3Popup(word, rect.left, rect.top);
         exIcon.remove();
       });
     }
@@ -699,5 +706,25 @@ body{
   renderPanel();
 })();
 </script>
-</body>
+<!-- ── HOW TO PLAY 팝업 ── -->
+<div id="howToPlayOverlay" style="
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0.45);
+  z-index:9000;
+  display:flex;align-items:center;justify-content:center;
+">
+  <div style="position:relative;width:872px;background:#fe6c48;outline:1px solid #000;isolation:isolate;">
+    <div style="position:absolute;left:-1px;top:-1px;background:#e9f056;height:34px;padding:0 16px;display:flex;align-items:center;z-index:3;">
+      <span style="font-family:'Pretendard',sans-serif;font-weight:700;font-size:20px;color:#fe6c48;line-height:34px;white-space:nowrap;">HOW TO PLAY</span>
+    </div>
+    <button onclick="document.getElementById('howToPlayOverlay').style.display='none'" style="position:absolute;right:-1px;top:-1px;width:60px;height:34px;background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:20px;color:#fe6c48;cursor:pointer;line-height:34px;text-align:center;z-index:3;">X</button>
+    <div style="margin:34px 16px 16px;background:#fff;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;">
+      <video id="howToPlayVideo" src="" style="width:100%;height:100%;object-fit:cover;display:none;" autoplay loop muted playsinline></video>
+      <span id="howToPlayPlaceholder" style="font-family:'Pretendard',sans-serif;font-size:18px;color:#aaa;">영상 준비 중</span>
+    </div>
+  </div>
+</div>
+
+<script src="sound.js"></script>
+  </body>
 </html>

@@ -408,7 +408,7 @@
       <div
         class="detail-panel"
         id="panel5"
-        style="background:#fe6c48;outline:1px solid #000;isolation:isolate;min-height:0;height:273px;top:calc(50% + 200px);right:82px;"
+        style="background:#fe6c48;outline:1px solid #000;isolation:isolate;min-height:0;height:273px;top:calc(50% + 200px);right:132px;"
       >
         <!-- 제목 -->
         <div style="position:absolute;left:-1px;top:-1px;background:#e9f056;height:34px;padding:0 38px;display:flex;align-items:center;z-index:3;">
@@ -541,7 +541,7 @@
       <div
         class="detail-panel"
         id="panel2"
-        style="background: #fe6c48; outline: 1px solid #000; isolation: isolate; min-height: 0; height: 594px; right: 662px;"
+        style="background: #fe6c48; outline: 1px solid #000; isolation: isolate; min-height: 0; height: 594px; right: 662px; top: calc(50% - 30px);"
       >
         <!-- 제목 프레임: height 32px 고정, 좌우 38px 패딩 -->
         <div style="position:absolute;left:-1px;top:-1px;background:#e9f056;height:34px;padding:0 38px;display:flex;align-items:center;z-index:3;">
@@ -647,7 +647,7 @@
       </div>
 
       <!-- ── 상세 패널: 그릇보다 큰 복은 오래가지 않는다 ── -->
-      <div class="detail-panel" id="panel4" style="background:#fe6c48;outline:1px solid #000;isolation:isolate;min-height:0;height:434px;right:562px;top:calc(50% + 50px);">
+      <div class="detail-panel" id="panel4" style="background:#fe6c48;outline:1px solid #000;isolation:isolate;min-height:0;height:434px;right:562px;top:calc(50% - 40px);">
         <div style="position:absolute;left:-1px;top:-1px;background:#e9f056;height:34px;padding:0 38px;display:flex;align-items:center;z-index:3;">
           <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:24px;color:#fe6c48;line-height:34px;white-space:nowrap;">그릇보다 큰 복은 오래가지 않는다</span>
         </div>
@@ -866,12 +866,12 @@
         <button onclick="closePanel('panel6')" style="position:absolute;right:-1px;top:-1px;width:80px;height:34px;background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:24px;color:#fe6c48;cursor:pointer;line-height:34px;text-align:center;z-index:3;">X</button>
         <div style="position:absolute;inset:0;z-index:0;pointer-events:none;">
           <div style="position:absolute;left:32px;top:89px;width:507px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:121px;width:450px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:121px;width:410px;height:27px;background:#fff;"></div>
           <div style="position:absolute;left:32px;top:185px;width:507px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:217px;width:430px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:217px;width:380px;height:27px;background:#fff;"></div>
           <div style="position:absolute;left:32px;top:281px;width:507px;height:27px;background:#fff;"></div>
           <div style="position:absolute;left:32px;top:313px;width:507px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:345px;width:340px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:32px;top:345px;width:270px;height:27px;background:#fff;"></div>
           <div style="position:absolute;left:32px;top:409px;width:507px;height:27px;background:#fff;"></div>
           <div style="position:absolute;left:32px;top:441px;width:507px;height:27px;background:#fff;"></div>
           <div style="position:absolute;left:32px;top:473px;width:65px;height:27px;background:#fff;"></div>
@@ -1062,6 +1062,7 @@
 
     <script>
       function openPanel(id, dotEl) {
+        if (window.playPop) window.playPop();
         document.querySelectorAll('.detail-panel.is-open').forEach(function(p) {
           p.classList.remove('is-open');
         });
@@ -1099,5 +1100,6 @@
     <script src="scale.js"></script>
     <script src="cursor.js"></script>
     <script src="help.js"></script>
+  <script src="sound.js"></script>
   </body>
 </html>

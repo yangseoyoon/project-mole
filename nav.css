@@ -173,7 +173,7 @@
   width: 398px;
   height: 100vh;
   background: #fff;
-  outline: 1.3px solid #000;
+  outline: 1.5px solid #000;
   z-index: 9000;
   overflow: hidden;
   transition: right 0.45s cubic-bezier(0.16,1,0.3,1);

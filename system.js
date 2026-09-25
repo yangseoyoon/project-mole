@@ -443,7 +443,10 @@ function analyzePattern() {
   window.location.href = 'loading.html';
 }
 
-document.getElementById('analyzeBtn').addEventListener('click', analyzePattern);
+document.getElementById('analyzeBtn').addEventListener('click', function() {
+  if (window.playKeyboard) window.playKeyboard();
+  analyzePattern();
+});
 
 // ── 다시찍기: 점 초기화 ──
 document.getElementById('resetBtn').addEventListener('click', () => {

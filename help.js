@@ -34,6 +34,7 @@
   document.body.appendChild(panel);
 
   function openHelp() {
+    if (window.playPop) window.playPop();
     panel.classList.add('active');
     overlay.classList.add('active');
   }

@@ -32,6 +32,7 @@ document.getElementById('captureBtn').addEventListener('click', () => {
     alert('웹캠 준비중입니다.');
     return;
   }
+  if (window.playCamClick) window.playCamClick();
 
   const outputWidth  = 679;
   const outputHeight = 830;
