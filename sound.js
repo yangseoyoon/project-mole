@@ -21,4 +21,42 @@
 
   // 모든 클릭에 spacebar-click 사운드
   document.addEventListener('click', function () { play(_click); }, true);
+
+  // 네비게이션 클릭: 사운드 재생 후 이동 (즉시 페이지 이동 시 오디오 끊김 방지)
+  document.addEventListener('click', function (e) {
+    // <a href> 링크
+    var link = e.target.closest('a[href]');
+    if (link) {
+      var href = link.getAttribute('href');
+      if (href && !href.startsWith('#') && !href.startsWith('javascript') && link.target !== '_blank') {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        play(_click);
+        setTimeout(function () { window.location.href = href; }, 120);
+        return;
+      }
+    }
+
+    // onclick 속성에 location.href 가 있는 버튼/요소
+    var btn = e.target.closest('[onclick]');
+    if (btn) {
+      var oc = btn.getAttribute('onclick') || '';
+      var m = oc.match(/window\.location\.href\s*=\s*['"]([^'"]+)['"]/);
+      if (m) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        play(_click);
+        var dest = m[1];
+        setTimeout(function () { window.location.href = dest; }, 120);
+        return;
+      }
+      if (/history\.back\(\)/.test(oc)) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        play(_click);
+        setTimeout(function () { history.back(); }, 120);
+        return;
+      }
+    }
+  }, true);
 })();
