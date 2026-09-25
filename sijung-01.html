@@ -4,10 +4,19 @@
     <meta charset="UTF-8" />
     <title>명궁 | DOT SHIFT</title>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+    />
     <link rel="stylesheet" href="nav.css" />
     <style>
-      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
       body {
         font-family: 'Pretendard', sans-serif;
@@ -65,8 +74,14 @@
         z-index: 10;
         text-decoration: none;
       }
-      .num-btn:hover { background: #ff5c34; color: #fff; }
-      .num-btn.active { background: #ff5c34; color: #fff; }
+      .num-btn:hover {
+        background: #ff5c34;
+        color: #fff;
+      }
+      .num-btn.active {
+        background: #ff5c34;
+        color: #fff;
+      }
 
       /* ── 언더라인 ── */
       .line-underline {
@@ -76,7 +91,10 @@
         width: 263.5px;
         height: 0;
       }
-      .line-underline img { display: block; width: 100%; }
+      .line-underline img {
+        display: block;
+        width: 100%;
+      }
 
       /* ── 타이틀 텍스트 ── */
       .detail-hanja {
@@ -158,7 +176,9 @@
         width: 528px;
         height: 468px;
       }
-      .diag-frame > * { position: absolute; }
+      .diag-frame > * {
+        position: absolute;
+      }
 
       /* 라벨 공통 */
       .diag-label {
@@ -183,8 +203,17 @@
         height: 56.12px;
         cursor: pointer;
       }
-      .diag-dot img { width: 15px; height: 15px; display: block; flex-shrink: 0; transition: filter 0.15s ease; }
-      .diag-dot:hover img { filter: invert(44%) sepia(98%) saturate(744%) hue-rotate(345deg) brightness(102%) contrast(101%); }
+      .diag-dot img {
+        width: 15px;
+        height: 15px;
+        display: block;
+        flex-shrink: 0;
+        transition: filter 0.15s ease;
+      }
+      .diag-dot:hover img {
+        filter: invert(44%) sepia(98%) saturate(744%) hue-rotate(345deg)
+          brightness(102%) contrast(101%);
+      }
 
       /* 툴팁 */
       .diag-tooltip {
@@ -208,7 +237,9 @@
         word-break: keep-all;
         white-space: normal;
       }
-      .diag-tooltip.show { opacity: 1; }
+      .diag-tooltip.show {
+        opacity: 1;
+      }
 
       /* 밝기 라벨 (frame 외부) */
       .diag-label-baki {
@@ -237,7 +268,6 @@
     </nav>
 
     <div class="sijungDetailPage page-scale">
-
       <!-- 얼굴 사진 -->
       <div class="face-wrap">
         <img src="images/sijung/face.png" alt="얼굴 사진" />
@@ -246,10 +276,16 @@
       <!-- 언더라인 -->
 
       <!-- 타이틀 -->
-      <p class="detail-hanja">命宮 <span class="detail-hanja-sub">목숨 명 • 집 궁</span></p>
+      <p class="detail-hanja">
+        命宮 <span class="detail-hanja-sub">목숨 명 • 집 궁</span>
+      </p>
       <p class="detail-sub">The Flow and Center of Life 삶의 흐름과 중심</p>
       <h2 class="detail-title">명궁</h2>
-      <p class="detail-body1">명궁은 두 눈썹 사이, 미간에 위치한 십이궁의 중심이 되는 궁이다.  삶의 흐름과 정신적 균형, 운명의 전체적인 방향성을 상징하는 영역으로 얼굴 전체를 해석하는 기준점과도 같다.</p>
+      <p class="detail-body1">
+        명궁은 두 눈썹 사이, 미간에 위치한 십이궁의 중심이 되는 궁이다. 삶의
+        흐름과 정신적 균형, 운명의 전체적인 방향성을 상징하는 영역으로 얼굴
+        전체를 해석하는 기준점과도 같다.
+      </p>
       <div class="detail-body2">
         <p>명궁을 볼 때는 넓이, 밝기, 주름, 점 총 4가지 요소를 본다.</p>
       </div>
@@ -257,52 +293,190 @@
       <!-- 다이어그램 (Figma frame 1389:1748, 컨테이너 기준 상대좌표) -->
       <div class="diag-frame">
         <!-- 배경 원 -->
-        <img src="images/sijung/diagram-circle-bg.svg" alt="" style="left:114.56px;top:81.39px;width:300.801px;height:300.801px;" />
+        <img
+          src="images/sijung/diagram-circle-bg.svg"
+          alt=""
+          style="
+            left: 114.56px;
+            top: 81.39px;
+            width: 300.801px;
+            height: 300.801px;
+          "
+        />
         <!-- 큰 내부 원 -->
-        <img src="images/sijung/diagram-circle-lg.svg" alt="" style="left:195.37px;top:162.20px;width:140.299px;height:140.299px;" />
+        <img
+          src="images/sijung/diagram-circle-lg.svg"
+          alt=""
+          style="
+            left: 195.37px;
+            top: 162.2px;
+            width: 140.299px;
+            height: 140.299px;
+          "
+        />
         <!-- 중간 원 -->
-        <img src="images/sijung/diagram-circle-md.svg" alt="" style="left:238.02px;top:204.85px;width:54.997px;height:54.997px;" />
+        <img
+          src="images/sijung/diagram-circle-md.svg"
+          alt=""
+          style="
+            left: 238.02px;
+            top: 204.85px;
+            width: 54.997px;
+            height: 54.997px;
+          "
+        />
         <!-- 중심 점 -->
-        <img src="images/sijung/diagram-dot-center.svg" alt="" style="left:260.46px;top:227.34px;width:9.612px;height:9.612px;" />
+        <img
+          src="images/sijung/diagram-dot-center.svg"
+          alt=""
+          style="left: 260.46px; top: 227.34px; width: 9.612px; height: 9.612px"
+        />
 
         <!-- 수직 축: 가로선 SVG를 동일 중심점에서 90도 회전 -->
-        <img src="images/sijung/line-axis-v.svg" alt="" style="
-          position:absolute;
-          width:384.487px;
-          left:73.03px;
-          top:229.47px;
-          transform:rotate(90deg);
-          transform-origin:center center;
-          display:block;
-        " />
+        <img
+          src="images/sijung/line-axis-v.svg"
+          alt=""
+          style="
+            position: absolute;
+            width: 384.487px;
+            left: 73.03px;
+            top: 229.47px;
+            transform: rotate(90deg);
+            transform-origin: center center;
+            display: block;
+          "
+        />
         <!-- 수평 축 -->
-        <div style="left:73.02px;top:232.15px;width:384.487px;height:0;position:absolute;">
-          <img src="images/sijung/line-axis-h.svg" alt="" style="display:block;width:100%;position:absolute;inset:-2.67px -0.69%;" />
+        <div
+          style="
+            left: 73.02px;
+            top: 232.15px;
+            width: 384.487px;
+            height: 0;
+            position: absolute;
+          "
+        >
+          <img
+            src="images/sijung/line-axis-h.svg"
+            alt=""
+            style="
+              display: block;
+              width: 100%;
+              position: absolute;
+              inset: -2.67px -0.69%;
+            "
+          />
         </div>
 
         <!-- 라벨: 점 (상단) -->
-        <div class="diag-label" style="left:234.83px;top:-0.15px;width:57.673px;height:27.234px;">점</div>
+        <div
+          class="diag-label"
+          style="
+            left: 234.83px;
+            top: -0.15px;
+            width: 57.673px;
+            height: 27.234px;
+          "
+        >
+          점
+        </div>
         <!-- 라벨: 넓이 (하단) -->
-        <div class="diag-label" style="left:199.58px;top:440.41px;width:126.56px;height:27.234px;">넓이</div>
+        <div
+          class="diag-label"
+          style="
+            left: 199.58px;
+            top: 440.41px;
+            width: 126.56px;
+            height: 27.234px;
+          "
+        >
+          넓이
+        </div>
         <!-- 라벨: 주름 (우측) -->
-        <div class="diag-label" style="left:470.33px;top:216.12px;width:57.673px;height:27.234px;">주름</div>
+        <div
+          class="diag-label"
+          style="
+            left: 470.33px;
+            top: 216.12px;
+            width: 57.673px;
+            height: 27.234px;
+          "
+        >
+          주름
+        </div>
 
-        <!-- 데이터 점: 1063:284 점없음이 (black) -->
-        <div class="diag-dot" data-dir="right" data-tip="점이 없다면 생활이 전반적으로 평탄하고 마음이 넓으며, 식견 또한 높다고 판단한다." style="left:309.68px;top:69.04px;"><img src="images/sijung/diagram-dot-black.svg" alt="" /></div>
-        <!-- 데이터 점: 1063:281 점있음이 (white) -->
-        <div class="diag-dot" data-dir="left" data-tip="복점의 경우 매우 총명해 학문 혹은 예술로 흥한다. 흉점의 경우 하고자 하는 일에 장애가 많고 주거가 불안정하다." style="left:180.61px;top:69.04px;"><img src="images/sijung/diagram-dot-white.svg" alt="" /></div>
-        <!-- 데이터 점: 1063:262 밝다 (black) -->
-        <div class="diag-dot" data-dir="left" data-tip="미간이 밝고 깨끗하면 좋은 기운을 가진 사람이라고 판단한다." style="left:116.74px;top:129.88px;"><img src="images/sijung/diagram-dot-black.svg" alt="" /></div>
-        <!-- 데이터 점: 1063:259 주름없음이 (black) -->
-        <div class="diag-dot" data-dir="right" data-tip="미간에 주름이 없으면 마음이 넓고 정서적으로 안정된 상태라고 해석한다." style="left:377.51px;top:277.98px;"><img src="images/sijung/diagram-dot-black.svg" alt="" /></div>
-        <!-- 데이터 점: 1063:255 주름있음이 (white) -->
-        <div class="diag-dot" data-dir="right" data-tip="미간에 세로 주름 있으면 고집이 세다고 보고, 가로 주름 있으면 내면에 근심이 있다고 해석한다." style="left:377.51px;top:129.89px;"><img src="images/sijung/diagram-dot-white.svg" alt="" /></div>
-        <!-- 데이터 점: 936:1025 넓음 (white) -->
-        <div class="diag-dot" data-dir="right" data-tip="미간이 넓으면 포용력이 있고 여유로운 성격이라고 해석한다." style="left:309.68px;top:338.77px;"><img src="images/sijung/diagram-dot-white.svg" alt="" /></div>
-        <!-- 데이터 점: 936:1028 좁다 (black) -->
-        <div class="diag-dot" data-dir="left" data-tip="미간이 좁으면 신중하고 고집있는 성격이라고 해석한다." style="left:180.61px;top:338.77px;"><img src="images/sijung/diagram-dot-black.svg" alt="" /></div>
-        <!-- 데이터 점: 831:1143 어두움 (alt) -->
-        <div class="diag-dot" data-dir="left" data-tip="미간이 칙칙하거나 그늘지면 스트레스나 고민이 있다고 본다." style="left:116.74px;top:277.98px;"><img src="images/sijung/diagram-dot-alt.svg" alt="" /></div>
+        <!-- 데이터 점: 1063:284 점없음이 -->
+        <div
+          class="diag-dot"
+          data-dir="right"
+          data-tip="&lt;b&gt;복점&lt;/b&gt;의 경우 매우 총명해 학문 혹은 예술로 흥한다. &lt;b&gt;흉점&lt;/b&gt;의 경우 하고자 하는 일에 장애가 많고 주거가 불안정하다."
+          style="left: 309.68px; top: 69.04px"
+        >
+          <img src="images/sijung/diagram-dot-black.svg" alt="" />
+        </div>
+        <!-- 데이터 점: 1063:281 점있음이 -->
+        <div
+          class="diag-dot"
+          data-dir="left"
+          data-tip="&lt;b&gt;점이 없다면&lt;/b&gt; 생활이 전반적으로 평탄하고 마음이 넓으며, 식견 또한 높다고 판단한다."
+          style="left: 180.61px; top: 69.04px"
+        >
+          <img src="images/sijung/diagram-dot-white.svg" alt="" />
+        </div>
+        <!-- 데이터 점: 1063:262 어둡다 -->
+        <div
+          class="diag-dot"
+          data-dir="left"
+          data-tip=" &lt;b&gt;미간이 칙칙하거나 그늘지면&lt;/b&gt; 스트레스나 고민이 있다고 본다."
+          style="left: 116.74px; top: 129.88px"
+        >
+          <img src="images/sijung/diagram-dot-black.svg" alt="" />
+        </div>
+        <!-- 데이터 점: 1063:259 주름있음이 -->
+        <div
+          class="diag-dot"
+          data-dir="right"
+          data-tip="미간에 &lt;b&gt;세로 주름이 있으면&lt;/b&gt; 고집이 세다고 보고, &lt;b&gt;가로 주름이 있으면&lt;/b&gt; 내면에 근심이 있다고 해석한다."
+          style="left: 377.51px; top: 277.98px"
+        >
+          <img src="images/sijung/diagram-dot-black.svg" alt="" />
+        </div>
+        <!-- 데이터 점: 1063:255 주름없음이 -->
+        <div
+          class="diag-dot"
+          data-dir="right"
+          data-tip="미간에 &lt;b&gt;주름이 없으면&lt;/b&gt; 마음이 넓고 정서적으로 안정된 상태라고 해석한다."
+          style="left: 377.51px; top: 129.89px"
+        >
+          <img src="images/sijung/diagram-dot-white.svg" alt="" />
+        </div>
+        <!-- 데이터 점: 936:1025 넓음 -->
+        <div
+          class="diag-dot"
+          data-dir="right"
+          data-tip=" &lt;b&gt;미간이 넓으면&lt;/b&gt; 포용력이 있고 여유로운 성격이라고 해석한다."
+          style="left: 309.68px; top: 338.77px"
+        >
+          <img src="images/sijung/diagram-dot-white.svg" alt="" />
+        </div>
+        <!-- 데이터 점: 936:1028 좁다 -->
+        <div
+          class="diag-dot"
+          data-dir="left"
+          data-tip=" &lt;b&gt;미간이 좁으면&lt;/b&gt; 신중하고 고집있는 성격이라고 해석한다."
+          style="left: 180.61px; top: 338.77px"
+        >
+          <img src="images/sijung/diagram-dot-black.svg" alt="" />
+        </div>
+        <!-- 데이터 점: 831:1143 밝음 -->
+        <div
+          class="diag-dot"
+          data-dir="left"
+          data-tip=" &lt;b&gt;미간이 밝고 깨끗하면&lt;/b&gt; 좋은 기운을 가진 사람이라고 판단한다."
+          style="left: 116.74px; top: 277.98px"
+        >
+          <img src="images/sijung/diagram-dot-white.svg" alt="" />
+        </div>
 
         <!-- 툴팁 -->
         <div class="diag-tooltip" id="diagTooltip"></div>
@@ -312,81 +486,293 @@
       <div class="diag-label-baki">밝기</div>
 
       <!-- ── 번호 버튼 ── -->
-      <a class="num-btn active" href="sijung-01.html" style="left:369.19px; top:calc(495.93px - 95.87px);">01</a>
+      <a
+        class="num-btn active"
+        href="sijung-01.html"
+        style="left: 369.19px; top: calc(495.93px - 95.87px)"
+        >01</a
+      >
       <!-- 02 형제궁 -->
-      <a class="num-btn" href="sijung-02.html" style="left:499.44px; top:calc(472.93px - 95.87px); text-decoration:none;">02</a>
-      <a class="num-btn" href="sijung-02.html" style="left:245.66px; top:calc(472.93px - 95.87px); text-decoration:none;">02</a>
+      <a
+        class="num-btn"
+        href="sijung-02.html"
+        style="
+          left: 499.44px;
+          top: calc(472.93px - 95.87px);
+          text-decoration: none;
+        "
+        >02</a
+      >
+      <a
+        class="num-btn"
+        href="sijung-02.html"
+        style="
+          left: 245.66px;
+          top: calc(472.93px - 95.87px);
+          text-decoration: none;
+        "
+        >02</a
+      >
       <!-- 03 처첩궁 -->
-      <a class="num-btn" href="sijung-03.html" style="left:171.61px; top:calc(538.93px - 95.87px); text-decoration:none;">03</a>
-      <a class="num-btn" href="sijung-03.html" style="left:569.61px; top:calc(538.93px - 95.87px); text-decoration:none;">03</a>
+      <a
+        class="num-btn"
+        href="sijung-03.html"
+        style="
+          left: 171.61px;
+          top: calc(538.93px - 95.87px);
+          text-decoration: none;
+        "
+        >03</a
+      >
+      <a
+        class="num-btn"
+        href="sijung-03.html"
+        style="
+          left: 569.61px;
+          top: calc(538.93px - 95.87px);
+          text-decoration: none;
+        "
+        >03</a
+      >
       <!-- 04 전택궁 -->
-      <a class="num-btn" href="sijung-04.html" style="left:370.03px; top:calc(873.87px - 95.87px);" style="text-decoration:none;">04</a>
-      <a class="num-btn" href="sijung-04.html" style="left:273.44px; top:calc(830.87px - 95.87px);" style="text-decoration:none;">04</a>
-      <a class="num-btn" href="sijung-04.html" style="left:464.44px; top:calc(830.87px - 95.87px);" style="text-decoration:none;">04</a>
-      <a class="num-btn" href="sijung-04.html" style="left:216.44px; top:calc(754.9px  - 95.87px);" style="text-decoration:none;">04</a>
-      <a class="num-btn" href="sijung-04.html" style="left:525.44px; top:calc(754.9px  - 95.87px);" style="text-decoration:none;">04</a>
+      <a
+        class="num-btn"
+        href="sijung-04.html"
+        style="left: 370.03px; top: calc(873.87px - 95.87px)"
+        style="text-decoration: none"
+        >04</a
+      >
+      <a
+        class="num-btn"
+        href="sijung-04.html"
+        style="left: 273.44px; top: calc(830.87px - 95.87px)"
+        style="text-decoration: none"
+        >04</a
+      >
+      <a
+        class="num-btn"
+        href="sijung-04.html"
+        style="left: 464.44px; top: calc(830.87px - 95.87px)"
+        style="text-decoration: none"
+        >04</a
+      >
+      <a
+        class="num-btn"
+        href="sijung-04.html"
+        style="left: 216.44px; top: calc(754.9px - 95.87px)"
+        style="text-decoration: none"
+        >04</a
+      >
+      <a
+        class="num-btn"
+        href="sijung-04.html"
+        style="left: 525.44px; top: calc(754.9px - 95.87px)"
+        style="text-decoration: none"
+        >04</a
+      >
       <!-- 05 관록궁 -->
-      <a class="num-btn" href="sijung-05.html" style="left:369.19px; top:calc(382.93px - 95.87px);">05</a>
+      <a
+        class="num-btn"
+        href="sijung-05.html"
+        style="left: 369.19px; top: calc(382.93px - 95.87px)"
+        >05</a
+      >
       <!-- 06 노복궁 -->
-      <a class="num-btn" href="sijung-06.html" style="left:255.94px; top:calc(669.93px - 95.87px);">06</a>
-      <a class="num-btn" href="sijung-06.html" style="left:490.44px; top:calc(669.93px - 95.87px);">06</a>
+      <a
+        class="num-btn"
+        href="sijung-06.html"
+        style="left: 255.94px; top: calc(669.93px - 95.87px)"
+        >06</a
+      >
+      <a
+        class="num-btn"
+        href="sijung-06.html"
+        style="left: 490.44px; top: calc(669.93px - 95.87px)"
+        >06</a
+      >
       <!-- 07 복덕궁 -->
-      <a class="num-btn" href="sijung-07.html" style="left:255.53px; top:calc(414.93px - 95.87px);">07</a>
-      <a class="num-btn" href="sijung-07.html" style="left:490.44px; top:calc(414.93px - 95.87px);">07</a>
+      <a
+        class="num-btn"
+        href="sijung-07.html"
+        style="left: 255.53px; top: calc(414.93px - 95.87px)"
+        >07</a
+      >
+      <a
+        class="num-btn"
+        href="sijung-07.html"
+        style="left: 490.44px; top: calc(414.93px - 95.87px)"
+        >07</a
+      >
       <!-- 08 재백궁 -->
-      <a class="num-btn" href="sijung-08.html" style="left:369.19px; top:calc(645.93px - 95.87px);">08</a>
+      <a
+        class="num-btn"
+        href="sijung-08.html"
+        style="left: 369.19px; top: calc(645.93px - 95.87px)"
+        >08</a
+      >
       <!-- 09 재백궁 -->
-      <a class="num-btn" href="sijung-09.html" style="left:272.44px; top:calc(514.93px - 95.87px);">09</a>
-      <a class="num-btn" href="sijung-09.html" style="left:464.44px; top:calc(514.93px - 95.87px);">09</a>
+      <a
+        class="num-btn"
+        href="sijung-09.html"
+        style="left: 272.44px; top: calc(514.93px - 95.87px)"
+        >09</a
+      >
+      <a
+        class="num-btn"
+        href="sijung-09.html"
+        style="left: 464.44px; top: calc(514.93px - 95.87px)"
+        >09</a
+      >
       <!-- 10 자녀궁 -->
-      <div class="num-btn" style="left:369.19px; top:calc(564.93px - 95.87px);">10</div>
+      <div
+        class="num-btn"
+        style="left: 369.19px; top: calc(564.93px - 95.87px)"
+      >
+        10
+      </div>
       <!-- 11 처첩궁 -->
-      <div class="num-btn" style="left:263.16px; top:calc(591.93px - 95.87px);">11</div>
-      <div class="num-btn" style="left:481.94px; top:calc(591.93px - 95.87px);">11</div>
+      <div
+        class="num-btn"
+        style="left: 263.16px; top: calc(591.93px - 95.87px)"
+      >
+        11
+      </div>
+      <div
+        class="num-btn"
+        style="left: 481.94px; top: calc(591.93px - 95.87px)"
+      >
+        11
+      </div>
       <!-- 12 남녀궁 -->
-      <div class="num-btn" style="left:182.44px; top:calc(456.93px - 95.87px);">12</div>
-      <div class="num-btn" style="left:560.44px; top:calc(456.93px - 95.87px);">12</div>
-
+      <div
+        class="num-btn"
+        style="left: 182.44px; top: calc(456.93px - 95.87px)"
+      >
+        12
+      </div>
+      <div
+        class="num-btn"
+        style="left: 560.44px; top: calc(456.93px - 95.87px)"
+      >
+        12
+      </div>
     </div>
 
-            <nav class="bottomNav">
+    <nav class="bottomNav">
       <div class="bn-inner">
-        <img class="bn-logo-l" style="width:23.456px;height:29.129px;left:40px;top:22.99px" src="images/nav/logo-D.svg" alt="">
-        <img class="bn-logo-l" style="width:29.935px;height:29.935px;left:66.65px;top:22.59px" src="images/nav/logo-O.svg" alt="">
-        <img class="bn-logo-l" style="width:22.571px;height:29.129px;left:98.09px;top:22.99px" src="images/nav/logo-T.svg" alt="">
-        <img class="bn-logo-l" style="width:21.726px;height:30.015px;left:134.06px;top:22.59px" src="images/nav/logo-S.svg" alt="">
-        <img class="bn-logo-l" style="width:23.336px;height:29.129px;left:160.53px;top:22.99px" src="images/nav/logo-H.svg" alt="">
-        <img class="bn-logo-l" style="width:4.426px;height:29.129px;left:189.82px;top:22.99px" src="images/nav/logo-I.svg" alt="">
-        <img class="bn-logo-l" style="width:18.065px;height:29.129px;left:200.16px;top:22.99px" src="images/nav/logo-F.svg" alt="">
-        <img class="bn-logo-l" style="width:22.571px;height:29.129px;left:221.73px;top:22.99px" src="images/nav/logo-T.svg" alt="">
+        <img
+          class="bn-logo-l"
+          style="width: 23.456px; height: 29.129px; left: 40px; top: 22.99px"
+          src="images/nav/logo-D.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="width: 29.935px; height: 29.935px; left: 66.65px; top: 22.59px"
+          src="images/nav/logo-O.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="width: 22.571px; height: 29.129px; left: 98.09px; top: 22.99px"
+          src="images/nav/logo-T.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="
+            width: 21.726px;
+            height: 30.015px;
+            left: 134.06px;
+            top: 22.59px;
+          "
+          src="images/nav/logo-S.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="
+            width: 23.336px;
+            height: 29.129px;
+            left: 160.53px;
+            top: 22.99px;
+          "
+          src="images/nav/logo-H.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="width: 4.426px; height: 29.129px; left: 189.82px; top: 22.99px"
+          src="images/nav/logo-I.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="
+            width: 18.065px;
+            height: 29.129px;
+            left: 200.16px;
+            top: 22.99px;
+          "
+          src="images/nav/logo-F.svg"
+          alt=""
+        />
+        <img
+          class="bn-logo-l"
+          style="
+            width: 22.571px;
+            height: 29.129px;
+            left: 221.73px;
+            top: 22.99px;
+          "
+          src="images/nav/logo-T.svg"
+          alt=""
+        />
         <a class="bn-badge bn-badge--h" href="index.html">H</a>
         <button class="bn-badge bn-badge--b" onclick="history.back()">B</button>
-        <button class="bn-item" style="left:450px" onclick="window.location.href='index.html'">
+        <button
+          class="bn-item"
+          style="left: 450px"
+          onclick="window.location.href = 'index.html'"
+        >
           <span>프로젝트 알아보기</span>
-          <img src="images/nav/nav-arrow.svg" alt="">
+          <img src="images/nav/nav-arrow.svg" alt="" />
         </button>
-        <button class="bn-item" style="left:790px" onclick="window.location.href='camera.html'">
+        <button
+          class="bn-item"
+          style="left: 790px"
+          onclick="window.location.href = 'camera.html'"
+        >
           <span>점 패턴 분석하기</span>
-          <img src="images/nav/nav-arrow.svg" alt="">
+          <img src="images/nav/nav-arrow.svg" alt="" />
         </button>
-        <button class="bn-item" style="left:1130px" onclick="window.location.href='facemap-celeb.html'">
+        <button
+          class="bn-item"
+          style="left: 1130px"
+          onclick="window.location.href = 'facemap-celeb.html'"
+        >
           <span>얼굴 지도 살펴보기</span>
-          <img src="images/nav/nav-arrow.svg" alt="">
+          <img src="images/nav/nav-arrow.svg" alt="" />
         </button>
-        <button class="bn-item" style="left:1470px" onclick="window.location.href='gwansang.html'">
+        <button
+          class="bn-item"
+          style="left: 1470px"
+          onclick="window.location.href = 'gwansang.html'"
+        >
           <span>관상학 알아보기</span>
-          <img src="images/nav/nav-arrow.svg" alt="">
+          <img src="images/nav/nav-arrow.svg" alt="" />
         </button>
-        <div class="bn-right-bg"></div><button class="bn-help-btn">?</button>
+        <div class="bn-right-bg"></div>
+        <button class="bn-help-btn">?</button>
       </div>
     </nav>
     <script>
       const tooltip = document.getElementById('diagTooltip');
       const diagFrame = document.querySelector('.diag-frame');
 
-      document.querySelectorAll('.diag-dot').forEach(dot => {
+      document.querySelectorAll('.diag-dot').forEach((dot) => {
         dot.addEventListener('mouseenter', () => {
-          tooltip.textContent = dot.dataset.tip;
+          tooltip.innerHTML = dot.dataset.tip;
           tooltip.classList.add('show');
 
           const dir = dot.dataset.dir;
@@ -398,7 +784,7 @@
 
           const tipTop = dotT + dotH / 2 - tipH / 2;
 
-          tooltip.style.left = (dotL + dotW + 5) + 'px';
+          tooltip.style.left = dotL + dotW + 5 + 'px';
           tooltip.style.top = tipTop + 'px';
         });
 
@@ -408,10 +794,8 @@
       });
     </script>
     <script src="scale.js"></script>
-  <script src="cursor.js"></script>
+    <script src="cursor.js"></script>
     <script src="help.js"></script>
-<script src="sound.js"></script>
+    <script src="sound.js"></script>
   </body>
 </html>
-
-
