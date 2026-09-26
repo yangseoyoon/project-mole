@@ -318,6 +318,33 @@
       document.querySelectorAll('img').forEach(img => img.draggable = false);
     })();
     </script>
+    <script>
+    // 타이틀 글자 마우스 반발 효과
+    (function(){
+      const letters = Array.from(document.querySelectorAll('.tl'));
+      const RADIUS = 220;
+      const STRENGTH = 100;
+      letters.forEach(el => { el.style.position = 'relative'; el.style.transition = 'top 0.25s ease, left 0.25s ease'; el.style.top = '0px'; el.style.left = '0px'; });
+      window.addEventListener('mousemove', e => {
+        letters.forEach(el => {
+          const r = el.getBoundingClientRect();
+          const cx = r.left + r.width / 2;
+          const cy = r.top + r.height / 2;
+          const dx = cx - e.clientX;
+          const dy = cy - e.clientY;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+          if (dist < RADIUS && dist > 0) {
+            const force = (RADIUS - dist) / RADIUS;
+            el.style.top  = (dy / dist * force * STRENGTH) + 'px';
+            el.style.left = (dx / dist * force * STRENGTH) + 'px';
+          } else {
+            el.style.top  = '0px';
+            el.style.left = '0px';
+          }
+        });
+      });
+    })();
+    </script>
     <script src="scale.js"></script>
     <script src="cursor.js"></script>
     <script src="help.js"></script>
