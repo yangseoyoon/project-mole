@@ -47,9 +47,9 @@
           <div class="win-footer">
             <!-- 3-세그먼트 툴바 -->
             <div class="win-toolbar">
-              <div class="win-seg"><span>기본</span></div>
-              <div class="win-seg"><span>스티커</span></div>
-              <div class="win-seg"><span>텍스트</span></div>
+              <div class="win-seg seg-active" id="segDefault" onclick="if(window.stopTextFilter)stopTextFilter();if(window.stopStickerFilter)stopStickerFilter();document.querySelectorAll('.win-seg').forEach(function(s){s.classList.remove('seg-active')});this.classList.add('seg-active');"><span>기본</span></div>
+              <div class="win-seg" onclick="toggleStickerFilter(this)"><span>도트화</span></div>
+              <div class="win-seg" onclick="toggleTextFilter(this)"><span>2D 메쉬</span></div>
             </div>
 
             <!-- 촬영 버튼 -->
@@ -57,9 +57,9 @@
               <img src="images/cam/cam-btn.svg" alt="촬영" />
             </button>
 
-            <!-- 초기화 버튼 -->
-            <button class="reset-btn" onclick="location.reload()">
-              초기화
+            <!-- 가이드 토글 버튼 -->
+            <button class="reset-btn" id="guideToggleBtn" onclick="toggleGuide(this)">
+              가이드 OFF
             </button>
           </div>
         </div>
@@ -198,7 +198,19 @@
     </nav>
 
     <canvas id="photoCanvas" style="display: none"></canvas>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
+    <script>
+      function toggleGuide(btn) {
+        var guide = document.querySelector('.guide-wrap');
+        if (!guide) return;
+        var on = guide.style.display === 'none';
+        guide.style.display = on ? '' : 'none';
+        btn.textContent = on ? '가이드 OFF' : '가이드 ON';
+      }
+    </script>
     <script src="camera.js"></script>
+    <script src="camera-text-filter.js"></script>
+    <script src="camera-sticker-filter.js"></script>
     <script src="scale.js"></script>
     <script src="cursor.js"></script>
     <script src="help.js"></script>

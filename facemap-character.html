@@ -70,59 +70,19 @@
       >
         <img src="images/facemap/dot-char-otorainy.svg" alt="" />
       </button>
-      <!-- 클러스터 (1140px) -->
-      <button
-        class="dotBtn"
-        data-profile="cluster1"
-        style="
-          left: 1080px;
-          top: 446.79px;
-          width: 36.42px;
-          height: 86.42px;
-          display: flex;
-          flex-direction: column;
-          gap: 50px;
-          align-items: center;
-          padding: 10px;
-        "
-      >
-        <img
-          style="width: 16.42px; height: 16.42px; flex-shrink: 0"
-          src="images/facemap/dot-char-small.svg"
-          alt=""
-        />
-        <img
-          style="width: 16.42px; height: 16.42px; flex-shrink: 0"
-          src="images/facemap/dot-char-small.svg"
-          alt=""
-        />
+      <!-- 클러스터1 분리 -->
+      <button class="dotBtn" data-profile="cluster1" style="left: 1089px; top: 456.79px; width: 16.42px; height: 16.42px;">
+        <img src="images/facemap/dot-char-small.svg" alt="" />
       </button>
-      <!-- 클러스터 (798px) -->
-      <button
-        class="dotBtn"
-        data-profile="cluster2"
-        style="
-          left: 738.02px;
-          top: 413.46px;
-          width: 36.42px;
-          height: 55.42px;
-          display: flex;
-          flex-direction: column;
-          gap: 19px;
-          align-items: center;
-          padding: 10px;
-        "
-      >
-        <img
-          style="width: 16.42px; height: 16.42px; flex-shrink: 0"
-          src="images/facemap/dot-char-small.svg"
-          alt=""
-        />
-        <img
-          style="width: 16.42px; height: 16.42px; flex-shrink: 0"
-          src="images/facemap/dot-char-small.svg"
-          alt=""
-        />
+      <button class="dotBtn" data-profile="cluster1b" style="left: 1089px; top: 523px; width: 16.42px; height: 16.42px;">
+        <img src="images/facemap/dot-char-small.svg" alt="" />
+      </button>
+      <!-- 클러스터2 분리 -->
+      <button class="dotBtn" data-profile="cluster2" style="left: 747px; top: 423.46px; width: 16.42px; height: 16.42px;">
+        <img src="images/facemap/dot-char-small.svg" alt="" />
+      </button>
+      <button class="dotBtn" data-profile="cluster2b" style="left: 747px; top: 458px; width: 16.42px; height: 16.42px;">
+        <img src="images/facemap/dot-char-small.svg" alt="" />
       </button>
       <!-- Frame412: 시즈쿠 -->
       <button
@@ -202,6 +162,28 @@
         />
       </button>
 
+      <!-- 아케우라지 츠카사 -->
+      <button class="dotBtn" data-profile="tsukasa" style="left: 404px; top: 662px; width: 16.42px; height: 16.42px;">
+        <img src="images/facemap/dot-char-small.svg" alt="" />
+      </button>
+
+      <!-- 코베니 1 - Right Eye 근처 -->
+      <button class="dotBtn" data-profile="kobeni" style="left: 1029px; top: 393px; width: 16.42px; height: 16.42px;">
+        <img src="images/facemap/dot-char-small.svg" alt="" />
+      </button>
+      <!-- 다이아 쿠로사와 -->
+      <button class="dotBtn" data-profile="diakurosawa" style="left: 730px; top: 805px; width: 16.42px; height: 16.42px;">
+        <img src="images/facemap/dot-char-small.svg" alt="" />
+      </button>
+      <!-- 코베니 2 - Mouth 왼쪽 근처 -->
+      <button class="dotBtn" data-profile="kobeni" style="left: 780px; top: 805px; width: 16.42px; height: 16.42px;">
+        <img src="images/facemap/dot-char-small.svg" alt="" />
+      </button>
+      <!-- 코베니 3 - 우하단 -->
+      <button class="dotBtn" data-profile="kobeni" style="left: 1690px; top: 780px; width: 16.42px; height: 16.42px;">
+        <img src="images/facemap/dot-char-small.svg" alt="" />
+      </button>
+
       <!-- 프로필 말풍선 -->
       <div class="profile-bubble" id="profileBubble">
         <div class="bubble-union">
@@ -222,53 +204,78 @@
     <script>
       const PROFILES = {
         sakusa: {
-          name: '사쿠사',
-          desc: '설명 추가 예정',
+          name: 'Kiyoomi Sakusa',
+          desc: '애니메이션 · 만화 <하이큐!!>의 등장인물',
           photo: 'images/facemap/photo-char-sakusa.png',
         },
         otorainy: {
           name: 'Oto Rainy',
-          desc: '허블사무소 소속 5인 버츄얼 밴드 아이돌 그룹 스코시즘의 멤버이자 버츄얼 유튜버',
+          desc: '5인 버츄얼 밴드 아이돌 그룹 스코시즘의 멤버이자 버츄얼 유튜버',
           photo: 'images/facemap/photo-char-otorainy.png',
         },
         himmel: {
-          name: '힘멜',
-          desc: '설명 추가 예정',
+          name: 'Himmel',
+          desc: '판타지 만화 <장송의 프리렌>의 등장인물',
           photo: 'images/facemap/photo-char-himmel.png',
         },
         tomoe: {
-          name: '토모에',
-          desc: '설명 추가 예정',
+          name: 'Tomie',
+          desc: '만화작가 이토준지의 대표작 <토미에 시리즈>의 등장인물',
           photo: 'images/facemap/photo-char-tomoe.png',
         },
         touya: {
-          name: '토우야',
-          desc: '설명 추가 예정',
+          name: 'Toya Aoyagi',
+          desc: '게임 &lt;프로젝트 세카이 컬러풀 스테이지! feat.하츠네미쿠&gt;의 등장인물',
           photo: 'images/facemap/photo-char-touya.png',
         },
         kohaku: {
-          name: '코하쿠',
-          desc: '설명 추가 예정',
+          name: 'Ichimura Kohaku',
+          desc: '순정만화 <아름다운 초저녁달>의 등장인물',
           photo: 'images/facemap/photo-char-kohaku.png',
         },
         shizuku: {
-          name: '시즈쿠',
-          desc: '설명 추가 예정',
+          name: 'Shizuku Hinomori',
+          desc: '게임 &lt;프로젝트 세카이 컬러풀 스테이지! feat.하츠네미쿠&gt;의 등장인물',
           photo: 'images/facemap/photo-char-shizuku.png',
         },
         cluster1: {
-          name: '타츠미',
-          desc: '설명 추가 예정',
+          name: 'Kazehaya Tatsumi',
+          desc: '게임 <앙상블 스타즈!!>의 등장인물',
           photo: 'images/facemap/photo-char-tatsumi.png',
         },
         cluster2: {
-          name: '키요코',
-          desc: '설명 추가 예정',
-          photo: 'images/facemap/photo-char-kiyoko.png',
+          name: 'Benichidori',
+          desc: '애니메이션 · 만화 <던전밥>의 등장인물',
+          photo: 'images/facemap/photo-char-beni.png',
         },
         char_new1: {
-          name: '베니',
-          desc: '설명 추가 예정',
+          name: 'Shimizu Kiyoko',
+          desc: '애니메이션 · 만화 <하이큐!!>의 등장인물',
+          photo: 'images/facemap/photo-char-kiyoko.png',
+        },
+        diakurosawa: {
+          name: 'Dia Kurosawa',
+          desc: '아이돌 프로젝트 시리즈 <br>&lt;러브라이브! 선샤인!!&gt;의 등장인물',
+          photo: 'images/facemap/photo-char-diakurosawa.png',
+        },
+        tsukasa: {
+          name: 'Akeuraj Tsukasa',
+          desc: '만화 <메달리스트>의 등장인물',
+          photo: 'images/facemap/photo-char-tsukasa.png',
+        },
+        kobeni: {
+          name: 'Higashiyama Kobeni',
+          desc: '만화 <체인소맨>의 등장인물',
+          photo: 'images/facemap/photo-char-kobeni.png',
+        },
+        cluster1b: {
+          name: 'Kazehaya Tatsumi',
+          desc: '게임 <앙상블 스타즈!!>의 등장인물',
+          photo: 'images/facemap/photo-char-tatsumi.png',
+        },
+        cluster2b: {
+          name: 'Benichidori',
+          desc: '애니메이션 · 만화 <던전밥>의 등장인물',
           photo: 'images/facemap/photo-char-beni.png',
         },
       };
@@ -282,25 +289,48 @@
       const BUBBLE_W = 418,
         BUBBLE_H = 172;
 
+      // 동시 반응 그룹: [bubble을 띄울 대표 점, 나머지...] — 대표 점 기준으로 bubble 위치
+      const LINKED_GROUPS = [
+        ['cluster1', 'cluster1b'],
+        ['cluster2', 'cluster2b'],
+      ];
+      // 클릭한 점 기준으로 bubble 위치 (멀리 떨어진 그룹)
+      const LINKED_GROUPS_SELF = [
+        ['kobeni'],
+      ];
+      function getLinkedBtns(btn) {
+        const group = [...LINKED_GROUPS, ...LINKED_GROUPS_SELF].find(g => g.includes(btn.dataset.profile));
+        if (!group) return [btn];
+        return group.flatMap(p => [...document.querySelectorAll('[data-profile="' + p + '"]')]);
+      }
+      // bubble 위치 기준 버튼: SELF 그룹은 클릭한 버튼, 나머지는 그룹 첫 번째
+      function getBubbleAnchor(btn) {
+        if (LINKED_GROUPS_SELF.some(g => g.includes(btn.dataset.profile))) return btn;
+        const group = LINKED_GROUPS.find(g => g.includes(btn.dataset.profile));
+        if (!group) return btn;
+        return document.querySelector('[data-profile="' + group[0] + '"]') || btn;
+      }
+
       document.querySelectorAll('[data-profile]').forEach((btn) => {
         btn.addEventListener('click', (e) => {
           e.stopPropagation();
           if (activeDot === btn && bubble.classList.contains('active')) {
             bubble.classList.remove('active');
-            btn.classList.remove('active');
+            getLinkedBtns(btn).forEach(b => b.classList.remove('active'));
             activeDot = null;
             return;
           }
-          if (activeDot) activeDot.classList.remove('active');
+          if (activeDot) getLinkedBtns(activeDot).forEach(b => b.classList.remove('active'));
           activeDot = btn;
-          btn.classList.add('active');
-          const p = PROFILES[btn.dataset.profile];
+          getLinkedBtns(btn).forEach(b => b.classList.add('active'));
+          const anchor = getBubbleAnchor(btn);
+          const p = PROFILES[anchor.dataset.profile];
           bPhoto.src = p.photo;
           bName.textContent = p.name;
-          bDesc.textContent = p.desc;
+          bDesc.innerHTML = p.desc;
 
           const s = window.innerWidth / 1920;
-          const btnRect = btn.getBoundingClientRect();
+          const btnRect = anchor.getBoundingClientRect();
           const pageRect = page.getBoundingClientRect();
           const dotCx = (btnRect.left - pageRect.left + btnRect.width / 2) / s;
           const dotTop = (btnRect.top - pageRect.top) / s;
@@ -320,7 +350,7 @@
 
       document.addEventListener('click', () => {
         bubble.classList.remove('active');
-        if (activeDot) activeDot.classList.remove('active');
+        if (activeDot) getLinkedBtns(activeDot).forEach(b => b.classList.remove('active'));
         activeDot = null;
       });
     </script>

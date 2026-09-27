@@ -181,6 +181,11 @@ body {
   pointer-events: none;
 }
 
+.dotBtn.active,
+.dotBtnSmall.active {
+  transform: scale(1.3);
+}
+
 .dotBtn.active img,
 .dotBtnSmall.active img {
   filter: brightness(0);
