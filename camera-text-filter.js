@@ -46,6 +46,21 @@
       const contourSet = new Set();
       contourPairs.forEach(function (pair) { contourSet.add(pair[0]); contourSet.add(pair[1]); });
 
+      // 삼각형 테셀레이션 (3개 중 1개만)
+      const tess = window.FACEMESH_TESSELATION;
+      if (tess) {
+        ctx.beginPath();
+        tess.forEach(function (pair, idx) {
+          if (idx % 3 !== 0) return;
+          const a = toCanvas(faceLm[pair[0]]), b = toCanvas(faceLm[pair[1]]);
+          ctx.moveTo(a[0], a[1]);
+          ctx.lineTo(b[0], b[1]);
+        });
+        ctx.strokeStyle = 'rgba(0,0,0,0.10)';
+        ctx.lineWidth = 0.3;
+        ctx.stroke();
+      }
+
       // 윤곽선 (2개 중 1개만)
       if (contourPairs.length) {
         ctx.beginPath();
