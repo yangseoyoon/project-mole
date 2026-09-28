@@ -48,34 +48,36 @@
       const contourSet = new Set();
       contourPairs.forEach(function (pair) { contourSet.add(pair[0]); contourSet.add(pair[1]); });
 
-      // 삼각형 테셀레이션
+      // 삼각형 테셀레이션 (3개 중 1개만)
       const tess = window.FACEMESH_TESSELATION;
       if (tess) {
         ctx.beginPath();
-        tess.forEach(function (pair) {
+        tess.forEach(function (pair, idx) {
+          if (idx % 3 !== 0) return;
           const a = toCanvas(faceLm[pair[0]]), b = toCanvas(faceLm[pair[1]]);
           ctx.moveTo(a[0], a[1]);
           ctx.lineTo(b[0], b[1]);
         });
-        ctx.strokeStyle = 'rgba(0,0,0,0.12)';
+        ctx.strokeStyle = 'rgba(0,0,0,0.10)';
         ctx.lineWidth = 0.3;
         ctx.stroke();
       }
 
-      // 윤곽선
+      // 윤곽선 (2개 중 1개만)
       if (contourPairs.length) {
         ctx.beginPath();
-        contourPairs.forEach(function (pair) {
+        contourPairs.forEach(function (pair, idx) {
+          if (idx % 2 !== 0) return;
           const a = toCanvas(faceLm[pair[0]]), b = toCanvas(faceLm[pair[1]]);
           ctx.moveTo(a[0], a[1]);
           ctx.lineTo(b[0], b[1]);
         });
-        ctx.strokeStyle = 'rgba(0,0,0,0.4)';
+        ctx.strokeStyle = 'rgba(0,0,0,0.35)';
         ctx.lineWidth = 0.5;
         ctx.stroke();
       }
 
-      // 점
+      // 점 (8개 중 1개만)
       function drawDot(pos, r) {
         ctx.beginPath();
         ctx.arc(pos[0], pos[1], r, 0, Math.PI * 2);
@@ -87,11 +89,14 @@
       }
       faceLm.forEach(function (p, i) {
         if (contourSet.has(i)) return;
-        if (i % 4 !== 0) return;
+        if (i % 8 !== 0) return;
         drawDot(toCanvas(p), 1.5);
       });
-      contourSet.forEach(function (i) {
-        drawDot(toCanvas(faceLm[i]), 2.5);
+      // 윤곽 점도 2개 중 1개만
+      let contourArr = Array.from(contourSet);
+      contourArr.forEach(function (i, idx) {
+        if (idx % 2 !== 0) return;
+        drawDot(toCanvas(faceLm[i]), 2);
       });
     }
 
@@ -143,7 +148,7 @@
       }
     });
     holistic.setOptions({
-      modelComplexity: 1,
+      modelComplexity: 0,
       smoothLandmarks: true,
       refineFaceLandmarks: true,
       minDetectionConfidence: 0.5,
