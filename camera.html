@@ -198,7 +198,7 @@
     </nav>
 
     <canvas id="photoCanvas" style="display: none"></canvas>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/holistic/holistic.js" crossorigin="anonymous"></script>
     <script>
       function toggleGuide(btn) {
         var guide = document.querySelector('.guide-wrap');
@@ -207,6 +207,11 @@
         guide.style.display = on ? '' : 'none';
         btn.textContent = on ? '가이드 OFF' : '가이드 ON';
       }
+    </script>
+    <script>
+      window.addEventListener('pagehide', function () {
+        localStorage.removeItem('capturedFace');
+      });
     </script>
     <script src="camera.js"></script>
     <script src="camera-text-filter.js"></script>
