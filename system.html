@@ -28,12 +28,18 @@
           <canvas id="dotCanvas"></canvas>
           <div id="grid"></div>
         </div>
-        <div class="sys-bar sys-bar--bottom"></div>
+        <button class="sys-bar sys-bar--bottom" id="retakeBtn" onclick="window.location.href='camera.html'">사진 다시찍기</button>
+      </div>
+
+      <!-- 클릭 안내 툴팁 -->
+      <div id="click-hint">
+        <p>사진을 클릭해</p>
+        <p>점을 찍어보세요!</p>
       </div>
 
       <!-- 중간 패널: 버튼 -->
       <div class="sys-mid-panel">
-        <button id="resetBtn">다시찍기</button>
+        <button id="resetBtn">점 다시찍기</button>
         <button id="analyzeBtn">분석하기</button>
       </div>
 
@@ -51,7 +57,7 @@
 
       <!-- 오른쪽 하단 패널 -->
       <div class="sys-right-bottom">
-        <div class="sys-bar sys-bar--top sys-bar--sm"></div>
+        <div class="sys-bar sys-bar--top sys-bar--sm" style="display:flex;align-items:center;padding-left:20px;font-size:12px;color:#888;font-family:'Pretendard',sans-serif;">궁(宮) 설명</div>
       </div>
 
     </div>

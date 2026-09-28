@@ -152,6 +152,35 @@ function drawAxes() {
 drawRings();
 drawAxes();
 
+// ── 궁별 설명 ──
+const PALACE_DESC = {
+  명궁:  { sub: '命宮 · 삶의 흐름과 중심', body: '명궁은 두 눈썹 사이, 미간에 위치한 십이궁의 중심이 되는 궁이다. 삶의 흐름과 정신적 균형, 운명의 전체적인 방향성을 상징하는 영역으로 얼굴 전체를 해석하는 기준점과도 같다.' },
+  형제궁: { sub: '兄弟宮 · 형제·친구와의 인연', body: '형제궁은 양쪽 눈썹 전체에 해당하는 영역으로 형제자매와의 성향, 관계, 인연과 운을 풀이한다. 여기서 형제란 단순히 혈육만을 뜻하는 것이 아니라 동년배, 즉 친구를 의미하기도 한다.' },
+  처첩궁: { sub: '妻妾宮 · 배우자·애정운', body: '양 쪽 눈꼬리 끝에서부터 관자놀이까지에 해당하는 영역으로 부부 관계, 애정운, 배우자나 이성과의 인연을 본다. 현대에서 처와 첩의 구조는 맞지 않다 판단해 부부궁이라고도 불린다.' },
+  노복궁: { sub: '奴僕宮 · 부하·노년기', body: '턱 끝과 그 주변에 해당하는 영역으로 부하나 제자와 같이 자신을 따르는 이들과 노년기를 나타낸다. 과거 노복(奴僕)은 \'부리는 종\'의 의미였으나, 현대에서는 나를 따르는 이로 해석한다.' },
+  관록궁: { sub: '官祿宮 · 사회적 지위·명예', body: '관록궁은 이마의 정중앙에 해당하는 영역으로 사회적 지위와 명예, 직업과 관련된 운을 풀이한다. \'관\'은 출세, \'록\'은 재물을 뜻하며, 삶에서 어떤 태도로 목표를 추구하는지 보여준다.' },
+  상모궁: { sub: '相貌宮 · 풍모·사회적 위신', body: '상모궁은 얼굴 전체의 형상과 조화를 뜻하는 영역으로 상황에 따라서 볼을 뜻하기도 한다. 십이궁 전체를 아우르는 풍모와 기상, 사회적 위신을 나타내며 얼굴의 모든 부위가 얼마나 유기적으로 잘 어우러졌는가를 판단한다.' },
+  복덕궁: { sub: '福德宮 · 조상의 덕·심리적 평안', body: '복덕궁은 눈썹 위 양쪽 이마에 해당하는 영역으로 조상의 덕과 본인의 심리적 평안과 관련된 운을 풀이한다. 복덕궁은 한자 그대로 평생의 복(福)과 덕(德)의 많고 적음을 보여준다.' },
+  재백궁: { sub: '財帛宮 · 재물의 흐름', body: '재백궁은 코 전체에 해당하는 영역으로, \'재물과 재산이 모이는 자리\'라는 뜻을 지닌다. 재산의 축적과 소모 등 재물의 흐름과 관련된 운을 풀이하며, 전통 관상에서는 이를 개인의 욕망과 연결해 해석하기도 한다.' },
+  전택궁: { sub: '田宅宮 · 주거·부동산', body: '전택궁은 눈두덩이와 눈 아래에 해당하는 영역으로 재산, 주거환경, 부동산과 관련된 운을 풀이한다. 주거의 안정과 개인의 심리적 안정 및 편안함과도 연결해 해석한다.' },
+  질액궁: { sub: '疾厄宮 · 건강·재앙', body: '질액궁은 두 눈 사이 콧대가 시작되는 지점에 해당하는 영역으로 건강, 질병 혹은 재앙이나 사고에 관한 운을 풀이한다. 질(疾)은 육체적인 질병처럼 내적인 건강 상태를, 액(厄)은 외부 혹은 정신적 상해를 의미한다.' },
+  남녀궁: { sub: '男女宮 · 자녀·애정운', body: '남녀궁은 눈 밑 애교살 부위에 해당하는 영역으로 부부간의 애정운과 자녀와의 인연 혹은 생식 능력에 관련된 운을 풀이한다. 자식복을 살피는 궁이기 때문에 자녀궁이라고 불리기도 한다.' },
+  천이궁: { sub: '遷移宮 · 이동·이사·해외진출', body: '천이궁은 양 눈썹 끝 위쪽의 이마 모서리(관자놀이 부근)에 해당하는 영역으로 이사나 이직, 해외진출과 같은 이동수를 전체적으로 풀이한다. 삶에서 일어나는 모든 공간적·환경적 이동을 뜻하므로 역마궁이라 불리기도 한다.' },
+};
+
+function showPalaceDesc(name) {
+  const panel = document.querySelector('.sys-right-bottom');
+  const info = PALACE_DESC[name];
+  if (!panel) return;
+  const existing = panel.querySelector('#palace-desc-content');
+  if (existing) existing.remove();
+  if (!info) return;
+  const div = document.createElement('div');
+  div.id = 'palace-desc-content';
+  div.innerHTML = `<p class="pdc-name">${name}</p><p class="pdc-sub">${info.sub}</p><p class="pdc-body">${info.body}</p>`;
+  panel.appendChild(div);
+}
+
 // ── 얼굴 구역 → 궁 이름 매핑 ──
 // dx = col - ORIGIN.col, dy = ORIGIN.row - row (정수 그리드 단위)
 // 좌우 대칭: |dx|로 거리 판별, dx 부호는 방사형 ±15° offset에 사용
@@ -363,10 +392,12 @@ grid.addEventListener('click', (e) => {
   points.push({ dx, dy, angle, radius, px, py, dotX: clickX, dotY: clickY, palace: palaceName });
   redrawRadial();
   redrawDots();
+  showPalaceDesc(palaceName);
 });
 
 // ── 줌 버튼 ──
-let zoomLevel = 1;
+let zoomLevel = 0.9;
+svg.style.transform = `scale(${zoomLevel})`;
 document.getElementById('zoomInBtn').addEventListener('click', () => {
   zoomLevel = Math.min(zoomLevel + 0.1, 2);
   svg.style.transform = `scale(${zoomLevel})`;

@@ -240,6 +240,79 @@ body{
   transform-origin:center center;
 }
 
+
+/* ── 인게임 튜토리얼 ── */
+#tut-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+}
+/* 시작점: 패널 중앙 (right ~12%, top 50%) */
+#tut-ghost-circle {
+  position: absolute;
+  width: 65px; height: 65px;
+  border-radius: 50%;
+  border: 2px solid #000;
+  background: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Pretendard', sans-serif;
+  font-size: 16px; font-weight: 600;
+  opacity: 0;
+  animation: tut-circle-anim 3.2s ease-in-out infinite;
+  right: calc(23.65% - 95px); top: 325px;
+}
+#tut-cursor {
+  position: absolute;
+  opacity: 0;
+  animation: tut-cursor-anim 3.2s ease-in-out infinite;
+  right: calc(23.65% - 108px); top: 358px;
+  transform: translateY(-10px) translateX(10px);
+}
+#tut-hint {
+  position: absolute;
+  bottom: 32px; left: 38%;
+  transform: translateX(-50%);
+  font-family: 'Pretendard', sans-serif;
+  font-size: 13px; font-weight: 600;
+  color: #ea5c3a;
+  white-space: nowrap;
+  background: rgba(255,255,255,0.88);
+  padding: 5px 14px;
+  border-radius: 20px;
+  border: 1px solid #ea5c3a;
+}
+/* 패널(오른쪽) → 캔버스(왼쪽) 이동 */
+/* translateX 음수값 = 왼쪽 이동. 캔버스 너비 ~76%, 패널 ~24% → 약 -55vw 이동 */
+@keyframes tut-circle-anim {
+  0%          { opacity:0;   transform:translateY(-50%) translateX(0); }
+  5%          { opacity:1;   transform:translateY(-50%) translateX(0); }
+  60%         { opacity:1;   transform:translateY(-50%) translateX(-35vw); }
+  72%,88%     { opacity:0;   transform:translateY(-50%) translateX(-35vw); }
+  89%         { opacity:0;   transform:translateY(-50%) translateX(0); }
+  100%        { opacity:0;   transform:translateY(-50%) translateX(0); }
+}
+@keyframes tut-cursor-anim {
+  0%          { opacity:0;   transform:translateY(-10px) translateX(10px) translateX(0); }
+  5%          { opacity:1;   transform:translateY(-10px) translateX(10px) translateX(0); }
+  60%         { opacity:1;   transform:translateY(-10px) translateX(10px) translateX(-35vw); }
+  72%,88%     { opacity:0;   transform:translateY(-10px) translateX(10px) translateX(-35vw); }
+  89%         { opacity:0;   transform:translateY(-10px) translateX(10px) translateX(0); }
+  100%        { opacity:0;   transform:translateY(-10px) translateX(10px) translateX(0); }
+}
+#tut-bubble {
+  position: absolute;
+  right: calc(23.65% - 45px); top: 250px;
+  background: #fff;
+  border: 1px solid #000;
+  border-radius: 20px;
+  padding: 8px 20px;
+  font-family: 'Pretendard', sans-serif;
+  font-size: 14px; font-weight: 500;
+  white-space: nowrap;
+}
+#tut-layer.hidden { display: none; }
+
 </style>
 </head>
 <body>
@@ -260,6 +333,18 @@ body{
   <div id="divider"></div>
   <div id="right-panel">
     <div id="panel-words"></div>
+  </div>
+
+  <!-- 튜토리얼: content 전체 위에 오버레이 -->
+  <div id="tut-layer">
+    <div id="tut-bubble">오른쪽 패널의 원을 드래그해서 캔버스에 배치하세요</div>
+    <div id="tut-ghost-circle">木</div>
+    <div id="tut-cursor">
+      <svg width="28" height="36" viewBox="0 0 28 36" fill="none">
+        <path d="M4 2L4 26L9 21L13 30L16 29L12 20L20 20L4 2Z" fill="#000" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
   </div>
 
 </div>
@@ -714,25 +799,19 @@ body{
   renderPanel();
 })();
 </script>
-<!-- ── HOW TO PLAY 팝업 ── -->
-<div id="howToPlayOverlay" style="
-  position:fixed;inset:0;
-  background:rgba(0,0,0,0.45);
-  z-index:9000;
-  display:flex;align-items:center;justify-content:center;
-">
-  <div style="position:relative;width:872px;background:#fe6c48;outline:1px solid #000;isolation:isolate;">
-    <div style="position:absolute;left:-1px;top:-1px;background:#e9f056;height:34px;padding:0 16px;display:flex;align-items:center;z-index:3;">
-      <span style="font-family:'Pretendard',sans-serif;font-weight:700;font-size:20px;color:#fe6c48;line-height:34px;white-space:nowrap;">HOW TO PLAY</span>
-    </div>
-    <button onclick="document.getElementById('howToPlayOverlay').style.display='none'" style="position:absolute;right:-1px;top:-1px;width:60px;height:34px;background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:20px;color:#fe6c48;cursor:pointer;line-height:34px;text-align:center;z-index:3;">X</button>
-    <div style="margin:34px 16px 16px;background:#fff;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;">
-      <video id="howToPlayVideo" src="" style="width:100%;height:100%;object-fit:cover;display:none;" autoplay loop muted playsinline></video>
-      <span id="howToPlayPlaceholder" style="font-family:'Pretendard',sans-serif;font-size:18px;color:#aaa;">영상 준비 중</span>
-    </div>
-  </div>
-</div>
 
+<script>
+  // 첫 드래그 시 튜토리얼 숨김
+  (function() {
+    var tut = document.getElementById('tut-layer');
+    if (!tut) return;
+    function hideTut() {
+      tut.classList.add('hidden');
+      document.removeEventListener('mousedown', hideTut);
+    }
+    document.addEventListener('mousedown', hideTut);
+  })();
+</script>
 <script src="sound.js"></script>
   </body>
 </html>

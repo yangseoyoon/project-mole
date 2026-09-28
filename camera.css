@@ -118,13 +118,12 @@ body {
   pointer-events: none;
 }
 
-/* 피그마: left=2.74, top=-76, w=737.523, h=1173 */
 .guide-inner {
   position: absolute;
-  left: 2.74px;
-  top: -76px;
-  width: 737.523px;
-  height: 1173px;
+  left: 0;
+  top: 0;
+  width: 743px;
+  height: 725px;
   pointer-events: none;
 }
 .guide-inner img {

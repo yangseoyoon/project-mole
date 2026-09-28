@@ -5,7 +5,6 @@
     return a;
   }
 
-  var _pop      = makeAudio('sounds/pop-sound-effect.mp3', 0.6);
   var _click    = makeAudio('sounds/spacebar-click.mp3',   0.4);
   var _camClick = makeAudio('sounds/camera-click.mp3',     0.7);
   var _keyboard = makeAudio('sounds/computer-keyboard.mp3',0.6);
@@ -15,7 +14,6 @@
     audio.play().catch(function () {});
   }
 
-  window.playPop       = function () { play(_pop); };
   window.playCamClick  = function () { play(_camClick); };
   window.playKeyboard  = function () { play(_keyboard); };
 
