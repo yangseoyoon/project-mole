@@ -324,9 +324,12 @@
       const letters = Array.from(document.querySelectorAll('.tl'));
       const RADIUS = 220;
       const STRENGTH = 100;
-      letters.forEach(el => { el.style.position = 'relative'; el.style.transition = 'top 0.25s ease, left 0.25s ease'; el.style.top = '0px'; el.style.left = '0px'; });
+      // 각 글자의 현재/목표 위치를 lerp로 부드럽게 추적
+      const state = letters.map(() => ({ x: 0, y: 0, tx: 0, ty: 0 }));
+      letters.forEach(el => { el.style.position = 'relative'; el.style.top = '0px'; el.style.left = '0px'; });
+
       window.addEventListener('mousemove', e => {
-        letters.forEach(el => {
+        letters.forEach((el, i) => {
           const r = el.getBoundingClientRect();
           const cx = r.left + r.width / 2;
           const cy = r.top + r.height / 2;
@@ -334,15 +337,28 @@
           const dy = cy - e.clientY;
           const dist = Math.sqrt(dx*dx + dy*dy);
           if (dist < RADIUS && dist > 0) {
-            const force = (RADIUS - dist) / RADIUS;
-            el.style.top  = (dy / dist * force * STRENGTH) + 'px';
-            el.style.left = (dx / dist * force * STRENGTH) + 'px';
+            const force = (1 - dist / RADIUS) * (1 - dist / RADIUS); // easeIn curve
+            state[i].tx = dx / dist * force * STRENGTH;
+            state[i].ty = dy / dist * force * STRENGTH;
           } else {
-            el.style.top  = '0px';
-            el.style.left = '0px';
+            state[i].tx = 0;
+            state[i].ty = 0;
           }
         });
       });
+
+      const K = 0.1; // lerp 계수 (낮을수록 더 느리고 부드럽게)
+      function animate() {
+        letters.forEach((el, i) => {
+          const s = state[i];
+          s.x += (s.tx - s.x) * K;
+          s.y += (s.ty - s.y) * K;
+          el.style.left = s.x.toFixed(2) + 'px';
+          el.style.top  = s.y.toFixed(2) + 'px';
+        });
+        requestAnimationFrame(animate);
+      }
+      animate();
     })();
     </script>
     <script src="scale.js"></script>
