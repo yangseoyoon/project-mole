@@ -6,8 +6,10 @@
   let rafId = null;
   let activeBtn = null;
 
-  // MediaPipe Pose 랜드마크 연결 (11번 어깨부터 - 얼굴 제외)
+  // MediaPipe Pose 33개 랜드마크 연결
   const POSE_CONNECTIONS = [
+    [0,1],[1,2],[2,3],[3,7],[0,4],[4,5],[5,6],[6,8],
+    [9,10],
     [11,12],[11,13],[13,15],[15,17],[15,19],[15,21],[17,19],
     [12,14],[14,16],[16,18],[16,20],[16,22],[18,20],
     [11,23],[12,24],[23,24],
@@ -125,9 +127,8 @@
       ctx.lineWidth = 1.2;
       ctx.stroke();
 
-      // 관절 점 (어깨 이하만)
+      // 관절 점
       poseLm.forEach(function (p, i) {
-        if (i < 11) return;
         const pos = toCanvas(p);
         ctx.beginPath();
         ctx.arc(pos[0], pos[1], 3, 0, Math.PI * 2);
