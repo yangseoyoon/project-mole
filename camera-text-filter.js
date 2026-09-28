@@ -75,13 +75,12 @@
       faceLm.forEach(function (p, i) {
         if (contourSet.has(i)) return;
         if (i % 8 !== 0) return;
-        drawDot(toCanvas(p), 1.5);
+        drawDot(toCanvas(p), 3);
       });
-      // 윤곽 점도 2개 중 1개만
       let contourArr = Array.from(contourSet);
       contourArr.forEach(function (i, idx) {
         if (idx % 2 !== 0) return;
-        drawDot(toCanvas(faceLm[i]), 2);
+        drawDot(toCanvas(faceLm[i]), 3);
       });
     }
 
