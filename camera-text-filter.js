@@ -61,6 +61,20 @@
         ctx.stroke();
       }
 
+      // 삼각형 테셀레이션
+      const tess = window.FACEMESH_TESSELATION;
+      if (tess) {
+        ctx.beginPath();
+        tess.forEach(function (pair) {
+          const a = toCanvas(faceLm[pair[0]]), b = toCanvas(faceLm[pair[1]]);
+          ctx.moveTo(a[0], a[1]);
+          ctx.lineTo(b[0], b[1]);
+        });
+        ctx.strokeStyle = 'rgba(0,0,0,0.15)';
+        ctx.lineWidth = 0.4;
+        ctx.stroke();
+      }
+
       // 윤곽선 (2개 중 1개만)
       if (contourPairs.length) {
         ctx.beginPath();
