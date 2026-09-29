@@ -198,8 +198,27 @@
     </nav>
 
     <canvas id="photoCanvas" style="display: none"></canvas>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/holistic/holistic.js" crossorigin="anonymous"></script>
+    <script>
+      // MediaPipe 스크립트를 필요할 때만 동적 로드
+      var _mpLoaded = { facemesh: false, holistic: false };
+      function loadScript(src, cb) {
+        var s = document.createElement('script');
+        s.src = src; s.crossOrigin = 'anonymous';
+        s.onload = cb; document.head.appendChild(s);
+      }
+      window.loadFaceMesh = function(cb) {
+        if (_mpLoaded.facemesh) { cb && cb(); return; }
+        loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js', function() {
+          _mpLoaded.facemesh = true; cb && cb();
+        });
+      };
+      window.loadHolistic = function(cb) {
+        if (_mpLoaded.holistic) { cb && cb(); return; }
+        loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/holistic/holistic.js', function() {
+          _mpLoaded.holistic = true; cb && cb();
+        });
+      };
+    </script>
     <script>
       function toggleGuide(btn) {
         var guide = document.querySelector('.guide-wrap');
@@ -217,9 +236,9 @@
     <script src="camera.js"></script>
     <script src="camera-text-filter.js"></script>
     <script src="camera-sticker-filter.js"></script>
-    <script src="scale.js"></script>
-    <script src="cursor.js"></script>
-    <script src="help.js"></script>
-  <script src="sound.js"></script>
+    <script src="scale.js" defer></script>
+    <script src="cursor.js" defer></script>
+    <script src="help.js" defer></script>
+  <script src="sound.js" defer></script>
   </body>
 </html>
