@@ -83,7 +83,6 @@
     resize();
     new ResizeObserver(resize).observe(video);
 
-    await new Promise(function(resolve) { window.loadFaceMesh(resolve); });
     fm = new window.FaceMesh({
       locateFile: function (f) {
         return 'https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/' + f;
