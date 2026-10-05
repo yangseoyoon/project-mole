@@ -85,40 +85,33 @@ body {
   max-width: 680px;
 }
 
-/* ── 좌측 인물 (Figma 기준 10% 축소) ── */
+/* ── 좌측 인물 ── */
 .portraitLeft {
   position: absolute;
-  left: 0;
-  top: -5.29px;
-  width: 491.4px;
-  height: 1171.13px;
+  left: -450px;
+  top: 24.71px;
   pointer-events: none;
-  overflow: hidden;
 }
 
 .portraitLeft img {
-  position: absolute;
-  top: 0;
-  left: -98.35%;
-  width: 198.35%;
-  height: 111.59%;
-  max-width: none;
   display: block;
+  height: 1331px;
+  width: auto;
 }
 
 /* ── 우측 인물 (원본 764×1024, 캔버스 높이 맞춰 비율 유지) ── */
 .portraitRight {
   position: absolute;
-  right: 0;
-  top: 28px;
-  width: 917px;
-  height: 1229px;
+  right: -470px;
+  top: -62px;
+  width: 1011px;
+  height: 1355px;
   pointer-events: none;
 }
 
 .portraitRight img {
-  width: 917px;
-  height: 1229px;
+  width: 1011px;
+  height: 1355px;
   display: block;
 }
 
