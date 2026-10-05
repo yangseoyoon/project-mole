@@ -117,11 +117,12 @@ body {
 }
 
 .portraitRight img {
-  width: 100%;
+  width: auto;
   height: 100%;
-  object-fit: cover;
-  object-position: bottom;
   display: block;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
 /* ── 중앙 콘텐츠 ── */
