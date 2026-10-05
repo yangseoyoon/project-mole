@@ -8,8 +8,7 @@
   var DESIGN_CONTENT_H = 960; // 1080 - 47 - 73
 
   function fit() {
-    var availH = window.innerHeight - TOP_H - BOT_H;
-    var s = Math.min(window.innerWidth / DESIGN_W, availH / DESIGN_CONTENT_H);
+    var s = window.innerWidth / DESIGN_W;
 
     document.querySelectorAll('.page-scale').forEach(function (el) {
       el.style.transformOrigin = 'top left';
