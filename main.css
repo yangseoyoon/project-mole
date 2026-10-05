@@ -90,13 +90,12 @@ body {
   position: absolute;
   left: 0;
   top: 0;
-  height: 80%;
-  overflow: hidden;
+  height: 100%;
   pointer-events: none;
 }
 
 .portraitLeft img {
-  height: 100%;
+  height: 95%;
   width: auto;
   display: block;
 }
@@ -106,13 +105,12 @@ body {
   position: absolute;
   right: 0;
   top: 0;
-  height: 80%;
-  overflow: hidden;
+  height: 100%;
   pointer-events: none;
 }
 
 .portraitRight img {
-  height: 100%;
+  height: 98%;
   width: auto;
   display: block;
 }
