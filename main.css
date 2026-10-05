@@ -90,14 +90,13 @@ body {
   position: absolute;
   left: 0;
   top: 0;
-  height: 100%;
+  height: 80%;
+  overflow: hidden;
   pointer-events: none;
-  -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 92%);
-  mask-image: linear-gradient(to bottom, black 60%, transparent 92%);
 }
 
 .portraitLeft img {
-  height: 95%;
+  height: 100%;
   width: auto;
   display: block;
 }
@@ -107,14 +106,13 @@ body {
   position: absolute;
   right: 0;
   top: 0;
-  height: 100%;
+  height: 80%;
+  overflow: hidden;
   pointer-events: none;
-  -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 92%);
-  mask-image: linear-gradient(to bottom, black 60%, transparent 92%);
 }
 
 .portraitRight img {
-  height: 98%;
+  height: 100%;
   width: auto;
   display: block;
 }
