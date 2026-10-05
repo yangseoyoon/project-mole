@@ -85,13 +85,13 @@ body {
   max-width: 680px;
 }
 
-/* ── 좌측 인물 (Figma: w=546px h=1301.25px left=0 top=-5.88px) ── */
+/* ── 좌측 인물 (Figma 기준 10% 축소) ── */
 .portraitLeft {
   position: absolute;
   left: 0;
-  top: -5.88px;
-  width: 546px;
-  height: 1301.25px;
+  top: -5.29px;
+  width: 491.4px;
+  height: 1171.13px;
   pointer-events: none;
   overflow: hidden;
 }
