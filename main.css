@@ -106,23 +106,20 @@ body {
   display: block;
 }
 
-/* ── 우측 인물 (Figma: w=573px h=1453px right=0 top=-81.75px) ── */
+/* ── 우측 인물 (원본 764×1024, 캔버스 높이 맞춰 비율 유지) ── */
 .portraitRight {
   position: absolute;
   right: 0;
-  top: -81.75px;
-  width: 573px;
-  height: 1453px;
+  top: 28px;
+  width: 764px;
+  height: 1024px;
   pointer-events: none;
 }
 
 .portraitRight img {
-  width: auto;
-  height: 100%;
+  width: 764px;
+  height: 1024px;
   display: block;
-  position: absolute;
-  right: 0;
-  top: 0;
 }
 
 /* ── 중앙 콘텐츠 ── */
