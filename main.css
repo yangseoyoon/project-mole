@@ -111,14 +111,14 @@ body {
   position: absolute;
   right: 0;
   top: 28px;
-  width: 764px;
-  height: 1024px;
+  width: 917px;
+  height: 1229px;
   pointer-events: none;
 }
 
 .portraitRight img {
-  width: 764px;
-  height: 1024px;
+  width: 917px;
+  height: 1229px;
   display: block;
 }
 
