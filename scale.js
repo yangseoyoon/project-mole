@@ -1,9 +1,16 @@
-/* 모든 페이지 공용 - 1920×1080 contain 스케일링
-   너비/높이 중 작은 쪽 기준으로 스케일 → 어떤 비율에서도 숨겨진 영역 노출 없음
-   .page-scale 은 top-left 기준, .bottomNav 는 bottom-left 기준 */
+/* 네비바 사이 콘텐츠 영역을 채우는 스케일링
+   topNav: 47px 고정 / bottomNav: 73px 고정
+   디자인 가시 콘텐츠 높이 = 1080 - 47 - 73 = 960px */
 (function () {
+  var TOP_H   = 47;
+  var BOT_H   = 73;
+  var DESIGN_W = 1920;
+  var DESIGN_CONTENT_H = 960; // 1080 - 47 - 73
+
   function fit() {
-    var s = window.innerWidth / 1920;
+    var availH = window.innerHeight - TOP_H - BOT_H;
+    var s = Math.min(window.innerWidth / DESIGN_W, availH / DESIGN_CONTENT_H);
+
     document.querySelectorAll('.page-scale').forEach(function (el) {
       el.style.transformOrigin = 'top left';
       el.style.transform = 'scale(' + s + ')';
