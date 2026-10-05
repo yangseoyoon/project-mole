@@ -9,6 +9,7 @@
 body {
   font-family: 'Pretendard', sans-serif;
   background: #e9f056;
+  overflow: hidden;
   width: 100vw;
   height: 100vh;
   overflow: hidden;

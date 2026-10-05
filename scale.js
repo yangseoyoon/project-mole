@@ -3,7 +3,7 @@
    .page-scale 은 top-left 기준, .bottomNav 는 bottom-left 기준 */
 (function () {
   function fit() {
-    var s = Math.min(window.innerWidth / 1920, 1);
+    var s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
     document.querySelectorAll('.page-scale').forEach(function (el) {
       el.style.transformOrigin = 'top left';
       el.style.transform = 'scale(' + s + ')';
