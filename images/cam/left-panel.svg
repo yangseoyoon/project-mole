@@ -1,0 +1,16 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="301" height="373" viewBox="0 0 301 373" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Frame 592">
+<g clip-path="url(#clip0_0_12)">
+<rect width="301" height="373" rx="10" fill="#EFEFEF" style="fill:#EFEFEF;fill:color(display-p3 0.9391 0.9391 0.9391);fill-opacity:1;"/>
+<rect id="Rectangle 447" x="-29.9449" y="248.842" width="351.735" height="214.047" rx="77.5" transform="rotate(-13.6627 -29.9449 248.842)" fill="#D9D9D9" stroke="black" style="fill:#D9D9D9;fill:color(display-p3 0.8510 0.8510 0.8510);fill-opacity:1;stroke:black;stroke-opacity:1;"/>
+<circle id="Ellipse 234" cx="149.34" cy="191.947" r="84.3006" fill="#D9D9D9" stroke="black" style="fill:#D9D9D9;fill:color(display-p3 0.8510 0.8510 0.8510);fill-opacity:1;stroke:black;stroke-opacity:1;"/>
+<ellipse id="Ellipse 437" cx="150.5" cy="185.261" rx="83.518" ry="112.261" stroke="#E9F056" style="stroke:#E9F056;stroke:color(display-p3 0.9137 0.9412 0.3373);stroke-opacity:1;" stroke-width="5" stroke-linecap="round" stroke-dasharray="10 10"/>
+</g>
+<rect x="0.5" y="0.5" width="300" height="372" rx="9.5" stroke="#A6A6A6" style="stroke:#A6A6A6;stroke:color(display-p3 0.6506 0.6506 0.6506);stroke-opacity:1;"/>
+</g>
+<defs>
+<clipPath id="clip0_0_12">
+<rect width="301" height="373" rx="10" fill="white" style="fill:white;fill-opacity:1;"/>
+</clipPath>
+</defs>
+</svg>

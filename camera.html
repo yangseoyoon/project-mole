@@ -18,8 +18,8 @@
     </nav>
 
     <div class="cameraWrap page-scale">
-      <!-- 뒷 배경 이미지: 1920×1080 전체 (스케일 제외) -->
-      <img class="bg-overlay" src="images/cam/cam-bg.png" alt="" />
+      <!-- 뒷 배경 이미지: cam-bg1 타일링 -->
+      <div class="bg-overlay"></div>
 
       <!-- 내부 요소 80% 스케일 래퍼 -->
       <div class="inner-scale">
@@ -27,9 +27,9 @@
         <div class="browser-window">
           <!-- 타이틀바 -->
           <div class="win-titlebar">
-            <span class="win-dot win-dot--red"></span>
-            <span class="win-dot win-dot--yellow"></span>
-            <span class="win-dot win-dot--green"></span>
+            <span class="win-dot"></span>
+            <span class="win-dot"></span>
+            <span class="win-dot"></span>
           </div>
 
           <!-- 카메라 영역 (검정) -->
@@ -38,7 +38,7 @@
             <!-- 가이드 오버레이 -->
             <div class="guide-wrap">
               <div class="guide-inner">
-                <img src="images/cam/guide-overlay-2.png" alt="" />
+                <img src="images/cam/guide-overlay-new.svg" alt="" />
               </div>
             </div>
           </div>
@@ -64,28 +64,38 @@
           </div>
         </div>
 
-        <!-- 좌측 회색 패널 -->
-        <div class="left-panel"></div>
+        <!-- 좌측 패널 이미지 -->
+        <img class="left-panel" src="images/cam/left-panel.svg" alt="" />
 
         <!-- 말풍선: 눈썹 가이드 -->
-        <div class="hint-pill hint-eyebrow">선 사이에 눈썹을 맞추세요!</div>
+        <div class="hint-pill hint-eyebrow">선 중앙에 눈썹을 맞추세요!</div>
 
         <!-- 말풍선: 얼굴 가이드 -->
         <div class="hint-pill hint-face">노란색 원에 얼굴을 맞추세요!</div>
 
-        <!-- 장식 원들: Figma 기준 주황/노란 원 (모두 80×80px) -->
-        <div style="position:absolute;left:215px;top:68px;width:80px;height:80px;border-radius:50%;background:#fe6c48;border:1px solid #000;"></div>
-        <div style="position:absolute;left:111px;top:122px;width:80px;height:80px;border-radius:50%;background:#fe6c48;border:1px solid #000;"></div>
-        <div style="position:absolute;left:130px;top:178px;width:80px;height:80px;border-radius:50%;background:#fe6c48;border:1px solid #000;"></div>
-        <div style="position:absolute;left:1896px;top:310px;width:80px;height:80px;border-radius:50%;background:#fe6c48;border:1px solid #000;"></div>
-        <div style="position:absolute;left:188px;top:820px;width:80px;height:80px;border-radius:50%;background:#fe6c48;border:1px solid #000;"></div>
-        <div style="position:absolute;left:30px;top:937px;width:80px;height:80px;border-radius:50%;background:#fe6c48;border:1px solid #000;"></div>
-        <div style="position:absolute;left:1779px;top:102px;width:80px;height:80px;border-radius:50%;background:#e9f056;border:1px solid #000;"></div>
-        <div style="position:absolute;left:1840px;top:162px;width:80px;height:80px;border-radius:50%;background:#e9f056;border:1px solid #000;"></div>
-        <div style="position:absolute;left:1807px;top:487px;width:80px;height:80px;border-radius:50%;background:#e9f056;border:1px solid #000;"></div>
-        <div style="position:absolute;left:1683px;top:717px;width:80px;height:80px;border-radius:50%;background:#e9f056;border:1px solid #000;"></div>
-        <div style="position:absolute;left:1733px;top:767px;width:80px;height:80px;border-radius:50%;background:#e9f056;border:1px solid #000;"></div>
-        <div style="position:absolute;left:108px;top:845px;width:80px;height:80px;border-radius:50%;background:#e9f056;border:1px solid #000;"></div>
+        <!-- 데코 벡터 라인 -->
+        <img class="deco-vector deco-vector-left"  src="images/cam/vector-left.svg"  alt="" />
+        <img class="deco-vector deco-vector-right" src="images/cam/vector-right.svg" alt="" />
+
+        <!-- 장식 원들: Figma 기준 위치 (77×77px) -->
+        <!-- 주황 원 (imgEllipse426) -->
+        <div style="position:absolute;left:1870px;top:319px;width:77px;height:77px;border-radius:50%;background:#fe6c48;border:1px solid #000;pointer-events:none;"></div>
+        <div style="position:absolute;left:81px;top:852px;width:77px;height:77px;border-radius:50%;background:#fe6c48;border:1px solid #000;pointer-events:none;"></div>
+        <div style="position:absolute;left:183.52px;top:953px;width:77px;height:77px;border-radius:50%;background:#fe6c48;border:1px solid #000;pointer-events:none;"></div>
+        <!-- 주황 이중원 (imgGroup509) -->
+        <div style="position:absolute;left:1745px;top:125.72px;width:77px;height:77px;border-radius:50%;background:#fe6c48;border:1px solid #000;pointer-events:none;"></div>
+        <div style="position:absolute;left:1769px;top:149px;width:77px;height:77px;border-radius:50%;background:#fe6c48;border:1px solid #000;pointer-events:none;"></div>
+        <!-- 노란 원 (imgEllipse429) -->
+        <div style="position:absolute;left:11.5px;top:146px;width:77px;height:77px;border-radius:50%;background:#e9f056;border:1px solid #000;pointer-events:none;"></div>
+        <div style="position:absolute;left:39.62px;top:881.5px;width:77px;height:77px;border-radius:50%;background:#e9f056;border:1px solid #000;pointer-events:none;"></div>
+        <!-- 노란 이중원 (imgGroup510) -->
+        <div style="position:absolute;left:1631px;top:715px;width:77px;height:77px;border-radius:50%;background:#e9f056;border:1px solid #000;pointer-events:none;"></div>
+        <div style="position:absolute;left:1655px;top:739px;width:77px;height:77px;border-radius:50%;background:#e9f056;border:1px solid #000;pointer-events:none;"></div>
+        <div style="position:absolute;left:1783.52px;top:463.47px;width:77px;height:77px;border-radius:50%;background:#e9f056;border:1px solid #000;pointer-events:none;"></div>
+        <div style="position:absolute;left:1807px;top:487px;width:77px;height:77px;border-radius:50%;background:#e9f056;border:1px solid #000;pointer-events:none;"></div>
+        <!-- 노란 이중원 (imgGroup511) -->
+        <div style="position:absolute;left:1767.52px;top:918.09px;width:77px;height:77px;border-radius:50%;background:#e9f056;border:1px solid #000;pointer-events:none;"></div>
+        <div style="position:absolute;left:1791px;top:942px;width:77px;height:77px;border-radius:50%;background:#e9f056;border:1px solid #000;pointer-events:none;"></div>
       </div>
     </div>
 

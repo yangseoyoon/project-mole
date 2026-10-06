@@ -1,22 +1,13 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
     <title>분석 결과 | DOT SHIFT</title>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
-    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
     <link rel="stylesheet" href="nav.css" />
     <style>
-      *,
-      *::before,
-      *::after {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
       body {
         font-family: 'Pretendard', sans-serif;
@@ -28,278 +19,243 @@
 
       .resultPage {
         position: fixed;
-        top: 0;
-        left: 0;
+        top: 0; left: 0;
         width: 1920px;
         height: 1080px;
+        display: flex;
+        background: #f2f2f0;
       }
 
-      /* 채팅 영역 */
-      .chat-wrap {
-        position: absolute;
-        top: 44px;
-        bottom: 108px;
-        left: 0;
-        right: 0;
+      /* ── 좌측: 점 패턴 시각화 ── */
+      .res-left {
+        flex-shrink: 0;
+        width: 600px;
+        height: 1080px;
+        border-right: 1px solid #000;
         display: flex;
         flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        padding-top: 47px;
+        padding-bottom: 73px;
+        background: #f2f2f0;
+      }
+
+      .res-back {
+        position: absolute;
+        top: 67px; left: 36px;
+        font-family: 'Pretendard', sans-serif;
+        font-size: 18px;
+        font-weight: 600;
+        color: #000;
+        background: transparent;
+        border: 1px solid #000;
+        border-radius: 100px;
+        padding: 10px 22px;
+        cursor: pointer;
+        transition: background 0.15s;
+        z-index: 10;
+      }
+      .res-back:hover { background: rgba(0,0,0,0.06); }
+
+      .dot-canvas-wrap {
+        width: 540px;
+        height: 680px;
+        position: relative;
+        flex-shrink: 0;
+      }
+
+      #dotSvg {
+        width: 100%;
+        height: 100%;
+      }
+
+      .dot-node { cursor: pointer; }
+      .dot-node .outer {
+        fill: transparent;
+        stroke: none;
+        transition: fill 0.25s;
+      }
+      .dot-node:hover .outer { fill: #e9f056; fill-opacity: 0.8; stroke: none; }
+      .dot-node .inner {
+        fill: #ea5c3a;
+        transition: r 0.25s, fill 0.25s;
+      }
+      .dot-label {
+        font-family: 'Pretendard', sans-serif;
+        font-size: 13px;
+        fill: #999;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.4s;
+      }
+      .dot-label.shown { opacity: 1; }
+      .dot-line {
+        stroke: #f0a090;
+        stroke-width: 0.8;
+        fill: none;
+        transition: stroke 0.25s, stroke-width 0.25s;
+      }
+      .dot-line.active { stroke: #ea5c3a; stroke-width: 1.5; }
+
+      .res-left-label {
+        margin-top: 28px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #bbb;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+      }
+
+      /* ── 우측: 결과 정보 ── */
+      .res-right {
+        flex: 1;
+        height: 1080px;
+        display: flex;
+        flex-direction: column;
+        padding-top: 47px;
+        padding-bottom: 73px;
         background: #fff;
       }
 
-      /* 헤더 */
-      .chat-header {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 70px;
-        border-bottom: 1px solid #e5e5e5;
-        flex-shrink: 0;
-        position: relative;
-      }
-      .chat-header-title {
-        font-size: 24px;
-        font-weight: 600;
-        color: #000;
-      }
-      .chat-header-back {
-        position: absolute;
-        left: 48px;
-        font-size: 20px;
-        font-weight: 500;
-        color: #555;
-        background: none;
-        border: none;
-        cursor: pointer;
-        padding: 10px 18px;
-        border-radius: 8px;
-        transition: background 0.15s;
-      }
-      .chat-header-back:hover {
-        background: #f3f3f3;
-      }
-
-      /* 메시지 스크롤 영역 */
-      .chat-messages {
+      .res-scroll {
         flex: 1;
+        min-height: 0;
         overflow-y: auto;
-        padding: 64px 400px;
+        padding: 72px 80px 60px 80px;
         display: flex;
         flex-direction: column;
-        gap: 52px;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
       }
+      .res-scroll::-webkit-scrollbar { display: none; }
 
-      /* 메시지 공통 */
-      .msg {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
+      .res-section {
+        padding: 48px 0;
+        border-bottom: 1px solid #ebebeb;
         opacity: 0;
         transform: translateY(14px);
-        animation: msgIn 0.45s ease forwards;
+        transition: opacity 0.5s ease, transform 0.5s ease;
       }
-      @keyframes msgIn {
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
+      .res-section:first-child { padding-top: 0; }
+      .res-section:last-child { border-bottom: none; }
+      .res-section.visible { opacity: 1; transform: translateY(0); }
+
+      .res-sec-label {
+        font-size: 11px;
+        font-weight: 700;
+        color: #bbb;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        margin-bottom: 20px;
       }
 
-      /* 사용자 메시지 (오른쪽) */
-      .msg--user {
-        align-items: flex-end;
+      .res-code {
+        line-height: 1.1;
+        margin-bottom: 18px;
       }
-      .msg--user .msg-photo {
-        width: 300px;
-        height: 366px;
-        border-radius: 18px;
-        object-fit: cover;
-        border: 1px solid #e0e0e0;
-        background: #f0f0f0;
-      }
-      .msg--user .msg-bubble {
-        background: #f0f0f0;
-        color: #000;
+      .res-code-kr {
+        display: block;
         font-size: 22px;
-        font-weight: 500;
-        padding: 16px 24px;
-        border-radius: 22px 22px 6px 22px;
-        max-width: 500px;
+        font-weight: 400;
+        color: #ea5c3a;
+        letter-spacing: 0;
+        margin-bottom: 6px;
+      }
+      .res-code-en {
+        display: block;
+        font-size: 72px;
+        font-weight: 800;
+        color: #ea5c3a;
+        letter-spacing: -3px;
+        line-height: 1;
+      }
+      .res-name {
+        font-size: 28px;
+        font-weight: 400;
+        color: #111;
         line-height: 1.5;
       }
 
-      /* AI 메시지 (왼쪽) */
-      .msg--ai {
-        align-items: flex-start;
-      }
-      .msg--ai .msg-row {
-        display: flex;
-        align-items: flex-start;
-        gap: 18px;
-      }
-      .msg-avatar {
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        background: #e9f056;
-        border: 1.5px solid #000;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 16px;
-        font-weight: 800;
-        color: #000;
-        flex-shrink: 0;
-        letter-spacing: -1px;
-      }
-      .msg-bubble-ai {
+      .res-pattern {
         font-size: 22px;
         font-weight: 400;
-        color: #000;
-        line-height: 1.75;
-        max-width: 920px;
-        background: #fafafa;
-        border: 1px solid #e0e0e0;
-        border-radius: 18px;
-        padding: 28px 36px;
-      }
-
-      /* 타이핑 도트 */
-      .typing-dots {
-        display: flex;
-        gap: 7px;
-        padding: 18px 4px;
-      }
-      .typing-dots span {
-        width: 11px;
-        height: 11px;
-        border-radius: 50%;
-        background: #bbb;
-        animation: dot 1.2s infinite ease-in-out;
-      }
-      .typing-dots span:nth-child(2) {
-        animation-delay: 0.2s;
-      }
-      .typing-dots span:nth-child(3) {
-        animation-delay: 0.4s;
-      }
-      @keyframes dot {
-        0%,
-        80%,
-        100% {
-          transform: scale(0.7);
-          opacity: 0.4;
-        }
-        40% {
-          transform: scale(1);
-          opacity: 1;
-        }
-      }
-
-      /* 결과 카드 */
-      .result-card {
-        border: 1px solid #e0e0e0;
-        border-radius: 18px;
-        padding: 40px 44px;
-        max-width: 880px;
-        background: #fafafa;
-      }
-      .result-code {
-        font-size: 16px;
-        font-weight: 600;
-        color: #aaa;
-        letter-spacing: 2px;
-        margin-bottom: 8px;
-      }
-      .result-type {
-        font-size: 36px;
-        font-weight: 700;
-        color: #ea5c3a;
-        margin-bottom: 18px;
-        line-height: 1.3;
-      }
-      .result-pattern {
-        font-size: 18px;
-        font-weight: 400;
-        color: #666;
+        color: #444;
         line-height: 1.7;
-        margin-bottom: 20px;
       }
-      .result-palaces {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-bottom: 28px;
-      }
-      .result-palace {
+
+      .res-palaces { display: flex; flex-wrap: wrap; gap: 10px; }
+      .res-palace {
         background: #fff;
         border: 1px solid #000;
         border-radius: 100px;
-        padding: 7px 18px;
-        font-size: 17px;
+        padding: 10px 24px;
+        font-size: 18px;
         font-weight: 500;
         color: #000;
+        cursor: pointer;
+        transition: background 0.15s;
       }
-      .result-tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-      .result-tag {
+      .res-palace:hover { background: #f5f5f5; }
+      .res-palace.highlighted { background: #000; color: #fff; }
+
+      .res-tags { display: flex; flex-wrap: wrap; gap: 10px; }
+      .res-tag {
         background: #e9f056;
         border: 1px solid #000;
         border-radius: 100px;
-        padding: 9px 22px;
-        font-size: 19px;
-        font-weight: 600;
+        padding: 10px 24px;
+        font-size: 18px;
+        font-weight: 700;
         color: #000;
       }
 
-      /* 두 번째 AI 메시지: 추가 코멘트 */
-      .comment-bubble {
-        font-size: 22px;
+      .res-comment {
+        font-size: 20px;
         font-weight: 400;
-        color: #000;
-        line-height: 1.75;
-        max-width: 880px;
+        color: #666;
+        line-height: 1.8;
       }
 
-      /* 하단 액션 */
-      .chat-actions {
+      .typing-dots { display: flex; gap: 7px; padding: 4px 0; }
+      .typing-dots span {
+        width: 9px; height: 9px;
+        border-radius: 50%;
+        background: #ccc;
+        animation: dot 1.2s infinite ease-in-out;
+      }
+      .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+      .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+      @keyframes dot {
+        0%, 80%, 100% { transform: scale(0.7); opacity: 0.4; }
+        40% { transform: scale(1); opacity: 1; }
+      }
+
+      .res-actions {
         flex-shrink: 0;
+        height: 100px;
+        border-top: 1px solid #ebebeb;
         display: flex;
         align-items: center;
-        justify-content: center;
-        gap: 24px;
-        height: 100px;
-        border-top: 1px solid #e5e5e5;
+        justify-content: flex-end;
+        gap: 20px;
+        padding: 0 80px;
       }
-      .action-btn {
-        height: 60px;
-        padding: 0 44px;
+      .res-btn {
+        height: 56px;
+        padding: 0 40px;
         border-radius: 100px;
-        border: 1.5px solid #000;
         font-family: 'Pretendard', sans-serif;
-        font-size: 22px;
+        font-size: 20px;
         font-weight: 600;
         cursor: pointer;
-        transition:
-          background 0.15s,
-          color 0.15s;
+        transition: background 0.15s, color 0.15s;
       }
-      .action-btn--primary {
-        background: #000;
-        color: #fff;
-      }
-      .action-btn--primary:hover {
-        background: #333;
-      }
-      .action-btn--secondary {
-        background: #fff;
-        color: #000;
-      }
-      .action-btn--secondary:hover {
-        background: #f3f3f3;
-      }
+      .res-btn--secondary { background: transparent; border: 1.5px solid #000; color: #000; }
+      .res-btn--secondary:hover { background: #f5f5f5; }
+      .res-btn--primary { background: #000; border: 1.5px solid #000; color: #fff; }
+      .res-btn--primary:hover { background: #333; }
     </style>
   </head>
   <body>
@@ -309,99 +265,45 @@
     </nav>
 
     <div class="resultPage page-scale">
-      <div class="chat-wrap">
-        <!-- 헤더 -->
-        <div class="chat-header">
-          <button class="chat-header-back" onclick="history.back()">
-            ← 다시 분석
-          </button>
-          <span class="chat-header-title">점 패턴 분석 결과</span>
+      <!-- 좌측: 점 패턴 노드 그래프 -->
+      <div class="res-left">
+        <div class="dot-canvas-wrap">
+          <svg id="dotSvg" viewBox="0 0 460 580" xmlns="http://www.w3.org/2000/svg"></svg>
         </div>
+      </div>
 
-        <!-- 메시지 영역 -->
-        <div class="chat-messages" id="chatMessages">
-          <!-- 사용자: 촬영 사진 -->
-          <div class="msg msg--user" style="animation-delay: 0.1s">
-            <img class="msg-photo" id="userPhoto" src="" alt="촬영 사진" />
-            <div class="msg-bubble">내 점 패턴 분석해줘</div>
-          </div>
-
-          <!-- 말풍선 1: 유형 코드 + 수식어 -->
-          <div class="msg msg--ai" id="aiMsg1">
-            <div class="msg-row">
-              <div class="msg-avatar">D·</div>
-              <div class="msg-bubble-ai">
-                <div class="typing-dots" id="typingDots1"><span></span><span></span><span></span></div>
-                <div id="bubble1" style="display:none">
-                  <div class="result-code" id="resultCode"></div>
-                  <div class="result-type" id="resultType"></div>
-                </div>
+      <!-- 우측: 결과 정보 -->
+      <div class="res-right">
+        <div class="res-scroll" id="resScroll">
+          <div class="res-section" id="sec1">
+            <div class="res-sec-label">analysis result</div>
+            <div class="typing-dots" id="dots1"><span></span><span></span><span></span></div>
+            <div id="sec1Content" style="display:none">
+              <div class="res-code">
+                <span class="res-code-kr" id="resultCodeKr"></span>
+                <span class="res-code-en" id="resultCode"></span>
               </div>
+              <div class="res-name" id="resultType"></div>
             </div>
           </div>
-
-          <!-- 말풍선 2: 패턴 모양 -->
-          <div class="msg msg--ai" id="aiMsg2" style="display:none">
-            <div class="msg-row">
-              <div class="msg-avatar">D·</div>
-              <div class="msg-bubble-ai">
-                <div class="typing-dots" id="typingDots2"><span></span><span></span><span></span></div>
-                <div id="bubble2" style="display:none">
-                  <div class="result-pattern" id="resultPattern"></div>
-                </div>
-              </div>
-            </div>
+          <div class="res-section" id="sec4">
+            <div class="res-sec-label">keywords</div>
+            <div class="typing-dots" id="dots4"><span></span><span></span><span></span></div>
+            <div class="res-tags" id="resultTags" style="display:none"></div>
           </div>
-
-          <!-- 말풍선 3: 십이궁 -->
-          <div class="msg msg--ai" id="aiMsg3" style="display:none">
-            <div class="msg-row">
-              <div class="msg-avatar">D·</div>
-              <div class="msg-bubble-ai">
-                <div class="typing-dots" id="typingDots3"><span></span><span></span><span></span></div>
-                <div id="bubble3" style="display:none">
-                  <div class="result-palaces" id="resultPalaces"></div>
-                </div>
-              </div>
-            </div>
+          <div class="res-section" id="sec2">
+            <div class="res-sec-label">dot pattern</div>
+            <div class="typing-dots" id="dots2"><span></span><span></span><span></span></div>
+            <div class="res-pattern" id="resultPattern" style="display:none"></div>
           </div>
-
-          <!-- 말풍선 4: 해시태그 -->
-          <div class="msg msg--ai" id="aiMsg4" style="display:none">
-            <div class="msg-row">
-              <div class="msg-avatar">D·</div>
-              <div class="msg-bubble-ai">
-                <div class="typing-dots" id="typingDots4"><span></span><span></span><span></span></div>
-                <div id="bubble4" style="display:none">
-                  <div class="result-tags" id="resultTags"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 말풍선 5: 궁 코멘트 -->
-          <div class="msg msg--ai" id="aiMsg5" style="display:none">
-            <div class="msg-row">
-              <div class="msg-avatar">D·</div>
-              <div class="comment-bubble" id="commentBubble"></div>
-            </div>
+          <div class="res-section" id="sec5">
+            <div class="typing-dots" id="dots5"><span></span><span></span><span></span></div>
+            <div class="res-comment" id="commentBubble" style="display:none"></div>
           </div>
         </div>
-
-        <!-- 하단 액션 버튼 -->
-        <div class="chat-actions">
-          <button
-            class="action-btn action-btn--secondary"
-            onclick="window.location.href = 'camera.html'"
-          >
-            다시 촬영하기
-          </button>
-          <button
-            class="action-btn action-btn--primary"
-            onclick="window.location.href = 'jeom-gwansang.html'"
-          >
-            관상 더 알아보기 →
-          </button>
+        <div class="res-actions">
+          <button class="res-btn res-btn--secondary" onclick="window.location.href='camera.html'">다시 촬영하기</button>
+          <button class="res-btn res-btn--primary" onclick="window.location.href='jeom-gwansang.html'">관상 더 알아보기 →</button>
         </div>
       </div>
     </div>
@@ -409,279 +311,389 @@
     <!-- 하단 네비게이션 바 -->
     <nav class="bottomNav">
       <div class="bn-inner">
-        <img
-          class="bn-logo-l"
-          style="width: 23.456px; height: 29.129px; left: 40px; top: 22.99px"
-          src="images/nav/logo-D.svg"
-          alt=""
-        />
-        <img
-          class="bn-logo-l"
-          style="width: 29.935px; height: 29.935px; left: 66.65px; top: 22.59px"
-          src="images/nav/logo-O.svg"
-          alt=""
-        />
-        <img
-          class="bn-logo-l"
-          style="width: 22.571px; height: 29.129px; left: 98.09px; top: 22.99px"
-          src="images/nav/logo-T.svg"
-          alt=""
-        />
-        <img
-          class="bn-logo-l"
-          style="
-            width: 21.726px;
-            height: 30.015px;
-            left: 134.06px;
-            top: 22.59px;
-          "
-          src="images/nav/logo-S.svg"
-          alt=""
-        />
-        <img
-          class="bn-logo-l"
-          style="
-            width: 23.336px;
-            height: 29.129px;
-            left: 160.53px;
-            top: 22.99px;
-          "
-          src="images/nav/logo-H.svg"
-          alt=""
-        />
-        <img
-          class="bn-logo-l"
-          style="width: 4.426px; height: 29.129px; left: 189.82px; top: 22.99px"
-          src="images/nav/logo-I.svg"
-          alt=""
-        />
-        <img
-          class="bn-logo-l"
-          style="
-            width: 18.065px;
-            height: 29.129px;
-            left: 200.16px;
-            top: 22.99px;
-          "
-          src="images/nav/logo-F.svg"
-          alt=""
-        />
-        <img
-          class="bn-logo-l"
-          style="
-            width: 22.571px;
-            height: 29.129px;
-            left: 221.73px;
-            top: 22.99px;
-          "
-          src="images/nav/logo-T.svg"
-          alt=""
-        />
+        <img class="bn-logo-l" style="width:23.456px;height:29.129px;left:40px;top:22.99px" src="images/nav/logo-D.svg" alt="" />
+        <img class="bn-logo-l" style="width:29.935px;height:29.935px;left:66.65px;top:22.59px" src="images/nav/logo-O.svg" alt="" />
+        <img class="bn-logo-l" style="width:22.571px;height:29.129px;left:98.09px;top:22.99px" src="images/nav/logo-T.svg" alt="" />
+        <img class="bn-logo-l" style="width:21.726px;height:30.015px;left:134.06px;top:22.59px" src="images/nav/logo-S.svg" alt="" />
+        <img class="bn-logo-l" style="width:23.336px;height:29.129px;left:160.53px;top:22.99px" src="images/nav/logo-H.svg" alt="" />
+        <img class="bn-logo-l" style="width:4.426px;height:29.129px;left:189.82px;top:22.99px" src="images/nav/logo-I.svg" alt="" />
+        <img class="bn-logo-l" style="width:18.065px;height:29.129px;left:200.16px;top:22.99px" src="images/nav/logo-F.svg" alt="" />
+        <img class="bn-logo-l" style="width:22.571px;height:29.129px;left:221.73px;top:22.99px" src="images/nav/logo-T.svg" alt="" />
         <a class="bn-badge bn-badge--h" href="index.html">H</a>
         <button class="bn-badge bn-badge--b" onclick="history.back()">B</button>
-        <button
-          class="bn-item"
-          style="left:450px"
-          onclick="window.location.href = 'index.html'"
-        >
-          <span>프로젝트 알아보기</span>
-          <img src="images/nav/nav-arrow.svg" alt="" />
-        </button>
-        <button
-          class="bn-item"
-          style="left:790px"
-          onclick="window.location.href = 'camera.html'"
-        >
-          <span>점 패턴 분석하기</span>
-          <img src="images/nav/nav-arrow.svg" alt="" />
-        </button>
-        <button
-          class="bn-item"
-          style="left:1130px"
-          onclick="window.location.href = 'facemap-celeb.html'"
-        >
-          <span>얼굴 지도 살펴보기</span>
-          <img src="images/nav/nav-arrow.svg" alt="" />
-        </button>
-        <button
-          class="bn-item"
-          style="left:1470px"
-          onclick="window.location.href = 'gwansang.html'"
-        >
-          <span>관상학 알아보기</span>
-          <img src="images/nav/nav-arrow.svg" alt="" />
-        </button>
+        <button class="bn-item" style="left:450px" onclick="window.location.href='index.html'"><span>프로젝트 알아보기</span><img src="images/nav/nav-arrow.svg" alt="" /></button>
+        <button class="bn-item" style="left:790px" onclick="window.location.href='camera.html'"><span>점 패턴 분석하기</span><img src="images/nav/nav-arrow.svg" alt="" /></button>
+        <button class="bn-item" style="left:1130px" onclick="window.location.href='facemap-celeb.html'"><span>얼굴 지도 살펴보기</span><img src="images/nav/nav-arrow.svg" alt="" /></button>
+        <button class="bn-item" style="left:1470px" onclick="window.location.href='gwansang.html'"><span>관상학 알아보기</span><img src="images/nav/nav-arrow.svg" alt="" /></button>
         <div class="bn-right-bg"></div><button class="bn-help-btn">?</button>
       </div>
     </nav>
 
     <script>
-      // ── 알파벳 → 해시태그 매핑 ──
       const LETTER_TAG = { C:'#자기중심', E:'#관계중심', G:'#내부몰입', D:'#외부확장', V:'#성취지향', H:'#관계지향', P:'#본질', L:'#연결', S:'#안정' };
-
-      // 코드에서 해시태그 4개 추출 (NONE → 빈 배열)
-      function codeToTags(code) {
-        if (!code || code === 'NONE') return [];
-        return [...code].map(c => LETTER_TAG[c]).filter(Boolean);
-      }
-
-      // 패턴 모양 설명 자동 생성
+      function codeToTags(code) { if (!code || code === 'NONE') return []; return [...code].map(c => LETTER_TAG[c]).filter(Boolean); }
       function codeToPattern(code) {
         if (!code || code === 'NONE') return '';
-        const pos  = code[0] === 'E' ? '얼굴 외곽' : '얼굴 중앙부';
-        const den  = code[1] === 'D' ? '분산된' : '집중된';
-        const dir  = code[2] === 'V' ? '수직 방향' : '수평 방향';
-        const cnt  = code[3] === 'P' ? '점 1개' : code[3] === 'L' ? '점 2개' : '점 3개 이상';
+        const pos = code[0] === 'E' ? '얼굴 외곽' : '얼굴 중앙부';
+        const den = code[1] === 'D' ? '분산된' : '집중된';
+        const dir = code[2] === 'V' ? '수직 방향' : '수평 방향';
+        const cnt = code[3] === 'P' ? '점 1개' : code[3] === 'L' ? '점 2개' : '점 3개 이상';
         return `${pos}에 ${den} ${dir}의 ${cnt}`;
       }
 
-      // ── 유형 데이터 ──
       const TYPE_MAP = {
-        CGVP: { name: '흔들림없는 확신으로 정상을 향해 돌진하는 독주자' },
-        CGVL: { name: '신뢰하는 사람들과 함께 정상까지 파고드는 신념가' },
-        CGVS: { name: '하나에 몰입하면서 전체 판의 흐름을 그리는 전략가' },
-        CGHP: { name: '확신을 갖고 내 사람에게 헌신하는 순정파' },
-        CGHL: { name: '사람들과 깊이 연결되어 관계를 지키는 헌신가' },
-        CGHS: { name: '신뢰와 의리를 지키며 주변까지 아우르는 버팀목' },
-        CDVL: { name: '강한 확신과 효율로 여러 목표를 동시에 정복하는 모험가' },
-        CDVS: { name: '넓은 시야와 강한 확신으로 판을 짜는 계략가' },
-        CDHL: { name: '자신과 주변인을 모두 동시에 골고루 챙기는 마당발' },
-        CDHS: { name: '자신의 기준으로 폭넓은 관계를 아우르는 조율자' },
-        EDVL: { name: '관계와 효율을 무기로 여러 성취를 동시에 쌓는 야심가' },
-        EDVS: { name: '관계 속에서 넓게 판을 짜며 그림을 그리는 기획자' },
-        EDHL: { name: '여러 관계를 동시에 살뜰히 챙기는 인싸 네트워커' },
-        EDHS: { name: '모두를 아우르며 전체 흐름을 중재하는 타고난 관리자' },
-        EGVP: { name: '집요하게 목표를 파고들어 이루는 불굴의 집념가' },
-        EGVL: { name: '사람들과의 관계에 깊이 몰입해 함께 목표를 완성하려는 동반자' },
-        EGVS: { name: '관계를 발판 삼아 넓은 시야로 성취를 그리는 사업가' },
-        EGHP: { name: '관계를 위해 헌신하는 정 많은 외골수' },
-        EGHL: { name: '관계 속에서 함께 성장하는 신뢰의 아이콘' },
-        EGHS: { name: '하나의 관계에 집중하면서도 모두를 아우르는 사교의 달인' },
-        NONE: { name: '타고난 운을 막힘없이 온전히 펼쳐내는 맑은 사람' },
+        CGVP:{name:'흔들림없는 확신으로 정상을 향해 돌진하는 독주자'},
+        CGVL:{name:'신뢰하는 사람들과 함께 정상까지 파고드는 신념가'},
+        CGVS:{name:'하나에 몰입하면서 전체 판의 흐름을 그리는 전략가'},
+        CGHP:{name:'확신을 갖고 내 사람에게 헌신하는 순정파'},
+        CGHL:{name:'사람들과 깊이 연결되어 관계를 지키는 헌신가'},
+        CGHS:{name:'신뢰와 의리를 지키며 주변까지 아우르는 버팀목'},
+        CDVL:{name:'강한 확신과 효율로 여러 목표를 동시에 정복하는 모험가'},
+        CDVS:{name:'넓은 시야와 강한 확신으로 판을 짜는 계략가'},
+        CDHL:{name:'자신과 주변인을 모두 동시에 골고루 챙기는 마당발'},
+        CDHS:{name:'자신의 기준으로 폭넓은 관계를 아우르는 조율자'},
+        EDVL:{name:'관계와 효율을 무기로 여러 성취를 동시에 쌓는 야심가'},
+        EDVS:{name:'관계 속에서 넓게 판을 짜며 그림을 그리는 기획자'},
+        EDHL:{name:'여러 관계를 동시에 살뜰히 챙기는 인싸 네트워커'},
+        EDHS:{name:'모두를 아우르며 전체 흐름을 중재하는 타고난 관리자'},
+        EGVP:{name:'집요하게 목표를 파고들어 이루는 불굴의 집념가'},
+        EGVL:{name:'사람들과의 관계에 깊이 몰입해 함께 목표를 완성하려는 동반자'},
+        EGVS:{name:'관계를 발판 삼아 넓은 시야로 성취를 그리는 사업가'},
+        EGHP:{name:'관계를 위해 헌신하는 정 많은 외골수'},
+        EGHL:{name:'관계 속에서 함께 성장하는 신뢰의 아이콘'},
+        EGHS:{name:'하나의 관계에 집중하면서도 모두를 아우르는 사교의 달인'},
+        NONE:{name:'타고난 운을 막힘없이 온전히 펼쳐내는 맑은 사람'},
       };
 
-      // 궁별 코멘트
       const PALACE_COMMENT = {
-        관록궁: '이마 중앙(관록궁)의 점 — 직업운과 사회적 성취를 나타냅니다.',
-        복덕궁: '이마 우측(복덕궁)의 점 — 복과 덕이 쌓이는 위치입니다.',
-        상모궁: '관자놀이(상모궁)의 점 — 외모와 첫인상의 운을 상징합니다.',
-        처첩궁: '눈꼬리(처첩궁)의 점 — 인연과 애정운을 나타냅니다.',
-        남녀궁: '볼 오른쪽(남녀궁)의 점 — 자녀운과 생명력을 의미합니다.',
-        질액궁:
-          '아래 볼(질액궁)의 점 — 건강과 체력 관리에 주의가 필요한 위치입니다.',
-        지각궁: '턱 중앙(지각궁)의 점 — 말년운과 안정적인 토대를 나타냅니다.',
-        전택궁:
-          '왼쪽 아래 볼(전택궁)의 점 — 부동산운과 거주 환경을 상징합니다.',
-        노복궁: '볼 왼쪽(노복궁)의 점 — 아랫사람과의 관계, 인복을 나타냅니다.',
-        재백궁: '눈꼬리 왼쪽(재백궁)의 점 — 재물운과 경제적 능력을 의미합니다.',
-        형제궁: '왼쪽 관자(형제궁)의 점 — 형제·동료와의 관계를 나타냅니다.',
-        천이궁:
-          '이마 좌측(천이궁)의 점 — 이동운과 변화에 강한 기질을 상징합니다.',
+        명궁:'미간(명궁)의 점 — 운명과 타고난 기질, 삶의 방향성을 나타냅니다.',
+        관록궁:'이마 중앙(관록궁)의 점 — 직업운과 사회적 성취를 나타냅니다.',
+        복덕궁:'이마 우측(복덕궁)의 점 — 복과 덕이 쌓이는 위치입니다.',
+        상모궁:'관자놀이(상모궁)의 점 — 외모와 첫인상의 운을 상징합니다.',
+        처첩궁:'눈꼬리(처첩궁)의 점 — 인연과 애정운을 나타냅니다.',
+        남녀궁:'볼 오른쪽(남녀궁)의 점 — 자녀운과 생명력을 의미합니다.',
+        질액궁:'아래 볼(질액궁)의 점 — 건강과 체력 관리에 주의가 필요한 위치입니다.',
+        지각궁:'턱 중앙(지각궁)의 점 — 말년운과 안정적인 토대를 나타냅니다.',
+        전택궁:'왼쪽 아래 볼(전택궁)의 점 — 부동산운과 거주 환경을 상징합니다.',
+        노복궁:'볼 왼쪽(노복궁)의 점 — 아랫사람과의 관계, 인복을 나타냅니다.',
+        재백궁:'눈꼬리 왼쪽(재백궁)의 점 — 재물운과 경제적 능력을 의미합니다.',
+        형제궁:'왼쪽 관자(형제궁)의 점 — 형제·동료와의 관계를 나타냅니다.',
+        천이궁:'이마 좌측(천이궁)의 점 — 이동운과 변화에 강한 기질을 상징합니다.',
       };
 
-      // ── 유형 매칭 ──
-      function matchType(code) {
-        if (!code || code === 'NONE') return 'NONE';
-        return TYPE_MAP[code] ? code : 'NONE';
-      }
+      /* 십이궁 SVG 좌표 (viewBox 0 0 460 580) */
+      const PALACE_POS = {
+        관록궁: {x:230, y:95},
+        천이궁: {x:140, y:112},
+        복덕궁: {x:320, y:112},
+        형제궁: {x: 72, y:192},
+        상모궁: {x:388, y:192},
+        명궁:   {x:230, y:212},
+        재백궁: {x:108, y:258},
+        처첩궁: {x:352, y:258},
+        노복궁: {x: 88, y:355},
+        남녀궁: {x:372, y:355},
+        전택궁: {x:128, y:442},
+        질액궁: {x:332, y:442},
+        지각궁: {x:230, y:502},
+      };
 
-      // ── 초기화 ──
-      const savedFace =
-        localStorage.getItem('capturedDots') ||
-        localStorage.getItem('capturedFace');
       const rawCode = localStorage.getItem('resultType') || 'NONE';
       const dominantPalace = localStorage.getItem('dominantPalace') || '';
-      const typeKey = matchType(rawCode);
+      const palaceCount = JSON.parse(localStorage.getItem('palaceCount') || '{}');
+      const typeKey = TYPE_MAP[rawCode] ? rawCode : 'NONE';
       const data = TYPE_MAP[typeKey];
 
-      // 사용자 사진
-      const photoEl = document.getElementById('userPhoto');
-      if (savedFace) photoEl.src = savedFace;
-
-      // 결과 채우기
-      document.getElementById('resultCode').textContent =
-        rawCode !== 'NONE' ? `유형 코드: ${rawCode}` : '';
+      document.getElementById('resultCodeKr').textContent = rawCode !== 'NONE' ? '유형 코드' : '';
+      document.getElementById('resultCode').textContent = rawCode !== 'NONE' ? rawCode : 'NONE';
       document.getElementById('resultType').textContent = data.name;
-
-      // 패턴 모양 설명
       document.getElementById('resultPattern').textContent = codeToPattern(rawCode);
 
-      // 십이궁
-      const palaceCount = JSON.parse(localStorage.getItem('palaceCount') || '{}');
-      const palacesEl = document.getElementById('resultPalaces');
-      Object.keys(palaceCount).forEach((palace) => {
-        const span = document.createElement('span');
-        span.className = 'result-palace';
-        span.textContent = `${palace} ×${palaceCount[palace]}`;
-        palacesEl.appendChild(span);
-      });
+      const activePalaces = Object.keys(palaceCount);
 
-      // 해시태그 (알파벳 기반)
       const tagsEl = document.getElementById('resultTags');
-      codeToTags(rawCode).forEach((tag) => {
-        const span = document.createElement('span');
-        span.className = 'result-tag';
-        span.textContent = tag;
-        tagsEl.appendChild(span);
+      codeToTags(rawCode).forEach(tag => {
+        const s = document.createElement('span');
+        s.className = 'res-tag';
+        s.textContent = tag;
+        tagsEl.appendChild(s);
       });
 
-      const chat = document.getElementById('chatMessages');
-      function scrollBottom() { chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' }); }
+      /* ── SVG 노드 그래프 ── */
+      (function buildDotGraph() {
+        const svg = document.getElementById('dotSvg');
+        const ns = 'http://www.w3.org/2000/svg';
+        function el(tag, attrs) {
+          const e = document.createElementNS(ns, tag);
+          Object.entries(attrs).forEach(([k,v]) => e.setAttribute(k,v));
+          return e;
+        }
 
-      function showBubble(typingId, bubbleId, msgId, delay, cb) {
+        /* 그리드 배경 */
+        const defs = el('defs', {});
+        const pat = el('pattern', {id:'grid', width:'46', height:'46', patternUnits:'userSpaceOnUse'});
+        pat.appendChild(el('path', {d:'M 46 0 L 0 0 0 46', fill:'none', stroke:'#e0e0e0', 'stroke-width':'0.5'}));
+        defs.appendChild(pat);
+        svg.appendChild(defs);
+        svg.appendChild(el('rect', {width:'460', height:'580', fill:'url(#grid)'}));
+
+
+        /* 노드 목록 */
+        const nodes = activePalaces
+          .filter(p => PALACE_POS[p])
+          .map(p => ({name:p, ...PALACE_POS[p], count: palaceCount[p]}));
+
+        if (nodes.length === 0) {
+          ['관록궁','남녀궁','처첩궁'].forEach(p => {
+            if (PALACE_POS[p]) nodes.push({name:p, ...PALACE_POS[p], count:1});
+          });
+        }
+
+        /* 면 채우기 (노드 3개 이상일 때) */
+        const faceLayer = el('g', {});
+        svg.appendChild(faceLayer);
+        let fillPoly = null;
+        if (nodes.length >= 3) {
+          fillPoly = el('polygon', {
+            points: nodes.map(n => `${n.x},${n.y}`).join(' '),
+            fill: '#ea5c3a', 'fill-opacity': '0.12', stroke: 'none',
+          });
+          faceLayer.appendChild(fillPoly);
+        }
+
+        /* 연결선 */
+        const lineLayer = el('g', {});
+        svg.appendChild(lineLayer);
+        const lines = [];
+        for (let i = 0; i < nodes.length; i++) {
+          for (let j = i+1; j < nodes.length; j++) {
+            const len = Math.hypot(nodes[j].x-nodes[i].x, nodes[j].y-nodes[i].y);
+            const line = el('line', {
+              class:'dot-line',
+              x1:nodes[i].x, y1:nodes[i].y,
+              x2:nodes[j].x, y2:nodes[j].y,
+              'data-a':nodes[i].name, 'data-b':nodes[j].name,
+              'stroke-dasharray':len, 'stroke-dashoffset':len,
+            });
+            lineLayer.appendChild(line);
+            lines.push(line);
+          }
+        }
+
+        /* 노드 */
+        const nodeLayer = el('g', {});
+        svg.appendChild(nodeLayer);
+
+        const basePos = nodes.map(n => ({x:n.x, y:n.y}));
+
+        nodes.forEach((node, idx) => {
+          const r = 7 + Math.min((node.count-1)*4, 10);
+          const g = el('g', {class:'dot-node', 'data-palace':node.name, style:'opacity:0'});
+          g.appendChild(el('circle', {class:'outer', cx:node.x, cy:node.y, r:r+16}));
+          g.appendChild(el('circle', {class:'inner', cx:node.x, cy:node.y, r}));
+          nodeLayer.appendChild(g);
+
+          /* 레이블 (초기 위치, tick에서 업데이트) */
+          const isRight0 = node.x > 240;
+          const isCenter0 = Math.abs(node.x-230) < 30;
+          const lx0 = isCenter0 ? node.x : (isRight0 ? node.x+r+12 : node.x-r-12);
+          const ly0 = isCenter0 ? node.y+r+18 : node.y+5;
+          const anchor0 = isCenter0 ? 'middle' : (isRight0 ? 'start' : 'end');
+          const lbl = el('text', {class:'dot-label', id:`lbl-${node.name}`, x:lx0, y:ly0, 'text-anchor':anchor0});
+          lbl.textContent = node.name;
+          nodeLayer.appendChild(lbl);
+          /* 진입 후 레이블 표시 */
+          setTimeout(() => lbl.classList.add('shown'), 800 + idx*150);
+
+          /* 호버 */
+          g.addEventListener('mouseenter', () => {
+            document.getElementById(`lbl-${node.name}`).style.opacity = '1';
+            lines.forEach(l => { if (l.dataset.a===node.name||l.dataset.b===node.name) l.classList.add('active'); });
+            const cb = document.getElementById('commentBubble');
+            if (cb.style.display !== 'none' && PALACE_COMMENT[node.name]) cb.textContent = PALACE_COMMENT[node.name];
+          });
+          g.addEventListener('mouseleave', () => {
+            document.getElementById(`lbl-${node.name}`).style.opacity = '0';
+            lines.forEach(l => { if (l.dataset.a===node.name||l.dataset.b===node.name) l.classList.remove('active'); });
+          });
+
+          /* 진입 */
+          setTimeout(() => {
+            g.style.transition = 'opacity 0.5s ease';
+            g.style.opacity = '1';
+          }, 500 + idx*150);
+        });
+
+        /* 선 드로잉 — 완료 후 dasharray 제거해서 선 끊김 방지 */
+        lines.forEach((line, i) => {
+          const delay = 800 + i*100;
+          setTimeout(() => {
+            line.style.transition = 'stroke-dashoffset 0.8s ease';
+            line.style.strokeDashoffset = '0';
+            setTimeout(() => {
+              line.removeAttribute('stroke-dasharray');
+              line.removeAttribute('stroke-dashoffset');
+              line.style.strokeDasharray = '';
+              line.style.strokeDashoffset = '';
+            }, 900);
+          }, delay);
+        });
+
+        /* ── 플로팅 + 드래그 스프링 복구 ── */
+        const floatPhase = nodes.map((_, i) => i * 0.9);
+        const nodeEls = Array.from(nodeLayer.querySelectorAll('.dot-node'));
+
+        /* 드래그 상태: SVG 오프셋 + 속도 */
+        const drag = nodes.map(() => ({
+          offX: 0, offY: 0, vx: 0, vy: 0,
+          active: false,
+          clientX0: 0, clientY0: 0, offX0: 0, offY0: 0,
+        }));
+
+        /* 현재 scale 팩터 (SVG → 화면 px 비율) */
+        function getScale() {
+          return Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+        }
+
+        nodeEls.forEach((g, i) => {
+          g.style.cursor = 'grab';
+          g.addEventListener('mousedown', e => {
+            e.preventDefault(); e.stopPropagation();
+            drag[i].active = true;
+            drag[i].clientX0 = e.clientX;
+            drag[i].clientY0 = e.clientY;
+            drag[i].offX0 = drag[i].offX;
+            drag[i].offY0 = drag[i].offY;
+            drag[i].vx = 0; drag[i].vy = 0;
+            g.style.cursor = 'grabbing';
+          });
+        });
+        document.addEventListener('mousemove', e => {
+          const s = getScale();
+          drag.forEach((d) => {
+            if (!d.active) return;
+            /* screen px delta → SVG unit delta: 1 screen px = 1/s SVG unit */
+            d.offX = d.offX0 + (e.clientX - d.clientX0) / s;
+            d.offY = d.offY0 + (e.clientY - d.clientY0) / s;
+          });
+        });
+        document.addEventListener('mouseup', () => {
+          drag.forEach((d, i) => {
+            if (d.active) { d.active = false; nodeEls[i].style.cursor = 'grab'; }
+          });
+        });
+
+        let t = 0;
+        function tick() {
+          t += 0.008;
+
+          nodes.forEach((node, i) => {
+            const d = drag[i];
+            if (!d.active) {
+              /* 지수 감쇠 — 튕김 없이 부드럽게 원위치 */
+              d.offX *= 0.88;
+              d.offY *= 0.88;
+            }
+            /* 드래그 중이면 플로팅 없음, 아니면 사인파 플로팅 */
+            const floatX = d.active ? 0 : 3 * Math.sin(t * 0.7 + floatPhase[i]);
+            const floatY = d.active ? 0 : 4 * Math.sin(t * 0.5 + floatPhase[i] * 1.3);
+            const PAD = 20;
+            const cx = Math.max(PAD, Math.min(460 - PAD, basePos[i].x + floatX + d.offX));
+            const cy = Math.max(PAD, Math.min(580 - PAD, basePos[i].y + floatY + d.offY));
+            const g = nodeEls[i];
+            if (!g) return;
+            /* 면 업데이트 */
+            if (fillPoly && i === nodes.length - 1) {
+              const pts = nodes.map((_, j) => {
+                const dj = drag[j];
+                const fx = dj.active ? 0 : 3 * Math.sin(t * 0.7 + floatPhase[j]);
+                const fy = dj.active ? 0 : 4 * Math.sin(t * 0.5 + floatPhase[j] * 1.3);
+                const px = Math.max(20, Math.min(440, basePos[j].x + fx + dj.offX));
+                const py = Math.max(20, Math.min(560, basePos[j].y + fy + dj.offY));
+                return `${px},${py}`;
+              });
+              fillPoly.setAttribute('points', pts.join(' '));
+            }
+            g.querySelectorAll('circle').forEach(c => { c.setAttribute('cx', cx); c.setAttribute('cy', cy); });
+            lines.forEach(l => {
+              if (l.dataset.a === node.name) { l.setAttribute('x1', cx); l.setAttribute('y1', cy); }
+              if (l.dataset.b === node.name) { l.setAttribute('x2', cx); l.setAttribute('y2', cy); }
+            });
+            const lbl = document.getElementById(`lbl-${node.name}`);
+            if (lbl) {
+              const r = 7 + Math.min((node.count-1)*4, 10);
+              const isRight = cx > 240;
+              const isCenter = Math.abs(cx - 230) < 30;
+              const lx = Math.max(5, Math.min(455, isCenter ? cx : (isRight ? cx+r+12 : cx-r-12)));
+              const ly = Math.max(15, Math.min(570, isCenter ? cy+r+18 : cy+5));
+              lbl.setAttribute('x', lx);
+              lbl.setAttribute('y', ly);
+              lbl.setAttribute('text-anchor', isCenter ? 'middle' : (isRight ? 'start' : 'end'));
+            }
+          });
+          requestAnimationFrame(tick);
+        }
+        setTimeout(tick, 1600);
+      })();
+
+      /* ── 우측 섹션 순차 등장 ── */
+      const scroll = document.getElementById('resScroll');
+      function scrollBottom() { scroll.scrollTo({top:scroll.scrollHeight, behavior:'smooth'}); }
+      function revealSection(secId, dotsId, contentId, delay, cb) {
         setTimeout(() => {
-          const msg = document.getElementById(msgId);
-          if (msg) { msg.style.display = 'flex'; msg.style.animation = 'msgIn 0.45s ease forwards'; }
+          document.getElementById(secId).classList.add('visible');
           scrollBottom();
           setTimeout(() => {
-            document.getElementById(typingId).style.display = 'none';
-            document.getElementById(bubbleId).style.display = 'block';
+            document.getElementById(dotsId).style.display = 'none';
+            const c = document.getElementById(contentId);
+            if (c) c.style.display = '';
             scrollBottom();
             if (cb) cb();
           }, 1200);
         }, delay);
       }
 
-      // 말풍선 1: 수식어 (1.5초 후)
-      showBubble('typingDots1', 'bubble1', null, 1500, () => {
-        // 말풍선 2: 패턴 모양
-        showBubble('typingDots2', 'bubble2', 'aiMsg2', 800, () => {
-          // 말풍선 3: 십이궁 (팔레스가 있을 때만)
-          const hasPalaces = Object.keys(palaceCount).length > 0;
-          if (hasPalaces) {
-            showBubble('typingDots3', 'bubble3', 'aiMsg3', 800, () => {
-              showBubble('typingDots4', 'bubble4', 'aiMsg4', 800, () => {
-                // 말풍선 5: 궁 코멘트
-                setTimeout(() => {
-                  const msg5 = document.getElementById('aiMsg5');
-                  msg5.style.display = 'flex';
-                  msg5.style.animation = 'msgIn 0.45s ease forwards';
-                  const comment = dominantPalace && PALACE_COMMENT[dominantPalace]
-                    ? PALACE_COMMENT[dominantPalace]
-                    : '관상에서 점은 단순한 점이 아니라 기운이 모이는 자리입니다.';
-                  document.getElementById('commentBubble').textContent = comment;
-                  scrollBottom();
-                }, 800);
-              });
-            });
-          } else {
-            showBubble('typingDots4', 'bubble4', 'aiMsg4', 800, () => {
-              setTimeout(() => {
-                const msg5 = document.getElementById('aiMsg5');
-                msg5.style.display = 'flex';
-                msg5.style.animation = 'msgIn 0.45s ease forwards';
-                document.getElementById('commentBubble').textContent = '관상에서 점은 단순한 점이 아니라 기운이 모이는 자리입니다.';
-                scrollBottom();
-              }, 800);
-            });
-          }
+      document.getElementById('sec1').classList.add('visible');
+      setTimeout(() => {
+        document.getElementById('dots1').style.display = 'none';
+        document.getElementById('sec1Content').style.display = 'block';
+        scrollBottom();
+        revealSection('sec4', 'dots4', 'resultTags', 800, () => {
+          revealSection('sec2', 'dots2', 'resultPattern', 800, () => {
+            revealSection('sec5', 'dots5', 'commentBubble', 800, null);
+            setTimeout(() => {
+              document.getElementById('commentBubble').textContent =
+                (dominantPalace && PALACE_COMMENT[dominantPalace])
+                  ? PALACE_COMMENT[dominantPalace]
+                  : '관상에서 점은 단순한 점이 아니라 기운이 모이는 자리입니다.';
+            }, 1600);
+          });
         });
-      });
+      }, 1500);
     </script>
 
-    <script src="scale.js" defer></script>
+    <script>
+      (function () {
+        var DESIGN_W = 1920, DESIGN_H = 1080;
+        function fitResult() {
+          var sw = window.innerWidth / DESIGN_W;
+          var sh = window.innerHeight / DESIGN_H;
+          var s = Math.min(sw, sh);
+          document.querySelectorAll('.page-scale').forEach(function (el) {
+            el.style.transformOrigin = 'top left';
+            el.style.transform = 'scale(' + s + ')';
+          });
+          document.querySelectorAll('.bottomNav').forEach(function (el) {
+            el.style.transformOrigin = 'bottom left';
+            el.style.transform = 'scale(' + sw + ')';
+          });
+        }
+        fitResult();
+        window.addEventListener('resize', fitResult);
+      })();
+    </script>
     <script src="cursor.js" defer></script>
     <script src="help.js" defer></script>
-  <script src="sound.js" defer></script>
+    <script src="sound.js" defer></script>
   </body>
 </html>
