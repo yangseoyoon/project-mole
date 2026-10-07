@@ -67,6 +67,11 @@
         <!-- 좌측 패널 이미지 -->
         <img class="left-panel" src="images/cam/left-panel.svg" alt="" />
 
+        <!-- 좌측 패널 웹캠 미리보기 -->
+        <div style="position:absolute;left:154px;top:339px;width:169px;height:169px;border-radius:50%;overflow:hidden;z-index:6;pointer-events:none;">
+          <video id="videoPreview" autoplay playsinline muted style="width:100%;height:100%;object-fit:cover;transform:scaleX(-1);"></video>
+        </div>
+
         <!-- 말풍선: 눈썹 가이드 -->
         <div class="hint-pill hint-eyebrow">선 중앙에 눈썹을 맞추세요!</div>
 

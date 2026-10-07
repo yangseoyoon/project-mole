@@ -21,6 +21,8 @@ const photoCtx = photoCanvas.getContext('2d');
       audio: false
     });
     video.srcObject = stream;
+    const preview = document.getElementById('videoPreview');
+    if (preview) preview.srcObject = stream;
   } catch (error) {
     console.error('웹캠 접근 실패:', error);
   }
