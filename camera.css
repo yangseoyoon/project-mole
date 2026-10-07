@@ -223,6 +223,14 @@ body {
 }
 
 /* ── 말풍선 힌트 ── */
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+@keyframes floatY2 {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
 .hint-pill {
   position: absolute;
   background: white;
@@ -237,6 +245,8 @@ body {
   pointer-events: none;
   z-index: 3;
 }
+.hint-eyebrow { animation: floatY  3s ease-in-out infinite; }
+.hint-face    { animation: floatY2 3s ease-in-out infinite 1.5s; }
 
 /* 피그마: left=1420.5, top=327.31 */
 .hint-eyebrow {
