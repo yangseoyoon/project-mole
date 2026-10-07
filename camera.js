@@ -21,14 +21,53 @@ const photoCtx = photoCanvas.getContext('2d');
       audio: false
     });
     video.srcObject = stream;
-    const vl = document.getElementById('videoLeft');
-    if (vl) vl.srcObject = stream;
     const vr = document.getElementById('videoRight');
     if (vr) vr.srcObject = stream;
+    startLeftDotCanvas();
   } catch (error) {
     console.error('웹캠 접근 실패:', error);
   }
 })();
+
+// 좌측 패널 도트 효과 렌더
+function startLeftDotCanvas() {
+  const cv = document.getElementById('canvasLeft');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  const tmp = document.createElement('canvas');
+  const tctx = tmp.getContext('2d', { willReadFrequently: true });
+  const PX = 12;
+
+  function frame() {
+    requestAnimationFrame(frame);
+    if (!video.videoWidth) return;
+    const vw = video.videoWidth, vh = video.videoHeight;
+    const cw = cv.offsetWidth, ch = cv.offsetHeight;
+    if (cv.width !== cw || cv.height !== ch) { cv.width = cw; cv.height = ch; }
+    tmp.width = vw; tmp.height = vh;
+    tctx.drawImage(video, 0, 0);
+    const data = tctx.getImageData(0, 0, vw, vh).data;
+    const scale = Math.max(cw / vw, ch / vh);
+    const ox = (cw - vw * scale) / 2;
+    const oy = (ch - vh * scale) / 2;
+    ctx.fillStyle = '#111';
+    ctx.fillRect(0, 0, cw, ch);
+    const dotR = PX * 0.62;
+    for (let x = PX / 2; x < cw; x += PX) {
+      for (let y = PX / 2; y < ch; y += PX) {
+        const vx = Math.round((cw - x - ox) / scale);
+        const vy = Math.round((y - oy) / scale);
+        if (vx < 0 || vx >= vw || vy < 0 || vy >= vh) continue;
+        const i = (vy * vw + vx) * 4;
+        ctx.beginPath();
+        ctx.arc(x, y, dotR, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgb(' + data[i] + ',' + data[i+1] + ',' + data[i+2] + ')';
+        ctx.fill();
+      }
+    }
+  }
+  frame();
+}
 
 // 촬영 버튼
 document.getElementById('captureBtn').addEventListener('click', () => {
