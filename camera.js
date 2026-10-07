@@ -21,8 +21,10 @@ const photoCtx = photoCanvas.getContext('2d');
       audio: false
     });
     video.srcObject = stream;
-    const preview = document.getElementById('videoPreview');
-    if (preview) preview.srcObject = stream;
+    const vl = document.getElementById('videoLeft');
+    if (vl) vl.srcObject = stream;
+    const vr = document.getElementById('videoRight');
+    if (vr) vr.srcObject = stream;
   } catch (error) {
     console.error('웹캠 접근 실패:', error);
   }
