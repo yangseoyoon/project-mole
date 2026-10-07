@@ -47,7 +47,7 @@ function startLeftDotCanvas() {
     tmp.width = vw; tmp.height = vh;
     tctx.drawImage(video, 0, 0);
     const data = tctx.getImageData(0, 0, vw, vh).data;
-    const scale = Math.max(cw / vw, ch / vh);
+    const scale = Math.max(cw / vw, ch / vh) * 1.1;
     const ox = (cw - vw * scale) / 2;
     const oy = (ch - vh * scale) / 2;
     ctx.fillStyle = '#111';
