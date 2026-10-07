@@ -270,7 +270,7 @@ body {
   display: block;
 }
 .deco-vector-left  { left: 54.02px;   top: 146px; width: 177px; height: 722px; }
-.deco-vector-right { left: 1661.8px;  top: 231px; width: 386px; height: 400px; z-index: 10; }
+.deco-vector-right { left: 1661.8px;  top: 231px; width: 386px; height: 320px; z-index: 10; }
 
 /* ── 폴더 장식: 피그마 w=133.001, h=105.984 ── */
 .deco-folder {
