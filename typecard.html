@@ -51,12 +51,7 @@
       align-items: center;
       z-index: 10;
     }
-    .tc-step {
-      font-size: 13px;
-      font-weight: 500;
-      color: #000;
-      opacity: 0.35;
-    }
+    .tc-step { font-size: 13px; font-weight: 500; color: #000; opacity: 0.35; }
     .tc-step.active { opacity: 1; color: #ea5c3a; font-weight: 700; }
     .tc-step-arrow { opacity: 0.3; font-size: 13px; }
 
@@ -67,25 +62,12 @@
       z-index: 10;
     }
     .tc-label {
-      font-size: 13px;
-      font-weight: 500;
-      color: #000;
-      opacity: 0.45;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
+      font-size: 13px; font-weight: 500; color: #000;
+      opacity: 0.45; letter-spacing: 0.1em; text-transform: uppercase;
     }
     .tc-type-name {
-      font-size: 72px;
-      font-weight: 800;
-      color: #000;
-      line-height: 1;
-      margin-top: 6px;
-    }
-    .tc-type-sub {
-      font-size: 18px;
-      font-weight: 400;
-      color: #ea5c3a;
-      margin-top: 10px;
+      font-size: 72px; font-weight: 800; color: #000;
+      line-height: 1; margin-top: 6px;
     }
 
     /* ── 카드 래퍼 ── */
@@ -93,14 +75,15 @@
       position: absolute;
       left: 50%;
       top: 50%;
-      transform: translate(-50%, -46%);
+      transform: translate(-50%, -48%);
       z-index: 10;
-      perspective: 1400px;
+      perspective: 1800px;
     }
 
+    /* 카드 크기: 이미지 비율 1502×4096 (≈1:2.73) */
     .flip-card {
-      width: 720px;
-      height: 440px;
+      width: 256px;
+      height: 698px;
       cursor: grab;
       user-select: none;
     }
@@ -111,7 +94,7 @@
       width: 100%;
       height: 100%;
       transform-style: preserve-3d;
-      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
       will-change: transform;
     }
     .flip-card.flipped .flip-card-inner {
@@ -122,144 +105,80 @@
     .flip-card-back {
       position: absolute;
       inset: 0;
-      border-radius: 20px;
-      border: 1.5px solid #000;
+      border-radius: 14px;
+      border: 1.5px solid rgba(0,0,0,0.15);
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
       overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.18);
     }
 
-    /* ── 앞면: 노란 카드 ── */
-    .flip-card-front {
-      background: #e9f056;
-      padding: 44px 48px 36px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+    .flip-card-front img,
+    .flip-card-back img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      pointer-events: none;
     }
 
-    .card-lines {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .card-line {
-      font-size: 22px;
-      font-weight: 400;
-      color: #000;
-      line-height: 1.4;
-    }
-    .card-line b {
-      font-weight: 800;
-      font-size: 26px;
-    }
-    .card-line em {
-      font-style: normal;
-      font-weight: 700;
+    .flip-card-back {
+      transform: rotateY(180deg);
     }
 
-    .card-bottom {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .card-type-row {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-    .card-arrow-circle {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-    .card-arrow-circle svg {
-      width: 22px;
-      height: 22px;
-    }
-    .card-type-label {
-      font-size: 18px;
-      font-weight: 500;
-      color: #000;
-    }
-    .card-type-code {
-      font-size: 56px;
-      font-weight: 800;
-      color: #000;
-      line-height: 1;
-    }
-
-    .card-person {
-      width: 90px;
-      height: 90px;
-      opacity: 0.85;
-    }
-
+    /* 플립 힌트 */
     .card-flip-hint {
       position: absolute;
       bottom: 14px;
       left: 50%;
       transform: translateX(-50%);
       font-size: 11px;
-      color: rgba(0,0,0,0.35);
+      color: rgba(0,0,0,0.3);
       white-space: nowrap;
+      pointer-events: none;
+      z-index: 5;
+      background: rgba(255,255,255,0.6);
+      padding: 4px 12px;
+      border-radius: 100px;
     }
 
-    /* ── 뒷면 ── */
-    .flip-card-back {
-      background: #111;
-      transform: rotateY(180deg);
-      padding: 44px 48px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-    .back-title {
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      color: #e9f056;
-      text-transform: uppercase;
-    }
-    .back-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      flex: 1;
-    }
-    .back-list li {
-      font-size: 17px;
-      font-weight: 400;
-      color: #fff;
-      line-height: 1.5;
-      padding-left: 20px;
-      position: relative;
-    }
-    .back-list li::before {
-      content: '—';
+    /* ── 내비게이션 ── */
+    .tc-nav {
       position: absolute;
-      left: 0;
-      color: #ea5c3a;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      z-index: 10;
     }
-    .back-bottom {
-      padding-top: 16px;
-      border-top: 1px solid #2a2a2a;
-      font-size: 11px;
-      color: #555;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
+    .tc-nav-btn {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      border: 1.5px solid #000;
+      background: transparent;
+      font-size: 22px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s;
+      font-family: 'Pretendard', sans-serif;
     }
+    .tc-nav-btn:hover { background: rgba(0,0,0,0.08); }
+    .tc-nav-dots { display: flex; gap: 7px; align-items: center; }
+    .tc-nav-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.2);
+      cursor: pointer;
+      transition: background 0.15s, transform 0.15s;
+    }
+    .tc-nav-dot.cur { background: #000; transform: scale(1.3); }
 
     /* ── 하단 버튼 ── */
     .tc-actions {
       position: absolute;
-      bottom: 96px;
+      bottom: 36px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
@@ -267,23 +186,19 @@
       z-index: 10;
     }
     .tc-btn {
-      height: 52px;
-      padding: 0 36px;
+      height: 44px; padding: 0 28px;
       border-radius: 100px;
       border: 1.5px solid #000;
       font-family: 'Pretendard', sans-serif;
-      font-size: 15px;
-      font-weight: 600;
+      font-size: 14px; font-weight: 600;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      display: flex; align-items: center; gap: 8px;
       transition: background 0.15s, color 0.15s;
     }
     .tc-btn--primary { background: #000; color: #e9f056; }
     .tc-btn--primary:hover { background: #222; }
-    .tc-btn--secondary { background: #fff; color: #000; }
-    .tc-btn--secondary:hover { background: #eee; }
+    .tc-btn--secondary { background: rgba(255,255,255,0.65); color: #000; }
+    .tc-btn--secondary:hover { background: #fff; }
   </style>
 </head>
 <body>
@@ -296,22 +211,11 @@
   <div class="typecardPage page-scale">
     <div class="tc-bg"></div>
 
-    <!-- 장식 원 -->
-    <div class="deco-circle" style="left:28px;top:142px;width:77px;height:77px;background:#e9f056;"></div>
-    <div class="deco-circle" style="left:52px;top:166px;width:77px;height:77px;background:#e9f056;"></div>
-    <div class="deco-circle" style="left:1842px;top:88px;width:77px;height:77px;background:#e9f056;"></div>
-    <div class="deco-circle" style="left:1866px;top:112px;width:77px;height:77px;background:#e9f056;"></div>
-    <div class="deco-circle" style="left:72px;top:880px;width:77px;height:77px;background:#fe6c48;"></div>
-    <div class="deco-circle" style="left:174px;top:960px;width:77px;height:77px;background:#fe6c48;"></div>
-    <div class="deco-circle" style="left:1862px;top:318px;width:77px;height:77px;background:#fe6c48;"></div>
-    <div class="deco-circle" style="left:1740px;top:710px;width:77px;height:77px;background:#e9f056;"></div>
-    <div class="deco-circle" style="left:1764px;top:734px;width:77px;height:77px;background:#e9f056;"></div>
 
     <!-- 헤더 -->
     <div class="tc-header">
       <div class="tc-label">당신의 점 유형</div>
-      <div class="tc-type-name">CGVL</div>
-      <div class="tc-type-sub">신뢰하는 사람들과 함께 정상까지 파고드는 신념가</div>
+      <div class="tc-type-name" id="hdrCode">—</div>
     </div>
 
     <!-- 진행 단계 -->
@@ -325,52 +229,26 @@
       <span class="tc-step">카드 저장</span>
     </div>
 
-    <!-- 카드 1장 -->
+    <!-- 카드 -->
     <div class="tc-card-wrap">
       <div class="flip-card" id="card0">
-        <div class="flip-card-inner">
-
-          <!-- 앞면 -->
+        <div class="flip-card-inner" id="cardInner">
           <div class="flip-card-front">
-            <div class="card-lines">
-              <div class="card-line"><b>자기중심</b> 판단의 기준은 철저히 <em>(나 자신)</em></div>
-              <div class="card-line">에너지와 시간을 <em>(쏟아붓는다)</em> <b>내부몰입</b></div>
-              <div class="card-line"><b>성취지향</b> 삶의 동력은 <em>(성취와 성공)</em></div>
-              <div class="card-line"><b>연결성</b> 두 가지 기운이 <em>(균형)</em>을 이룸</div>
-            </div>
-            <div class="card-bottom">
-              <div class="card-type-row">
-                <div class="card-arrow-circle">
-                  <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M4 11H18M18 11L12 5M18 11L12 17" stroke="#e9f056" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </div>
-                <span class="card-type-label">Type</span>
-                <span class="card-type-code">CGVL</span>
-              </div>
-              <svg class="card-person" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="45" cy="28" r="18" fill="#000"/>
-                <path d="M10 82c0-19.33 15.67-35 35-35s35 15.67 35 35" fill="#000"/>
-              </svg>
-            </div>
+            <img id="imgFront" src="" alt="카드 앞면" />
             <div class="card-flip-hint">← 드래그해서 뒤집기</div>
           </div>
-
-          <!-- 뒷면 -->
           <div class="flip-card-back">
-            <div class="back-title">CGVL 상세 특징</div>
-            <ul class="back-list">
-              <li>목표에 강하게 집중하는 성향, 선택과 집중을 자연스럽게 실천</li>
-              <li>신뢰하는 사람과의 관계에서 깊은 에너지를 얻음</li>
-              <li>성취를 삶의 동력으로 삼으며 꾸준히 전진</li>
-              <li>내면의 두 기운(집중과 연결)이 균형을 이루는 복합형</li>
-              <li>조용하지만 강한 의지로 주변에 영향을 미침</li>
-            </ul>
-            <div class="back-bottom">Type CGVL · DOT SHIFT Analysis</div>
+            <img id="imgBack" src="" alt="카드 뒷면" />
           </div>
-
         </div>
       </div>
+    </div>
+
+    <!-- 내비게이션 -->
+    <div class="tc-nav">
+      <button class="tc-nav-btn" id="prevBtn">‹</button>
+      <div class="tc-nav-dots" id="navDots"></div>
+      <button class="tc-nav-btn" id="nextBtn">›</button>
     </div>
 
     <!-- 하단 버튼 -->
@@ -409,52 +287,104 @@
   </nav>
 
   <script>
+  const TOTAL = 21;
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  // URL ?card=3 또는 localStorage 기반으로 초기 카드 결정
+  function getInitialIndex() {
+    const params = new URLSearchParams(location.search);
+    const cardParam = params.get('card');
+    if (cardParam) return Math.max(1, Math.min(TOTAL, parseInt(cardParam))) - 1;
+    const stored = parseInt(localStorage.getItem('resultCardNum') || '1');
+    return Math.max(0, Math.min(TOTAL - 1, stored - 1));
+  }
+
+  let curIdx = getInitialIndex();
+
+  function renderCard(idx) {
+    const num = pad(idx + 1);
+    document.getElementById('imgFront').src = `images/cards/card${num}-front.png`;
+    document.getElementById('imgBack').src  = `images/cards/card${num}-back.png`;
+    document.getElementById('hdrCode').textContent = `CARD ${num}`;
+
+    // 내비게이션 도트
+    const nd = document.getElementById('navDots');
+    nd.innerHTML = Array.from({length: TOTAL}, (_, i) =>
+      `<div class="tc-nav-dot${i === idx ? ' cur' : ''}" onclick="goTo(${i})"></div>`
+    ).join('');
+
+    // 플립 초기화
     const card = document.getElementById('card0');
-    let startX = 0, isDragging = false;
+    card.classList.remove('flipped');
+    const inner = document.getElementById('cardInner');
+    inner.style.transition = 'none';
+    inner.style.transform = '';
+    setTimeout(() => { inner.style.transition = ''; }, 30);
+  }
 
-    card.addEventListener('mousedown', e => { startX = e.clientX; isDragging = true; });
+  function goTo(idx) {
+    curIdx = (idx + TOTAL) % TOTAL;
+    renderCard(curIdx);
+  }
 
-    window.addEventListener('mousemove', e => {
-      if (!isDragging) return;
-      const dx = e.clientX - startX;
-      const inner = card.querySelector('.flip-card-inner');
-      const base = card.classList.contains('flipped') ? 180 : 0;
-      inner.style.transition = 'none';
-      inner.style.transform = `rotateY(${base + dx * 0.3}deg)`;
-    });
+  document.getElementById('prevBtn').addEventListener('click', () => goTo(curIdx - 1));
+  document.getElementById('nextBtn').addEventListener('click', () => goTo(curIdx + 1));
 
-    window.addEventListener('mouseup', e => {
-      if (!isDragging) return;
-      isDragging = false;
-      const dx = e.clientX - startX;
-      const inner = card.querySelector('.flip-card-inner');
-      inner.style.transition = '';
-      inner.style.transform = '';
-      if (Math.abs(dx) > 60) card.classList.toggle('flipped');
-    });
+  renderCard(curIdx);
 
-    card.addEventListener('touchstart', e => { startX = e.touches[0].clientX; isDragging = true; }, { passive: true });
-    card.addEventListener('touchmove', e => {
-      if (!isDragging) return;
-      const dx = e.touches[0].clientX - startX;
-      const inner = card.querySelector('.flip-card-inner');
-      const base = card.classList.contains('flipped') ? 180 : 0;
-      inner.style.transition = 'none';
-      inner.style.transform = `rotateY(${base + dx * 0.3}deg)`;
-    }, { passive: true });
-    card.addEventListener('touchend', e => {
-      if (!isDragging) return;
-      isDragging = false;
-      const dx = e.changedTouches[0].clientX - startX;
-      const inner = card.querySelector('.flip-card-inner');
-      inner.style.transition = '';
-      inner.style.transform = '';
-      if (Math.abs(dx) > 60) card.classList.toggle('flipped');
-    });
+  // ── 드래그 플립 ───────────────────────────────────────────────
+  const card = document.getElementById('card0');
+  let startX = 0, isDragging = false;
 
-    document.getElementById('saveBtn').addEventListener('click', () => {
-      alert('카드 저장 기능은 준비 중입니다.');
-    });
+  card.addEventListener('mousedown', e => { startX = e.clientX; isDragging = true; });
+  window.addEventListener('mousemove', e => {
+    if (!isDragging) return;
+    const dx = e.clientX - startX;
+    const inner = card.querySelector('.flip-card-inner');
+    const base = card.classList.contains('flipped') ? 180 : 0;
+    inner.style.transition = 'none';
+    inner.style.transform = `rotateY(${base + dx * 0.35}deg)`;
+  });
+  window.addEventListener('mouseup', e => {
+    if (!isDragging) return;
+    isDragging = false;
+    const dx = e.clientX - startX;
+    const inner = card.querySelector('.flip-card-inner');
+    inner.style.transition = '';
+    inner.style.transform = '';
+    if (Math.abs(dx) > 60) card.classList.toggle('flipped');
+  });
+
+  card.addEventListener('touchstart', e => { startX = e.touches[0].clientX; isDragging = true; }, { passive: true });
+  card.addEventListener('touchmove', e => {
+    if (!isDragging) return;
+    const dx = e.touches[0].clientX - startX;
+    const inner = card.querySelector('.flip-card-inner');
+    const base = card.classList.contains('flipped') ? 180 : 0;
+    inner.style.transition = 'none';
+    inner.style.transform = `rotateY(${base + dx * 0.35}deg)`;
+  }, { passive: true });
+  card.addEventListener('touchend', e => {
+    if (!isDragging) return;
+    isDragging = false;
+    const dx = e.changedTouches[0].clientX - startX;
+    const inner = card.querySelector('.flip-card-inner');
+    inner.style.transition = '';
+    inner.style.transform = '';
+    if (Math.abs(dx) > 60) card.classList.toggle('flipped');
+  });
+
+  // ── 카드 저장 ─────────────────────────────────────────────────
+  document.getElementById('saveBtn').addEventListener('click', () => {
+    const num = pad(curIdx + 1);
+    const isFlipped = document.getElementById('card0').classList.contains('flipped');
+    const src = `images/cards/card${num}-${isFlipped ? 'back' : 'front'}.png`;
+    const a = document.createElement('a');
+    a.href = src;
+    a.download = `dotshift-card${num}.png`;
+    a.click();
+  });
   </script>
 
   <script src="scale.js" defer></script>

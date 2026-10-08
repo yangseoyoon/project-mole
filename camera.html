@@ -61,6 +61,14 @@
             <button class="reset-btn" id="guideToggleBtn" onclick="toggleGuide(this)">
               가이드 OFF
             </button>
+
+            <!-- 줌 슬라이더 -->
+            <div class="zoom-wrap">
+              <span class="zoom-icon">🔍</span>
+              <input type="range" id="zoomSlider" class="zoom-slider"
+                min="1" max="3" step="0.05" value="1" />
+              <span class="zoom-val" id="zoomVal">1×</span>
+            </div>
           </div>
         </div>
 
@@ -217,6 +225,35 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/holistic/holistic.js" crossorigin="anonymous" defer></script>
     <script>
+      // ── 줌 슬라이더 ─────────────────────────────────────────────
+      (function() {
+        var slider = document.getElementById('zoomSlider');
+        var valLabel = document.getElementById('zoomVal');
+        var video = document.getElementById('video');
+        var videoRight = document.getElementById('videoRight');
+
+        function applyZoom(z) {
+          window.cameraZoom = z; // 캡처에서 참조
+          video.style.transform = 'scaleX(-1) scale(' + z + ')';
+          if (videoRight) videoRight.style.transform = 'scaleX(-1) scale(1.06)';
+          valLabel.textContent = z.toFixed(2).replace(/\.?0+$/, '') + '×';
+          var pct = ((z - 1) / 2) * 100;
+          slider.style.background = 'linear-gradient(to right, #111 ' + pct + '%, #ccc ' + pct + '%)';
+        }
+
+        slider.addEventListener('input', function() {
+          applyZoom(parseFloat(this.value));
+        });
+
+        // 더블클릭으로 리셋
+        slider.addEventListener('dblclick', function() {
+          this.value = 1;
+          applyZoom(1);
+        });
+
+        applyZoom(1);
+      })();
+
       function toggleGuide(btn) {
         var guide = document.querySelector('.guide-wrap');
         if (!guide) return;

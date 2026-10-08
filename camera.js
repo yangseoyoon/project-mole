@@ -103,7 +103,8 @@ document.getElementById('captureBtn').addEventListener('click', () => {
   const cropX = ovalCX - cropW / 2;
   const cropY = Math.max(0, ovalCY - cropH / 2);
 
-  const vidScale = Math.max(frameW / vw, frameH / vh);
+  const z = window.cameraZoom || 1;
+  const vidScale = Math.max(frameW / vw, frameH / vh) * z;
   const vidOfsX  = (vw * vidScale - frameW) / 2;
   const vidOfsY  = (vh * vidScale - frameH) / 2;
 

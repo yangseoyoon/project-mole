@@ -187,27 +187,19 @@ function showPalaceDesc(name) {
 function getPalaceName(dx, dy) {
   const adx = Math.abs(dx);
 
-  // 이마 상단 (dy > 3)
-  if (dy > 3) {
+  // 이마 상단 (dy > 2)
+  if (dy > 2) {
     if (adx <= 2) return '관록궁';
     if (adx <= 6) return '복덕궁';
-    if (adx <= 9) return '천이궁';
+    if (adx <= 10) return '천이궁';
     return '공백';
   }
 
-  // 이마 하단 / 관자 상단 (dy 2~3)
-  if (dy >= 2) {
-    if (adx <= 2) return '관록궁';
-    if (adx <= 6) return '복덕궁';
-    if (adx <= 9) return '천이궁';
-    return '공백';
-  }
-
-  // 눈썹 (dy 1~2, 미포함)
+  // 눈썹 (dy 1~2)
   if (dy >= 1) {
     if (adx <= 1) return '명궁';
-    if (adx <= 4) return '형제궁';
-    if (adx <= 9) return '천이궁';
+    if (adx <= 5) return '형제궁';
+    if (adx <= 9) return '처첩궁';
     return '공백';
   }
 
@@ -215,31 +207,33 @@ function getPalaceName(dx, dy) {
   if (dy >= -1) {
     if (adx <= 1) return '명궁';
     if (adx <= 4) return '전택궁';
-    if (adx <= 8) return '처첩궁';
+    if (adx <= 9) return '처첩궁';
     return '공백';
   }
 
-  // 코 (dy -4~-1, 미포함)
+  // 코 / 볼 상단 (dy -4~-1)
   if (dy >= -4) {
     if (adx <= 2) return '질액궁';
-    if (adx <= 6) return '남녀궁';
+    if (adx <= 5) return '남녀궁';
+    if (adx <= 8) return '상모궁';
     return '공백';
   }
 
-  // 인중 (dy -6~-4, 미포함)
+  // 인중 / 볼 중단 (dy -6~-4)
   if (dy >= -6) {
-    if (adx <= 2) return '재백궁';
+    if (adx <= 3) return '재백궁';
+    if (adx <= 7) return '상모궁';
     return '공백';
   }
 
-  // 입 (dy -7~-6, 미포함)
-  if (dy >= -7) {
-    if (adx <= 3) return '상모궁';
+  // 입 / 볼 하단 (dy -8~-6)
+  if (dy >= -8) {
+    if (adx <= 5) return '상모궁';
     return '공백';
   }
 
-  // 턱 (dy < -7)
-  if (adx <= 4) return '노복궁';
+  // 턱 (dy < -8)
+  if (adx <= 6) return '노복궁';
   return '공백';
 }
 

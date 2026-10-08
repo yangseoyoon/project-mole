@@ -188,6 +188,59 @@ body {
 .captureBtn:active { transform: translateX(-50%) scale(0.93); opacity: 0.7; }
 .captureBtn img { width: 100%; height: 100%; display: block; }
 
+/* ── 줌 슬라이더 ── */
+.zoom-wrap {
+  position: absolute;
+  left: 310px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.zoom-icon {
+  font-size: 16px;
+  line-height: 1;
+  user-select: none;
+}
+.zoom-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 200px;
+  height: 4px;
+  border-radius: 2px;
+  background: #ccc;
+  outline: none;
+  cursor: pointer;
+}
+.zoom-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #111;
+  cursor: pointer;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  transition: background 0.15s;
+}
+.zoom-slider::-webkit-slider-thumb:hover { background: #ff5c34; }
+.zoom-slider::-moz-range-thumb {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: #111;
+  cursor: pointer;
+  border: 2px solid #fff;
+}
+.zoom-val {
+  font-family: 'Pretendard', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  min-width: 28px;
+}
+
 /* ── 초기화 버튼: 피그마 left=1060, top=818.5 → footer내부 top=25.5 ── */
 .reset-btn {
   position: absolute;
