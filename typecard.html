@@ -25,7 +25,6 @@
       overflow: visible;
     }
 
-    /* 배경 타일 */
     .tc-bg {
       position: absolute;
       inset: 0;
@@ -35,7 +34,6 @@
       z-index: 0;
     }
 
-    /* 장식 원 */
     .deco-circle {
       position: absolute;
       border-radius: 50%;
@@ -44,35 +42,7 @@
       z-index: 1;
     }
 
-    /* ── 상단 헤더 영역 ── */
-    .tc-header {
-      position: absolute;
-      left: 120px; top: 80px;
-      z-index: 10;
-    }
-    .tc-label {
-      font-size: 14px;
-      font-weight: 500;
-      color: #000;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      opacity: 0.5;
-    }
-    .tc-type-name {
-      font-size: 96px;
-      font-weight: 800;
-      color: #000;
-      line-height: 1;
-      margin-top: 8px;
-    }
-    .tc-type-sub {
-      font-size: 22px;
-      font-weight: 400;
-      color: #ea5c3a;
-      margin-top: 12px;
-    }
-
-    /* ── 진행 단계 표시 ── */
+    /* 진행 단계 */
     .tc-steps {
       position: absolute;
       right: 120px; top: 90px;
@@ -86,32 +56,52 @@
       font-weight: 500;
       color: #000;
       opacity: 0.35;
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
-    .tc-step.active { opacity: 1; color: #ea5c3a; }
-    .tc-step-arrow { opacity: 0.3; }
+    .tc-step.active { opacity: 1; color: #ea5c3a; font-weight: 700; }
+    .tc-step-arrow { opacity: 0.3; font-size: 13px; }
 
-    /* ── 카드 영역 ── */
-    .tc-cards-wrap {
+    /* 헤더 */
+    .tc-header {
+      position: absolute;
+      left: 120px; top: 80px;
+      z-index: 10;
+    }
+    .tc-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: #000;
+      opacity: 0.45;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .tc-type-name {
+      font-size: 72px;
+      font-weight: 800;
+      color: #000;
+      line-height: 1;
+      margin-top: 6px;
+    }
+    .tc-type-sub {
+      font-size: 18px;
+      font-weight: 400;
+      color: #ea5c3a;
+      margin-top: 10px;
+    }
+
+    /* ── 카드 래퍼 ── */
+    .tc-card-wrap {
       position: absolute;
       left: 50%;
       top: 50%;
-      transform: translate(-50%, -48%);
-      display: flex;
-      gap: 40px;
-      align-items: center;
+      transform: translate(-50%, -46%);
       z-index: 10;
+      perspective: 1400px;
     }
 
-    /* 카드 공통 */
     .flip-card {
-      width: 320px;
+      width: 720px;
       height: 440px;
-      perspective: 1200px;
       cursor: grab;
-      flex-shrink: 0;
       user-select: none;
     }
     .flip-card:active { cursor: grabbing; }
@@ -132,157 +122,168 @@
     .flip-card-back {
       position: absolute;
       inset: 0;
-      border-radius: 16px;
-      border: 1px solid #000;
+      border-radius: 20px;
+      border: 1.5px solid #000;
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
       overflow: hidden;
     }
 
-    /* 앞면 */
+    /* ── 앞면: 노란 카드 ── */
     .flip-card-front {
-      background: #fff;
+      background: #e9f056;
+      padding: 44px 48px 36px;
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
-      padding: 32px;
-    }
-    .card-front-tag {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.15em;
-      color: #ea5c3a;
-      text-transform: uppercase;
-      margin-bottom: 12px;
-    }
-    .card-front-title {
-      font-size: 36px;
-      font-weight: 800;
-      color: #000;
-      line-height: 1.1;
-    }
-    .card-front-desc {
-      font-size: 14px;
-      font-weight: 400;
-      color: #555;
-      margin-top: 12px;
-      line-height: 1.6;
-    }
-    .card-front-dot {
-      position: absolute;
-      top: 32px;
-      right: 32px;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      border: 1px solid #000;
-    }
-    .card-flip-hint {
-      position: absolute;
-      bottom: 16px;
-      right: 20px;
-      font-size: 11px;
-      color: #aaa;
-      display: flex;
-      align-items: center;
-      gap: 4px;
+      justify-content: space-between;
     }
 
-    /* 뒷면 */
+    .card-lines {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .card-line {
+      font-size: 22px;
+      font-weight: 400;
+      color: #000;
+      line-height: 1.4;
+    }
+    .card-line b {
+      font-weight: 800;
+      font-size: 26px;
+    }
+    .card-line em {
+      font-style: normal;
+      font-weight: 700;
+    }
+
+    .card-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .card-type-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .card-arrow-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .card-arrow-circle svg {
+      width: 22px;
+      height: 22px;
+    }
+    .card-type-label {
+      font-size: 18px;
+      font-weight: 500;
+      color: #000;
+    }
+    .card-type-code {
+      font-size: 56px;
+      font-weight: 800;
+      color: #000;
+      line-height: 1;
+    }
+
+    .card-person {
+      width: 90px;
+      height: 90px;
+      opacity: 0.85;
+    }
+
+    .card-flip-hint {
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px;
+      color: rgba(0,0,0,0.35);
+      white-space: nowrap;
+    }
+
+    /* ── 뒷면 ── */
     .flip-card-back {
       background: #111;
       transform: rotateY(180deg);
+      padding: 44px 48px;
       display: flex;
       flex-direction: column;
-      padding: 32px;
-      gap: 0;
+      gap: 20px;
     }
-    .card-back-title {
-      font-size: 18px;
-      font-weight: 700;
+    .back-title {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
       color: #e9f056;
-      margin-bottom: 24px;
+      text-transform: uppercase;
     }
-    .card-back-list {
+    .back-list {
       list-style: none;
       display: flex;
       flex-direction: column;
       gap: 14px;
       flex: 1;
     }
-    .card-back-list li {
-      font-size: 14px;
+    .back-list li {
+      font-size: 17px;
       font-weight: 400;
       color: #fff;
       line-height: 1.5;
-      padding-left: 16px;
+      padding-left: 20px;
       position: relative;
     }
-    .card-back-list li::before {
+    .back-list li::before {
       content: '—';
       position: absolute;
       left: 0;
       color: #ea5c3a;
     }
-    .card-back-bottom {
-      margin-top: auto;
-      padding-top: 20px;
-      border-top: 1px solid #333;
+    .back-bottom {
+      padding-top: 16px;
+      border-top: 1px solid #2a2a2a;
       font-size: 11px;
-      color: #666;
+      color: #555;
       letter-spacing: 0.1em;
       text-transform: uppercase;
     }
 
-    /* 카드 색상 변형 */
-    .flip-card:nth-child(2) .flip-card-front { background: #f5f5f5; }
-    .flip-card:nth-child(3) .flip-card-front { background: #fff8f6; }
-    .flip-card:nth-child(1) .card-front-dot { background: #e9f056; }
-    .flip-card:nth-child(2) .card-front-dot { background: #fe6c48; }
-    .flip-card:nth-child(3) .card-front-dot { background: #111; }
-
-    /* 카드 미세 기울기 */
-    .flip-card:nth-child(1) { transform: rotate(-2deg); }
-    .flip-card:nth-child(2) { transform: rotate(0.5deg); margin-top: -30px; }
-    .flip-card:nth-child(3) { transform: rotate(2.5deg); }
-
     /* ── 하단 버튼 ── */
     .tc-actions {
       position: absolute;
-      bottom: 100px;
+      bottom: 96px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
-      gap: 20px;
+      gap: 16px;
       z-index: 10;
     }
     .tc-btn {
-      height: 56px;
-      padding: 0 40px;
+      height: 52px;
+      padding: 0 36px;
       border-radius: 100px;
-      border: 1px solid #000;
+      border: 1.5px solid #000;
       font-family: 'Pretendard', sans-serif;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 600;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       transition: background 0.15s, color 0.15s;
     }
-    .tc-btn--primary {
-      background: #000;
-      color: #e9f056;
-    }
+    .tc-btn--primary { background: #000; color: #e9f056; }
     .tc-btn--primary:hover { background: #222; }
-    .tc-btn--secondary {
-      background: #fff;
-      color: #000;
-    }
+    .tc-btn--secondary { background: #fff; color: #000; }
     .tc-btn--secondary:hover { background: #eee; }
-
-    /* 드래그 중 힌트 숨기기 */
-    .flip-card.dragging .card-flip-hint { opacity: 0; }
   </style>
 </head>
 <body>
@@ -309,8 +310,8 @@
     <!-- 헤더 -->
     <div class="tc-header">
       <div class="tc-label">당신의 점 유형</div>
-      <div class="tc-type-name">CLUSTER</div>
-      <div class="tc-type-sub">집중형 · 에너지를 한곳에 모으는 사람</div>
+      <div class="tc-type-name">CGVL</div>
+      <div class="tc-type-sub">신뢰하는 사람들과 함께 정상까지 파고드는 신념가</div>
     </div>
 
     <!-- 진행 단계 -->
@@ -324,93 +325,59 @@
       <span class="tc-step">카드 저장</span>
     </div>
 
-    <!-- 카드 3장 -->
-    <div class="tc-cards-wrap">
-
-      <!-- 카드 1: 핵심 유형 -->
+    <!-- 카드 1장 -->
+    <div class="tc-card-wrap">
       <div class="flip-card" id="card0">
         <div class="flip-card-inner">
+
+          <!-- 앞면 -->
           <div class="flip-card-front">
-            <div class="card-front-dot"></div>
-            <div class="card-front-tag">Core Type</div>
-            <div class="card-front-title">집중형<br>CLUSTER</div>
-            <div class="card-front-desc">점들이 특정 영역에 밀집되어<br>강한 에너지 집중을 보여줍니다.</div>
+            <div class="card-lines">
+              <div class="card-line"><b>자기중심</b> 판단의 기준은 철저히 <em>(나 자신)</em></div>
+              <div class="card-line">에너지와 시간을 <em>(쏟아붓는다)</em> <b>내부몰입</b></div>
+              <div class="card-line"><b>성취지향</b> 삶의 동력은 <em>(성취와 성공)</em></div>
+              <div class="card-line"><b>연결성</b> 두 가지 기운이 <em>(균형)</em>을 이룸</div>
+            </div>
+            <div class="card-bottom">
+              <div class="card-type-row">
+                <div class="card-arrow-circle">
+                  <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 11H18M18 11L12 5M18 11L12 17" stroke="#e9f056" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <span class="card-type-label">Type</span>
+                <span class="card-type-code">CGVL</span>
+              </div>
+              <svg class="card-person" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="45" cy="28" r="18" fill="#000"/>
+                <path d="M10 82c0-19.33 15.67-35 35-35s35 15.67 35 35" fill="#000"/>
+              </svg>
+            </div>
             <div class="card-flip-hint">← 드래그해서 뒤집기</div>
           </div>
+
+          <!-- 뒷면 -->
           <div class="flip-card-back">
-            <div class="card-back-title">핵심 특징</div>
-            <ul class="card-back-list">
-              <li>목표에 강하게 집중하는 성향</li>
-              <li>선택과 집중을 자연스럽게 실천</li>
-              <li>한 가지에 깊이 파고드는 전문성</li>
-              <li>에너지 낭비 없이 효율을 추구</li>
-              <li>깊은 관계보다 핵심 관계를 중시</li>
+            <div class="back-title">CGVL 상세 특징</div>
+            <ul class="back-list">
+              <li>목표에 강하게 집중하는 성향, 선택과 집중을 자연스럽게 실천</li>
+              <li>신뢰하는 사람과의 관계에서 깊은 에너지를 얻음</li>
+              <li>성취를 삶의 동력으로 삼으며 꾸준히 전진</li>
+              <li>내면의 두 기운(집중과 연결)이 균형을 이루는 복합형</li>
+              <li>조용하지만 강한 의지로 주변에 영향을 미침</li>
             </ul>
-            <div class="card-back-bottom">Cluster · 집중형</div>
+            <div class="back-bottom">Type CGVL · DOT SHIFT Analysis</div>
           </div>
+
         </div>
       </div>
-
-      <!-- 카드 2: 관계 패턴 -->
-      <div class="flip-card" id="card1">
-        <div class="flip-card-inner">
-          <div class="flip-card-front">
-            <div class="card-front-dot"></div>
-            <div class="card-front-tag">Relation Pattern</div>
-            <div class="card-front-title">연결형<br>BRIDGE</div>
-            <div class="card-front-desc">주요 점들이 선으로 연결되어<br>관계 지향적 성격을 나타냅니다.</div>
-            <div class="card-flip-hint">← 드래그해서 뒤집기</div>
-          </div>
-          <div class="flip-card-back">
-            <div class="card-back-title">관계 패턴</div>
-            <ul class="card-back-list">
-              <li>사람과 사람 사이를 자연스럽게 연결</li>
-              <li>커뮤니케이션 능력이 탁월</li>
-              <li>중재자·조율자 역할을 즐김</li>
-              <li>네트워크를 통해 가치를 창출</li>
-              <li>관계의 맥락을 잘 파악함</li>
-            </ul>
-            <div class="card-back-bottom">Bridge · 연결형</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 카드 3: 에너지 흐름 -->
-      <div class="flip-card" id="card2">
-        <div class="flip-card-inner">
-          <div class="flip-card-front">
-            <div class="card-front-dot"></div>
-            <div class="card-front-tag">Energy Flow</div>
-            <div class="card-front-title">확산형<br>SCATTER</div>
-            <div class="card-front-desc">점들이 넓게 퍼져 다양한<br>가능성을 탐색하는 성향입니다.</div>
-            <div class="card-flip-hint">← 드래그해서 뒤집기</div>
-          </div>
-          <div class="flip-card-back">
-            <div class="card-back-title">에너지 흐름</div>
-            <ul class="card-back-list">
-              <li>다양한 관심사를 동시에 탐구</li>
-              <li>창의적 발상과 아이디어가 풍부</li>
-              <li>변화와 새로운 환경에 빠르게 적응</li>
-              <li>경계를 허물고 영역을 넓혀가는 힘</li>
-              <li>자유롭고 유연한 사고방식</li>
-            </ul>
-            <div class="card-back-bottom">Scatter · 확산형</div>
-          </div>
-        </div>
-      </div>
-
     </div>
 
     <!-- 하단 버튼 -->
     <div class="tc-actions">
-      <button class="tc-btn tc-btn--secondary" onclick="window.location.href='system.html'">
-        ← 다시 분석하기
-      </button>
-      <button class="tc-btn tc-btn--primary" id="saveBtn">
-        카드 저장하기 ↓
-      </button>
+      <button class="tc-btn tc-btn--secondary" onclick="window.location.href='result.html'">← 결과로 돌아가기</button>
+      <button class="tc-btn tc-btn--primary" id="saveBtn">카드 저장하기 ↓</button>
     </div>
-
   </div>
 
   <nav class="bottomNav">
@@ -442,70 +409,49 @@
   </nav>
 
   <script>
-    // 드래그로 카드 뒤집기
-    document.querySelectorAll('.flip-card').forEach(card => {
-      let startX = 0;
-      let isDragging = false;
+    const card = document.getElementById('card0');
+    let startX = 0, isDragging = false;
 
-      card.addEventListener('mousedown', e => {
-        startX = e.clientX;
-        isDragging = true;
-        card.classList.add('dragging');
-      });
+    card.addEventListener('mousedown', e => { startX = e.clientX; isDragging = true; });
 
-      window.addEventListener('mousemove', e => {
-        if (!isDragging) return;
-        const dx = e.clientX - startX;
-        const inner = card.querySelector('.flip-card-inner');
-        const isFlipped = card.classList.contains('flipped');
-        const base = isFlipped ? 180 : 0;
-        inner.style.transition = 'none';
-        inner.style.transform = `rotateY(${base + dx * 0.3}deg)`;
-      });
-
-      window.addEventListener('mouseup', e => {
-        if (!isDragging) return;
-        isDragging = false;
-        card.classList.remove('dragging');
-        const dx = e.clientX - startX;
-        const inner = card.querySelector('.flip-card-inner');
-        inner.style.transition = '';
-        if (Math.abs(dx) > 60) {
-          card.classList.toggle('flipped');
-        }
-        inner.style.transform = '';
-      });
-
-      // 터치 지원
-      card.addEventListener('touchstart', e => {
-        startX = e.touches[0].clientX;
-        isDragging = true;
-      }, { passive: true });
-
-      card.addEventListener('touchmove', e => {
-        if (!isDragging) return;
-        const dx = e.touches[0].clientX - startX;
-        const inner = card.querySelector('.flip-card-inner');
-        const isFlipped = card.classList.contains('flipped');
-        const base = isFlipped ? 180 : 0;
-        inner.style.transition = 'none';
-        inner.style.transform = `rotateY(${base + dx * 0.3}deg)`;
-      }, { passive: true });
-
-      card.addEventListener('touchend', e => {
-        if (!isDragging) return;
-        isDragging = false;
-        const dx = e.changedTouches[0].clientX - startX;
-        const inner = card.querySelector('.flip-card-inner');
-        inner.style.transition = '';
-        if (Math.abs(dx) > 60) {
-          card.classList.toggle('flipped');
-        }
-        inner.style.transform = '';
-      });
+    window.addEventListener('mousemove', e => {
+      if (!isDragging) return;
+      const dx = e.clientX - startX;
+      const inner = card.querySelector('.flip-card-inner');
+      const base = card.classList.contains('flipped') ? 180 : 0;
+      inner.style.transition = 'none';
+      inner.style.transform = `rotateY(${base + dx * 0.3}deg)`;
     });
 
-    // 카드 저장 (현재는 placeholder)
+    window.addEventListener('mouseup', e => {
+      if (!isDragging) return;
+      isDragging = false;
+      const dx = e.clientX - startX;
+      const inner = card.querySelector('.flip-card-inner');
+      inner.style.transition = '';
+      inner.style.transform = '';
+      if (Math.abs(dx) > 60) card.classList.toggle('flipped');
+    });
+
+    card.addEventListener('touchstart', e => { startX = e.touches[0].clientX; isDragging = true; }, { passive: true });
+    card.addEventListener('touchmove', e => {
+      if (!isDragging) return;
+      const dx = e.touches[0].clientX - startX;
+      const inner = card.querySelector('.flip-card-inner');
+      const base = card.classList.contains('flipped') ? 180 : 0;
+      inner.style.transition = 'none';
+      inner.style.transform = `rotateY(${base + dx * 0.3}deg)`;
+    }, { passive: true });
+    card.addEventListener('touchend', e => {
+      if (!isDragging) return;
+      isDragging = false;
+      const dx = e.changedTouches[0].clientX - startX;
+      const inner = card.querySelector('.flip-card-inner');
+      inner.style.transition = '';
+      inner.style.transform = '';
+      if (Math.abs(dx) > 60) card.classList.toggle('flipped');
+    });
+
     document.getElementById('saveBtn').addEventListener('click', () => {
       alert('카드 저장 기능은 준비 중입니다.');
     });
