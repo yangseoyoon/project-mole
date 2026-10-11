@@ -71,7 +71,7 @@
         width: 235px;
         height: 313.437px;
         object-fit: cover;
-        animation: fadeInUp 0.8s 0.2s ease both;
+        transition: opacity 0.4s ease;
       }
 
       @keyframes fadeInUp {
@@ -105,7 +105,7 @@
 
       <p class="loading-text">유형을 분석하는 중입니다</p>
 
-      <img class="loading-face" src="images/loading-face.png" alt="" />
+      <img class="loading-face" id="loadingFace" src="images/loading-face.png" alt="" />
 
     </div>
 
@@ -143,9 +143,50 @@
     </nav>
 
     <script>
-      setTimeout(() => {
-        window.location.href = 'result.html';
-      }, 4000);
+      (function() {
+        const images = [
+          'images/loading-face.png',
+          'images/아트보드 1.png',
+          'images/아트보드 2.png',
+          'images/아트보드 3.png',
+          'images/아트보드 4.png',
+          'images/아트보드 5.png',
+          'images/아트보드 6.png',
+          'images/아트보드 7.png',
+          'images/아트보드 8.png',
+          'images/아트보드 9.png',
+          'images/아트보드 10.png',
+          'images/아트보드 11.png',
+          'images/아트보드 12.png',
+          'images/아트보드 13.png',
+          'images/아트보드 14.png',
+          'images/아트보드 15.png',
+          'images/아트보드 16.png',
+          'images/아트보드 17.png',
+          'images/아트보드 18.png',
+          'images/아트보드 19.png',
+          'images/아트보드 20.png',
+          'images/아트보드 21.png',
+        ];
+        const el = document.getElementById('loadingFace');
+        let idx = 0;
+        const INTERVAL = 200; // 한 장당 표시 시간(ms)
+        const TOTAL = 4000;
+
+        const timer = setInterval(() => {
+          el.style.opacity = 0;
+          setTimeout(() => {
+            idx = (idx + 1) % images.length;
+            el.src = images[idx];
+            el.style.opacity = 1;
+          }, 200);
+        }, INTERVAL);
+
+        setTimeout(() => {
+          clearInterval(timer);
+          window.location.href = 'result.html';
+        }, TOTAL);
+      })();
     </script>
 
     <script src="scale.js" defer></script>

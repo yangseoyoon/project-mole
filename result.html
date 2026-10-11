@@ -59,6 +59,11 @@
       .dot-node .outer { fill: transparent; cursor: grab; }
       .dot-node .outer:active { cursor: grabbing; }
       .dot-node .inner { fill: #ea5c3a; opacity: 0.7; pointer-events: none; }
+      @keyframes nodeGlow {
+        0%, 100% { filter: drop-shadow(0 0 4px #ea5c3a) drop-shadow(0 0 8px #ea5c3a88); opacity: 0.7; }
+        50%       { filter: drop-shadow(0 0 10px #ea5c3a) drop-shadow(0 0 22px #ea5c3acc); opacity: 1; }
+      }
+      .dot-node .inner { animation: nodeGlow 2.4s ease-in-out infinite; }
       .dot-line { stroke: #ea5c3a; stroke-width: 1.5; opacity: 0.25; }
       .dot-label {
         font-family: 'Pretendard', sans-serif;
@@ -90,7 +95,7 @@
         color: #000;
         letter-spacing: 4px;
         text-transform: uppercase;
-        margin-bottom: 24px;
+        margin-bottom: 8px;
         opacity: 0;
         transform: translateY(10px);
         transition: opacity 0.5s, transform 0.5s;
@@ -580,7 +585,9 @@
             const r = 8 + Math.min((node.count-1)*4, 12);
             const g = svgEl('g', {class:'dot-node', style:'opacity:0'});
             g.appendChild(svgEl('circle', {class:'outer', cx:node.x, cy:node.y, r:r+18}));
-            g.appendChild(svgEl('circle', {class:'inner', cx:node.x, cy:node.y, r}));
+            const inner = svgEl('circle', {class:'inner', cx:node.x, cy:node.y, r});
+            inner.style.animationDelay = (idx * 0.18) + 's';
+            g.appendChild(inner);
             nodeLayer.appendChild(g);
             nodeEls.push(g);
 
