@@ -1,32 +1,59 @@
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* system.html 전용 — 반응형(body.rwd), 디자인 1px = var(--u) (base.css)
+   패널 묶음(.sys-layout)은 Figma 1920 기준 x 174.8 ~ 1745.2, y 89 ~ 929.5 영역.
+   묶음 안 좌표는 그 영역의 왼쪽 위(174.8, 89)를 원점으로 한 값. */
 
 body {
   background: #e9f056;
   font-family: 'Pretendard', sans-serif;
-  overflow: hidden;
-  width: 100vw;
-  height: 100vh;
 }
 
-/* ── 1920×1080 고정 캔버스 ── */
+/* ── 페이지: 상·하단 바 사이를 채우고, 모자라면 세로 스크롤 ── */
 .systemPage {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 1920px;
-  height: 1080px;
-  transform-origin: top left;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100dvh;
+  /* 1920×1080 에서 Figma 와 같은 여백: 위 47+42, 아래 77.5+73 */
+  padding: calc(var(--nav-top-h) + 42 * var(--u)) 0 calc(var(--nav-bottom-h) + 77.5 * var(--u));
 }
 
-/* ── 배경 이미지 ── */
+/* ── 배경 이미지: 뷰포트 전체 ── */
 .sys-bg {
-  position: absolute;
+  position: fixed;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   pointer-events: none;
   z-index: 0;
+}
+
+/* ── 장식 원: 가장자리 기준 고정 (inline --l/--r/--t/--b, 디자인 px) ── */
+.sys-deco {
+  position: fixed;
+  left:   calc(var(--l) * var(--u));
+  right:  calc(var(--r) * var(--u));
+  top:    calc(var(--t) * var(--u));
+  bottom: calc(var(--b) * var(--u));
+  width:  calc(77 * var(--u));
+  height: calc(77 * var(--u));
+  border-radius: 50%;
+  background: #e9f056;
+  border: 1px solid #000;
+  pointer-events: none;
+  z-index: 0;
+}
+.sys-deco--orange { background: #fe6c48; }
+
+/* ── 패널 묶음 ── */
+.sys-layout {
+  position: relative;
+  flex: none;
+  width: calc(1570.4 * var(--u));
+  height: calc(840.5 * var(--u));
+  margin: 0 auto;
+  z-index: 1;
 }
 
 /* ── 공통 패널 ── */
@@ -37,17 +64,17 @@ body {
   position: absolute;
   background: white;
   border: 1px solid #797979;
-  border-radius: 10px;
+  border-radius: calc(10 * var(--u));
   overflow: hidden;
   z-index: 1;
 }
 
-/* ── 왼쪽 패널 ── */
+/* ── 왼쪽 패널 (얼굴 — 화면 오른쪽) ── */
 .sys-left-panel {
-  left: 74.8px;
-  top: 99px;
-  width: 650px;
-  height: 770px;
+  left: calc(920.4 * var(--u));
+  top: calc(10 * var(--u));
+  width: calc(650 * var(--u));
+  height: calc(770 * var(--u));
 }
 
 /* ── 바 (타이틀바 / 푸터) ── */
@@ -60,20 +87,43 @@ body {
   border-color: #a6a6a6;
   z-index: 2;
 }
-.sys-bar--top    { top: -1px;    height: 60px; border-width: 0 0 1px 0; }
-.sys-bar--bottom { bottom: -1px; height: 50px; border-width: 1px 0 0 0; }
-.sys-bar--sm     { height: 32px; }
+.sys-bar--top    { top: -1px;    height: calc(60 * var(--u)); border-width: 0 0 1px 0; }
+.sys-bar--bottom { bottom: -1px; height: calc(50 * var(--u)); border-width: 1px 0 0 0; }
+.sys-bar--sm     { height: calc(32 * var(--u)); }
+.sys-bar--label {
+  display: flex;
+  align-items: center;
+  padding-left: calc(20 * var(--u));
+  font-family: 'Pretendard', sans-serif;
+  font-size: calc(12 * var(--u));
+  color: #888;
+}
 
 /* ── 얼굴 컨테이너 ── */
 #faceContainer {
   position: absolute;
-  left: 60px;
-  top: 62px;
-  width: 530px;
-  height: 648px;
+  left: calc(60 * var(--u));
+  top: calc(62 * var(--u));
+  width: calc(530 * var(--u));
+  height: calc(648 * var(--u));
   background: #e9f056;
-  border-radius: 10px;
+  border-radius: calc(10 * var(--u));
   overflow: hidden;
+}
+
+@keyframes facePulse {
+  0%   { box-shadow: 0 0 0 0px rgba(234,92,58,0.55); }
+  70%  { box-shadow: 0 0 0 calc(18 * var(--u)) rgba(234,92,58,0); }
+  100% { box-shadow: 0 0 0 0px rgba(234,92,58,0); }
+}
+#faceContainer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: calc(10 * var(--u));
+  animation: facePulse 2s ease-out infinite;
+  pointer-events: none;
+  z-index: 10;
 }
 
 #savedCanvas {
@@ -121,25 +171,25 @@ body {
 
 /* ── 중간 패널: 버튼 ── */
 .sys-mid-panel {
-  left: 775px;
-  top: 290px;
-  width: 300px;
-  height: 130px;
+  left: calc(735.2 * var(--u));
+  top: calc(201 * var(--u));
+  width: calc(300 * var(--u));
+  height: calc(130 * var(--u));
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 14px;
+  gap: calc(14 * var(--u));
 }
 
 #resetBtn,
 #analyzeBtn {
-  width: 260px;
-  height: 50px;
-  border-radius: 8px;
+  width: calc(260 * var(--u));
+  height: calc(50 * var(--u));
+  border-radius: calc(8 * var(--u));
   font-family: 'Pretendard', sans-serif;
   font-weight: 600;
-  font-size: 18px;
+  font-size: calc(18 * var(--u));
   cursor: pointer;
   transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
@@ -167,7 +217,7 @@ body {
 #retakeBtn {
   font-family: 'Pretendard', sans-serif;
   font-weight: 500;
-  font-size: 15px;
+  font-size: calc(15 * var(--u));
   cursor: pointer;
   color: #444;
   background: #efefef;
@@ -181,14 +231,14 @@ body {
 /* ── 클릭 안내 툴팁 ── */
 #click-hint {
   position: absolute;
-  left: 700px;
-  top: 170px;
+  left: calc(665.2 * var(--u));
+  top: calc(81 * var(--u));
   background: #efefef;
   border: 1px solid #797979;
-  border-radius: 14px;
-  padding: 16px 24px;
+  border-radius: calc(14 * var(--u));
+  padding: calc(16 * var(--u)) calc(24 * var(--u));
   font-family: 'Pretendard', sans-serif;
-  font-size: 20px;
+  font-size: calc(20 * var(--u));
   font-weight: 400;
   line-height: 1.5;
   text-align: center;
@@ -196,20 +246,20 @@ body {
   pointer-events: none;
 }
 
-/* ── 오른쪽 상단 패널: 방사형 차트 ── */
+/* ── 오른쪽 상단 패널 (방사형 차트 — 화면 왼쪽) ── */
 .sys-right-top {
-  left: 1211.02px;
-  top: 89px;
-  width: 617.792px;
-  height: 617px;
+  left: 0;
+  top: 0;
+  width: calc(556 * var(--u));
+  height: calc(555 * var(--u));
 }
 
 .sys-chart-area {
   position: absolute;
   left: 0;
-  top: 32px;
+  top: calc(32 * var(--u));
   width: 100%;
-  height: calc(100% - 32px);
+  height: calc(100% - 32 * var(--u));
   overflow: hidden;
 }
 
@@ -222,20 +272,20 @@ body {
 /* ── 줌 버튼 ── */
 #chartControls {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: calc(10 * var(--u));
+  right: calc(10 * var(--u));
   display: flex;
-  gap: 8px;
+  gap: calc(8 * var(--u));
   z-index: 10;
 }
 
 #chartControls button {
-  width: 30px;
-  height: 30px;
+  width: calc(30 * var(--u));
+  height: calc(30 * var(--u));
   background: white;
   border: 1px solid #797979;
-  border-radius: 4px;
-  font-size: 18px;
+  border-radius: calc(4 * var(--u));
+  font-size: calc(18 * var(--u));
   font-weight: 700;
   cursor: pointer;
   display: flex;
@@ -245,36 +295,36 @@ body {
 }
 #chartControls button:hover { background: #f0f0f0; }
 
-/* ── 오른쪽 하단 패널 ── */
+/* ── 오른쪽 하단 패널 (궁 설명 — 화면 왼쪽 아래) ── */
 .sys-right-bottom {
-  left: 1076.86px;
-  top: 729.5px;
-  width: 617.792px;
-  height: 200px;
+  left: 0;
+  top: calc(640.5 * var(--u));
+  width: calc(617.792 * var(--u));
+  height: calc(200 * var(--u));
 }
 
 #palace-desc-content {
   position: absolute;
-  top: 44px;
-  left: 28px;
-  right: 28px;
-  bottom: 20px;
+  top: calc(44 * var(--u));
+  left: calc(28 * var(--u));
+  right: calc(28 * var(--u));
+  bottom: calc(20 * var(--u));
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: calc(6 * var(--u));
 }
 
 .pdc-name {
   font-family: 'Pretendard', sans-serif;
-  font-size: 22px;
+  font-size: calc(22 * var(--u));
   font-weight: 700;
   color: #111;
-  margin-bottom: 2px;
+  margin-bottom: calc(2 * var(--u));
 }
 
 .pdc-sub {
   font-family: 'Pretendard', sans-serif;
-  font-size: 12px;
+  font-size: calc(12 * var(--u));
   font-weight: 400;
   color: #888;
   letter-spacing: 0.03em;
@@ -282,9 +332,36 @@ body {
 
 .pdc-body {
   font-family: 'Pretendard', sans-serif;
-  font-size: 14px;
+  font-size: calc(14 * var(--u));
   font-weight: 400;
   color: #333;
   line-height: 1.65;
-  margin-top: 4px;
+  margin-top: calc(4 * var(--u));
+}
+
+/* ── 좁은 화면 / 크게 확대한 화면: 2열로 재배치 ──
+   왼쪽: 차트 → 설명, 오른쪽: 안내+버튼 → 얼굴 패널.
+   1340px 미만에서는 Figma 배치(폭 1570)가 화면에 들어가지 않는다. */
+@media (max-width: 1339px) {
+  .sys-layout {
+    display: grid;
+    width: calc(1308 * var(--u));
+    height: auto;
+    grid-template-columns: calc(618 * var(--u)) calc(650 * var(--u));
+    grid-template-rows: calc(130 * var(--u)) auto auto;
+    gap: calc(24 * var(--u)) calc(40 * var(--u));
+    align-items: start;
+  }
+
+  .sys-layout > * {
+    position: relative;
+    left: auto;
+    top: auto;
+  }
+
+  .sys-right-top    { grid-column: 1; grid-row: 1 / 3; }
+  .sys-right-bottom { grid-column: 1; grid-row: 3; }
+  #click-hint       { grid-column: 2; grid-row: 1; justify-self: start; align-self: center; position: relative; left: auto; top: auto; }
+  .sys-mid-panel    { grid-column: 2; grid-row: 1; justify-self: end; }
+  .sys-left-panel   { grid-column: 2; grid-row: 2 / 4; }
 }

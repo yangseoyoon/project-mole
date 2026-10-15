@@ -1,0 +1,91 @@
+/* ── 반응형 공통 기반 ──
+   <body class="rwd"> 로 전환된 페이지에서만 링크한다 (nav.css 다음, 페이지 CSS 앞).
+   지원 범위: 데스크톱 1024px 이상. 화면이 낮으면 세로 스크롤 허용.
+
+   ※ 브라우저 확대/축소가 동작하려면 크기를 vw 만으로 잡지 말 것.
+     글자·최대 폭에는 rem/px 성분을 섞는다 (예: clamp(1rem, 0.5rem + 0.8vw, 1.5rem)). */
+
+:root {
+  /* 색 */
+  --c-yellow: #e9f056;
+  --c-orange: #ea5c3a;
+  --c-gray:   #757575;
+  --c-black:  #000;
+  --c-white:  #fff;
+
+  /* 레이아웃 */
+  --page-min-w:    1000px;  /* 1024 화면 - 세로 스크롤바 여유 */
+  --content-max-w: 1920px;
+  --nav-top-h:     47px;
+  --nav-bottom-h:  73px;
+
+  /* 글자 크기 (1920 기준 Figma 값에 수렴하는 유동 크기) */
+  --fs-14: clamp(0.8125rem, 0.6rem  + 0.27vw, 0.875rem);
+  --fs-17: clamp(0.9375rem, 0.75rem + 0.3vw,  1.0625rem);
+  --fs-20: clamp(1rem,      0.5rem  + 0.63vw, 1.25rem);
+  --fs-24: clamp(1rem,      0.5rem  + 0.83vw, 1.5rem);
+  --fs-32: clamp(1.375rem,  0.75rem + 1.04vw, 2rem);
+  --fs-48: clamp(2rem,      1rem    + 1.67vw, 3rem);
+
+  /* 간격 */
+  --sp-gutter: clamp(1.5rem, 0.5rem + 2.08vw, 3.125rem);
+
+  /* 유동 디자인 단위: Figma 1px → calc(N * var(--u))
+     1920 폭에서 정확히 1px. 고정 성분(0.4px)과 화면폭 성분(0.6px)을 섞어
+     화면 크기에 따라 부드럽게 줄고/늘면서 브라우저 확대도 반영된다.
+     (1366 ≈ 0.83px, 1024 ≈ 0.72px, 2560 ≈ 1.2px) */
+  --u: calc(0.025rem + 0.03125vw);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* 페이지 CSS 의 body { width:100vw; height:100vh; overflow:hidden } 를 무력화 */
+body.rwd {
+  width: auto;
+  height: auto;
+  min-width: var(--page-min-w);
+  min-height: 100dvh;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+/* 상·하단 고정 바를 피해 본문 영역을 잡는 래퍼 */
+.rwd-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  padding-top: var(--nav-top-h);
+  padding-bottom: var(--nav-bottom-h);
+}
+
+/* ── 아트워크 스테이지 ──
+   Figma 좌표 그대로 배치해야 하는 요소(얼굴 지도 점, 노란 공 등)를 위한 비율 고정 상자.
+   사용 예:
+     <div class="stage" style="--stage-w:1920; --stage-h:1080">
+       <img class="at" style="--x:331; --y:120; --w:45; --h:45" ...>
+     </div>
+   - --x/--y/--w/--h 는 단위 없는 Figma px 값
+   - 자식 내부 크기에는 var(--su) (= 디자인 1px) 사용: width: calc(45 * var(--su)) */
+.stage {
+  --stage-w: 1920;
+  --stage-h: 1080;
+  --su: calc(100cqw / var(--stage-w));
+  position: relative;
+  width: 100%;
+  aspect-ratio: var(--stage-w) / var(--stage-h);
+  container-type: inline-size;
+}
+
+/* 뷰포트(상·하단 바 제외) 안에 통째로 들어가야 할 때 */
+.stage--fit {
+  width: min(100%, (100dvh - var(--nav-top-h) - var(--nav-bottom-h)) * var(--stage-w) / var(--stage-h));
+  margin-inline: auto;
+}
+
+.stage > .at {
+  position: absolute;
+  left:   calc(var(--x, 0) / var(--stage-w) * 100%);
+  top:    calc(var(--y, 0) / var(--stage-h) * 100%);
+  width:  calc(var(--w) / var(--stage-w) * 100%);
+  height: calc(var(--h) / var(--stage-h) * 100%);
+}

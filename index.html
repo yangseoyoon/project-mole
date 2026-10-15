@@ -2,6 +2,7 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>DOT SHIFT</title>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
     <link
@@ -9,10 +10,11 @@
       href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
     />
     <link rel="stylesheet" href="nav.css" />
+    <link rel="stylesheet" href="base.css" />
     <link rel="stylesheet" href="main.css" />
     <style>body { background: #e7f024; }</style>
   </head>
-  <body>
+  <body class="rwd">
     <!-- ── 상단 네비게이션 바 ── -->
     <nav class="topNav">
       <a class="navLeft" href="index.html">PROJECT: DOT SHIFT</a>
@@ -21,7 +23,7 @@
 
     <!-- Section 1: 히어로 -->
     <section class="snap-section" id="section1">
-        <main class="heroMain page-scale">
+        <main class="heroMain">
           <!-- 좌측 인물 -->
           <div class="portraitLeft">
             <img src="images/main/left_face.png" alt="" />
@@ -35,13 +37,13 @@
           <!-- 중앙 콘텐츠 -->
           <div class="heroCenter">
             <div class="titleText">
-              <img class="tl" src="images/title/title-D.svg"  style="animation-delay:0s;     animation-duration:2.8s; margin-right:13px" alt="D">
-              <img class="tl" src="images/title/title-O.svg"  style="animation-delay:-1.1s;  animation-duration:3.5s; margin-right:6px"  alt="O">
-              <img class="tl" src="images/title/title-T1.svg" style="animation-delay:-0.4s;  animation-duration:2.3s; margin-right:54px" alt="T">
-              <img class="tl" src="images/title/title-S.svg"  style="animation-delay:-2.0s;  animation-duration:3.8s; margin-right:19px" alt="S">
-              <img class="tl" src="images/title/title-H.svg"  style="animation-delay:-0.7s;  animation-duration:2.6s; margin-right:24px" alt="H">
-              <img class="tl" src="images/title/title-I.svg"  style="animation-delay:-1.6s;  animation-duration:3.1s; margin-right:24px" alt="I">
-              <img class="tl" src="images/title/title-F.svg"  style="animation-delay:-0.2s;  animation-duration:4.0s; margin-right:14px" alt="F">
+              <img class="tl" src="images/title/title-D.svg"  style="animation-delay:0s;     animation-duration:2.8s; --gap:13" alt="D">
+              <img class="tl" src="images/title/title-O.svg"  style="animation-delay:-1.1s;  animation-duration:3.5s; --gap:6"  alt="O">
+              <img class="tl" src="images/title/title-T1.svg" style="animation-delay:-0.4s;  animation-duration:2.3s; --gap:54" alt="T">
+              <img class="tl" src="images/title/title-S.svg"  style="animation-delay:-2.0s;  animation-duration:3.8s; --gap:19" alt="S">
+              <img class="tl" src="images/title/title-H.svg"  style="animation-delay:-0.7s;  animation-duration:2.6s; --gap:24" alt="H">
+              <img class="tl" src="images/title/title-I.svg"  style="animation-delay:-1.6s;  animation-duration:3.1s; --gap:24" alt="I">
+              <img class="tl" src="images/title/title-F.svg"  style="animation-delay:-0.2s;  animation-duration:4.0s; --gap:14" alt="F">
               <img class="tl" src="images/title/title-T2.svg" style="animation-delay:-1.3s;  animation-duration:2.9s" alt="T">
             </div>
             <p class="titleSub">관상학 기반 점 패턴 분석 프로젝트</p>
@@ -51,44 +53,44 @@
       </section>
 
     <!-- 장식 점들 — 블러 영향 안 받는 최상위 레이어 -->
-    <div id="dotsLayer" class="page-scale" style="position:fixed;top:0;left:0;width:1920px;height:1080px;pointer-events:none;z-index:9999;">
-          <div class="heroDot" style="left: 373.71px; top: 180px; pointer-events:auto;">
+    <div id="dotsLayer">
+          <div class="heroDot" style="--x:373.71; --y:180">
             <img src="https://www.figma.com/api/mcp/asset/61fcf6b7-8f03-4355-b046-6f9bef3c6ec3" alt=""/>
             <div class="dot-tooltip"><div class="dot-line"></div><span class="dot-label"></span><span class="dot-desc"></span></div>
           </div>
-          <div class="heroDot" style="left: 696.03px; top: 313.59px; pointer-events:auto;">
+          <div class="heroDot" style="--x:696.03; --y:313.59">
             <img src="https://www.figma.com/api/mcp/asset/61fcf6b7-8f03-4355-b046-6f9bef3c6ec3" alt=""/>
             <div class="dot-tooltip"><div class="dot-line"></div><span class="dot-label"></span><span class="dot-desc"></span></div>
           </div>
-          <div class="heroDot" style="left: 478.71px; top: 390px; pointer-events:auto;">
+          <div class="heroDot" style="--x:478.71; --y:390">
             <img src="https://www.figma.com/api/mcp/asset/61fcf6b7-8f03-4355-b046-6f9bef3c6ec3" alt=""/>
             <div class="dot-tooltip"><div class="dot-line"></div><span class="dot-label"></span><span class="dot-desc"></span></div>
           </div>
-          <div class="heroDot" style="left: 724.06px; top: 710px; pointer-events:auto;">
+          <div class="heroDot" style="--x:724.06; --y:710">
             <img src="https://www.figma.com/api/mcp/asset/61fcf6b7-8f03-4355-b046-6f9bef3c6ec3" alt=""/>
             <div class="dot-tooltip"><div class="dot-line"></div><span class="dot-label"></span><span class="dot-desc"></span></div>
           </div>
-          <div class="heroDot" style="left: 320.39px; top: 774px; pointer-events:auto;">
+          <div class="heroDot" style="--x:320.39; --y:774">
             <img src="https://www.figma.com/api/mcp/asset/61fcf6b7-8f03-4355-b046-6f9bef3c6ec3" alt=""/>
             <div class="dot-tooltip"><div class="dot-line"></div><span class="dot-label"></span><span class="dot-desc"></span></div>
           </div>
-          <div class="heroDot" style="left: 572.72px; top: 862px; pointer-events:auto;">
+          <div class="heroDot" style="--x:572.72; --y:862">
             <img src="https://www.figma.com/api/mcp/asset/61fcf6b7-8f03-4355-b046-6f9bef3c6ec3" alt=""/>
             <div class="dot-tooltip"><div class="dot-line"></div><span class="dot-label"></span><span class="dot-desc"></span></div>
           </div>
-          <div class="heroDot dot-flip" style="left: 1299.71px; top: 170px; pointer-events:auto;">
+          <div class="heroDot dot-flip" style="--x:1299.71; --y:170">
             <img src="https://www.figma.com/api/mcp/asset/61fcf6b7-8f03-4355-b046-6f9bef3c6ec3" alt=""/>
             <div class="dot-tooltip"><div class="dot-line"></div><span class="dot-label"></span><span class="dot-desc"></span></div>
           </div>
-          <div class="heroDot dot-flip" style="left: 1488.56px; top: 751px; pointer-events:auto;">
+          <div class="heroDot dot-flip" style="--x:1488.56; --y:751">
             <img src="https://www.figma.com/api/mcp/asset/61fcf6b7-8f03-4355-b046-6f9bef3c6ec3" alt=""/>
             <div class="dot-tooltip"><div class="dot-line"></div><span class="dot-label"></span><span class="dot-desc"></span></div>
           </div>
-          <div class="heroDot dot-flip" style="left: 1530px; top: 101.32px; pointer-events:auto;">
+          <div class="heroDot dot-flip" style="--x:1530; --y:101.32">
             <img src="https://www.figma.com/api/mcp/asset/61fcf6b7-8f03-4355-b046-6f9bef3c6ec3" alt=""/>
             <div class="dot-tooltip"><div class="dot-line"></div><span class="dot-label"></span><span class="dot-desc"></span></div>
           </div>
-          <div class="heroDot dot-flip" style="left: 1129.71px; top: 851.35px; pointer-events:auto;">
+          <div class="heroDot dot-flip" style="--x:1129.71; --y:851.35">
             <img src="https://www.figma.com/api/mcp/asset/61fcf6b7-8f03-4355-b046-6f9bef3c6ec3" alt=""/>
             <div class="dot-tooltip"><div class="dot-line"></div><span class="dot-label"></span><span class="dot-desc"></span></div>
           </div>
@@ -96,7 +98,7 @@
 
     <!-- Section 2: 프로젝트 설명 -->
     <section class="snap-section" id="section2">
-        <div class="descSection page-scale">
+        <div class="descSection">
           <div class="descSection-inner">
             <span class="descSection-label">About the project</span>
             <h2 class="descSection-title">
@@ -245,6 +247,12 @@
       const W = 1920, H = 1080, CX = W/2, CY = H/2;
       const dots = Array.from(document.querySelectorAll('.heroDot'));
 
+      // 디자인 1px 이 실제 몇 px 인지 (--u). 점 지름 20.648 으로 역산
+      let u = 1;
+      function measureU() { if (dots[0]) u = dots[0].offsetWidth / 20.648 || 1; }
+      measureU();
+      window.addEventListener('resize', measureU);
+
       // 각 점의 3D 좌표 (center 기준 x,y, 랜덤 z 깊이) + 랜덤 float 애니메이션
       const dotData = dots.map(dot => {
         const dur   = (1.2 + Math.random() * 1.2).toFixed(2) + 's';
@@ -253,8 +261,8 @@
         dot.style.setProperty('--dot-delay', delay);
         return {
           el:  dot,
-          ox:  parseFloat(dot.style.left) - CX,
-          oy:  parseFloat(dot.style.top)  - CY,
+          ox:  parseFloat(dot.style.getPropertyValue('--x')) - CX,
+          oy:  parseFloat(dot.style.getPropertyValue('--y')) - CY,
           oz:  (Math.random() - 0.5) * 700
         };
       });
@@ -276,7 +284,7 @@
         dotData.forEach(d => {
           const p = project(d.ox, d.oy, d.oz, rotY, rotX);
           d.el.style.transform =
-            `translate(${(p.x - (d.ox+CX)).toFixed(2)}px,${(p.y - (d.oy+CY)).toFixed(2)}px)`;
+            `translate(${((p.x - (d.ox+CX)) * u).toFixed(2)}px,${((p.y - (d.oy+CY)) * u).toFixed(2)}px)`;
         });
         requestAnimationFrame(tick);
       }
@@ -361,7 +369,6 @@
       animate();
     })();
     </script>
-    <script src="scale.js" defer></script>
     <script src="cursor.js" defer></script>
     <script src="help.js" defer></script>
   <script src="sound.js" defer></script>

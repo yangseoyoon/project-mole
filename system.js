@@ -35,8 +35,9 @@ const grid = document.getElementById('grid');
 
 // ── 방사형 SVG ──
 const svg = document.getElementById('radialSvg');
-const svgW = svg.parentElement.clientWidth || 600;
-const svgH = svg.parentElement.clientHeight || 700;
+// 디자인 기준(1920) 차트 영역 크기로 고정 — 실제 크기는 viewBox 로 스케일
+const svgW = 554;
+const svgH = 521;
 const centerX = svgW / 2;
 const centerY = svgH / 2;
 const ringGap = 28;

@@ -1,50 +1,40 @@
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+/* index.html 전용 — 반응형(body.rwd), 디자인 1px = var(--u) (base.css) */
 
 body {
   font-family: 'Pretendard', sans-serif;
   background: #e9f056;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
 }
 
-/* ── 두 섹션 모두 고정 레이어 ── */
+/* ── 섹션 ── */
 .snap-section {
-  position: fixed;
-  top: 0;
-  left: 0;
+  position: relative;
   width: 100%;
-  height: 100vh;
+  min-height: 100dvh;
   overflow: hidden;
 }
-#section1 { z-index: 1; }
-#section2 { z-index: 2; transform: translateY(100vh); }
 
-/* ── 메인 히어로 영역 ── */
+/* 2번째 섹션: 아직 진입 동작이 없어(기존에도 화면 밖 대기) 숨겨 둠 */
+#section2 { display: none; }
+
+/* 히어로 그림 단위: 1920 미만에서는 화면폭에 정비례(그림 비율 유지),
+   그 이상에서는 --u 를 따른다. 글자(부제·툴팁)는 --u 를 써서 확대가 반영된다. */
+.heroMain,
+#dotsLayer {
+  --hu: min(var(--u), 100vw / 1920);
+}
+
+/* ── 메인 히어로 영역: 뷰포트 전체를 채움 ── */
 .heroMain {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 1920px;
-  height: 1080px;
+  inset: 0;
   background: #e9f056;
   overflow: hidden;
 }
 
 /* ── 2번째 섹션: 프로젝트 설명 ── */
 .descSection {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 1920px;
-  height: 1080px;
-  background: transparent;
+  min-height: 100dvh;
+  padding: var(--nav-top-h) var(--sp-gutter) var(--nav-bottom-h);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -54,64 +44,67 @@ body {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 40px;
-  max-width: 900px;
+  gap: calc(40 * var(--u));
+  max-width: calc(900 * var(--u));
 }
 
 .descSection-label {
   font-family: 'Pretendard', sans-serif;
-  font-size: 14px;
+  font-size: calc(14 * var(--u));
   font-weight: 600;
   color: #e9f056;
-  letter-spacing: 4px;
+  letter-spacing: calc(4 * var(--u));
   text-transform: uppercase;
 }
 
 .descSection-title {
   font-family: 'Pretendard', sans-serif;
-  font-size: 72px;
+  font-size: calc(72 * var(--u));
   font-weight: 800;
   color: #fff;
   line-height: 1.1;
-  letter-spacing: -2px;
+  letter-spacing: calc(-2 * var(--u));
 }
 
 .descSection-body {
   font-family: 'Pretendard', sans-serif;
-  font-size: 22px;
+  font-size: calc(22 * var(--u));
   font-weight: 400;
   color: rgba(255,255,255,0.65);
   line-height: 1.8;
-  max-width: 680px;
+  max-width: calc(680 * var(--u));
 }
+
+/* 히어로의 인물·점은 모두 화면 중앙 기준 (Figma 1920×1080 의 중심 960,540).
+   화면이 좁으면 양 끝이 잘리고, 타이틀과 인물 사이 관계는 그대로 유지된다. */
 
 /* ── 좌측 인물 ── */
 .portraitLeft {
   position: absolute;
-  left: -450px;
-  top: 24.71px;
+  left: calc(50% + (-450 - 960) * var(--hu));
+  top: calc(50% + (24.71 - 540) * var(--hu));
   pointer-events: none;
 }
 
 .portraitLeft img {
   display: block;
-  height: 1331px;
+  height: calc(1331 * var(--hu));
   width: auto;
 }
 
-/* ── 우측 인물 (원본 764×1024, 캔버스 높이 맞춰 비율 유지) ── */
+/* ── 우측 인물 ── */
 .portraitRight {
   position: absolute;
-  right: -470px;
-  top: -62px;
-  width: 1011px;
-  height: 1355px;
+  right: calc(50% + (-470 - 960) * var(--hu));
+  top: calc(50% + (-62 - 540) * var(--hu));
+  width: calc(1011 * var(--hu));
+  height: calc(1355 * var(--hu));
   pointer-events: none;
 }
 
 .portraitRight img {
-  width: 1011px;
-  height: 1355px;
+  width: 100%;
+  height: 100%;
   display: block;
 }
 
@@ -124,7 +117,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: calc(20 * var(--hu));
   text-align: center;
   pointer-events: none;
 }
@@ -136,21 +129,22 @@ body {
   white-space: nowrap;
 }
 
-/* 피그마 프레임 882×179, 글자 높이 ~122px */
+/* 피그마 프레임 882×179, 글자 높이 ~122px. 글자 간격은 inline --gap */
 .tl {
   display: block;
-  height: 122px;
+  height: calc(122 * var(--hu));
   width: auto;
+  margin-right: calc(var(--gap, 0) * var(--hu));
   animation: logoFloat 3.2s ease-in-out infinite;
 }
 
 .titleSub {
   font-family: 'Pretendard', sans-serif;
   font-weight: 400;
-  font-size: 22px;
+  font-size: calc(22 * var(--u));
   color: #000;
   text-align: center;
-  margin-top: 16px;
+  margin-top: calc(16 * var(--u));
   letter-spacing: 0;
 }
 
@@ -158,17 +152,17 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: calc(12 * var(--u));
 }
 
 .subtitleCircle {
-  width: 38px;
-  height: 38px;
+  width: calc(38 * var(--u));
+  height: calc(38 * var(--u));
   flex-shrink: 0;
 }
 
 .subtitleText {
-  font-size: clamp(16px, 1.875vw, 36px);
+  font-size: calc(36 * var(--u));
   font-weight: 500;
   color: black;
   white-space: nowrap;
@@ -181,24 +175,34 @@ body {
 
 @keyframes logoFloat {
   0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-10px); }
+  50%       { transform: translateY(calc(-10 * var(--hu))); }
 }
 
 @keyframes dotFloat {
   0%, 100% { margin-top: 0; }
-  50%       { margin-top: -12px; }
+  50%       { margin-top: calc(-12 * var(--hu)); }
 }
 
-/* ── 장식 점 (hover 툴팁 포함) ── */
+/* ── 장식 점 레이어 (뷰포트 고정) ── */
+#dotsLayer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* 좌표는 inline --x/--y (Figma 1920×1080 기준), 인물과 같은 화면 중앙 기준 */
 .heroDot {
   position: absolute;
-  width: 20.648px;
-  height: 20.648px;
+  left: calc(50% + (var(--x) - 960) * var(--hu));
+  top: calc(50% + (var(--y) - 540) * var(--hu));
+  width: calc(20.648 * var(--hu));
+  height: calc(20.648 * var(--hu));
   cursor: default;
+  pointer-events: auto;
   z-index: 10;
   animation: dotFloat var(--dot-dur, 3s) ease-in-out var(--dot-delay, 0s) infinite;
 }
-
 .heroDot > img {
   display: none;
 }
@@ -218,8 +222,8 @@ body {
   top: 50%;
   left: 100%;
   transform: translateY(-50%);
-  width: 500px;
-  height: 44px;
+  width: calc(500 * var(--u));
+  height: calc(44 * var(--u));
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease;
@@ -234,7 +238,7 @@ body {
   top: 50%;
   left: 0;
   transform: translateY(-50%);
-  width: 120px;
+  width: calc(120 * var(--u));
   height: 1px;
   background: #ff5c34;
 }
@@ -242,10 +246,10 @@ body {
 .dot-label {
   position: absolute;
   top: 0;
-  left: 70px;
+  left: calc(70 * var(--u));
   font-family: 'Pretendard', sans-serif;
   font-weight: 700;
-  font-size: 20px;
+  font-size: calc(20 * var(--u));
   color: #ff5c34;
   line-height: 1;
   white-space: nowrap;
@@ -254,10 +258,10 @@ body {
 .dot-desc {
   position: absolute;
   bottom: 0;
-  left: 70px;
+  left: calc(70 * var(--u));
   font-family: 'Pretendard', sans-serif;
   font-weight: 500;
-  font-size: 17px;
+  font-size: calc(17 * var(--u));
   color: black;
   line-height: 1;
   white-space: nowrap;
@@ -277,6 +281,6 @@ body {
 .heroDot.dot-flip .dot-label,
 .heroDot.dot-flip .dot-desc {
   left: auto;
-  right: 70px;
+  right: calc(70 * var(--u));
   text-align: right;
 }

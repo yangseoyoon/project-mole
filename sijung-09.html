@@ -2,307 +2,107 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>전택궁 | DOT SHIFT</title>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
     <link rel="stylesheet" href="nav.css" />
-    <style>
-      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-      body {
-        font-family: 'Pretendard', sans-serif;
-        background: #e9f056;
-        overflow: hidden;
-        width: 100vw;
-        height: 100vh;
-      }
-
-      .sijungDetailPage {
-        position: fixed;
-        top: 43.446px;
-        left: 0;
-        width: 1920px;
-        height: calc(1080px - 43.446px - 73px);
-        overflow: hidden;
-      }
-
-      .face-wrap {
-        position: absolute;
-        width: 668.875px;
-        height: 946.134px;
-        top: calc(105.87px - 95.87px);
-        left: 50px;
-        overflow: hidden;
-        pointer-events: none;
-      }
-      .face-wrap img {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        pointer-events: none;
-      }
-
-      .num-btn {
-        position: absolute;
-        width: 28.824px;
-        height: 28px;
-        border: 1.5px solid #000;
-        border-radius: 100px;
-        background: #fff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: 'Pretendard', sans-serif;
-        font-weight: 400;
-        font-size: 20px;
-        color: #000;
-        line-height: 1;
-        cursor: pointer;
-        z-index: 10;
-        text-decoration: none;
-      }
-      .num-btn:hover { background: #ff5c34; color: #fff; }
-      .num-btn.active { background: #ff5c34; color: #fff; }
-
-      .detail-hanja {
-        position: absolute;
-        left: 736.93px;
-        top: calc(474.19px - 95.87px);
-        transform: translateY(-50%);
-        font-family: 'Pretendard', sans-serif;
-        font-weight: 700;
-        font-size: 96px;
-        color: #000;
-        line-height: 44px;
-        white-space: nowrap;
-        display: flex;
-        align-items: baseline;
-        gap: 0;
-      }
-      .detail-hanja-sub {
-        font-size: 20px;
-        font-weight: 700;
-        margin-left: 12px;
-      }
-
-      .detail-sub {
-        position: absolute;
-        left: 736.844px;
-        top: calc(547.05px - 95.87px);
-        transform: translateY(-50%);
-        font-family: 'Pretendard', sans-serif;
-        font-weight: 400;
-        font-size: 20px;
-        color: #000;
-        line-height: 40px;
-        white-space: nowrap;
-      }
-
-      .detail-title {
-        position: absolute;
-        left: 736.91px;
-        top: calc(600.94px - 95.87px);
-        transform: translateY(-50%);
-        font-family: 'Pretendard', sans-serif;
-        font-weight: 600;
-        font-size: 32px;
-        color: #000;
-        line-height: 44px;
-        white-space: nowrap;
-      }
-
-      .detail-text-block {
-        position: absolute;
-        left: 737.01px;
-        top: calc(642.51px - 95.87px);
-        width: 465px;
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-      }
-
-      .detail-body1 {
-        font-family: 'Pretendard', sans-serif;
-        font-weight: 500;
-        font-size: 20px;
-        color: #000;
-        line-height: 32px;
-      }
-
-      .detail-body2 {
-        font-family: 'Pretendard', sans-serif;
-        font-weight: 500;
-        font-size: 20px;
-        color: #000;
-        line-height: 32px;
-      }
-
-      .diag-frame {
-        position: absolute;
-        left: 1226.02px;
-        top: 247.78px;
-        width: 528px;
-        height: 468px;
-      }
-      .diag-frame > * { position: absolute; }
-
-      .diag-label {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: 'Pretendard', sans-serif;
-        font-weight: 500;
-        font-size: 18px;
-        color: #000;
-        text-align: center;
-        line-height: 32px;
-        padding: 2px;
-      }
-
-      .diag-dot {
-        display: flex;
-        align-items: center;
-        padding: 10px;
-        width: 39.284px;
-        height: 56.12px;
-        cursor: pointer;
-      }
-      .diag-dot img { width: 15px; height: 15px; display: block; flex-shrink: 0; transition: filter 0.15s ease; }
-      .diag-dot:hover img { filter: invert(44%) sepia(98%) saturate(744%) hue-rotate(345deg) brightness(102%) contrast(101%); }
-
-      .diag-tooltip {
-        position: absolute;
-        background: #fff;
-        border: 1px solid #000;
-        padding: 10px 15px;
-        width: 262px;
-        min-width: 262px;
-        max-width: 262px;
-        height: auto;
-        font-family: 'Pretendard', sans-serif;
-        font-weight: 500;
-        font-size: 18px;
-        color: #000;
-        line-height: 32px;
-        pointer-events: none;
-        opacity: 0;
-        transition: opacity 0.12s ease;
-        z-index: 100;
-        word-break: keep-all;
-        white-space: normal;
-      }
-      .diag-tooltip.show { opacity: 1; }
-
-      .diag-label-baki {
-        position: absolute;
-        left: 1225.332px;
-        top: 464.05px;
-        width: 57.673px;
-        height: 27.234px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: 'Pretendard', sans-serif;
-        font-weight: 500;
-        font-size: 18px;
-        color: #000;
-        text-align: center;
-        line-height: 32px;
-        padding: 2px;
-      }
-    </style>
+    <link rel="stylesheet" href="base.css" />
+    <link rel="stylesheet" href="sijung.css" />
   </head>
-  <body>
+  <body class="rwd">
     <nav class="topNav">
       <a class="navLeft" href="index.html">PROJECT: DOT SHIFT</a>
       <span class="navRight">Everything starts from a dot</span>
     </nav>
 
-    <div class="sijungDetailPage page-scale">
+    <div class="sijungDetailPage sj-page">
+      <div class="sj-stage">
+        <div class="sj-g sj-g--face">
+          <div class="face-wrap">
+            <img src="images/sijung/face.png" alt="얼굴 사진" />
+          </div>
+          <!-- ── 번호 버튼 ── -->
+          <a class="num-btn" href="sijung-01.html" style="left:calc(369.19 * var(--su)); top:calc(calc(495.93 * var(--su)) - calc(95.87 * var(--su)));">01</a>
+          <a class="num-btn" href="sijung-02.html" style="left:calc(499.44 * var(--su)); top:calc(calc(472.93 * var(--su)) - calc(95.87 * var(--su)));">02</a>
+          <a class="num-btn" href="sijung-02.html" style="left:calc(245.66 * var(--su)); top:calc(calc(472.93 * var(--su)) - calc(95.87 * var(--su)));">02</a>
+          <a class="num-btn" href="sijung-03.html" style="left:calc(171.61 * var(--su)); top:calc(calc(538.93 * var(--su)) - calc(95.87 * var(--su)));">03</a>
+          <a class="num-btn" href="sijung-03.html" style="left:calc(569.61 * var(--su)); top:calc(calc(538.93 * var(--su)) - calc(95.87 * var(--su)));">03</a>
+          <a class="num-btn" href="sijung-04.html" style="left:calc(370.03 * var(--su)); top:calc(calc(873.87 * var(--su)) - calc(95.87 * var(--su)));">04</a>
+          <a class="num-btn" href="sijung-04.html" style="left:calc(273.44 * var(--su)); top:calc(calc(830.87 * var(--su)) - calc(95.87 * var(--su)));">04</a>
+          <a class="num-btn" href="sijung-04.html" style="left:calc(464.44 * var(--su)); top:calc(calc(830.87 * var(--su)) - calc(95.87 * var(--su)));">04</a>
+          <a class="num-btn" href="sijung-04.html" style="left:calc(216.44 * var(--su)); top:calc(calc(754.9 * var(--su))  - calc(95.87 * var(--su)));">04</a>
+          <a class="num-btn" href="sijung-04.html" style="left:calc(525.44 * var(--su)); top:calc(calc(754.9 * var(--su))  - calc(95.87 * var(--su)));">04</a>
+          <a class="num-btn" href="sijung-05.html" style="left:calc(369.19 * var(--su)); top:calc(calc(382.93 * var(--su)) - calc(95.87 * var(--su)));">05</a>
+          <a class="num-btn" href="sijung-06.html" style="left:calc(255.94 * var(--su)); top:calc(calc(669.93 * var(--su)) - calc(95.87 * var(--su)));">06</a>
+          <a class="num-btn" href="sijung-06.html" style="left:calc(490.44 * var(--su)); top:calc(calc(669.93 * var(--su)) - calc(95.87 * var(--su)));">06</a>
+          <a class="num-btn" href="sijung-07.html" style="left:calc(255.53 * var(--su)); top:calc(calc(414.93 * var(--su)) - calc(95.87 * var(--su)));">07</a>
+          <a class="num-btn" href="sijung-07.html" style="left:calc(490.44 * var(--su)); top:calc(calc(414.93 * var(--su)) - calc(95.87 * var(--su)));">07</a>
+          <!-- 08 재백궁 -->
+          <a class="num-btn" href="sijung-08.html" style="left:calc(369.19 * var(--su)); top:calc(calc(645.93 * var(--su)) - calc(95.87 * var(--su)));">08</a>
+          <!-- 09 전택궁 (active) -->
+          <a class="num-btn active" href="sijung-09.html" style="left:calc(272.44 * var(--su)); top:calc(calc(514.93 * var(--su)) - calc(95.87 * var(--su)));">09</a>
+          <a class="num-btn active" href="sijung-09.html" style="left:calc(464.44 * var(--su)); top:calc(calc(514.93 * var(--su)) - calc(95.87 * var(--su)));">09</a>
+          <!-- 10 -->
+          <a class="num-btn" href="sijung-10.html" style="left:calc(369.19 * var(--su)); top:calc(calc(564.93 * var(--su)) - calc(95.87 * var(--su))); text-decoration:none;">10</a>
+          <!-- 11 -->
+          <a class="num-btn" href="sijung-11.html" style="left:calc(263.16 * var(--su)); top:calc(calc(591.93 * var(--su)) - calc(95.87 * var(--su))); text-decoration:none;">11</a>
+          <a class="num-btn" href="sijung-11.html" style="left:calc(481.94 * var(--su)); top:calc(calc(591.93 * var(--su)) - calc(95.87 * var(--su))); text-decoration:none;">11</a>
+          <!-- 12 -->
+          <a class="num-btn" href="sijung-12.html" style="left:calc(182.44 * var(--su)); top:calc(calc(456.93 * var(--su)) - calc(95.87 * var(--su)));">12</a>
+          <a class="num-btn" href="sijung-12.html" style="left:calc(560.44 * var(--su)); top:calc(calc(456.93 * var(--su)) - calc(95.87 * var(--su)));">12</a>
+        </div>
 
-      <div class="face-wrap">
-        <img src="images/sijung/face.png" alt="얼굴 사진" />
-      </div>
+        <div class="sj-g sj-g--text">
+          <p class="detail-hanja">田宅宮 <span class="detail-hanja-sub">밭 전 • 집 택 • 집 궁</span></p>
+          <p class="detail-sub">Property and Home Environment 재산 및 주거환경</p>
+          <h2 class="detail-title">전택궁</h2>
+          <div class="detail-text-block">
+            <p class="detail-body1">전택궁은 눈두덩이와 눈 아래에 해당하는 영역으로 재산, 주거환경, 부동산과 관련된 운을 풀이한다. 여기서 부동산을 머무는 공간인 집과 연결하여, 주거의 안정과 개인의 심리적 안정 및 편안함과도 연결해 해석한다.</p>
+            <div class="detail-body2">
+              <p>전택궁을 볼 때는 형태, 살집, 윤기, 점 총 4가지 요소를 본다.</p>
+            </div>
+          </div>
+        </div>
 
-      <p class="detail-hanja">田宅宮 <span class="detail-hanja-sub">밭 전 • 집 택 • 집 궁</span></p>
-      <p class="detail-sub">Property and Home Environment 재산 및 주거환경</p>
-      <h2 class="detail-title">전택궁</h2>
-      <div class="detail-text-block">
-        <p class="detail-body1">전택궁은 눈두덩이와 눈 아래에 해당하는 영역으로 재산, 주거환경, 부동산과 관련된 운을 풀이한다. 여기서 부동산을 머무는 공간인 집과 연결하여, 주거의 안정과 개인의 심리적 안정 및 편안함과도 연결해 해석한다.</p>
-        <div class="detail-body2">
-          <p>전택궁을 볼 때는 형태, 살집, 윤기, 점 총 4가지 요소를 본다.</p>
+        <div class="sj-g sj-g--diagram">
+          <div class="diag-frame">
+            <img src="images/sijung/diagram-circle-bg.svg" alt="" style="left:calc(114.56 * var(--su));top:calc(81.39 * var(--su));width:calc(300.801 * var(--su));height:calc(300.801 * var(--su));" />
+            <img src="images/sijung/diagram-circle-lg.svg" alt="" style="left:calc(195.37 * var(--su));top:calc(162.20 * var(--su));width:calc(140.299 * var(--su));height:calc(140.299 * var(--su));" />
+            <img src="images/sijung/diagram-circle-md.svg" alt="" style="left:calc(238.02 * var(--su));top:calc(204.85 * var(--su));width:calc(54.997 * var(--su));height:calc(54.997 * var(--su));" />
+            <img src="images/sijung/diagram-dot-center.svg" alt="" style="left:calc(260.46 * var(--su));top:calc(227.34 * var(--su));width:calc(9.612 * var(--su));height:calc(9.612 * var(--su));" />
+
+            <img src="images/sijung/line-axis-v.svg" alt="" style="
+              position:absolute;
+              width:calc(384.487 * var(--su));
+              left:calc(73.03 * var(--su));
+              top:calc(229.47 * var(--su));
+              transform:rotate(90deg);
+              transform-origin:center center;
+              display:block;
+            " />
+            <div style="left:calc(73.02 * var(--su));top:calc(232.15 * var(--su));width:calc(384.487 * var(--su));height:0;position:absolute;">
+              <img src="images/sijung/line-axis-h.svg" alt="" style="display:block;width:100%;position:absolute;inset:calc(-2.67 * var(--su)) -0.69%;" />
+            </div>
+
+            <div class="diag-label" style="left:calc(234.83 * var(--su));top:calc(-0.15 * var(--su));width:calc(57.673 * var(--su));height:calc(27.234 * var(--su));">점</div>
+            <div class="diag-label" style="left:calc(199.58 * var(--su));top:calc(440.41 * var(--su));width:calc(126.56 * var(--su));height:calc(27.234 * var(--su));">살집</div>
+            <div class="diag-label" style="left:calc(470.33 * var(--su));top:calc(216.12 * var(--su));width:calc(57.673 * var(--su));height:calc(27.234 * var(--su));">윤기</div>
+
+            <div class="diag-dot" data-dir="right" data-tip="&lt;b&gt;복점&lt;/b&gt;의 경우 좋은 집을 갖거나 부동산 투자에 운이 따르고, &lt;b&gt;흉점&lt;/b&gt;의 경우 유산 문제가 생기거나 주거지가 자주 바뀔 수 있다." style="left:calc(309.68 * var(--su));top:calc(69.04 * var(--su));"><img src="images/sijung/diagram-dot-black.svg" alt="" /></div>
+            <div class="diag-dot" data-dir="right" data-tip="눈두덩이가 &lt;b&gt;밝고 윤택하면&lt;/b&gt; 생활에 활기가 있으며 현재의 생활 기반이 충분히 안정적이라 본다." style="left:calc(377.51 * var(--su));top:calc(129.89 * var(--su));"><img src="images/sijung/diagram-dot-white.svg" alt="" /></div>
+            <div class="diag-dot" data-dir="right" data-tip="눈두덩이가 &lt;b&gt;탁하고 건조하면&lt;/b&gt; 재산이나 가정생활에 분란이 생기기 쉽다고 본다." style="left:calc(377.51 * var(--su));top:calc(277.98 * var(--su));"><img src="images/sijung/diagram-dot-black.svg" alt="" /></div>
+            <div class="diag-dot" data-dir="right" data-tip="눈두덩이가 &lt;b&gt;넓고 도톰하며 살집이 있으면&lt;/b&gt; 가업이나 부동산 등의 자산이 안정적이라고 본다." style="left:calc(309.68 * var(--su));top:calc(338.77 * var(--su));"><img src="images/sijung/diagram-dot-white.svg" alt="" /></div>
+            <div class="diag-dot" data-dir="left" data-tip="&lt;b&gt;좁고 얇거나 함몰된 눈두덩이&lt;/b&gt;는 생활 기반이 불안정하고 재산을 지속적으로 유지하기 어렵다고 본다." style="left:calc(180.61 * var(--su));top:calc(338.77 * var(--su));"><img src="images/sijung/diagram-dot-black.svg" alt="" /></div>
+            <div class="diag-dot" data-dir="left" data-tip="눈두덩이의 형태가 &lt;b&gt;평평하고 부드러우면&lt;/b&gt; 집안이 화목하며 주거 환경이 안정적이기에 마음 또한 평안하다고 본다." style="left:calc(116.74 * var(--su));top:calc(277.98 * var(--su));"><img src="images/sijung/diagram-dot-white.svg" alt="" /></div>
+            <div class="diag-dot" data-dir="left" data-tip="눈두덩이가 &lt;b&gt;울퉁불퉁하거나 지나치게 꺼진 경우&lt;/b&gt;에는 가정이나 주거 환경에 변화가 많아 불안정하다고 본다." style="left:calc(116.74 * var(--su));top:calc(129.88 * var(--su));"><img src="images/sijung/diagram-dot-black.svg" alt="" /></div>
+            <div class="diag-dot" data-dir="left" data-tip="&lt;b&gt;점이 없다면&lt;/b&gt; 부모의 유산을 잘 물려받고 집안이 화목하다." style="left:calc(180.61 * var(--su));top:calc(69.04 * var(--su));"><img src="images/sijung/diagram-dot-white.svg" alt="" /></div>
+
+            <div class="diag-tooltip" id="diagTooltip"></div>
+          </div>
+          <div class="diag-label-baki">형태</div>
         </div>
       </div>
-
-      <div class="diag-frame">
-        <img src="images/sijung/diagram-circle-bg.svg" alt="" style="left:114.56px;top:81.39px;width:300.801px;height:300.801px;" />
-        <img src="images/sijung/diagram-circle-lg.svg" alt="" style="left:195.37px;top:162.20px;width:140.299px;height:140.299px;" />
-        <img src="images/sijung/diagram-circle-md.svg" alt="" style="left:238.02px;top:204.85px;width:54.997px;height:54.997px;" />
-        <img src="images/sijung/diagram-dot-center.svg" alt="" style="left:260.46px;top:227.34px;width:9.612px;height:9.612px;" />
-
-        <img src="images/sijung/line-axis-v.svg" alt="" style="
-          position:absolute;
-          width:384.487px;
-          left:73.03px;
-          top:229.47px;
-          transform:rotate(90deg);
-          transform-origin:center center;
-          display:block;
-        " />
-        <div style="left:73.02px;top:232.15px;width:384.487px;height:0;position:absolute;">
-          <img src="images/sijung/line-axis-h.svg" alt="" style="display:block;width:100%;position:absolute;inset:-2.67px -0.69%;" />
-        </div>
-
-        <div class="diag-label" style="left:234.83px;top:-0.15px;width:57.673px;height:27.234px;">점</div>
-        <div class="diag-label" style="left:199.58px;top:440.41px;width:126.56px;height:27.234px;">살집</div>
-        <div class="diag-label" style="left:470.33px;top:216.12px;width:57.673px;height:27.234px;">윤기</div>
-
-        <div class="diag-dot" data-dir="right" data-tip="&lt;b&gt;복점&lt;/b&gt;의 경우 좋은 집을 갖거나 부동산 투자에 운이 따르고, &lt;b&gt;흉점&lt;/b&gt;의 경우 유산 문제가 생기거나 주거지가 자주 바뀔 수 있다." style="left:309.68px;top:69.04px;"><img src="images/sijung/diagram-dot-black.svg" alt="" /></div>
-        <div class="diag-dot" data-dir="right" data-tip="눈두덩이가 &lt;b&gt;밝고 윤택하면&lt;/b&gt; 생활에 활기가 있으며 현재의 생활 기반이 충분히 안정적이라 본다." style="left:377.51px;top:129.89px;"><img src="images/sijung/diagram-dot-white.svg" alt="" /></div>
-        <div class="diag-dot" data-dir="right" data-tip="눈두덩이가 &lt;b&gt;탁하고 건조하면&lt;/b&gt; 재산이나 가정생활에 분란이 생기기 쉽다고 본다." style="left:377.51px;top:277.98px;"><img src="images/sijung/diagram-dot-black.svg" alt="" /></div>
-        <div class="diag-dot" data-dir="right" data-tip="눈두덩이가 &lt;b&gt;넓고 도톰하며 살집이 있으면&lt;/b&gt; 가업이나 부동산 등의 자산이 안정적이라고 본다." style="left:309.68px;top:338.77px;"><img src="images/sijung/diagram-dot-white.svg" alt="" /></div>
-        <div class="diag-dot" data-dir="left" data-tip="&lt;b&gt;좁고 얇거나 함몰된 눈두덩이&lt;/b&gt;는 생활 기반이 불안정하고 재산을 지속적으로 유지하기 어렵다고 본다." style="left:180.61px;top:338.77px;"><img src="images/sijung/diagram-dot-black.svg" alt="" /></div>
-        <div class="diag-dot" data-dir="left" data-tip="눈두덩이의 형태가 &lt;b&gt;평평하고 부드러우면&lt;/b&gt; 집안이 화목하며 주거 환경이 안정적이기에 마음 또한 평안하다고 본다." style="left:116.74px;top:277.98px;"><img src="images/sijung/diagram-dot-white.svg" alt="" /></div>
-        <div class="diag-dot" data-dir="left" data-tip="눈두덩이가 &lt;b&gt;울퉁불퉁하거나 지나치게 꺼진 경우&lt;/b&gt;에는 가정이나 주거 환경에 변화가 많아 불안정하다고 본다." style="left:116.74px;top:129.88px;"><img src="images/sijung/diagram-dot-black.svg" alt="" /></div>
-        <div class="diag-dot" data-dir="left" data-tip="&lt;b&gt;점이 없다면&lt;/b&gt; 부모의 유산을 잘 물려받고 집안이 화목하다." style="left:180.61px;top:69.04px;"><img src="images/sijung/diagram-dot-white.svg" alt="" /></div>
-
-        <div class="diag-tooltip" id="diagTooltip"></div>
-      </div>
-
-      <div class="diag-label-baki">형태</div>
-
-      <!-- ── 번호 버튼 ── -->
-      <a class="num-btn" href="sijung-01.html" style="left:369.19px; top:calc(495.93px - 95.87px);">01</a>
-      <a class="num-btn" href="sijung-02.html" style="left:499.44px; top:calc(472.93px - 95.87px);">02</a>
-      <a class="num-btn" href="sijung-02.html" style="left:245.66px; top:calc(472.93px - 95.87px);">02</a>
-      <a class="num-btn" href="sijung-03.html" style="left:171.61px; top:calc(538.93px - 95.87px);">03</a>
-      <a class="num-btn" href="sijung-03.html" style="left:569.61px; top:calc(538.93px - 95.87px);">03</a>
-      <a class="num-btn" href="sijung-04.html" style="left:370.03px; top:calc(873.87px - 95.87px);">04</a>
-      <a class="num-btn" href="sijung-04.html" style="left:273.44px; top:calc(830.87px - 95.87px);">04</a>
-      <a class="num-btn" href="sijung-04.html" style="left:464.44px; top:calc(830.87px - 95.87px);">04</a>
-      <a class="num-btn" href="sijung-04.html" style="left:216.44px; top:calc(754.9px  - 95.87px);">04</a>
-      <a class="num-btn" href="sijung-04.html" style="left:525.44px; top:calc(754.9px  - 95.87px);">04</a>
-      <a class="num-btn" href="sijung-05.html" style="left:369.19px; top:calc(382.93px - 95.87px);">05</a>
-      <a class="num-btn" href="sijung-06.html" style="left:255.94px; top:calc(669.93px - 95.87px);">06</a>
-      <a class="num-btn" href="sijung-06.html" style="left:490.44px; top:calc(669.93px - 95.87px);">06</a>
-      <a class="num-btn" href="sijung-07.html" style="left:255.53px; top:calc(414.93px - 95.87px);">07</a>
-      <a class="num-btn" href="sijung-07.html" style="left:490.44px; top:calc(414.93px - 95.87px);">07</a>
-      <!-- 08 재백궁 -->
-      <a class="num-btn" href="sijung-08.html" style="left:369.19px; top:calc(645.93px - 95.87px);">08</a>
-      <!-- 09 전택궁 (active) -->
-      <a class="num-btn active" href="sijung-09.html" style="left:272.44px; top:calc(514.93px - 95.87px);">09</a>
-      <a class="num-btn active" href="sijung-09.html" style="left:464.44px; top:calc(514.93px - 95.87px);">09</a>
-      <!-- 10 -->
-      <a class="num-btn" href="sijung-10.html" style="left:369.19px; top:calc(564.93px - 95.87px); text-decoration:none;">10</a>
-      <!-- 11 -->
-      <a class="num-btn" href="sijung-11.html" style="left:263.16px; top:calc(591.93px - 95.87px); text-decoration:none;">11</a>
-      <a class="num-btn" href="sijung-11.html" style="left:481.94px; top:calc(591.93px - 95.87px); text-decoration:none;">11</a>
-      <!-- 12 -->
-      <a class="num-btn" href="sijung-12.html" style="left:182.44px; top:calc(456.93px - 95.87px);">12</a>
-      <a class="num-btn" href="sijung-12.html" style="left:560.44px; top:calc(456.93px - 95.87px);">12</a>
-
     </div>
 
     <nav class="bottomNav">
@@ -335,34 +135,7 @@
         </button>
         <div class="bn-right-bg"></div><button class="bn-help-btn">?</button>
       </div>
-    </nav>
-    <script>
-      const tooltip = document.getElementById('diagTooltip');
-
-      document.querySelectorAll('.diag-dot').forEach(dot => {
-        dot.addEventListener('mouseenter', () => {
-          const tip = dot.dataset.tip;
-          if (!tip) return;
-          tooltip.innerHTML = tip;
-          tooltip.classList.add('show');
-
-          const dotL = dot.offsetLeft;
-          const dotT = dot.offsetTop;
-          const dotW = dot.offsetWidth;
-          const dotH = dot.offsetHeight;
-          const tipH = tooltip.offsetHeight;
-          const tipTop = dotT + dotH / 2 - tipH / 2;
-
-          tooltip.style.left = (dotL + dotW + 5) + 'px';
-          tooltip.style.top = tipTop + 'px';
-        });
-
-        dot.addEventListener('mouseleave', () => {
-          tooltip.classList.remove('show');
-        });
-      });
-    </script>
-    <script src="scale.js"></script>
+    </nav>
     <script src="cursor.js"></script>
     <script src="help.js"></script>
     <script src="sound.js"></script>

@@ -2,6 +2,9 @@
    topNav: 47px 고정 / bottomNav: 73px 고정
    디자인 가시 콘텐츠 높이 = 1080 - 47 - 73 = 960px */
 (function () {
+  /* 반응형으로 전환된 페이지(body.rwd)는 스케일하지 않음 */
+  if (document.body && document.body.classList.contains('rwd')) return;
+
   var TOP_H   = 47;
   var BOT_H   = 73;
   var DESIGN_W = 1920;

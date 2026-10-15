@@ -2,36 +2,40 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>분석 | DOT SHIFT</title>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
     <link rel="stylesheet" href="nav.css" />
+    <link rel="stylesheet" href="base.css" />
     <link rel="stylesheet" href="system.css" />
   </head>
-  <body>
+  <body class="rwd">
 
     <nav class="topNav">
       <a class="navLeft" href="index.html">PROJECT: DOT SHIFT</a>
       <span class="navRight">Everything starts from a dot</span>
     </nav>
 
-    <div class="systemPage page-scale">
+    <div class="systemPage">
 
       <!-- 배경 -->
       <img class="sys-bg" src="images/cam-bg.png" alt="" />
 
-      <!-- 장식 원들 -->
-      <div style="position:absolute;left:28px;top:142px;width:77px;height:77px;border-radius:50%;background:#e9f056;border:1px solid #000;pointer-events:none;"></div>
-      <div style="position:absolute;left:52px;top:166px;width:77px;height:77px;border-radius:50%;background:#e9f056;border:1px solid #000;pointer-events:none;"></div>
-      <div style="position:absolute;left:1842px;top:88px;width:77px;height:77px;border-radius:50%;background:#e9f056;border:1px solid #000;pointer-events:none;"></div>
-      <div style="position:absolute;left:1866px;top:112px;width:77px;height:77px;border-radius:50%;background:#e9f056;border:1px solid #000;pointer-events:none;"></div>
-      <div style="position:absolute;left:72px;top:880px;width:77px;height:77px;border-radius:50%;background:#fe6c48;border:1px solid #000;pointer-events:none;"></div>
-      <div style="position:absolute;left:174px;top:960px;width:77px;height:77px;border-radius:50%;background:#fe6c48;border:1px solid #000;pointer-events:none;"></div>
-      <div style="position:absolute;left:1862px;top:318px;width:77px;height:77px;border-radius:50%;background:#fe6c48;border:1px solid #000;pointer-events:none;"></div>
-      <div style="position:absolute;left:1740px;top:710px;width:77px;height:77px;border-radius:50%;background:#e9f056;border:1px solid #000;pointer-events:none;"></div>
-      <div style="position:absolute;left:1764px;top:734px;width:77px;height:77px;border-radius:50%;background:#e9f056;border:1px solid #000;pointer-events:none;"></div>
-      <div style="position:absolute;left:1790px;top:912px;width:77px;height:77px;border-radius:50%;background:#e9f056;border:1px solid #000;pointer-events:none;"></div>
-      <div style="position:absolute;left:1814px;top:936px;width:77px;height:77px;border-radius:50%;background:#e9f056;border:1px solid #000;pointer-events:none;"></div>
+      <!-- 장식 원들 (Figma 1920×1080 기준, 가까운 가장자리에서의 거리) -->
+      <div class="sys-deco" style="--l:28; --t:142"></div>
+      <div class="sys-deco" style="--l:52; --t:166"></div>
+      <div class="sys-deco" style="--r:1; --t:88"></div>
+      <div class="sys-deco" style="--r:-23; --t:112"></div>
+      <div class="sys-deco sys-deco--orange" style="--l:72; --b:123"></div>
+      <div class="sys-deco sys-deco--orange" style="--l:174; --b:43"></div>
+      <div class="sys-deco sys-deco--orange" style="--r:-19; --t:318"></div>
+      <div class="sys-deco" style="--r:103; --b:293"></div>
+      <div class="sys-deco" style="--r:79; --b:269"></div>
+      <div class="sys-deco" style="--r:53; --b:91"></div>
+      <div class="sys-deco" style="--r:29; --b:67"></div>
+
+      <div class="sys-layout">
 
       <!-- 왼쪽 패널: 얼굴 + 그리드 -->
       <div class="sys-left-panel">
@@ -70,9 +74,10 @@
 
       <!-- 오른쪽 하단 패널 -->
       <div class="sys-right-bottom">
-        <div class="sys-bar sys-bar--top sys-bar--sm" style="display:flex;align-items:center;padding-left:20px;font-size:12px;color:#888;font-family:'Pretendard',sans-serif;">궁(宮) 설명</div>
+        <div class="sys-bar sys-bar--top sys-bar--sm sys-bar--label">궁(宮) 설명</div>
       </div>
 
+      </div>
     </div>
 
     <!-- 하단 네비게이션 바 -->
@@ -110,7 +115,6 @@
 
     <canvas id="photoCanvas" style="display:none;"></canvas>
     <script src="system.js"></script>
-    <script src="scale.js" defer></script>
   <script src="cursor.js" defer></script>
     <script src="help.js" defer></script>
 <script src="sound.js" defer></script>

@@ -2,6 +2,7 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>십이궁 | DOT SHIFT</title>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
     <link
@@ -9,230 +10,83 @@
       href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
     />
     <link rel="stylesheet" href="nav.css" />
-    <style>
-      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-      body {
-        font-family: 'Pretendard', sans-serif;
-        background: #e9f056;
-        overflow: hidden;
-        width: 100vw;
-        height: 100vh;
-      }
-
-      /* ── 페이지 캔버스 (1920px 기준) ── */
-      .sijungPage {
-        position: fixed;
-        top: 43.446px;
-        left: 0;
-        width: 1920px;
-        height: calc(1080px - 43.446px - 73px);
-        overflow: hidden;
-      }
-
-      /* ── 얼굴 사진 공통 ── */
-      .face-wrap {
-        position: absolute;
-        width: 668.875px;
-        height: 946.134px;
-        top: calc(105.87px - 95.87px);
-        overflow: hidden;
-        cursor: default;
-      }
-      .face-wrap img {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        pointer-events: none;
-        display: block;
-      }
-
-      /* 왼쪽 얼굴 */
-      .face-left  { left: 50px; }
-
-      /* 오른쪽 얼굴: 사진 고정, 호버시 다이어그램 오버레이 */
-      .face-right { left: 1216.9px; cursor: pointer; }
-      .face-right .face-default { z-index: 1; }
-      .face-right .face-hover   {
-        opacity: 0; z-index: 2; transition: opacity 0.15s ease;
-        position: absolute;
-        inset: auto;
-        width: 500.603px;
-        height: 641px;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        object-fit: contain;
-      }
-      .face-right:hover .face-hover { opacity: 1; }
-
-      /* ── 번호 버튼 ── */
-      .num-btn {
-        position: absolute;
-        width: 28.824px;
-        height: 28px;
-        border: 1.5px solid #000;
-        border-radius: 100px;
-        background: #fff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: 'Pretendard', sans-serif;
-        font-weight: 400;
-        text-decoration: none;
-        font-size: 20px;
-        color: #000;
-        line-height: 1;
-        cursor: pointer;
-        transition: background 0.12s ease, color 0.12s ease;
-        z-index: 10;
-      }
-      .num-btn:hover {
-        background: #ff5c34;
-        color: #fff;
-      }
-
-      /* ── "Click Number!" 힌트 pill ── */
-      .hint-pill {
-        position: absolute;
-        background: #fff;
-        border: 0.3px solid #000;
-        border-radius: 100px;
-        padding: 12px 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        filter: drop-shadow(2px 2px 1px rgba(0,0,0,0.3));
-        pointer-events: none;
-      }
-      .hint-pill img {
-        display: block;
-        width: 128.32px;
-        height: 15.039px;
-      }
-
-      /* ── 중앙 텍스트 블록 ── */
-      .center-text {
-        position: absolute;
-        /* 1920px 기준 left:727.5px → vw 비율 */
-        left: 727.5px;
-        top: calc(539px - 95.87px);
-        width: 465px;
-      }
-
-      .center-sub {
-        position: absolute;
-        left: calc(50% - 232.36px);
-        top: calc(463.79px - 95.87px);
-        transform: translateY(-50%);
-        width: 397px;
-        font-family: 'Pretendard', sans-serif;
-        font-weight: 400;
-        font-size: 20px;
-        color: #000;
-        line-height: 40px;
-        white-space: nowrap;
-      }
-
-      .center-title {
-        position: absolute;
-        left: 821.64px;
-        top: calc(497.69px - 95.87px);
-        transform: translate(-50%, -50%);
-        font-family: 'Pretendard', sans-serif;
-        font-weight: 600;
-        font-size: 32px;
-        color: #000;
-        white-space: nowrap;
-        line-height: 44px;
-      }
-
-      .center-body {
-        position: absolute;
-        left: 727.5px;
-        top: calc(539px - 95.87px);
-        width: 465px;
-        font-family: 'Pretendard', sans-serif;
-        font-weight: 500;
-        font-size: 20px;
-        color: #000;
-        line-height: 32px;
-      }
-      .center-body p { margin: 0; }
-    </style>
+    <link rel="stylesheet" href="base.css" />
+    <link rel="stylesheet" href="sijung.css" />
   </head>
-  <body>
+  <body class="rwd">
     <nav class="topNav">
       <a class="navLeft" href="index.html">PROJECT: DOT SHIFT</a>
       <span class="navRight">Everything starts from a dot</span>
     </nav>
 
-    <div class="sijungPage page-scale">
+    <div class="sijungPage sj-page">
+      <div class="sj-stage">
+        <div class="sj-g sj-g--face">
+          <!-- ── 왼쪽 얼굴 + 번호 버튼 ── -->
+          <div class="face-wrap face-left">
+            <img src="images/sijung/face.png" alt="얼굴 사진" />
+          </div>
+          <!-- 힌트 pill 상단 -->
+          <div class="hint-pill" style="left:calc(62.4 * var(--su)); top:calc(calc(313 * var(--su)) - calc(95.87 * var(--su)));"><img src="images/sijung/click-number.svg" alt="Click Number!"></div>
+          <!-- 힌트 pill 하단 -->
+          <div class="hint-pill" style="left:calc(489.44 * var(--su)); top:calc(calc(896 * var(--su)) - calc(95.87 * var(--su)));"><img src="images/sijung/click-number.svg" alt="Click Number!"></div>
+          <!-- ── 번호 버튼 (calc(1920 * var(--su)) 기준 절대 좌표) ── -->
+          <!-- 01 명궁 -->
+          <a class="num-btn" href="sijung-01.html" style="left:calc(369.19 * var(--su)); top:calc(calc(495.93 * var(--su)) - calc(95.87 * var(--su))); text-decoration:none;">01</a>
+          <!-- 02 형제궁 (좌우) -->
+          <a class="num-btn" href="sijung-02.html" style="left:calc(499.44 * var(--su)); top:calc(calc(472.93 * var(--su)) - calc(95.87 * var(--su))); text-decoration:none;">02</a>
+          <a class="num-btn" href="sijung-02.html" style="left:calc(245.66 * var(--su)); top:calc(calc(472.93 * var(--su)) - calc(95.87 * var(--su))); text-decoration:none;">02</a>
+          <!-- 03 처첩궁 (좌우) -->
+          <a class="num-btn" href="sijung-03.html" style="left:calc(171.61 * var(--su)); top:calc(calc(538.93 * var(--su)) - calc(95.87 * var(--su))); text-decoration:none;">03</a>
+          <a class="num-btn" href="sijung-03.html" style="left:calc(569.61 * var(--su)); top:calc(calc(538.93 * var(--su)) - calc(95.87 * var(--su))); text-decoration:none;">03</a>
+          <!-- 04 전택궁 (여러 개) -->
+          <a class="num-btn" href="sijung-04.html" style="left:calc(370.03 * var(--su)); top:calc(calc(873.87 * var(--su)) - calc(95.87 * var(--su)));" style="text-decoration:none;">04</a>
+          <a class="num-btn" href="sijung-04.html" style="left:calc(273.44 * var(--su)); top:calc(calc(830.87 * var(--su)) - calc(95.87 * var(--su)));" style="text-decoration:none;">04</a>
+          <a class="num-btn" href="sijung-04.html" style="left:calc(464.44 * var(--su)); top:calc(calc(830.87 * var(--su)) - calc(95.87 * var(--su)));" style="text-decoration:none;">04</a>
+          <a class="num-btn" href="sijung-04.html" style="left:calc(216.44 * var(--su)); top:calc(calc(754.9 * var(--su))  - calc(95.87 * var(--su)));" style="text-decoration:none;">04</a>
+          <a class="num-btn" href="sijung-04.html" style="left:calc(525.44 * var(--su)); top:calc(calc(754.9 * var(--su))  - calc(95.87 * var(--su)));" style="text-decoration:none;">04</a>
+          <!-- 05 관록궁 -->
+          <a class="num-btn" href="sijung-05.html" style="left:calc(369.19 * var(--su)); top:calc(calc(382.93 * var(--su)) - calc(95.87 * var(--su)));">05</a>
+          <!-- 06 노복궁 (좌우) -->
+          <a class="num-btn" href="sijung-06.html" style="left:calc(255.94 * var(--su)); top:calc(calc(669.93 * var(--su)) - calc(95.87 * var(--su)));">06</a>
+          <a class="num-btn" href="sijung-06.html" style="left:calc(490.44 * var(--su)); top:calc(calc(669.93 * var(--su)) - calc(95.87 * var(--su)));">06</a>
+          <!-- 07 복덕궁 (좌우) -->
+          <a class="num-btn" href="sijung-07.html" style="left:calc(255.53 * var(--su)); top:calc(calc(414.93 * var(--su)) - calc(95.87 * var(--su))); text-decoration:none;">07</a>
+          <a class="num-btn" href="sijung-07.html" style="left:calc(490.44 * var(--su)); top:calc(calc(414.93 * var(--su)) - calc(95.87 * var(--su))); text-decoration:none;">07</a>
+          <!-- 08 재백궁 -->
+          <a class="num-btn" href="sijung-08.html" style="left:calc(369.19 * var(--su)); top:calc(calc(645.93 * var(--su)) - calc(95.87 * var(--su))); text-decoration:none;">08</a>
+          <!-- 09 전택궁 (좌우) -->
+          <a class="num-btn" href="sijung-09.html" style="left:calc(272.44 * var(--su)); top:calc(calc(514.93 * var(--su)) - calc(95.87 * var(--su))); text-decoration:none;">09</a>
+          <a class="num-btn" href="sijung-09.html" style="left:calc(464.44 * var(--su)); top:calc(calc(514.93 * var(--su)) - calc(95.87 * var(--su))); text-decoration:none;">09</a>
+          <!-- 10 질액궁 -->
+          <a class="num-btn" href="sijung-10.html" style="left:calc(369.19 * var(--su)); top:calc(calc(564.93 * var(--su)) - calc(95.87 * var(--su))); text-decoration:none;">10</a>
+          <!-- 11 처첩궁 (좌우) -->
+          <a class="num-btn" href="sijung-11.html" style="left:calc(263.16 * var(--su)); top:calc(calc(591.93 * var(--su)) - calc(95.87 * var(--su))); text-decoration:none;">11</a>
+          <a class="num-btn" href="sijung-11.html" style="left:calc(481.94 * var(--su)); top:calc(calc(591.93 * var(--su)) - calc(95.87 * var(--su))); text-decoration:none;">11</a>
+          <!-- 12 천이궁 (좌우) -->
+          <a class="num-btn" href="sijung-12.html" style="left:calc(182.44 * var(--su)); top:calc(calc(456.93 * var(--su)) - calc(95.87 * var(--su))); text-decoration:none;">12</a>
+          <a class="num-btn" href="sijung-12.html" style="left:calc(560.44 * var(--su)); top:calc(calc(456.93 * var(--su)) - calc(95.87 * var(--su))); text-decoration:none;">12</a>
+        </div>
 
-      <!-- ── 오른쪽 얼굴 (호버 → 다이어그램) ── -->
-      <div class="face-wrap face-right">
-        <img class="face-default" src="images/sijung/face.png" alt="얼굴 사진" />
-        <img class="face-hover"   src="images/sijung/face-diagram.png" alt="십이궁 다이어그램" />
+        <div class="sj-g sj-g--text">
+          <!-- ── 중앙 텍스트 ── -->
+          <p class="center-sub">The Flow and Center of Life 삶의 흐름과 중심</p>
+          <h2 class="center-title">십이궁:十二宮</h2>
+          <div class="center-body">
+            <p>십이궁은 얼굴을 열두 개의 영역으로 나누고, 각 위치마다 삶의 의미를 대응시켜 해석하는 위치 기반의 관상 체계이자 전통적인 관상 이론이다. 열두 영역으로 나뉜 각 부위는 명예, 재물, 관계 등 삶의 다양한 요소로 대응되고 이를 통해 개인의 길흉화복을 해석한다.</p>
+            <p>&nbsp;</p>
+            <p>십이궁으로 관상을 볼 때는 각 영역의 형태와 색, 윤기의 정도 등을 기준으로 해당 영역이 상징하는 요소의 강약의 정도를 판단한다. 특정 부위가 발달된 경우 해당 영역의 기운이 강한 삶이라 해석되며, 반대로 손상되거나 불균형한 경우는 부정적인 영향이 있다고 해석되기도 한다. 그러나 관상에서 가장 중요한 것은 균형과 조화이기에 십이궁에서도 영역의 균형과 조화를 중시한다.</p>
+          </div>
+        </div>
+
+        <div class="sj-g sj-g--face-r">
+          <!-- ── 오른쪽 얼굴 (호버 → 다이어그램) ── -->
+          <div class="face-wrap face-right">
+            <img class="face-default" src="images/sijung/face.png" alt="얼굴 사진" />
+            <img class="face-hover"   src="images/sijung/face-diagram.png" alt="십이궁 다이어그램" />
+          </div>
+        </div>
       </div>
-
-      <!-- ── 왼쪽 얼굴 + 번호 버튼 ── -->
-      <div class="face-wrap face-left">
-        <img src="images/sijung/face.png" alt="얼굴 사진" />
-      </div>
-
-      <!-- 힌트 pill 상단 -->
-      <div class="hint-pill" style="left:62.4px; top:calc(313px - 95.87px);"><img src="images/sijung/click-number.svg" alt="Click Number!"></div>
-      <!-- 힌트 pill 하단 -->
-      <div class="hint-pill" style="left:489.44px; top:calc(896px - 95.87px);"><img src="images/sijung/click-number.svg" alt="Click Number!"></div>
-
-      <!-- ── 번호 버튼 (1920px 기준 절대 좌표) ── -->
-      <!-- 01 명궁 -->
-      <a class="num-btn" href="sijung-01.html" style="left:369.19px; top:calc(495.93px - 95.87px); text-decoration:none;">01</a>
-      <!-- 02 형제궁 (좌우) -->
-      <a class="num-btn" href="sijung-02.html" style="left:499.44px; top:calc(472.93px - 95.87px); text-decoration:none;">02</a>
-      <a class="num-btn" href="sijung-02.html" style="left:245.66px; top:calc(472.93px - 95.87px); text-decoration:none;">02</a>
-      <!-- 03 처첩궁 (좌우) -->
-      <a class="num-btn" href="sijung-03.html" style="left:171.61px; top:calc(538.93px - 95.87px); text-decoration:none;">03</a>
-      <a class="num-btn" href="sijung-03.html" style="left:569.61px; top:calc(538.93px - 95.87px); text-decoration:none;">03</a>
-      <!-- 04 전택궁 (여러 개) -->
-      <a class="num-btn" href="sijung-04.html" style="left:370.03px; top:calc(873.87px - 95.87px);" style="text-decoration:none;">04</a>
-      <a class="num-btn" href="sijung-04.html" style="left:273.44px; top:calc(830.87px - 95.87px);" style="text-decoration:none;">04</a>
-      <a class="num-btn" href="sijung-04.html" style="left:464.44px; top:calc(830.87px - 95.87px);" style="text-decoration:none;">04</a>
-      <a class="num-btn" href="sijung-04.html" style="left:216.44px; top:calc(754.9px  - 95.87px);" style="text-decoration:none;">04</a>
-      <a class="num-btn" href="sijung-04.html" style="left:525.44px; top:calc(754.9px  - 95.87px);" style="text-decoration:none;">04</a>
-      <!-- 05 관록궁 -->
-      <a class="num-btn" href="sijung-05.html" style="left:369.19px; top:calc(382.93px - 95.87px);">05</a>
-      <!-- 06 노복궁 (좌우) -->
-      <a class="num-btn" href="sijung-06.html" style="left:255.94px; top:calc(669.93px - 95.87px);">06</a>
-      <a class="num-btn" href="sijung-06.html" style="left:490.44px; top:calc(669.93px - 95.87px);">06</a>
-      <!-- 07 복덕궁 (좌우) -->
-      <a class="num-btn" href="sijung-07.html" style="left:255.53px; top:calc(414.93px - 95.87px); text-decoration:none;">07</a>
-      <a class="num-btn" href="sijung-07.html" style="left:490.44px; top:calc(414.93px - 95.87px); text-decoration:none;">07</a>
-      <!-- 08 재백궁 -->
-      <a class="num-btn" href="sijung-08.html" style="left:369.19px; top:calc(645.93px - 95.87px); text-decoration:none;">08</a>
-      <!-- 09 전택궁 (좌우) -->
-      <a class="num-btn" href="sijung-09.html" style="left:272.44px; top:calc(514.93px - 95.87px); text-decoration:none;">09</a>
-      <a class="num-btn" href="sijung-09.html" style="left:464.44px; top:calc(514.93px - 95.87px); text-decoration:none;">09</a>
-      <!-- 10 질액궁 -->
-      <a class="num-btn" href="sijung-10.html" style="left:369.19px; top:calc(564.93px - 95.87px); text-decoration:none;">10</a>
-      <!-- 11 처첩궁 (좌우) -->
-      <a class="num-btn" href="sijung-11.html" style="left:263.16px; top:calc(591.93px - 95.87px); text-decoration:none;">11</a>
-      <a class="num-btn" href="sijung-11.html" style="left:481.94px; top:calc(591.93px - 95.87px); text-decoration:none;">11</a>
-      <!-- 12 천이궁 (좌우) -->
-      <a class="num-btn" href="sijung-12.html" style="left:182.44px; top:calc(456.93px - 95.87px); text-decoration:none;">12</a>
-      <a class="num-btn" href="sijung-12.html" style="left:560.44px; top:calc(456.93px - 95.87px); text-decoration:none;">12</a>
-
-      <!-- ── 중앙 텍스트 ── -->
-      <p class="center-sub">The Flow and Center of Life 삶의 흐름과 중심</p>
-      <h2 class="center-title">십이궁:十二宮</h2>
-      <div class="center-body">
-        <p>십이궁은 얼굴을 열두 개의 영역으로 나누고, 각 위치마다 삶의 의미를 대응시켜 해석하는 위치 기반의 관상 체계이자 전통적인 관상 이론이다. 열두 영역으로 나뉜 각 부위는 명예, 재물, 관계 등 삶의 다양한 요소로 대응되고 이를 통해 개인의 길흉화복을 해석한다.</p>
-        <p>&nbsp;</p>
-        <p>십이궁으로 관상을 볼 때는 각 영역의 형태와 색, 윤기의 정도 등을 기준으로 해당 영역이 상징하는 요소의 강약의 정도를 판단한다. 특정 부위가 발달된 경우 해당 영역의 기운이 강한 삶이라 해석되며, 반대로 손상되거나 불균형한 경우는 부정적인 영향이 있다고 해석되기도 한다. 그러나 관상에서 가장 중요한 것은 균형과 조화이기에 십이궁에서도 영역의 균형과 조화를 중시한다.</p>
-      </div>
-
     </div>
 
     <!-- ── 하단 내비게이션 ── -->
@@ -266,8 +120,7 @@
         </button>
         <div class="bn-right-bg"></div><button class="bn-help-btn">?</button>
       </div>
-    </nav>
-    <script src="scale.js"></script>
+    </nav>
   <script src="cursor.js"></script>
     <script src="help.js"></script>
 <script src="sound.js"></script>
