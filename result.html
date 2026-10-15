@@ -2,10 +2,12 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>분석 결과 | DOT SHIFT</title>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
     <link rel="stylesheet" href="nav.css" />
+    <link rel="stylesheet" href="base.css" />
     <style>
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -322,7 +324,7 @@
       }
     </style>
   </head>
-  <body>
+  <body class="rwd">
     <nav class="topNav">
       <a class="navLeft" href="index.html">PROJECT: DOT SHIFT</a>
       <span class="navRight">Everything starts from a dot</span>
@@ -788,26 +790,8 @@
 
     </script>
 
-    <script>
-      (function () {
-        var DESIGN_W = 1920, DESIGN_H = 1080;
-        function fitResult() {
-          var sw = window.innerWidth / DESIGN_W;
-          var sh = window.innerHeight / DESIGN_H;
-          var s = Math.min(sw, sh);
-          document.querySelectorAll('.page-scale').forEach(function (el) {
-            el.style.transformOrigin = 'top left';
-            el.style.transform = 'scale(' + s + ')';
-          });
-          document.querySelectorAll('.bottomNav').forEach(function (el) {
-            el.style.transformOrigin = 'bottom left';
-            el.style.transform = 'scale(' + sw + ')';
-          });
-        }
-        fitResult();
-        window.addEventListener('resize', fitResult);
-      })();
-    </script>
+    <!-- 1920×1080 결과 화면을 창 안에 맞춰 가운데 배치 (노드맵 JS 의 getScale() 과 같은 배율) -->
+    <script src="fit-stage.js"></script>
     <script src="cursor.js" defer></script>
     <script src="help.js" defer></script>
     <script src="sound.js" defer></script>

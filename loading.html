@@ -2,40 +2,38 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>분석 중 | DOT SHIFT</title>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
     <link rel="stylesheet" href="nav.css" />
+    <link rel="stylesheet" href="base.css" />
     <style>
-      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
       body {
         background: #fff;
-        overflow: hidden;
-        width: 100vw;
-        height: 100vh;
       }
+
+      /* 점 · 문구 · 얼굴을 화면 가운데에 세로로 (Figma: y 268.7 ~ 807.4, 중심 ≈ 540) */
       .loadingPage {
-        position: fixed;
-        top: 0; left: 0;
-        width: 1920px;
-        height: 1080px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100dvh;
+        padding: var(--nav-top-h) 0 var(--nav-bottom-h);
         background: #fff;
       }
 
       /* 점 세 개 애니메이션 */
       .loading-dots {
-        position: absolute;
-        left: 50%;
-        top: 268.71px;
-        transform: translateX(-50%);
         display: flex;
-        gap: 10px;
+        gap: calc(10 * var(--u));
         align-items: center;
       }
       .loading-dots span {
         display: block;
-        width: 10px;
-        height: 10px;
+        width: calc(10 * var(--u));
+        height: calc(10 * var(--u));
         background: #000;
         border-radius: 50%;
         animation: dotBlink 1.2s ease-in-out infinite;
@@ -47,57 +45,42 @@
         40%            { opacity: 1;   transform: scale(1.2); }
       }
 
-      /* 메인 텍스트 */
+      /* 메인 텍스트 (Figma: 가운데에서 오른쪽으로 9.65 치우침) */
       .loading-text {
-        position: absolute;
-        left: calc(50% + 9.65px);
-        top: 360px;
-        transform: translate(-50%, -50%);
+        margin-top: calc(57.9 * var(--u));
+        margin-left: calc(19.3 * var(--u));
         font-family: 'Pretendard', sans-serif;
         font-weight: 700;
-        font-size: 36px;
+        font-size: calc(36 * var(--u));
         color: #000;
         white-space: nowrap;
         line-height: 1.3;
-        animation: fadeInUp 0.6s ease forwards;
+        animation: fadeInUpText 0.6s ease forwards;
+      }
+      @keyframes fadeInUpText {
+        from { opacity: 0; transform: translateY(calc(30 * var(--u))); }
+        to   { opacity: 1; transform: translateY(0); }
       }
 
       /* 얼굴 이미지 */
       .loading-face {
-        position: absolute;
-        left: 50%;
-        top: 494px;
-        transform: translateX(-50%);
-        width: 235px;
-        height: 313.437px;
+        margin-top: calc(110.6 * var(--u));
+        width: calc(235 * var(--u));
+        height: calc(313.437 * var(--u));
         object-fit: cover;
         transition: opacity 0.4s ease;
       }
 
-      @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(20px) translateX(-50%); }
-        to   { opacity: 1; transform: translateY(0)    translateX(-50%); }
-      }
-
-      /* 텍스트는 translateX 없으므로 별도 */
-      .loading-text {
-        animation: fadeInUpText 0.6s ease forwards;
-      }
-      @keyframes fadeInUpText {
-        from { opacity: 0; transform: translate(-50%, calc(-50% + 30px)); }
-        to   { opacity: 1; transform: translate(-50%, -50%); }
-      }
-
     </style>
   </head>
-  <body>
+  <body class="rwd">
 
     <nav class="topNav">
       <a class="navLeft" href="index.html">PROJECT: DOT SHIFT</a>
       <span class="navRight">Everything starts from a dot</span>
     </nav>
 
-    <div class="loadingPage page-scale">
+    <div class="loadingPage">
 
       <div class="loading-dots">
         <span></span><span></span><span></span>
@@ -189,7 +172,6 @@
       })();
     </script>
 
-    <script src="scale.js" defer></script>
     <script src="cursor.js" defer></script>
     <script src="help.js" defer></script>
   <script src="sound.js" defer></script>

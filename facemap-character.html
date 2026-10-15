@@ -2,6 +2,7 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>얼굴 지도 : Character | DOT SHIFT</title>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
     <link
@@ -9,9 +10,10 @@
       href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
     />
     <link rel="stylesheet" href="nav.css" />
+    <link rel="stylesheet" href="base.css" />
     <link rel="stylesheet" href="facemap.css" />
   </head>
-  <body>
+  <body class="rwd">
     <!-- 상단 네비게이션 바 -->
     <nav class="topNav">
       <a class="navLeft" href="index.html">PROJECT: DOT SHIFT</a>
@@ -19,11 +21,149 @@
     </nav>
 
     <!-- 메인 콘텐츠 -->
-    <div class="faceMapPage page-scale">
-      <!-- 얼굴 지도 이미지 + 파란 오버레이 -->
-      <div class="faceMapBg">
-        <img class="faceMapImg" src="images/facemap/face-bg.png" alt="" />
-        <div class="faceMapOverlay" style="background: #3a7dea"></div>
+    <div class="faceMapPage">
+      <!-- 그림 영역: 얼굴 지도 + 점 (Figma 1920×964 좌표, 단위 --fu) -->
+      <div class="fm-stage">
+        <!-- 얼굴 지도 이미지 + 파란 오버레이 -->
+        <div class="faceMapBg">
+          <img class="faceMapImg" src="images/facemap/face-bg.png" alt="" />
+          <div class="faceMapOverlay" style="background: #3a7dea"></div>
+        </div>
+        <!-- 얼굴 위 점 버튼들 -->
+        <!-- Frame408: 오토레이니 -->
+        <button
+          class="dotBtn"
+          data-profile="otorainy"
+          style="left: calc(1043.58 * var(--fu)); top: calc(487.09 * var(--fu))"
+        >
+          <img src="images/facemap/dot-char-otorainy.svg" alt="" />
+        </button>
+        <!-- 클러스터1 분리 -->
+        <button class="dotBtn" data-profile="cluster1" style="left: calc(1089 * var(--fu)); top: calc(456.79 * var(--fu)); width: calc(16.42 * var(--fu)); height: calc(16.42 * var(--fu));">
+          <img src="images/facemap/dot-char-small.svg" alt="" />
+        </button>
+        <button class="dotBtn" data-profile="cluster1b" style="left: calc(1089 * var(--fu)); top: calc(523 * var(--fu)); width: calc(16.42 * var(--fu)); height: calc(16.42 * var(--fu));">
+          <img src="images/facemap/dot-char-small.svg" alt="" />
+        </button>
+        <!-- 클러스터2 분리 -->
+        <button class="dotBtn" data-profile="cluster2" style="left: calc(747 * var(--fu)); top: calc(423.46 * var(--fu)); width: calc(16.42 * var(--fu)); height: calc(16.42 * var(--fu));">
+          <img src="images/facemap/dot-char-small.svg" alt="" />
+        </button>
+        <button class="dotBtn" data-profile="cluster2b" style="left: calc(747 * var(--fu)); top: calc(458 * var(--fu)); width: calc(16.42 * var(--fu)); height: calc(16.42 * var(--fu));">
+          <img src="images/facemap/dot-char-small.svg" alt="" />
+        </button>
+        <!-- Frame412: 시즈쿠 -->
+        <button
+          class="dotBtn"
+          data-profile="shizuku"
+          style="left: calc(780 * var(--fu)); top: calc(829.09 * var(--fu))"
+        >
+          <img src="images/facemap/dot-char-shizuku.svg" alt="" />
+        </button>
+        <!-- Frame445: 새 캐릭터 -->
+        <button
+          class="dotBtn"
+          data-profile="char_new1"
+          style="left: calc(930.02 * var(--fu)); top: calc(840.58 * var(--fu))"
+        >
+          <img src="images/facemap/dot-char-new1.svg" alt="" />
+        </button>
+        <!-- Frame411: 코하쿠 -->
+        <button
+          class="dotBtn"
+          data-profile="kohaku"
+          style="left: calc(991.79 * var(--fu)); top: calc(830.58 * var(--fu))"
+        >
+          <img src="images/facemap/dot-char-kohaku.svg" alt="" />
+        </button>
+        <!-- Frame409: 힘멜 -->
+        <button
+          class="dotBtn"
+          data-profile="himmel"
+          style="left: calc(1146 * var(--fu)); top: calc(402.58 * var(--fu))"
+        >
+          <img src="images/facemap/dot-char-himmel.svg" alt="" />
+        </button>
+        <!-- Frame410: 토모에 -->
+        <button
+          class="dotBtn"
+          data-profile="tomoe"
+          style="left: calc(1208.58 * var(--fu)); top: calc(420.79 * var(--fu))"
+        >
+          <img src="images/facemap/dot-char-tomoe.svg" alt="" />
+        </button>
+        <!-- Frame413: 토우야 -->
+        <button
+          class="dotBtn"
+          data-profile="touya"
+          style="left: calc(1190.37 * var(--fu)); top: calc(394.37 * var(--fu))"
+        >
+          <img src="images/facemap/dot-char-touya.svg" alt="" />
+        </button>
+        <!-- Frame416: 사쿠사 (클러스터) -->
+        <button
+          class="dotBtn"
+          data-profile="sakusa"
+          style="left: calc(434 * var(--fu)); top: calc(312.09 * var(--fu)); width: calc(96 * var(--fu)); height: calc(66 * var(--fu))"
+        >
+          <img
+            style="
+              position: absolute;
+              left: calc(50 * var(--fu));
+              top: calc(29.58 * var(--fu));
+              width: calc(36.42 * var(--fu));
+              height: calc(36.42 * var(--fu));
+            "
+            src="images/facemap/dot-char-sakusa.svg"
+            alt=""
+          />
+          <img
+            style="
+              position: absolute;
+              left: calc(8 * var(--fu));
+              top: calc(-6.84 * var(--fu));
+              width: calc(36.42 * var(--fu));
+              height: calc(36.42 * var(--fu));
+            "
+            src="images/facemap/dot-char-sakusa.svg"
+            alt=""
+          />
+        </button>
+        <!-- 아케우라지 츠카사 -->
+        <button class="dotBtn" data-profile="tsukasa" style="left: calc(404 * var(--fu)); top: calc(662 * var(--fu)); width: calc(16.42 * var(--fu)); height: calc(16.42 * var(--fu));">
+          <img src="images/facemap/dot-char-small.svg" alt="" />
+        </button>
+        <!-- 코베니 1 - Right Eye 근처 -->
+        <button class="dotBtn" data-profile="kobeni" style="left: calc(1029 * var(--fu)); top: calc(393 * var(--fu)); width: calc(16.42 * var(--fu)); height: calc(16.42 * var(--fu));">
+          <img src="images/facemap/dot-char-small.svg" alt="" />
+        </button>
+        <!-- 다이아 쿠로사와 -->
+        <button class="dotBtn" data-profile="diakurosawa" style="left: calc(730 * var(--fu)); top: calc(805 * var(--fu)); width: calc(16.42 * var(--fu)); height: calc(16.42 * var(--fu));">
+          <img src="images/facemap/dot-char-small.svg" alt="" />
+        </button>
+        <!-- 코베니 2 - Mouth 왼쪽 근처 -->
+        <button class="dotBtn" data-profile="kobeni" style="left: calc(780 * var(--fu)); top: calc(805 * var(--fu)); width: calc(16.42 * var(--fu)); height: calc(16.42 * var(--fu));">
+          <img src="images/facemap/dot-char-small.svg" alt="" />
+        </button>
+        <!-- 코베니 3 - 우하단 -->
+        <button class="dotBtn" data-profile="kobeni" style="left: calc(1690 * var(--fu)); top: calc(780 * var(--fu)); width: calc(16.42 * var(--fu)); height: calc(16.42 * var(--fu));">
+          <img src="images/facemap/dot-char-small.svg" alt="" />
+        </button>
+        <!-- 프로필 말풍선 -->
+        <div class="profile-bubble" id="profileBubble">
+          <div class="bubble-union">
+            <img src="images/facemap/bubble-union.svg" alt="" />
+          </div>
+          <div class="bubble-content">
+            <div class="bubble-photo-wrap">
+              <img id="bubblePhoto" src="" alt="" />
+            </div>
+            <div class="bubble-text">
+              <p class="bubble-name" id="bubbleName"></p>
+              <p class="bubble-desc" id="bubbleDesc"></p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- 우측 노란 패널 + 세로 텍스트 -->
@@ -32,7 +172,6 @@
           ICONIC &amp; CHARMING POINT
         </div>
       </div>
-
       <!-- 설명 텍스트 (우측 상단) -->
       <div class="descText">
         <p class="descTitle">아이코닉함과 매력 포인트</p>
@@ -41,165 +180,27 @@
           완전히 재정의되었다.
         </p>
       </div>
-
       <!-- 왼쪽 범례 -->
       <div
         class="legendCircle"
-        style="top: 64.75px; --legend-hover-w: 330px"
+        style="--top: 64.75; --legend-hover-w: 330"
         onclick="window.location.href = 'facemap-celeb.html'"
       >
         <span class="legend-c" style="color: #fb6d4b">C</span
         ><span class="legend-label">elebrity</span>
       </div>
-      <div class="legendCircle" style="top: 178.75px; --legend-hover-w: 346px">
+      <div class="legendCircle" style="--top: 178.75; --legend-hover-w: 346">
         <span class="legend-c" style="color: #5e9bff">C</span
         ><span class="legend-label">haracter</span>
       </div>
-      <div class="legendCircle" style="top: 292.75px; --legend-hover-w: 292px"
+      <div class="legendCircle" style="--top: 292.75; --legend-hover-w: 292"
         onclick="window.location.href='facemap-custom.html'">
         <span class="legend-c" style="color: #ff53cb">C</span
         ><span class="legend-label">ustom</span>
       </div>
-
-      <!-- 얼굴 위 점 버튼들 -->
-      <!-- Frame408: 오토레이니 -->
-      <button
-        class="dotBtn"
-        data-profile="otorainy"
-        style="left: 1043.58px; top: 487.09px"
-      >
-        <img src="images/facemap/dot-char-otorainy.svg" alt="" />
-      </button>
-      <!-- 클러스터1 분리 -->
-      <button class="dotBtn" data-profile="cluster1" style="left: 1089px; top: 456.79px; width: 16.42px; height: 16.42px;">
-        <img src="images/facemap/dot-char-small.svg" alt="" />
-      </button>
-      <button class="dotBtn" data-profile="cluster1b" style="left: 1089px; top: 523px; width: 16.42px; height: 16.42px;">
-        <img src="images/facemap/dot-char-small.svg" alt="" />
-      </button>
-      <!-- 클러스터2 분리 -->
-      <button class="dotBtn" data-profile="cluster2" style="left: 747px; top: 423.46px; width: 16.42px; height: 16.42px;">
-        <img src="images/facemap/dot-char-small.svg" alt="" />
-      </button>
-      <button class="dotBtn" data-profile="cluster2b" style="left: 747px; top: 458px; width: 16.42px; height: 16.42px;">
-        <img src="images/facemap/dot-char-small.svg" alt="" />
-      </button>
-      <!-- Frame412: 시즈쿠 -->
-      <button
-        class="dotBtn"
-        data-profile="shizuku"
-        style="left: 780px; top: 829.09px"
-      >
-        <img src="images/facemap/dot-char-shizuku.svg" alt="" />
-      </button>
-      <!-- Frame445: 새 캐릭터 -->
-      <button
-        class="dotBtn"
-        data-profile="char_new1"
-        style="left: 930.02px; top: 840.58px"
-      >
-        <img src="images/facemap/dot-char-new1.svg" alt="" />
-      </button>
-      <!-- Frame411: 코하쿠 -->
-      <button
-        class="dotBtn"
-        data-profile="kohaku"
-        style="left: 991.79px; top: 830.58px"
-      >
-        <img src="images/facemap/dot-char-kohaku.svg" alt="" />
-      </button>
-      <!-- Frame409: 힘멜 -->
-      <button
-        class="dotBtn"
-        data-profile="himmel"
-        style="left: 1146px; top: 402.58px"
-      >
-        <img src="images/facemap/dot-char-himmel.svg" alt="" />
-      </button>
-      <!-- Frame410: 토모에 -->
-      <button
-        class="dotBtn"
-        data-profile="tomoe"
-        style="left: 1208.58px; top: 420.79px"
-      >
-        <img src="images/facemap/dot-char-tomoe.svg" alt="" />
-      </button>
-      <!-- Frame413: 토우야 -->
-      <button
-        class="dotBtn"
-        data-profile="touya"
-        style="left: 1190.37px; top: 394.37px"
-      >
-        <img src="images/facemap/dot-char-touya.svg" alt="" />
-      </button>
-      <!-- Frame416: 사쿠사 (클러스터) -->
-      <button
-        class="dotBtn"
-        data-profile="sakusa"
-        style="left: 434px; top: 312.09px; width: 96px; height: 66px"
-      >
-        <img
-          style="
-            position: absolute;
-            left: 50px;
-            top: 29.58px;
-            width: 36.42px;
-            height: 36.42px;
-          "
-          src="images/facemap/dot-char-sakusa.svg"
-          alt=""
-        />
-        <img
-          style="
-            position: absolute;
-            left: 8px;
-            top: -6.84px;
-            width: 36.42px;
-            height: 36.42px;
-          "
-          src="images/facemap/dot-char-sakusa.svg"
-          alt=""
-        />
-      </button>
-
-      <!-- 아케우라지 츠카사 -->
-      <button class="dotBtn" data-profile="tsukasa" style="left: 404px; top: 662px; width: 16.42px; height: 16.42px;">
-        <img src="images/facemap/dot-char-small.svg" alt="" />
-      </button>
-
-      <!-- 코베니 1 - Right Eye 근처 -->
-      <button class="dotBtn" data-profile="kobeni" style="left: 1029px; top: 393px; width: 16.42px; height: 16.42px;">
-        <img src="images/facemap/dot-char-small.svg" alt="" />
-      </button>
-      <!-- 다이아 쿠로사와 -->
-      <button class="dotBtn" data-profile="diakurosawa" style="left: 730px; top: 805px; width: 16.42px; height: 16.42px;">
-        <img src="images/facemap/dot-char-small.svg" alt="" />
-      </button>
-      <!-- 코베니 2 - Mouth 왼쪽 근처 -->
-      <button class="dotBtn" data-profile="kobeni" style="left: 780px; top: 805px; width: 16.42px; height: 16.42px;">
-        <img src="images/facemap/dot-char-small.svg" alt="" />
-      </button>
-      <!-- 코베니 3 - 우하단 -->
-      <button class="dotBtn" data-profile="kobeni" style="left: 1690px; top: 780px; width: 16.42px; height: 16.42px;">
-        <img src="images/facemap/dot-char-small.svg" alt="" />
-      </button>
-
-      <!-- 프로필 말풍선 -->
-      <div class="profile-bubble" id="profileBubble">
-        <div class="bubble-union">
-          <img src="images/facemap/bubble-union.svg" alt="" />
-        </div>
-        <div class="bubble-content">
-          <div class="bubble-photo-wrap">
-            <img id="bubblePhoto" src="" alt="" />
-          </div>
-          <div class="bubble-text">
-            <p class="bubble-name" id="bubbleName"></p>
-            <p class="bubble-desc" id="bubbleDesc"></p>
-          </div>
-        </div>
-      </div>
     </div>
+
+    <script src="facemap.js"></script>
 
     <script>
       const PROFILES = {
@@ -284,10 +285,7 @@
       const bPhoto = document.getElementById('bubblePhoto');
       const bName = document.getElementById('bubbleName');
       const bDesc = document.getElementById('bubbleDesc');
-      const page = document.querySelector('.faceMapPage');
       let activeDot = null;
-      const BUBBLE_W = 418,
-        BUBBLE_H = 172;
 
       // 동시 반응 그룹: [bubble을 띄울 대표 점, 나머지...] — 대표 점 기준으로 bubble 위치
       const LINKED_GROUPS = [
@@ -329,21 +327,7 @@
           bName.textContent = p.name;
           bDesc.innerHTML = p.desc;
 
-          const s = window.innerWidth / 1920;
-          const btnRect = anchor.getBoundingClientRect();
-          const pageRect = page.getBoundingClientRect();
-          const dotCx = (btnRect.left - pageRect.left + btnRect.width / 2) / s;
-          const dotTop = (btnRect.top - pageRect.top) / s;
-          const dotH = btnRect.height / s;
-
-          let left = dotCx - BUBBLE_W / 2;
-          let top = dotTop - BUBBLE_H + 14;
-
-          left = Math.max(8, Math.min(left, 1920 - BUBBLE_W - 8));
-          if (top < 8) top = dotTop + dotH + 2;
-
-          bubble.style.left = left + 'px';
-          bubble.style.top = top + 'px';
+          placeBubble(bubble, anchor);
           bubble.classList.add('active');
         });
       });
@@ -463,7 +447,6 @@
         <div class="bn-right-bg"></div><button class="bn-help-btn">?</button>
       </div>
     </nav>
-    <script src="scale.js"></script>
     <script src="cursor.js"></script>
     <script src="help.js"></script>
   <script src="sound.js"></script>

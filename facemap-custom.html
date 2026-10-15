@@ -2,6 +2,7 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>커스텀 점 지도 | DOT SHIFT</title>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
     <link
@@ -9,51 +10,70 @@
       href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
     />
     <link rel="stylesheet" href="nav.css" />
+    <link rel="stylesheet" href="base.css" />
     <link rel="stylesheet" href="facemap.css" />
     <style>
       .faceMapOverlay { background: #ff53cb !important; }
       .verticalText { color: #ff53cb !important; }
     </style>
   </head>
-  <body>
+  <body class="rwd">
     <nav class="topNav">
       <a class="navLeft" href="index.html">PROJECT: DOT SHIFT</a>
       <span class="navRight">Everything starts from a dot</span>
     </nav>
 
-    <div class="faceMapPage page-scale">
-      <div class="faceMapBg">
-        <img class="faceMapImg" src="images/facemap/face-bg.png" alt="" />
-        <div class="faceMapOverlay"></div>
+    <div class="faceMapPage">
+      <!-- 그림 영역: 얼굴 지도 + 점 (Figma 1920×964 좌표, 단위 --fu) -->
+      <div class="fm-stage">
+        <div class="faceMapBg">
+          <img class="faceMapImg" src="images/facemap/face-bg.png" alt="" />
+          <div class="faceMapOverlay"></div>
+        </div>
+        <!-- 커스텀 점 컨테이너 -->
+        <div id="customDotsContainer"></div>
+        <!-- 프로필 말풍선 -->
+        <div class="profile-bubble" id="profileBubble">
+          <button class="bubble-delete-btn" id="bubbleDeleteBtn">삭제</button>
+          <div class="bubble-union">
+            <img src="images/facemap/bubble-union.svg" alt="" />
+          </div>
+          <div class="bubble-content">
+            <div class="bubble-photo-wrap" id="bubblePhotoWrap">
+              <img id="bubblePhoto" src="" alt="" />
+            </div>
+            <div class="bubble-text">
+              <p class="bubble-name" id="bubbleName"></p>
+              <p class="bubble-desc" id="bubbleDesc"></p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="rightPanel">
         <div class="verticalText">ICONIC &amp; CHARMING POINT</div>
       </div>
-
       <div class="descText">
         <p class="descTitle">나만의 점 지도</p>
         <p class="descBody">
           얼굴 위 원하는 위치에 점을 찍고<br />나만의 관상 기록을 남겨보세요.
         </p>
       </div>
-
       <!-- 왼쪽 범례 -->
-      <div class="legendCircle" style="top: 64.75px; --legend-hover-w: 304px"
+      <div class="legendCircle" style="--top: 64.75; --legend-hover-w: 304"
         onclick="window.location.href='facemap-celeb.html'">
         <span class="legend-c" style="color: #fb6d4b">C</span
         ><span class="legend-label">elebrity</span>
       </div>
-      <div class="legendCircle" style="top: 178.75px; --legend-hover-w: 304px"
+      <div class="legendCircle" style="--top: 178.75; --legend-hover-w: 304"
         onclick="window.location.href='facemap-character.html'">
         <span class="legend-c" style="color: #5e9bff">C</span
         ><span class="legend-label">haracter</span>
       </div>
-      <div class="legendCircle" style="top: 292.75px; --legend-hover-w: 254px">
+      <div class="legendCircle" style="--top: 292.75; --legend-hover-w: 254">
         <span class="legend-c" style="color: #ff53cb">C</span
         ><span class="legend-label">ustom</span>
       </div>
-
       <!-- 진입 안내 팝업 -->
       <div id="welcomeOverlay" class="welcome-overlay">
         <div class="welcome-popup">
@@ -61,33 +81,10 @@
           <p class="welcome-body-text">+ 버튼을 누르고 원하는 위치를 클릭하면 자신만의 점과 프로필을 추가할 수 있습니다.</p>
         </div>
       </div>
-
       <!-- 점 추가 버튼 -->
       <button class="add-dot-btn" id="addDotBtn" onclick="togglePlacementMode()">+</button>
-
       <!-- 배치 모드 안내 힌트 -->
       <div class="placement-hint">얼굴 위를 클릭해 점을 추가하세요 · ESC로 취소</div>
-
-      <!-- 커스텀 점 컨테이너 -->
-      <div id="customDotsContainer"></div>
-
-      <!-- 프로필 말풍선 -->
-      <div class="profile-bubble" id="profileBubble">
-        <button class="bubble-delete-btn" id="bubbleDeleteBtn">삭제</button>
-        <div class="bubble-union">
-          <img src="images/facemap/bubble-union.svg" alt="" />
-        </div>
-        <div class="bubble-content">
-          <div class="bubble-photo-wrap" id="bubblePhotoWrap">
-            <img id="bubblePhoto" src="" alt="" />
-          </div>
-          <div class="bubble-text">
-            <p class="bubble-name" id="bubbleName"></p>
-            <p class="bubble-desc" id="bubbleDesc"></p>
-          </div>
-        </div>
-      </div>
-
       <!-- 입력 폼 모달 -->
       <div id="dotInputOverlay" class="dot-input-overlay">
         <div class="dot-input-popup" onclick="event.stopPropagation()">
@@ -115,6 +112,8 @@
       </div>
     </div>
 
+    <script src="facemap.js"></script>
+
     <script>
       const bubble = document.getElementById('profileBubble');
       const bPhoto = document.getElementById('bubblePhoto');
@@ -122,11 +121,11 @@
       const bName = document.getElementById('bubbleName');
       const bDesc = document.getElementById('bubbleDesc');
       const page = document.querySelector('.faceMapPage');
+      const stage = document.querySelector('.fm-stage');
       let activeCustomDot = null;
       let currentCustomDotId = null;
       let placementMode = false;
       let pendingPos = null;
-      const BUBBLE_W = 418, BUBBLE_H = 172;
 
       const PHOTO_OPTIONS = [
         { id: 'none', color: '#d9d9d9' },
@@ -180,18 +179,7 @@
       }
 
       function positionBubble(btn) {
-        const s = window.innerWidth / 1920;
-        const btnRect = btn.getBoundingClientRect();
-        const pageRect = page.getBoundingClientRect();
-        const dotCx = (btnRect.left - pageRect.left + btnRect.width / 2) / s;
-        const dotTop = (btnRect.top - pageRect.top) / s;
-        const dotH = btnRect.height / s;
-        let left = dotCx - BUBBLE_W / 2;
-        let top = dotTop - BUBBLE_H + 14;
-        left = Math.max(8, Math.min(left, 1920 - BUBBLE_W - 8));
-        if (top < 8) top = dotTop + dotH + 2;
-        bubble.style.left = left + 'px';
-        bubble.style.top = top + 'px';
+        placeBubble(bubble, btn);
       }
       function closeBubble() {
         bubble.classList.remove('active', 'custom-active');
@@ -204,11 +192,12 @@
       document.querySelector('.faceMapBg').addEventListener('click', (e) => {
         if (!placementMode) return;
         e.stopPropagation();
-        const s = window.innerWidth / 1920;
-        const pageRect = page.getBoundingClientRect();
+        // 그림 영역 기준 디자인 좌표(1920 기준)로 저장 → 화면 크기와 무관
+        const stageRect = stage.getBoundingClientRect();
+        const s = stageRect.width / 1920;
         pendingPos = {
-          x: (e.clientX - pageRect.left) / s,
-          y: (e.clientY - pageRect.top) / s,
+          x: (e.clientX - stageRect.left) / s,
+          y: (e.clientY - stageRect.top) / s,
         };
         exitPlacementMode();
         openDotInputForm();
@@ -261,8 +250,8 @@
         const btn = document.createElement('button');
         btn.className = 'custom-dot-btn';
         btn.dataset.customId = String(dot.id);
-        btn.style.left = dot.x + 'px';
-        btn.style.top = dot.y + 'px';
+        btn.style.left = 'calc(' + dot.x + ' * var(--fu))';
+        btn.style.top = 'calc(' + dot.y + ' * var(--fu))';
         btn.innerHTML = '<span class="custom-dot-circle"></span>';
         container.appendChild(btn);
 
@@ -341,7 +330,6 @@
         <div class="bn-right-bg"></div><button class="bn-help-btn">?</button>
       </div>
     </nav>
-    <script src="scale.js"></script>
     <script src="cursor.js"></script>
     <script src="help.js"></script>
   <script src="sound.js"></script>

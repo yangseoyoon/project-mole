@@ -2,6 +2,7 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>얼굴 지도 | DOT SHIFT</title>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
     <link
@@ -9,9 +10,10 @@
       href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
     />
     <link rel="stylesheet" href="nav.css" />
+    <link rel="stylesheet" href="base.css" />
     <link rel="stylesheet" href="facemap.css" />
   </head>
-  <body>
+  <body class="rwd">
     <!-- 상단 네비게이션 바 -->
     <nav class="topNav">
       <a class="navLeft" href="index.html">PROJECT: DOT SHIFT</a>
@@ -19,18 +21,100 @@
     </nav>
 
     <!-- 메인 콘텐츠 -->
-    <div class="faceMapPage page-scale">
-      <!-- 얼굴 지도 이미지 + 오렌지 오버레이 -->
-      <div class="faceMapBg">
-        <img class="faceMapImg" src="images/facemap/face-bg.png" alt="" />
-        <div class="faceMapOverlay"></div>
+    <div class="faceMapPage">
+      <!-- 그림 영역: 얼굴 지도 + 점 (Figma 1920×964 좌표, 단위 --fu) -->
+      <div class="fm-stage">
+        <!-- 얼굴 지도 이미지 + 오렌지 오버레이 -->
+        <div class="faceMapBg">
+          <img class="faceMapImg" src="images/facemap/face-bg.png" alt="" />
+          <div class="faceMapOverlay"></div>
+        </div>
+        <!-- 얼굴 위 점 버튼들 -->
+        <!-- Frame400: 제니 -->
+        <button class="dotBtn" data-profile="jenny" style="left: calc(1192.79 * var(--fu)); top: calc(285.61 * var(--fu))">
+          <img src="images/facemap/dot-jenny.svg" alt="" />
+        </button>
+        <!-- Frame401: 제이 -->
+        <button class="dotBtn" data-profile="jay" style="left: calc(868 * var(--fu)); top: calc(190.44 * var(--fu))">
+          <img src="images/facemap/dot-jay.svg" alt="" />
+        </button>
+        <!-- Frame402: 가을 -->
+        <button class="dotBtn" data-profile="gaeul" style="left: calc(1064 * var(--fu)); top: calc(835.77 * var(--fu))">
+          <img src="images/facemap/dot-gaeul.svg" alt="" />
+        </button>
+        <!-- Frame410: 신디 크로포드 -->
+        <button class="dotBtn" data-profile="cindy" style="left: calc(1045.79 * var(--fu)); top: calc(788.12 * var(--fu))">
+          <img src="images/facemap/dot-cindy.svg" alt="" />
+        </button>
+        <!-- Frame409: 마릴린 먼로 -->
+        <button class="dotBtn" data-profile="marilyn" style="left: calc(1083.58 * var(--fu)); top: calc(743.3 * var(--fu))">
+          <img src="images/facemap/dot-marilyn.svg" alt="" />
+        </button>
+        <!-- Frame399: 비비 -->
+        <button class="dotBtn" data-profile="bibi" style="left: calc(391.02 * var(--fu)); top: calc(673.09 * var(--fu)); width: calc(79 * var(--fu))">
+          <img src="images/facemap/dot-bibi.svg" alt="" />
+        </button>
+        <!-- Frame404: 장원영 -->
+        <button class="dotBtn" data-profile="jangwonyoung" style="left: calc(1467.5 * var(--fu)); top: calc(604.4 * var(--fu))">
+          <img src="images/facemap/dot-jangwonyoung.svg" alt="" />
+        </button>
+        <!-- Frame405: 장식용 -->
+        <div class="dotBtn" style="left: calc(1209.5 * var(--fu)); top: calc(164.55 * var(--fu))">
+          <img src="images/facemap/dot-deco.svg" alt="" />
+        </div>
+        <!-- Frame412: 이로하 -->
+        <button class="dotBtn" data-profile="iroha" style="left: calc(1118.79 * var(--fu)); top: calc(402.09 * var(--fu))">
+          <img src="images/facemap/dot-iroha.svg" alt="" />
+        </button>
+        <!-- Frame407: 레이 -->
+        <button class="dotBtn" data-profile="rei" style="left: calc(1400 * var(--fu)); top: calc(780 * var(--fu))">
+          <img src="images/facemap/dot-rei.svg" alt="" />
+        </button>
+        <!-- Frame406: 고소영 -->
+        <button class="dotBtn" data-profile="kosoyoung" style="left: calc(910.29 * var(--fu)); top: calc(548.71 * var(--fu))">
+          <img src="images/facemap/dot-kosoyoung.svg" alt="" />
+        </button>
+        <!-- Frame411: 이글레시아스 -->
+        <button class="dotBtnSmall" data-profile="enrique" style="left: calc(1393.21 * var(--fu)); top: calc(548.71 * var(--fu))">
+          <img src="images/facemap/dot-enrique.png" alt="" />
+        </button>
+        <!-- Frame403: 전지현 -->
+        <button class="dotBtn" data-profile="jeonjihyun" style="left: calc(1577.08 * var(--fu)); top: calc(673.55 * var(--fu))">
+          <img src="images/facemap/dot-jeonjihyun.svg" alt="" />
+        </button>
+        <!-- 아오이 유우 -->
+        <button class="dotBtn" data-profile="aoiyu" style="left: calc(1050 * var(--fu)); top: calc(620 * var(--fu))">
+          <img src="images/facemap/dot-aoiyu.svg" alt="" />
+        </button>
+        <!-- IU -->
+        <button class="dotBtn" data-profile="iu" style="left: calc(1080 * var(--fu)); top: calc(570 * var(--fu))">
+          <img src="images/facemap/dot-iu.svg" alt="" />
+        </button>
+        <!-- 고마츠 나나 -->
+        <button class="dotBtn" data-profile="komatsunana" style="left: calc(1170 * var(--fu)); top: calc(640 * var(--fu))">
+          <img src="images/facemap/dot-komatsunana.svg" alt="" />
+        </button>
+        <!-- 프로필 말풍선 -->
+        <div class="profile-bubble" id="profileBubble">
+          <div class="bubble-union">
+            <img src="images/facemap/bubble-union.svg" alt="" />
+          </div>
+          <div class="bubble-content">
+            <div class="bubble-photo-wrap">
+              <img id="bubblePhoto" src="" alt="" />
+            </div>
+            <div class="bubble-text">
+              <p class="bubble-name" id="bubbleName"></p>
+              <p class="bubble-desc" id="bubbleDesc"></p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- 우측 노란 패널 + 세로 텍스트 -->
       <div class="rightPanel">
         <div class="verticalText">ICONIC &amp; CHARMING POINT</div>
       </div>
-
       <!-- 설명 텍스트 (우측 상단) -->
       <div class="descText">
         <p class="descTitle">아이코닉함과 매력 포인트</p>
@@ -39,15 +123,14 @@
           완전히 재정의되었다.
         </p>
       </div>
-
       <!-- 왼쪽 범례 -->
-      <div class="legendCircle" style="top: 64.75px; --legend-hover-w: 304px">
+      <div class="legendCircle" style="--top: 64.75; --legend-hover-w: 304">
         <span class="legend-c" style="color: #fb6d4b">C</span
         ><span class="legend-label">elebrity</span>
       </div>
       <div
         class="legendCircle"
-        style="top: 178.75px; --legend-hover-w: 304px"
+        style="--top: 178.75; --legend-hover-w: 304"
         onclick="window.location.href = 'facemap-character.html'"
       >
         <span class="legend-c" style="color: #5e9bff">C</span
@@ -55,99 +138,15 @@
       </div>
       <div
         class="legendCircle"
-        style="top: 292.75px; --legend-hover-w: 254px"
+        style="--top: 292.75; --legend-hover-w: 254"
         onclick="window.location.href='facemap-custom.html'"
       >
         <span class="legend-c" style="color: #ff53cb">C</span
         ><span class="legend-label">ustom</span>
       </div>
-
-
-      <!-- 얼굴 위 점 버튼들 -->
-      <!-- Frame400: 제니 -->
-      <button class="dotBtn" data-profile="jenny" style="left: 1192.79px; top: 285.61px">
-        <img src="images/facemap/dot-jenny.svg" alt="" />
-      </button>
-      <!-- Frame401: 제이 -->
-      <button class="dotBtn" data-profile="jay" style="left: 868px; top: 190.44px">
-        <img src="images/facemap/dot-jay.svg" alt="" />
-      </button>
-      <!-- Frame402: 가을 -->
-      <button class="dotBtn" data-profile="gaeul" style="left: 1064px; top: 835.77px">
-        <img src="images/facemap/dot-gaeul.svg" alt="" />
-      </button>
-      <!-- Frame410: 신디 크로포드 -->
-      <button class="dotBtn" data-profile="cindy" style="left: 1045.79px; top: 788.12px">
-        <img src="images/facemap/dot-cindy.svg" alt="" />
-      </button>
-      <!-- Frame409: 마릴린 먼로 -->
-      <button class="dotBtn" data-profile="marilyn" style="left: 1083.58px; top: 743.3px">
-        <img src="images/facemap/dot-marilyn.svg" alt="" />
-      </button>
-      <!-- Frame399: 비비 -->
-      <button class="dotBtn" data-profile="bibi" style="left: 391.02px; top: 673.09px; width: 79px">
-        <img src="images/facemap/dot-bibi.svg" alt="" />
-      </button>
-      <!-- Frame404: 장원영 -->
-      <button class="dotBtn" data-profile="jangwonyoung" style="left: 1467.5px; top: 604.4px">
-        <img src="images/facemap/dot-jangwonyoung.svg" alt="" />
-      </button>
-      <!-- Frame405: 장식용 -->
-      <div class="dotBtn" style="left: 1209.5px; top: 164.55px">
-        <img src="images/facemap/dot-deco.svg" alt="" />
-      </div>
-      <!-- Frame412: 이로하 -->
-      <button class="dotBtn" data-profile="iroha" style="left: 1118.79px; top: 402.09px">
-        <img src="images/facemap/dot-iroha.svg" alt="" />
-      </button>
-      <!-- Frame407: 레이 -->
-      <button class="dotBtn" data-profile="rei" style="left: 1400px; top: 780px">
-        <img src="images/facemap/dot-rei.svg" alt="" />
-      </button>
-      <!-- Frame406: 고소영 -->
-      <button class="dotBtn" data-profile="kosoyoung" style="left: 910.29px; top: 548.71px">
-        <img src="images/facemap/dot-kosoyoung.svg" alt="" />
-      </button>
-      <!-- Frame411: 이글레시아스 -->
-      <button class="dotBtnSmall" data-profile="enrique" style="left: 1393.21px; top: 548.71px">
-        <img src="images/facemap/dot-enrique.png" alt="" />
-      </button>
-      <!-- Frame403: 전지현 -->
-      <button class="dotBtn" data-profile="jeonjihyun" style="left: 1577.08px; top: 673.55px">
-        <img src="images/facemap/dot-jeonjihyun.svg" alt="" />
-      </button>
-
-
-      <!-- 아오이 유우 -->
-      <button class="dotBtn" data-profile="aoiyu" style="left: 1050px; top: 620px">
-        <img src="images/facemap/dot-aoiyu.svg" alt="" />
-      </button>
-      <!-- IU -->
-      <button class="dotBtn" data-profile="iu" style="left: 1080px; top: 570px">
-        <img src="images/facemap/dot-iu.svg" alt="" />
-      </button>
-      <!-- 고마츠 나나 -->
-      <button class="dotBtn" data-profile="komatsunana" style="left: 1170px; top: 640px">
-        <img src="images/facemap/dot-komatsunana.svg" alt="" />
-      </button>
-
-      <!-- 프로필 말풍선 -->
-      <div class="profile-bubble" id="profileBubble">
-        <div class="bubble-union">
-          <img src="images/facemap/bubble-union.svg" alt="" />
-        </div>
-        <div class="bubble-content">
-          <div class="bubble-photo-wrap">
-            <img id="bubblePhoto" src="" alt="" />
-          </div>
-          <div class="bubble-text">
-            <p class="bubble-name" id="bubbleName"></p>
-            <p class="bubble-desc" id="bubbleDesc"></p>
-          </div>
-        </div>
-      </div>
-
     </div>
+
+    <script src="facemap.js"></script>
 
     <script>
       const PROFILES = {
@@ -232,9 +231,7 @@
       const bPhoto = document.getElementById('bubblePhoto');
       const bName = document.getElementById('bubbleName');
       const bDesc = document.getElementById('bubbleDesc');
-      const page = document.querySelector('.faceMapPage');
       let activeDot = null;
-      const BUBBLE_W = 418, BUBBLE_H = 172;
 
       document.querySelectorAll('[data-profile]').forEach((btn) => {
         btn.addEventListener('click', (e) => {
@@ -253,18 +250,7 @@
           bName.textContent = p.name;
           bDesc.textContent = p.desc;
 
-          const s = window.innerWidth / 1920;
-          const btnRect = btn.getBoundingClientRect();
-          const pageRect = page.getBoundingClientRect();
-          const dotCx = (btnRect.left - pageRect.left + btnRect.width / 2) / s;
-          const dotTop = (btnRect.top - pageRect.top) / s;
-          const dotH = btnRect.height / s;
-          let left = dotCx - BUBBLE_W / 2;
-          let top = dotTop - BUBBLE_H + 14;
-          left = Math.max(8, Math.min(left, 1920 - BUBBLE_W - 8));
-          if (top < 8) top = dotTop + dotH + 2;
-          bubble.style.left = left + 'px';
-          bubble.style.top = top + 'px';
+          placeBubble(bubble, btn);
           bubble.classList.add('active');
         });
       });
@@ -384,7 +370,6 @@
         <div class="bn-right-bg"></div><button class="bn-help-btn">?</button>
       </div>
     </nav>
-    <script src="scale.js"></script>
     <script src="cursor.js"></script>
     <script src="help.js"></script>
   <script src="sound.js"></script>

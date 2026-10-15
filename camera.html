@@ -2,6 +2,7 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>웹캠 | DOT SHIFT</title>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
     <link
@@ -9,15 +10,16 @@
       href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
     />
     <link rel="stylesheet" href="nav.css" />
+    <link rel="stylesheet" href="base.css" />
     <link rel="stylesheet" href="camera.css" />
   </head>
-  <body>
+  <body class="rwd">
     <nav class="topNav">
       <a class="navLeft" href="index.html">PROJECT: DOT SHIFT</a>
       <span class="navRight">Everything starts from a dot</span>
     </nav>
 
-    <div class="cameraWrap page-scale">
+    <div class="cameraWrap">
       <!-- 뒷 배경 이미지: cam-bg1 타일링 -->
       <div class="bg-overlay"></div>
 
@@ -64,22 +66,24 @@
 
             <!-- 줌 슬라이더 -->
             <div class="zoom-wrap">
-              <span class="zoom-icon">🔍</span>
-              <input type="range" id="zoomSlider" class="zoom-slider"
-                min="1" max="3" step="0.05" value="1" />
-              <span class="zoom-val" id="zoomVal">1×</span>
+              <span class="zoom-icon" style="font-style:normal;font-size:calc(16 * var(--cu));font-weight:bold;line-height:1;cursor:default;">−</span>
+              <div id="zoomDots" style="display:flex;align-items:center;gap:calc(6 * var(--cu));">
+                <!-- dots injected by JS -->
+              </div>
+              <span class="zoom-icon" style="font-style:normal;font-size:calc(16 * var(--cu));font-weight:bold;line-height:1;cursor:default;">+</span>
+              <span class="zoom-val" id="zoomVal" style="display:none;">1×</span>
             </div>
           </div>
         </div>
 
         <!-- 좌측 패널 도트 효과 -->
-        <div style="position:absolute;left:89.5px;top:231px;width:301px;height:373px;border-radius:10px;overflow:hidden;z-index:5;border:1px solid #a6a6a6;background:#111;pointer-events:none;">
+        <div style="position:absolute;left:calc(89.5 * var(--cu));top:calc(231 * var(--cu));width:calc(301 * var(--cu));height:calc(373 * var(--cu));border-radius:calc(10 * var(--cu));overflow:hidden;z-index:5;border:1px solid #a6a6a6;background:#111;pointer-events:none;">
           <canvas id="canvasLeft" style="width:100%;height:100%;display:block;"></canvas>
         </div>
 
         <!-- 우측 패널 웹캠 -->
-        <div style="position:absolute;left:1460px;top:565px;width:380px;height:283px;border-radius:10px;overflow:hidden;z-index:5;border:1px solid #a6a6a6;background:#efefef;pointer-events:none;">
-          <video id="videoRight" autoplay playsinline muted style="width:100%;height:100%;object-fit:cover;transform:scaleX(-1) scale(1.06);filter:blur(6px);"></video>
+        <div style="position:absolute;left:calc(1460 * var(--cu));top:calc(565 * var(--cu));width:calc(380 * var(--cu));height:calc(283 * var(--cu));border-radius:calc(10 * var(--cu));overflow:hidden;z-index:5;border:1px solid #a6a6a6;background:#efefef;pointer-events:none;">
+          <video id="videoRight" autoplay playsinline muted style="width:100%;height:100%;object-fit:cover;transform:scaleX(-1) scale(1.06);filter:blur(calc(6 * var(--cu)));"></video>
         </div>
 
         <!-- 말풍선: 눈썹 가이드 -->
@@ -93,23 +97,17 @@
 
         <!-- 장식 원들: Figma 기준 위치 (77×77px) -->
         <!-- 주황 원 (imgEllipse426) -->
-        <div style="position:absolute;left:1870px;top:319px;width:77px;height:77px;border-radius:50%;background:#fe6c48;border:1px solid #000;pointer-events:none;"></div>
-        <div style="position:absolute;left:81px;top:852px;width:77px;height:77px;border-radius:50%;background:#fe6c48;border:1px solid #000;pointer-events:none;"></div>
-        <div style="position:absolute;left:183.52px;top:953px;width:77px;height:77px;border-radius:50%;background:#fe6c48;border:1px solid #000;pointer-events:none;"></div>
+        <div style="position:absolute;left:calc(1870 * var(--cu));top:calc(319 * var(--cu));width:calc(77 * var(--cu));height:calc(77 * var(--cu));border-radius:50%;background:#fe6c48;border:1px solid #000;pointer-events:none;"></div>
+        <div style="position:absolute;left:calc(81 * var(--cu));top:calc(852 * var(--cu));width:calc(77 * var(--cu));height:calc(77 * var(--cu));border-radius:50%;background:#fe6c48;border:1px solid #000;pointer-events:none;"></div>
+        <div style="position:absolute;left:calc(183.52 * var(--cu));top:calc(953 * var(--cu));width:calc(77 * var(--cu));height:calc(77 * var(--cu));border-radius:50%;background:#fe6c48;border:1px solid #000;pointer-events:none;"></div>
         <!-- 주황 이중원 (imgGroup509) -->
-        <div style="position:absolute;left:1745px;top:125.72px;width:77px;height:77px;border-radius:50%;background:#fe6c48;border:1px solid #000;pointer-events:none;"></div>
-        <div style="position:absolute;left:1769px;top:149px;width:77px;height:77px;border-radius:50%;background:#fe6c48;border:1px solid #000;pointer-events:none;"></div>
+        <div style="position:absolute;left:calc(1745 * var(--cu));top:calc(125.72 * var(--cu));width:calc(77 * var(--cu));height:calc(77 * var(--cu));border-radius:50%;background:#fe6c48;border:1px solid #000;pointer-events:none;"></div>
         <!-- 노란 원 (imgEllipse429) -->
-        <div style="position:absolute;left:11.5px;top:146px;width:77px;height:77px;border-radius:50%;background:#e9f056;border:1px solid #000;pointer-events:none;"></div>
-        <div style="position:absolute;left:39.62px;top:881.5px;width:77px;height:77px;border-radius:50%;background:#e9f056;border:1px solid #000;pointer-events:none;"></div>
+        <div style="position:absolute;left:calc(11.5 * var(--cu));top:calc(146 * var(--cu));width:calc(77 * var(--cu));height:calc(77 * var(--cu));border-radius:50%;background:#e9f056;border:1px solid #000;pointer-events:none;"></div>
+        <div style="position:absolute;left:calc(39.62 * var(--cu));top:calc(881.5 * var(--cu));width:calc(77 * var(--cu));height:calc(77 * var(--cu));border-radius:50%;background:#e9f056;border:1px solid #000;pointer-events:none;"></div>
         <!-- 노란 이중원 (imgGroup510) -->
-        <div style="position:absolute;left:1631px;top:715px;width:77px;height:77px;border-radius:50%;background:#e9f056;border:1px solid #000;pointer-events:none;"></div>
-        <div style="position:absolute;left:1655px;top:739px;width:77px;height:77px;border-radius:50%;background:#e9f056;border:1px solid #000;pointer-events:none;"></div>
-        <div style="position:absolute;left:1783.52px;top:463.47px;width:77px;height:77px;border-radius:50%;background:#e9f056;border:1px solid #000;pointer-events:none;"></div>
-        <div style="position:absolute;left:1807px;top:487px;width:77px;height:77px;border-radius:50%;background:#e9f056;border:1px solid #000;pointer-events:none;"></div>
-        <!-- 노란 이중원 (imgGroup511) -->
-        <div style="position:absolute;left:1767.52px;top:918.09px;width:77px;height:77px;border-radius:50%;background:#e9f056;border:1px solid #000;pointer-events:none;"></div>
-        <div style="position:absolute;left:1791px;top:942px;width:77px;height:77px;border-radius:50%;background:#e9f056;border:1px solid #000;pointer-events:none;"></div>
+        <div style="position:absolute;left:calc(1631 * var(--cu));top:calc(715 * var(--cu));width:calc(77 * var(--cu));height:calc(77 * var(--cu));border-radius:50%;background:#e9f056;border:1px solid #000;pointer-events:none;"></div>
+        <div style="position:absolute;left:calc(1655 * var(--cu));top:calc(739 * var(--cu));width:calc(77 * var(--cu));height:calc(77 * var(--cu));border-radius:50%;background:#e9f056;border:1px solid #000;pointer-events:none;"></div>
       </div>
     </div>
 
@@ -225,33 +223,71 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/holistic/holistic.js" crossorigin="anonymous" defer></script>
     <script>
-      // ── 줌 슬라이더 ─────────────────────────────────────────────
+      // ── 줌 슬라이더 (도트) ──────────────────────────────────────
       (function() {
-        var slider = document.getElementById('zoomSlider');
         var valLabel = document.getElementById('zoomVal');
+        var dotsWrap = document.getElementById('zoomDots');
         var video = document.getElementById('video');
         var videoRight = document.getElementById('videoRight');
 
-        function applyZoom(z) {
-          window.cameraZoom = z; // 캡처에서 참조
+        var STEPS = 10;
+        var MIN = 1, MAX = 3;
+        var currentIdx = 0;
+
+        // 도트 생성
+        var dots = [];
+        for (var i = 0; i < STEPS; i++) {
+          var d = document.createElement('div');
+          var size = 5 + i * 1.5;
+          d.style.cssText = 'width:calc('+size+' * var(--cu));height:calc('+size+' * var(--cu));border-radius:50%;background:#fff;cursor:pointer;transition:background 0.15s;flex-shrink:0;';
+          d.dataset.idx = i;
+          d.addEventListener('click', (function(idx) {
+            return function() { setDot(idx); };
+          })(i));
+          dotsWrap.appendChild(d);
+          dots.push(d);
+        }
+
+        function setDot(idx) {
+          idx = Math.max(0, Math.min(STEPS - 1, idx));
+          currentIdx = idx;
+          var z = MIN + (idx / (STEPS - 1)) * (MAX - MIN);
+          window.cameraZoom = z;
           video.style.transform = 'scaleX(-1) scale(' + z + ')';
           if (videoRight) videoRight.style.transform = 'scaleX(-1) scale(1.06)';
           valLabel.textContent = z.toFixed(2).replace(/\.?0+$/, '') + '×';
-          var pct = ((z - 1) / 2) * 100;
-          slider.style.background = 'linear-gradient(to right, #111 ' + pct + '%, #ccc ' + pct + '%)';
+          dots.forEach(function(d, i) {
+            d.style.background = i <= idx ? '#fe6c48' : '#ffffff';
+          });
         }
 
-        slider.addEventListener('input', function() {
-          applyZoom(parseFloat(this.value));
-        });
+        function idxFromX(clientX) {
+          var rect = dotsWrap.getBoundingClientRect();
+          var pct = (clientX - rect.left) / rect.width;
+          return Math.round(pct * (STEPS - 1));
+        }
 
-        // 더블클릭으로 리셋
-        slider.addEventListener('dblclick', function() {
-          this.value = 1;
-          applyZoom(1);
-        });
+        var dragging = false;
 
-        applyZoom(1);
+        dotsWrap.addEventListener('mousedown', function(e) {
+          dragging = true;
+          setDot(idxFromX(e.clientX));
+        });
+        document.addEventListener('mousemove', function(e) {
+          if (dragging) setDot(idxFromX(e.clientX));
+        });
+        document.addEventListener('mouseup', function() { dragging = false; });
+
+        dotsWrap.addEventListener('touchstart', function(e) {
+          e.preventDefault();
+          setDot(idxFromX(e.touches[0].clientX));
+        }, { passive: false });
+        dotsWrap.addEventListener('touchmove', function(e) {
+          e.preventDefault();
+          setDot(idxFromX(e.touches[0].clientX));
+        }, { passive: false });
+
+        setDot(0);
       })();
 
       function toggleGuide(btn) {
@@ -270,7 +306,6 @@
     <script src="camera.js"></script>
     <script src="camera-text-filter.js"></script>
     <script src="camera-sticker-filter.js"></script>
-    <script src="scale.js" defer></script>
     <script src="cursor.js" defer></script>
     <script src="help.js" defer></script>
   <script src="sound.js" defer></script>
