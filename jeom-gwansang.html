@@ -2,6 +2,7 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>점과 관상 | DOT SHIFT</title>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
     <link
@@ -9,6 +10,7 @@
       href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
     />
     <link rel="stylesheet" href="nav.css" />
+    <link rel="stylesheet" href="base.css" />
     <style>
       *,
       *::before,
@@ -19,17 +21,20 @@
       }
       body {
         font-family: 'Pretendard', sans-serif;
-        overflow: hidden;
-        width: 100vw;
-        height: 100vh;
         background: #e9f056;
       }
+      /* 1920×1080 구성을 화면에 맞춰 비례 축소/확대 (디자인 1px = var(--gu)).
+         기본은 화면 폭 기준(낮은 화면은 세로 스크롤). 16:10 처럼 상대적으로 높은 화면은
+         세로를 채우도록 최대 1.2배까지 키우고 좌우를 균등하게 잘라낸다. */
+      /* 넘친 좌우는 body 가 잘라냄 (html 에 overflow 를 두어 body 의 clip 이 화면으로 넘어가지 않게) */
+      html { overflow-x: hidden; }
+      body.rwd { overflow-x: clip; }
       .jeomPage {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 1920px;
-        height: 1080px;
+        --gu: min(max(100vw / 1920, 100dvh / 1080), 100vw / 1600);
+        position: relative;
+        width: calc(1920 * var(--gu));
+        height: calc(1080 * var(--gu));
+        margin-left: calc((100vw - 1920 * var(--gu)) / 2);
         overflow: hidden;
       }
       /* 화살표+텍스트 컨테이너 */
@@ -48,29 +53,29 @@
       .jr img {
         display: block;
         max-width: none;
-        height: 22.092px;
+        height: calc(22.092 * var(--gu));
       }
       /* 독립 텍스트 레이블 */
       .jt {
         position: absolute;
         font-family: 'Pretendard', sans-serif;
         font-weight: 400;
-        font-size: 20px;
+        font-size: calc(20 * var(--gu));
         color: #f84f25;
         white-space: nowrap;
-        line-height: 44px;
+        line-height: calc(44 * var(--gu));
         transform-origin: left center;
-        text-shadow: 0 0 6px rgba(255,255,255,0.9), 0 0 14px rgba(255,255,255,0.7), 0 0 24px rgba(255,255,255,0.5);
+        text-shadow: 0 0 calc(6 * var(--gu)) rgba(255,255,255,0.9), 0 0 calc(14 * var(--gu)) rgba(255,255,255,0.7), 0 0 calc(24 * var(--gu)) rgba(255,255,255,0.5);
       }
       .jr img {
-        filter: drop-shadow(0 0 5px rgba(255,255,255,0.8)) drop-shadow(0 0 12px rgba(255,255,255,0.5));
+        filter: drop-shadow(0 0 calc(5 * var(--gu)) rgba(255,255,255,0.8)) drop-shadow(0 0 calc(12 * var(--gu)) rgba(255,255,255,0.5));
       }
       /* ── 점 (Figma: 78×76px 오렌지 타원) ── */
       .jeomDot {
         position: absolute;
-        width: 48px;
-        height: 46px;
-        border-radius: 100px;
+        width: calc(48 * var(--gu));
+        height: calc(46 * var(--gu));
+        border-radius: calc(100 * var(--gu));
         background: #f84f25;
         border: 1px solid #000;
         cursor: pointer;
@@ -79,23 +84,23 @@
         display: flex;
         align-items: center;
         justify-content: flex-start;
-        padding: 0 14px;
+        padding: 0 calc(14 * var(--gu));
         transform-origin: left center;
         transition: width 0.4s cubic-bezier(0.4,0,0.2,1),
                     border-radius 0.4s cubic-bezier(0.4,0,0.2,1);
       }
       .jeomDot.active { outline: 1px solid #000; }
       .jeomDot.expanded {
-        border-radius: 50px;
+        border-radius: calc(50 * var(--gu));
       }
       .dot-label {
         opacity: 0;
         white-space: nowrap;
         font-family: 'Pretendard', sans-serif;
         font-weight: 600;
-        font-size: 17px;
+        font-size: calc(17 * var(--gu));
         color: #fff;
-        margin-left: 10px;
+        margin-left: calc(10 * var(--gu));
         transition: opacity 0.2s 0.2s;
         pointer-events: none;
         flex-shrink: 0;
@@ -105,12 +110,12 @@
       /* ── 상세 패널 ── */
       .detail-panel {
         position: absolute;
-        right: 162px;
+        right: calc(162 * var(--gu));
         top: 50%;
         transform: translateY(-50%);
-        width: 600px;
+        width: calc(600 * var(--gu));
         height: auto;
-        min-height: 560px;
+        min-height: calc(560 * var(--gu));
         background: rgba(255, 255, 255, 0.9);
         outline: 1px solid #000;
         overflow: hidden;
@@ -125,11 +130,11 @@
       }
       .dp-portrait {
         position: absolute;
-        right: -1px;
-        top: calc(50% + 62px);
+        right: calc(-1 * var(--gu));
+        top: calc(50% + calc(62 * var(--gu)));
         transform: translateY(-50%);
-        width: 330px;
-        height: 893px;
+        width: calc(330 * var(--gu));
+        height: calc(893 * var(--gu));
         overflow: hidden;
       }
       .dp-portrait img {
@@ -143,10 +148,10 @@
       }
       .dp-dots {
         position: absolute;
-        right: -15px;
-        top: 72px;
-        width: 49px;
-        height: 9px;
+        right: calc(-15 * var(--gu));
+        top: calc(72 * var(--gu));
+        width: calc(49 * var(--gu));
+        height: calc(9 * var(--gu));
       }
       .dp-dots img {
         width: 100%;
@@ -162,39 +167,39 @@
       }
       .dp-sub {
         position: absolute;
-        left: 29px;
-        top: 22px;
+        left: calc(29 * var(--gu));
+        top: calc(22 * var(--gu));
         transform: translateY(-50%);
         font-family: 'Pretendard', sans-serif;
         font-weight: 600;
-        font-size: 22px;
+        font-size: calc(22 * var(--gu));
         color: #000;
         white-space: nowrap;
-        line-height: 44px;
+        line-height: calc(44 * var(--gu));
       }
       .dp-title {
         position: absolute;
-        left: 29px;
-        top: 82.5px;
+        left: calc(29 * var(--gu));
+        top: calc(82.5 * var(--gu));
         transform: translateY(-50%);
         font-family: 'Pretendard', sans-serif;
         font-weight: 600;
-        font-size: 32px;
+        font-size: calc(32 * var(--gu));
         color: #ea5c3a;
         white-space: nowrap;
-        line-height: 44px;
+        line-height: calc(44 * var(--gu));
       }
       .dp-body {
         position: absolute;
-        left: 29px;
-        top: 155px;
-        right: 29px;
-        bottom: 32px;
+        left: calc(29 * var(--gu));
+        top: calc(155 * var(--gu));
+        right: calc(29 * var(--gu));
+        bottom: calc(32 * var(--gu));
         font-family: 'Pretendard', sans-serif;
         font-weight: 500;
-        font-size: 20px;
+        font-size: calc(20 * var(--gu));
         color: #000;
-        line-height: 32px;
+        line-height: calc(32 * var(--gu));
         overflow-y: auto;
       }
       .dp-body p {
@@ -205,13 +210,13 @@
         bottom: 0;
         left: 0;
         right: 0;
-        height: 64px;
+        height: calc(64 * var(--gu));
         background: transparent;
         border: none;
         border-top: 1px solid #000;
         font-family: 'Pretendard', sans-serif;
         font-weight: 500;
-        font-size: 26px;
+        font-size: calc(26 * var(--gu));
         color: #000;
         cursor: pointer;
         width: 100%;
@@ -228,21 +233,21 @@
       }
     </style>
   </head>
-  <body>
+  <body class="rwd">
     <nav class="topNav">
       <a class="navLeft" href="index.html">PROJECT: DOT SHIFT</a>
       <span class="navRight">Everything starts from a dot</span>
     </nav>
 
-    <div class="jeomPage page-scale">
+    <div class="jeomPage">
       <!-- 배경 -->
       <div
         style="
           position: absolute;
-          left: -817px;
-          top: -428px;
-          width: 3574px;
-          height: 2012px;
+          left: calc(-817 * var(--gu));
+          top: calc(-428 * var(--gu));
+          width: calc(3574 * var(--gu));
+          height: calc(2012 * var(--gu));
         "
       >
         <img
@@ -265,142 +270,142 @@
         <!-- 1: 관상은 꼴을 보는 것 (16.02°) -->
         <div
           class="ja"
-          style="left: 198.78px; top: 109.69px; width: 208.061px; height: 59.745px"
+          style="left: calc(198.78 * var(--gu)); top: calc(109.69 * var(--gu)); width: calc(208.061 * var(--gu)); height: calc(59.745 * var(--gu))"
         >
           <div class="jr" style="transform: rotate(16.02deg)">
-            <img src="images/jeom/arrow-17.png" style="width: 212px; filter: none" />
+            <img src="images/jeom/arrow-17.png" style="width: calc(212 * var(--gu)); filter: none" />
           </div>
         </div>
         <!-- 2: 관상은 과학이다! (159.72°) -->
         <div
           class="ja"
-          style="left: 372.21px; top: 250.8px; width: 203.055px; height: 75.017px"
+          style="left: calc(372.21 * var(--gu)); top: calc(250.8 * var(--gu)); width: calc(203.055 * var(--gu)); height: calc(75.017 * var(--gu))"
         >
           <div class="jr" style="transform: rotate(159.72deg)">
-            <img src="images/jeom/arrow-17.png" style="width: 212px; filter: none" />
+            <img src="images/jeom/arrow-17.png" style="width: calc(212 * var(--gu)); filter: none" />
           </div>
         </div>
         <!-- 3: 분수에 맞게 살아라? (0°) -->
         <div
           class="ja"
-          style="left: 198.78px; top: 400.3px; width: 216.469px; height: 22.092px"
+          style="left: calc(198.78 * var(--gu)); top: calc(400.3 * var(--gu)); width: calc(216.469 * var(--gu)); height: calc(22.092 * var(--gu))"
         >
           <div class="jr" style="transform: rotate(0deg)">
-            <img src="images/jeom/arrow-17.png" style="width: 212px; filter: drop-shadow(0 0 5px rgba(0,0,0,0.8)) drop-shadow(0 0 12px rgba(0,0,0,0.5))" />
+            <img src="images/jeom/arrow-17.png" style="width: calc(212 * var(--gu)); filter: drop-shadow(0 0 calc(5 * var(--gu)) rgba(0,0,0,0.8)) drop-shadow(0 0 calc(12 * var(--gu)) rgba(0,0,0,0.5))" />
           </div>
         </div>
         <!-- 4: 그릇보다 큰 복은 오래가지 않는다 (81.09°) -->
         <div
           class="ja"
-          style="left: 645.52px; top: 428.89px; width: 33.529px; height: 213.856px"
+          style="left: calc(645.52 * var(--gu)); top: calc(428.89 * var(--gu)); width: calc(33.529 * var(--gu)); height: calc(213.856 * var(--gu))"
         >
           <div class="jr" style="transform: rotate(64deg)">
-            <img src="images/jeom/arrow-17.png" style="width: 306px" />
+            <img src="images/jeom/arrow-17.png" style="width: calc(306 * var(--gu))" />
           </div>
         </div>
         <!-- 5: 인간 = 소우주? (-22.24°) -->
         <div
           class="ja"
-          style="left: 865.91px; top: 823.19px; width: 200.37px; height: 81.918px"
+          style="left: calc(865.91 * var(--gu)); top: calc(823.19 * var(--gu)); width: calc(200.37 * var(--gu)); height: calc(81.918 * var(--gu))"
         >
           <div class="jr" style="transform: rotate(-23deg)">
-            <img src="images/jeom/arrow-17.png" style="width: 212px" />
+            <img src="images/jeom/arrow-17.png" style="width: calc(212 * var(--gu))" />
           </div>
         </div>
         <!-- 6: 자연과 신체의 대응체계 (上) (-102.29°) -->
         <div
           class="ja"
-          style="left: 1168.68px; top: 543.1px; width: 46.081px; height: 211.507px"
+          style="left: calc(1168.68 * var(--gu)); top: calc(543.1 * var(--gu)); width: calc(46.081 * var(--gu)); height: calc(211.507 * var(--gu))"
         >
           <div class="jr" style="transform: rotate(-102.29deg)">
-            <img src="images/jeom/arrow-17.png" style="width: 266px; filter: none" />
+            <img src="images/jeom/arrow-17.png" style="width: calc(266 * var(--gu)); filter: none" />
           </div>
         </div>
         <!-- 7: 자연과 신체의 대응체계 (下) (-10.22°) -->
         <div
           class="ja"
-          style="left: 1134.41px; top: 212.73px; width: 213.034px; height: 38.408px"
+          style="left: calc(1134.41 * var(--gu)); top: calc(212.73 * var(--gu)); width: calc(213.034 * var(--gu)); height: calc(38.408 * var(--gu))"
         >
           <div class="jr" style="transform: rotate(-10.22deg)">
-            <img src="images/jeom/arrow-17.png" style="width: 266px; filter: drop-shadow(0 0 5px rgba(0,0,0,0.8)) drop-shadow(0 0 12px rgba(0,0,0,0.5))" />
+            <img src="images/jeom/arrow-17.png" style="width: calc(266 * var(--gu)); filter: drop-shadow(0 0 calc(5 * var(--gu)) rgba(0,0,0,0.8)) drop-shadow(0 0 calc(12 * var(--gu)) rgba(0,0,0,0.5))" />
           </div>
         </div>
         <!-- 8: 복점? 흉점? (103.7°) -->
         <div
           class="ja"
-          style="left: 1590.14px; top: 183.27px; width: 51.279px; height: 210.307px"
+          style="left: calc(1590.14 * var(--gu)); top: calc(183.27 * var(--gu)); width: calc(51.279 * var(--gu)); height: calc(210.307 * var(--gu))"
         >
           <div class="jr" style="transform: rotate(103.7deg)">
-            <img src="images/jeom/arrow-17.png" style="width: 212px; filter: drop-shadow(0 0 5px rgba(0,0,0,0.8)) drop-shadow(0 0 12px rgba(0,0,0,0.5))" />
+            <img src="images/jeom/arrow-17.png" style="width: calc(212 * var(--gu)); filter: drop-shadow(0 0 calc(5 * var(--gu)) rgba(0,0,0,0.8)) drop-shadow(0 0 calc(12 * var(--gu)) rgba(0,0,0,0.5))" />
           </div>
         </div>
         <!-- 9: 관상은 끊임없이 변한다 (54.84°) -->
         <div
           class="ja"
-          style="left: 1565.97px; top: 517.46px; width: 124.66px; height: 176.971px"
+          style="left: calc(1565.97 * var(--gu)); top: calc(517.46 * var(--gu)); width: calc(124.66 * var(--gu)); height: calc(176.971 * var(--gu))"
         >
           <div class="jr" style="transform: rotate(54.84deg)">
-            <img src="images/jeom/arrow-17.png" style="width: 231px; filter: none" />
+            <img src="images/jeom/arrow-17.png" style="width: calc(231 * var(--gu)); filter: none" />
           </div>
         </div>
 
         <!-- ── 텍스트 레이블 9개 (Figma 좌표) ── -->
         <div
           class="jt"
-          style="left: 412px; top: 148px; transform: rotate(16.02deg); text-shadow: none;"
+          style="left: calc(412 * var(--gu)); top: calc(148 * var(--gu)); transform: rotate(16.02deg); text-shadow: none;"
         >관상은 꼴을 보는 것</div>
         <div
           class="jt"
-          style="left: 240px; top: 353px; transform: rotate(159.72deg) scaleX(-1) scaleY(-1); text-shadow: none;"
+          style="left: calc(240 * var(--gu)); top: calc(353 * var(--gu)); transform: rotate(159.72deg) scaleX(-1) scaleY(-1); text-shadow: none;"
         >관상은 과학이다!</div>
         <div
           class="jt"
-          style="left: 420px; top: 389px; transform: rotate(0deg); text-shadow: 0 0 6px rgba(0,0,0,1.0), 0 0 14px rgba(0,0,0,0.9);"
+          style="left: calc(420 * var(--gu)); top: calc(389 * var(--gu)); transform: rotate(0deg); text-shadow: 0 0 calc(6 * var(--gu)) rgba(0,0,0,1.0), 0 0 calc(14 * var(--gu)) rgba(0,0,0,0.9);"
         >분수에 맞게 살아라?</div>
         <div
           class="jt"
-          style="left: 732px; top: 658px; transform: rotate(64deg);"
+          style="left: calc(732 * var(--gu)); top: calc(658 * var(--gu)); transform: rotate(64deg);"
         >그릇보다 큰 복은 오래가지 않는다</div>
         <div
           class="jt"
-          style="left: 1070px; top: 798px; transform: rotate(-23deg);"
+          style="left: calc(1070 * var(--gu)); top: calc(798 * var(--gu)); transform: rotate(-23deg);"
         >인간 = 소우주?</div>
         <div
           class="jt"
-          style="left: 1162px; top: 490px; transform: rotate(-102.29deg); text-shadow: none;"
+          style="left: calc(1162 * var(--gu)); top: calc(490 * var(--gu)); transform: rotate(-102.29deg); text-shadow: none;"
         >자연과 신체의 대응체계 (上)</div>
         <div
           class="jt"
-          style="left: 1379px; top: 185px; transform: rotate(-10.22deg); text-shadow: 0 0 6px rgba(0,0,0,1.0), 0 0 14px rgba(0,0,0,0.9);"
+          style="left: calc(1379 * var(--gu)); top: calc(185 * var(--gu)); transform: rotate(-10.22deg); text-shadow: 0 0 calc(6 * var(--gu)) rgba(0,0,0,1.0), 0 0 calc(14 * var(--gu)) rgba(0,0,0,0.9);"
         >자연과 신체의 대응체계 (下)</div>
         <div
           class="jt"
-          style="left: 1589px; top: 377px; transform: rotate(103.7deg); text-shadow: 0 0 6px rgba(0,0,0,1.0), 0 0 14px rgba(0,0,0,0.9);"
+          style="left: calc(1589 * var(--gu)); top: calc(377 * var(--gu)); transform: rotate(103.7deg); text-shadow: 0 0 calc(6 * var(--gu)) rgba(0,0,0,1.0), 0 0 calc(14 * var(--gu)) rgba(0,0,0,0.9);"
         >복점? 흉점?</div>
         <div
           class="jt"
-          style="left: 1699px; top: 684px; transform: rotate(54.84deg); text-shadow: none;"
+          style="left: calc(1699 * var(--gu)); top: calc(684 * var(--gu)); transform: rotate(54.84deg); text-shadow: none;"
         >관상은 끊임없이 변한다</div>
 
         <!-- ── 점 9개 (Figma 좌표, 클릭 시 패널) ── -->
         <!-- dot 1: 관상은 꼴을 보는 것 → 16.02° -->
-        <div class="jeomDot" style="left: 199px; top: 87px; transform: rotate(16.02deg);" onclick="openPanel('panel1', this)"><span class="dot-label">관상은 꼴을 보는 것</span></div>
+        <div class="jeomDot" style="left: calc(199 * var(--gu)); top: calc(87 * var(--gu)); transform: rotate(16.02deg);" onclick="openPanel('panel1', this)"><span class="dot-label">관상은 꼴을 보는 것</span></div>
         <!-- dot 2: 관상은 과학이다! → 159.72° -->
-        <div class="jeomDot" style="left: 575px; top: 228px; transform: rotate(159.72deg);" onclick="openPanel('panel2', this)"><span class="dot-label" style="display:inline-block;transform:rotate(180deg);">관상은 과학이다!</span></div>
+        <div class="jeomDot" style="left: calc(575 * var(--gu)); top: calc(228 * var(--gu)); transform: rotate(159.72deg);" onclick="openPanel('panel2', this)"><span class="dot-label" style="display:inline-block;transform:rotate(180deg);">관상은 과학이다!</span></div>
         <!-- dot 3: 분수에 맞게 살아라? → 0° -->
-        <div class="jeomDot" style="left: 199px; top: 388px; transform: rotate(0deg);" onclick="openPanel('panel3', this)"><span class="dot-label">분수에 맞게 살아라?</span></div>
+        <div class="jeomDot" style="left: calc(199 * var(--gu)); top: calc(388 * var(--gu)); transform: rotate(0deg);" onclick="openPanel('panel3', this)"><span class="dot-label">분수에 맞게 살아라?</span></div>
         <!-- dot 4: 그릇보다 큰 복은 → 81.09° -->
-        <div class="jeomDot" style="left: 594px; top: 374px; transform: rotate(64deg);" onclick="openPanel('panel4', this)"><span class="dot-label">그릇보다 큰 복은 오래가지 않는다</span></div>
+        <div class="jeomDot" style="left: calc(594 * var(--gu)); top: calc(374 * var(--gu)); transform: rotate(64deg);" onclick="openPanel('panel4', this)"><span class="dot-label">그릇보다 큰 복은 오래가지 않는다</span></div>
         <!-- dot 5: 인간=소우주? → -22.24° -->
-        <div class="jeomDot" style="left: 866px; top: 883px; transform: rotate(-23deg);" onclick="openPanel('panel5', this)"><span class="dot-label">인간 = 소우주?</span></div>
+        <div class="jeomDot" style="left: calc(866 * var(--gu)); top: calc(883 * var(--gu)); transform: rotate(-23deg);" onclick="openPanel('panel5', this)"><span class="dot-label">인간 = 소우주?</span></div>
         <!-- dot 6: 자연과 신체의 대응체계 上 → -102.29° -->
-        <div class="jeomDot" style="left: 1220px; top: 758px; transform: rotate(-102.29deg);" onclick="openPanel('panel6', this)"><span class="dot-label">자연과 신체의 대응체계 (上)</span></div>
+        <div class="jeomDot" style="left: calc(1220 * var(--gu)); top: calc(758 * var(--gu)); transform: rotate(-102.29deg);" onclick="openPanel('panel6', this)"><span class="dot-label">자연과 신체의 대응체계 (上)</span></div>
         <!-- dot 7: 자연과 신체의 대응체계 下 → -10.22° -->
-        <div class="jeomDot" style="left: 1108px; top: 233px; transform: rotate(-10.22deg);" onclick="openPanel('panel7', this)"><span class="dot-label" style="margin-top:-5px;">자연과 신체의 대응체계 (下)</span></div>
+        <div class="jeomDot" style="left: calc(1108 * var(--gu)); top: calc(233 * var(--gu)); transform: rotate(-10.22deg);" onclick="openPanel('panel7', this)"><span class="dot-label" style="margin-top:calc(-5 * var(--gu));">자연과 신체의 대응체계 (下)</span></div>
         <!-- dot 8: 복점? 흉점? → 103.7° -->
-        <div class="jeomDot" style="left: 1641px; top: 160px; transform: rotate(103.7deg);" onclick="openPanel('panel8', this)"><span class="dot-label">복점? 흉점?</span></div>
+        <div class="jeomDot" style="left: calc(1641 * var(--gu)); top: calc(160 * var(--gu)); transform: rotate(103.7deg);" onclick="openPanel('panel8', this)"><span class="dot-label">복점? 흉점?</span></div>
         <!-- dot 9: 관상은 끊임없이 변한다 → 54.84° -->
-        <div class="jeomDot" style="left: 1561px; top: 487px; transform: rotate(54.84deg);" onclick="openPanel('panel9', this)"><span class="dot-label">관상은 끊임없이 변한다</span></div>
+        <div class="jeomDot" style="left: calc(1561 * var(--gu)); top: calc(487 * var(--gu)); transform: rotate(54.84deg);" onclick="openPanel('panel9', this)"><span class="dot-label">관상은 끊임없이 변한다</span></div>
       </div>
       <!-- /content-layer -->
 
@@ -408,14 +413,14 @@
       <div
         class="detail-panel"
         id="panel5"
-        style="background:#fe6c48;outline:1px solid #000;isolation:isolate;min-height:0;height:273px;top:calc(50% + 200px);right:132px;"
+        style="background:#fe6c48;outline:1px solid #000;isolation:isolate;min-height:0;height:calc(273 * var(--gu));top:calc(50% + calc(200 * var(--gu)));right:calc(132 * var(--gu));"
       >
         <!-- 제목 -->
-        <div style="position:absolute;left:-1px;top:-1px;background:#e9f056;height:34px;padding:0 38px;display:flex;align-items:center;z-index:3;">
-          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:24px;color:#fe6c48;line-height:34px;white-space:nowrap;">인간 = 소우주?</span>
+        <div style="position:absolute;left:calc(-1 * var(--gu));top:calc(-1 * var(--gu));background:#e9f056;height:calc(34 * var(--gu));padding:0 calc(38 * var(--gu));display:flex;align-items:center;z-index:3;">
+          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:calc(24 * var(--gu));color:#fe6c48;line-height:calc(34 * var(--gu));white-space:nowrap;">인간 = 소우주?</span>
         </div>
         <!-- X 버튼 -->
-        <button onclick="closePanel('panel5')" style="position:absolute;right:-1px;top:-1px;width:80px;height:34px;background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:24px;color:#fe6c48;cursor:pointer;line-height:34px;text-align:center;z-index:3;">X</button>
+        <button onclick="closePanel('panel5')" style="position:absolute;right:calc(-1 * var(--gu));top:calc(-1 * var(--gu));width:calc(80 * var(--gu));height:calc(34 * var(--gu));background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:calc(24 * var(--gu));color:#fe6c48;cursor:pointer;line-height:calc(34 * var(--gu));text-align:center;z-index:3;">X</button>
         <!-- 레이어 1: 흰 줄 -->
         <div
           style="position: absolute; inset: 0; z-index: 0; pointer-events: none"
@@ -423,50 +428,50 @@
           <div
             style="
               position: absolute;
-              left: 32px;
-              top: 88px;
-              width: 507px;
-              height: 27px;
+              left: calc(32 * var(--gu));
+              top: calc(88 * var(--gu));
+              width: calc(507 * var(--gu));
+              height: calc(27 * var(--gu));
               background: #fff;
             "
           ></div>
           <div
             style="
               position: absolute;
-              left: 32px;
-              top: 120px;
-              width: 507px;
-              height: 27px;
+              left: calc(32 * var(--gu));
+              top: calc(120 * var(--gu));
+              width: calc(507 * var(--gu));
+              height: calc(27 * var(--gu));
               background: #fff;
             "
           ></div>
           <div
             style="
               position: absolute;
-              left: 32px;
-              top: 152px;
-              width: 507px;
-              height: 27px;
+              left: calc(32 * var(--gu));
+              top: calc(152 * var(--gu));
+              width: calc(507 * var(--gu));
+              height: calc(27 * var(--gu));
               background: #fff;
             "
           ></div>
           <div
             style="
               position: absolute;
-              left: 32px;
-              top: 184px;
-              width: 507px;
-              height: 27px;
+              left: calc(32 * var(--gu));
+              top: calc(184 * var(--gu));
+              width: calc(507 * var(--gu));
+              height: calc(27 * var(--gu));
               background: #fff;
             "
           ></div>
           <div
             style="
               position: absolute;
-              left: 32px;
-              top: 216px;
-              width: 380px;
-              height: 27px;
+              left: calc(32 * var(--gu));
+              top: calc(216 * var(--gu));
+              width: calc(380 * var(--gu));
+              height: calc(27 * var(--gu));
               background: #fff;
             "
           ></div>
@@ -474,24 +479,24 @@
         <!-- 레이어 2: 노란 점들 -->
         <div style="position:absolute;inset:0;z-index:1;pointer-events:none;">
           <!-- 소우주 -->
-          <div style="position:absolute;left:52px;top:112px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(52 * var(--gu));top:calc(112 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- 이미 존재하는 자연 -->
-          <div style="position:absolute;left:70px;top:144px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(70 * var(--gu));top:calc(144 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- 대입 -->
-          <div style="position:absolute;left:298px;top:144px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(298 * var(--gu));top:calc(144 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
         </div>
         <!-- 레이어 3: 텍스트 -->
         <div
           style="
             position: absolute;
-            top: 88px;
-            left: 34px;
-            width: 504px;
+            top: calc(88 * var(--gu));
+            left: calc(34 * var(--gu));
+            width: calc(504 * var(--gu));
             font-family: 'Pretendard', sans-serif;
             font-weight: 500;
-            font-size: 20px;
+            font-size: calc(20 * var(--gu));
             color: #000;
-            line-height: 32px;
+            line-height: calc(32 * var(--gu));
             z-index: 2;
           "
         >
@@ -509,157 +514,157 @@
       <div
         class="detail-panel"
         id="panel2"
-        style="background: #fe6c48; outline: 1px solid #000; isolation: isolate; min-height: 0; height: 594px; right: 662px; top: calc(50% - 30px);"
+        style="background: #fe6c48; outline: 1px solid #000; isolation: isolate; min-height: 0; height: calc(594 * var(--gu)); right: calc(662 * var(--gu)); top: calc(50% - calc(30 * var(--gu)));"
       >
         <!-- 제목 프레임: height 32px 고정, 좌우 38px 패딩 -->
-        <div style="position:absolute;left:-1px;top:-1px;background:#e9f056;height:34px;padding:0 38px;display:flex;align-items:center;z-index:3;">
-          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:24px;color:#fe6c48;line-height:34px;white-space:nowrap;">관상은 과학이다!</span>
+        <div style="position:absolute;left:calc(-1 * var(--gu));top:calc(-1 * var(--gu));background:#e9f056;height:calc(34 * var(--gu));padding:0 calc(38 * var(--gu));display:flex;align-items:center;z-index:3;">
+          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:calc(24 * var(--gu));color:#fe6c48;line-height:calc(34 * var(--gu));white-space:nowrap;">관상은 과학이다!</span>
         </div>
         <button
           onclick="closePanel('panel2')"
-          style="position:absolute;right:-1px;top:-1px;width:80px;height:34px;background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:24px;color:#fe6c48;cursor:pointer;line-height:34px;text-align:center;z-index:3;"
+          style="position:absolute;right:calc(-1 * var(--gu));top:calc(-1 * var(--gu));width:calc(80 * var(--gu));height:calc(34 * var(--gu));background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:calc(24 * var(--gu));color:#fe6c48;cursor:pointer;line-height:calc(34 * var(--gu));text-align:center;z-index:3;"
         >X</button>
         <!-- 레이어 1: 흰 줄 (Figma +1px) -->
         <div style="position:absolute;inset:0;z-index:0;pointer-events:none;">
-          <div style="position:absolute;left:32px;top:89px;width:507px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:121px;width:364px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:185px;width:497px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:217px;width:492px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:249px;width:503px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:281px;width:503px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:313px;width:492px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:345px;width:443px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:409px;width:492px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:441px;width:497px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:473px;width:497px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:505px;width:491px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:537px;width:81px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(89 * var(--gu));width:calc(507 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(121 * var(--gu));width:calc(364 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(185 * var(--gu));width:calc(497 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(217 * var(--gu));width:calc(492 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(249 * var(--gu));width:calc(503 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(281 * var(--gu));width:calc(503 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(313 * var(--gu));width:calc(492 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(345 * var(--gu));width:calc(443 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(409 * var(--gu));width:calc(492 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(441 * var(--gu));width:calc(497 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(473 * var(--gu));width:calc(497 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(505 * var(--gu));width:calc(491 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(537 * var(--gu));width:calc(81 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
         </div>
         <!-- 레이어 2: 노란 점들 (Figma 정확한 수치) -->
         <div style="position:absolute;inset:0;z-index:1;pointer-events:none;">
           <!-- 과학 -->
-          <div style="position:absolute;left:91px;top:81px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(91 * var(--gu));top:calc(81 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- 삶의 / 궤적 -->
-          <div style="position:absolute;left:100px;top:241px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
-          <div style="position:absolute;left:134px;top:241px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(100 * var(--gu));top:calc(241 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(134 * var(--gu));top:calc(241 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- 빅데이터가 -->
-          <div style="position:absolute;left:264px;top:305px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
-          <div style="position:absolute;left:298px;top:305px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(264 * var(--gu));top:calc(305 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(298 * var(--gu));top:calc(305 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- 정보 -->
-          <div style="position:absolute;left:25px;top:497px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(25 * var(--gu));top:calc(497 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- 과부화 -->
-          <div style="position:absolute;left:55px;top:497px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
-          <div style="position:absolute;left:89px;top:497px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
-          <div style="position:absolute;left:293px;top:497px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
-          <div style="position:absolute;left:327px;top:497px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
-          <div style="position:absolute;left:361px;top:497px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(55 * var(--gu));top:calc(497 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(89 * var(--gu));top:calc(497 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(293 * var(--gu));top:calc(497 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(327 * var(--gu));top:calc(497 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(361 * var(--gu));top:calc(497 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
         </div>
         <!-- 레이어 3: 텍스트 (흰줄 기준 top:88) -->
-        <div style="position:absolute;top:88px;left:34px;width:504px;z-index:2;font-family:'Pretendard',sans-serif;font-weight:500;font-size:20px;color:#000;line-height:32px;">
+        <div style="position:absolute;top:calc(88 * var(--gu));left:calc(34 * var(--gu));width:calc(504 * var(--gu));z-index:2;font-family:'Pretendard',sans-serif;font-weight:500;font-size:calc(20 * var(--gu));color:#000;line-height:calc(32 * var(--gu));">
           <p style="margin:0;">'관상은 과학이다'라는 밈은 외모로 성향을 예측하는 경험칙을 재치 있게 표현한 말일 뿐, 학술적 과학은 아니다. </p>
-          <p style="margin:0;line-height:32px;">&nbsp;</p>
+          <p style="margin:0;line-height:calc(32 * var(--gu));">&nbsp;</p>
           <p style="margin:0;">관상이 타고난 생김새로 운명이나 성격을 판단하는 것이라면, 인상은 대상으로부터 느껴지는 분위기와 느낌을 뜻한다. 관상에서 말하는 "삶의 궤적이 얼굴에 남는다"는 말도 관상보다는 후천적인 '인상'에 가깝다. 사람은 환경, 생각, 표정 습관에 따라 얼굴 근육과 주름이 변하며, 이처럼 축적된 빅데이터가 인상으로 드러나 성격을 직관적으로 읽어낼 수 있는 경우들이 발생하는 것이다. </p>
-          <p style="margin:0;line-height:32px;">&nbsp;</p>
+          <p style="margin:0;line-height:calc(32 * var(--gu));">&nbsp;</p>
           <p style="margin:0;">관상은 재미있는 개념 중 하나지만 타고난 생김새가 미래를 결정한다는 운명론적 해석은 경계해야 할 필요가 있다. 현대의 관상이란 사람의 무한한 가능성을 유효한 범위로 그룹화해 타인 파악 시 정보 과부하를 줄여주는 효율적인 경험적 도구로 해석하는 것이 적절하다.</p>
         </div>
       </div>
 
       <!-- ── 상세 패널: 분수에 맞게 살아라? ── -->
-      <div class="detail-panel" id="panel3" style="background:#fe6c48;outline:1px solid #000;isolation:isolate;min-height:0;height:626px;right:662px;">
-        <div style="position:absolute;left:-1px;top:-1px;background:#e9f056;height:34px;padding:0 38px;display:flex;align-items:center;z-index:3;">
-          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:24px;color:#fe6c48;line-height:34px;white-space:nowrap;">분수에 맞게 살아라?</span>
+      <div class="detail-panel" id="panel3" style="background:#fe6c48;outline:1px solid #000;isolation:isolate;min-height:0;height:calc(626 * var(--gu));right:calc(662 * var(--gu));">
+        <div style="position:absolute;left:calc(-1 * var(--gu));top:calc(-1 * var(--gu));background:#e9f056;height:calc(34 * var(--gu));padding:0 calc(38 * var(--gu));display:flex;align-items:center;z-index:3;">
+          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:calc(24 * var(--gu));color:#fe6c48;line-height:calc(34 * var(--gu));white-space:nowrap;">분수에 맞게 살아라?</span>
         </div>
-        <button onclick="closePanel('panel3')" style="position:absolute;right:-1px;top:-1px;width:80px;height:34px;background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:24px;color:#fe6c48;cursor:pointer;line-height:34px;text-align:center;z-index:3;">X</button>
+        <button onclick="closePanel('panel3')" style="position:absolute;right:calc(-1 * var(--gu));top:calc(-1 * var(--gu));width:calc(80 * var(--gu));height:calc(34 * var(--gu));background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:calc(24 * var(--gu));color:#fe6c48;cursor:pointer;line-height:calc(34 * var(--gu));text-align:center;z-index:3;">X</button>
         <!-- 레이어 1: 흰 줄 (+1px) — P1:7줄 P2:4줄 P3:3줄 -->
         <div style="position:absolute;inset:0;z-index:0;pointer-events:none;">
           <!-- P1: 7줄 -->
-          <div style="position:absolute;left:32px;top:89px;width:500px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:121px;width:497px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:153px;width:501px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:185px;width:492px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:217px;width:507px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:249px;width:497px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:281px;width:235px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(89 * var(--gu));width:calc(500 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(121 * var(--gu));width:calc(497 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(153 * var(--gu));width:calc(501 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(185 * var(--gu));width:calc(492 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(217 * var(--gu));width:calc(507 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(249 * var(--gu));width:calc(497 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(281 * var(--gu));width:calc(235 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
           <!-- P2: 4줄 (gap at 313) -->
-          <div style="position:absolute;left:32px;top:345px;width:496px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:377px;width:502px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:409px;width:497px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:441px;width:480px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(345 * var(--gu));width:calc(496 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(377 * var(--gu));width:calc(502 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(409 * var(--gu));width:calc(497 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(441 * var(--gu));width:calc(480 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
           <!-- P3: 3줄 (gap at 473) -->
-          <div style="position:absolute;left:32px;top:505px;width:504px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:537px;width:497px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:569px;width:174px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(505 * var(--gu));width:calc(504 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(537 * var(--gu));width:calc(497 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(569 * var(--gu));width:calc(174 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
         </div>
         <!-- 레이어 2: 노란 원 (격·복·그릇 각 등장마다) -->
         <div style="position:absolute;inset:0;z-index:1;pointer-events:none;">
           <!-- P1 line1: 格 -->
-          <div style="position:absolute;left:175px;top:81px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(175 * var(--gu));top:calc(81 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- P1 line1: 복 -->
-          <div style="position:absolute;left:207px;top:81px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(207 * var(--gu));top:calc(81 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- P1 line1: 그릇 -->
-          <div style="position:absolute;left:237px;top:81px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(237 * var(--gu));top:calc(81 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- P1 line2: 格은 -->
-          <div style="position:absolute;left:444px;top:113px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(444 * var(--gu));top:calc(113 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- P1 line4: 복은 -->
-          <div style="position:absolute;left:366px;top:177px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(366 * var(--gu));top:calc(177 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- P1 line6: 그릇은 -->
-          <div style="position:absolute;left:165px;top:241px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(165 * var(--gu));top:calc(241 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- P2 line2: 그릇의 -->
-          <div style="position:absolute;left:215px;top:369px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(215 * var(--gu));top:calc(369 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- P2 line2: 복의 -->
-          <div style="position:absolute;left:320px;top:369px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(320 * var(--gu));top:calc(369 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
         </div>
         <!-- 레이어 3: 텍스트 -->
-        <div style="position:absolute;top:88px;left:34px;width:504px;z-index:2;font-family:'Pretendard',sans-serif;font-weight:500;font-size:20px;color:#000;line-height:32px;">
+        <div style="position:absolute;top:calc(88 * var(--gu));left:calc(34 * var(--gu));width:calc(504 * var(--gu));z-index:2;font-family:'Pretendard',sans-serif;font-weight:500;font-size:calc(20 * var(--gu));color:#000;line-height:calc(32 * var(--gu));">
           <p style="margin:0;">관상학에서 말하는 '격·복·그릇'은 사람이 살아가며 마주하는 기회와 그것을 감당하는 능력의 관계를 설명하는 개념이다. 격은 귀함과 천함을 나누는 기준으로, 어떤 환경과 역할 속에서 살아가게 되는지를 결정짓는 구조적 조건으로 작용한다. 복은 유복함과 박복함을 드러내는 운으로, 재물, 명예, 인간관계와 같은 다양한 형태로 나타난다. 그리고 그릇은 이러한 것들을 받아들이고 유지할 수 있는 내적 수용 능력을 의미한다.</p>
-          <p style="margin:0;line-height:32px;">&nbsp;</p>
+          <p style="margin:0;line-height:calc(32 * var(--gu));">&nbsp;</p>
           <p style="margin:0;">이 세 요소는 독립적으로 존재하는 것이 아니라 서로 긴밀하게 연결되어 작동한다. 특히, 그릇의 크기는 복의 지속 여부를 결정하는 중요한 기준이다. 감당할 수 있는 범위를 넘어선 복은 일시적으로는 획득될 수 있으나, 장기적으로 유지되기 어렵다는 관점이다.</p>
-          <p style="margin:0;line-height:32px;">&nbsp;</p>
+          <p style="margin:0;line-height:calc(32 * var(--gu));">&nbsp;</p>
           <p style="margin:0;">따라서 '분수에 맞게 살아야 한다'는 말은 단순한 도덕적 권고가 아니라, 자신의 수용 범위와 균형을 고려하여 삶을 유지해야 한다는 구조적 이해에 가깝다.</p>
         </div>
       </div>
 
       <!-- ── 상세 패널: 그릇보다 큰 복은 오래가지 않는다 ── -->
-      <div class="detail-panel" id="panel4" style="background:#fe6c48;outline:1px solid #000;isolation:isolate;min-height:0;height:434px;right:562px;top:calc(50% - 40px);">
-        <div style="position:absolute;left:-1px;top:-1px;background:#e9f056;height:34px;padding:0 38px;display:flex;align-items:center;z-index:3;">
-          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:24px;color:#fe6c48;line-height:34px;white-space:nowrap;">그릇보다 큰 복은 오래가지 않는다</span>
+      <div class="detail-panel" id="panel4" style="background:#fe6c48;outline:1px solid #000;isolation:isolate;min-height:0;height:calc(434 * var(--gu));right:calc(562 * var(--gu));top:calc(50% - calc(40 * var(--gu)));">
+        <div style="position:absolute;left:calc(-1 * var(--gu));top:calc(-1 * var(--gu));background:#e9f056;height:calc(34 * var(--gu));padding:0 calc(38 * var(--gu));display:flex;align-items:center;z-index:3;">
+          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:calc(24 * var(--gu));color:#fe6c48;line-height:calc(34 * var(--gu));white-space:nowrap;">그릇보다 큰 복은 오래가지 않는다</span>
         </div>
-        <button onclick="closePanel('panel4')" style="position:absolute;right:-1px;top:-1px;width:80px;height:34px;background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:24px;color:#fe6c48;cursor:pointer;line-height:34px;text-align:center;z-index:3;">X</button>
+        <button onclick="closePanel('panel4')" style="position:absolute;right:calc(-1 * var(--gu));top:calc(-1 * var(--gu));width:calc(80 * var(--gu));height:calc(34 * var(--gu));background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:calc(24 * var(--gu));color:#fe6c48;cursor:pointer;line-height:calc(34 * var(--gu));text-align:center;z-index:3;">X</button>
         <!-- 레이어 1: 흰 줄 (+1px) — P1:3줄 P2:3줄 P3:2줄 -->
         <div style="position:absolute;inset:0;z-index:0;pointer-events:none;">
           <!-- P1: 3줄 -->
-          <div style="position:absolute;left:32px;top:89px;width:500px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:121px;width:497px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:153px;width:235px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(89 * var(--gu));width:calc(500 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(121 * var(--gu));width:calc(497 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(153 * var(--gu));width:calc(235 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
           <!-- P2: 3줄 (gap at 185) -->
-          <div style="position:absolute;left:32px;top:217px;width:501px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:249px;width:501px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:281px;width:230px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(217 * var(--gu));width:calc(501 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(249 * var(--gu));width:calc(501 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(281 * var(--gu));width:calc(230 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
           <!-- P3: 2줄 (gap at 313) -->
-          <div style="position:absolute;left:32px;top:345px;width:503px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:377px;width:405px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(345 * var(--gu));width:calc(503 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(377 * var(--gu));width:calc(405 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
         </div>
         <!-- 레이어 2: 노란 점들 -->
         <div style="position:absolute;inset:0;z-index:1;pointer-events:none;">
           <!-- '격·복·그릇' -->
-          <div style="position:absolute;left:26px;top:81px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
-          <div style="position:absolute;left:60px;top:81px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
-          <div style="position:absolute;left:94px;top:81px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(26 * var(--gu));top:calc(81 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(60 * var(--gu));top:calc(81 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(94 * var(--gu));top:calc(81 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- 조건 -->
-          <div style="position:absolute;left:239px;top:113px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(239 * var(--gu));top:calc(113 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- 관계 -->
-          <div style="position:absolute;left:410px;top:113px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(410 * var(--gu));top:calc(113 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- 다르다. -->
-          <div style="position:absolute;left:360px;top:209px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
-          <div style="position:absolute;left:394px;top:209px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
-          <div style="position:absolute;left:428px;top:209px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(360 * var(--gu));top:calc(209 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(394 * var(--gu));top:calc(209 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(428 * var(--gu));top:calc(209 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
         </div>
         <!-- 레이어 3: 텍스트 -->
-        <div style="position:absolute;top:88px;left:34px;width:504px;z-index:2;font-family:'Pretendard',sans-serif;font-weight:500;font-size:20px;color:#000;line-height:32px;">
+        <div style="position:absolute;top:calc(88 * var(--gu));left:calc(34 * var(--gu));width:calc(504 * var(--gu));z-index:2;font-family:'Pretendard',sans-serif;font-weight:500;font-size:calc(20 * var(--gu));color:#000;line-height:calc(32 * var(--gu));">
           <p style="margin:0;">'격·복·그릇'이라는 개념은 개인의 능력이나 자질을 절대적인 기준으로 평가하기보다, 주어진 조건과 그것을 다루는 방식 사이의 관계를 설명하는 데 목적이 있다.</p>
-          <p style="margin:0;line-height:32px;">&nbsp;</p>
+          <p style="margin:0;line-height:calc(32 * var(--gu));">&nbsp;</p>
           <p style="margin:0;">보통 격과 복은 함께 따르는 경우가 많지만 그릇은 다르다. 아무리 격과 복이 넘쳐도 그것을 담을 그릇이 작다면 그 사람의 격과 복은 모두 빠져나가 버리는 것이다.</p>
-          <p style="margin:0;line-height:32px;">&nbsp;</p>
+          <p style="margin:0;line-height:calc(32 * var(--gu));">&nbsp;</p>
           <p style="margin:0;">따라서 "그릇보다 큰 복은 오래 가지 않는다."라는 말은 격·복·그릇의 개념을 함축적으로 표현한 문장이라고 볼 수 있다.</p>
         </div>
       </div>
@@ -668,27 +673,27 @@
       <div
         class="detail-panel"
         id="panel1"
-        style="background:#fe6c48;width:600px;height:562px;min-height:0;outline:1px solid #000;right:auto;left:670px;top:190px;transform:none;isolation:isolate;"
+        style="background:#fe6c48;width:calc(600 * var(--gu));height:calc(562 * var(--gu));min-height:0;outline:1px solid #000;right:auto;left:calc(670 * var(--gu));top:calc(190 * var(--gu));transform:none;isolation:isolate;"
       >
-        <div style="position:absolute;left:-1px;top:-1px;background:#e9f056;height:34px;padding:0 38px;display:flex;align-items:center;z-index:3;">
-          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:24px;color:#fe6c48;line-height:34px;white-space:nowrap;">관상은 꼴을 보는 것</span>
+        <div style="position:absolute;left:calc(-1 * var(--gu));top:calc(-1 * var(--gu));background:#e9f056;height:calc(34 * var(--gu));padding:0 calc(38 * var(--gu));display:flex;align-items:center;z-index:3;">
+          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:calc(24 * var(--gu));color:#fe6c48;line-height:calc(34 * var(--gu));white-space:nowrap;">관상은 꼴을 보는 것</span>
         </div>
-        <button onclick="closePanel('panel1')" style="position:absolute;right:-1px;top:-1px;width:80px;height:34px;background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:24px;color:#fe6c48;cursor:pointer;line-height:34px;text-align:center;z-index:3;">X</button>
+        <button onclick="closePanel('panel1')" style="position:absolute;right:calc(-1 * var(--gu));top:calc(-1 * var(--gu));width:calc(80 * var(--gu));height:calc(34 * var(--gu));background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:calc(24 * var(--gu));color:#fe6c48;cursor:pointer;line-height:calc(34 * var(--gu));text-align:center;z-index:3;">X</button>
         <!-- 레이어 1: 흰 줄 (+1px) -->
         <div style="position:absolute;inset:0;z-index:0;pointer-events:none;">
-          <div style="position:absolute;left:32px;top:89px;width:507px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:121px;width:507px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:153px;width:349px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:217px;width:492px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:249px;width:492px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:281px;width:499px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:313px;width:499px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:345px;width:499px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:377px;width:492px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:409px;width:503px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:441px;width:497px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:473px;width:497px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:505px;width:65px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(89 * var(--gu));width:calc(507 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(121 * var(--gu));width:calc(507 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(153 * var(--gu));width:calc(349 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(217 * var(--gu));width:calc(492 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(249 * var(--gu));width:calc(492 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(281 * var(--gu));width:calc(499 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(313 * var(--gu));width:calc(499 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(345 * var(--gu));width:calc(499 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(377 * var(--gu));width:calc(492 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(409 * var(--gu));width:calc(503 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(441 * var(--gu));width:calc(497 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(473 * var(--gu));width:calc(497 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(505 * var(--gu));width:calc(65 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
         </div>
 
         <!-- 레이어 2: 노란 점들 -->
@@ -698,10 +703,10 @@
           <div
             style="
               position: absolute;
-              left: 342px;
-              top: 81px;
-              width: 45px;
-              height: 45px;
+              left: calc(342 * var(--gu));
+              top: calc(81 * var(--gu));
+              width: calc(45 * var(--gu));
+              height: calc(45 * var(--gu));
               border-radius: 50%;
               background: #e9f056;
               border: 0.3px solid #000;
@@ -710,10 +715,10 @@
           <div
             style="
               position: absolute;
-              left: 376px;
-              top: 81px;
-              width: 45px;
-              height: 45px;
+              left: calc(376 * var(--gu));
+              top: calc(81 * var(--gu));
+              width: calc(45 * var(--gu));
+              height: calc(45 * var(--gu));
               border-radius: 50%;
               background: #e9f056;
               border: 0.3px solid #000;
@@ -722,10 +727,10 @@
           <div
             style="
               position: absolute;
-              left: 154px;
-              top: 113px;
-              width: 45px;
-              height: 45px;
+              left: calc(154 * var(--gu));
+              top: calc(113 * var(--gu));
+              width: calc(45 * var(--gu));
+              height: calc(45 * var(--gu));
               border-radius: 50%;
               background: #e9f056;
               border: 0.3px solid #000;
@@ -734,10 +739,10 @@
           <div
             style="
               position: absolute;
-              left: 186px;
-              top: 132px;
-              width: 45px;
-              height: 45px;
+              left: calc(186 * var(--gu));
+              top: calc(132 * var(--gu));
+              width: calc(45 * var(--gu));
+              height: calc(45 * var(--gu));
               border-radius: 50%;
               background: #e9f056;
               border: 0.3px solid #000;
@@ -746,10 +751,10 @@
           <div
             style="
               position: absolute;
-              left: 215px;
-              top: 145px;
-              width: 45px;
-              height: 45px;
+              left: calc(215 * var(--gu));
+              top: calc(145 * var(--gu));
+              width: calc(45 * var(--gu));
+              height: calc(45 * var(--gu));
               border-radius: 50%;
               background: #e9f056;
               border: 0.3px solid #000;
@@ -758,10 +763,10 @@
           <div
             style="
               position: absolute;
-              left: 38px;
-              top: 206px;
-              width: 45px;
-              height: 45px;
+              left: calc(38 * var(--gu));
+              top: calc(206 * var(--gu));
+              width: calc(45 * var(--gu));
+              height: calc(45 * var(--gu));
               border-radius: 50%;
               background: #e9f056;
               border: 0.3px solid #000;
@@ -770,10 +775,10 @@
           <div
             style="
               position: absolute;
-              left: 404px;
-              top: 238px;
-              width: 45px;
-              height: 45px;
+              left: calc(404 * var(--gu));
+              top: calc(238 * var(--gu));
+              width: calc(45 * var(--gu));
+              height: calc(45 * var(--gu));
               border-radius: 50%;
               background: #e9f056;
               border: 0.3px solid #000;
@@ -782,10 +787,10 @@
           <div
             style="
               position: absolute;
-              left: 83px;
-              top: 462px;
-              width: 45px;
-              height: 45px;
+              left: calc(83 * var(--gu));
+              top: calc(462 * var(--gu));
+              width: calc(45 * var(--gu));
+              height: calc(45 * var(--gu));
               border-radius: 50%;
               background: #e9f056;
               border: 0.3px solid #000;
@@ -794,9 +799,9 @@
         </div>
 
         <!-- 레이어 3: 텍스트 -->
-        <div style="position:absolute;top:88px;left:34px;width:504px;z-index:2;font-family:'Pretendard',sans-serif;font-weight:500;font-size:20px;color:#000;line-height:32px;">
+        <div style="position:absolute;top:calc(88 * var(--gu));left:calc(34 * var(--gu));width:calc(504 * var(--gu));z-index:2;font-family:'Pretendard',sans-serif;font-weight:500;font-size:calc(20 * var(--gu));color:#000;line-height:calc(32 * var(--gu));">
           <p style="margin:0;">볼 관(觀) + 꼴, 모양 상(相)으로 얼굴의 형상과 꼴을 본다는 뜻이다. 다만 관상은 얼굴만 보는 것이 아니라 머리끝부터 발끝까지, 행동거지를 포함한 사람의 전체를 읽는 것이다.</p>
-          <p style="margin:0;line-height:32px;">&nbsp;</p>
+          <p style="margin:0;line-height:calc(32 * var(--gu));">&nbsp;</p>
           <p style="margin:0;">관상학(觀相學, Physiognomy)은 겉으로 드러난 인간의 얼굴 생김새를 관찰하여 그 사람의 성격, 기질, 운명을 판단하려는 점(占)을 말한다. 이 용어는 고대 그리스어로 자연이나 본성을 의미하는 'physis'와 지식 혹은 판단을 의미하는 'gnomon'이 결합하여 만들어졌다. 관상은 문명이 발생한 시기와 비슷한 때에 생겨났고, 마의 상법으로부터 체계화되어 현재까지 내려오는 점술로서 역사적으로 동서양을 막론하고 고대부터 근대까지 인간을 이해하는 하나의 방법론으로 통용되었다. 그러나 현대 과학의 발달과 함께 그 타당성이 검증되지 않아 현재는 대표적인 의사과학으로 분류된다.</p>
         </div>
       </div>
@@ -833,196 +838,196 @@
                              width:504px; z-index:2;
                              font-family:'Pretendard'; font-weight:500;
                              font-size:20px; color:#000; line-height:32px;
-                             단락간 빈줄: <p style="margin:0;line-height:32px;">&nbsp;</p>
+                             단락간 빈줄: <p style="margin:0;line-height:calc(32 * var(--gu));">&nbsp;</p>
 
            height 계산: 마지막 흰줄 top + 27 + 30(하단패딩) = height
            ══════════════════════════════════════════════════════════ -->
 
       <!-- ── 상세 패널 6: 자연과 신체의 대응체계 (上) ── -->
       <!-- height = 마지막흰줄(473)+27+30 = 530 -->
-      <div class="detail-panel" id="panel6" style="background:#fe6c48;outline:1px solid #000;isolation:isolate;min-height:0;height:530px;right:882px;top:calc(50% - 50px);">
-        <div style="position:absolute;left:-1px;top:-1px;background:#e9f056;height:34px;padding:0 38px;display:flex;align-items:center;z-index:3;">
-          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:24px;color:#fe6c48;line-height:34px;white-space:nowrap;">자연과 신체의 대응체계 (上)</span>
+      <div class="detail-panel" id="panel6" style="background:#fe6c48;outline:1px solid #000;isolation:isolate;min-height:0;height:calc(530 * var(--gu));right:calc(882 * var(--gu));top:calc(50% - calc(50 * var(--gu)));">
+        <div style="position:absolute;left:calc(-1 * var(--gu));top:calc(-1 * var(--gu));background:#e9f056;height:calc(34 * var(--gu));padding:0 calc(38 * var(--gu));display:flex;align-items:center;z-index:3;">
+          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:calc(24 * var(--gu));color:#fe6c48;line-height:calc(34 * var(--gu));white-space:nowrap;">자연과 신체의 대응체계 (上)</span>
         </div>
-        <button onclick="closePanel('panel6')" style="position:absolute;right:-1px;top:-1px;width:80px;height:34px;background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:24px;color:#fe6c48;cursor:pointer;line-height:34px;text-align:center;z-index:3;">X</button>
+        <button onclick="closePanel('panel6')" style="position:absolute;right:calc(-1 * var(--gu));top:calc(-1 * var(--gu));width:calc(80 * var(--gu));height:calc(34 * var(--gu));background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:calc(24 * var(--gu));color:#fe6c48;cursor:pointer;line-height:calc(34 * var(--gu));text-align:center;z-index:3;">X</button>
         <div style="position:absolute;inset:0;z-index:0;pointer-events:none;">
-          <div style="position:absolute;left:32px;top:89px;width:507px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:121px;width:410px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:185px;width:507px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:217px;width:380px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:281px;width:507px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:313px;width:507px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:345px;width:270px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:409px;width:507px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:441px;width:507px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:473px;width:65px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(89 * var(--gu));width:calc(507 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(121 * var(--gu));width:calc(410 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(185 * var(--gu));width:calc(507 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(217 * var(--gu));width:calc(380 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(281 * var(--gu));width:calc(507 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(313 * var(--gu));width:calc(507 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(345 * var(--gu));width:calc(270 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(409 * var(--gu));width:calc(507 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(441 * var(--gu));width:calc(507 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(473 * var(--gu));width:calc(65 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
         </div>
         <div style="position:absolute;inset:0;z-index:1;pointer-events:none;">
           <!-- 1: 하늘 -->
-          <div style="position:absolute;left:29px;top:81px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(29 * var(--gu));top:calc(81 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- 2,3: 두상과 이마 -->
-          <div style="position:absolute;left:83px;top:81px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
-          <div style="position:absolute;left:141px;top:81px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(83 * var(--gu));top:calc(81 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(141 * var(--gu));top:calc(81 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- 4,5,6: 하늘의 기운 -->
-          <div style="position:absolute;left:337px;top:81px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
-          <div style="position:absolute;left:371px;top:81px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
-          <div style="position:absolute;left:405px;top:81px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(337 * var(--gu));top:calc(81 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(371 * var(--gu));top:calc(81 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(405 * var(--gu));top:calc(81 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- 7: 땅 -->
-          <div style="position:absolute;left:27px;top:177px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(27 * var(--gu));top:calc(177 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- 10,11: 땅의 지혜 -->
-          <div style="position:absolute;left:182px;top:177px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
-          <div style="position:absolute;left:216px;top:177px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(182 * var(--gu));top:calc(177 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(216 * var(--gu));top:calc(177 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- 10,11,12: 해와 달 -->
-          <div style="position:absolute;left:20px;top:273px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
-          <div style="position:absolute;left:54px;top:273px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
-          <div style="position:absolute;left:108px;top:273px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(20 * var(--gu));top:calc(273 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(54 * var(--gu));top:calc(273 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(108 * var(--gu));top:calc(273 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- 13: 바다 -->
-          <div style="position:absolute;left:29px;top:401px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(29 * var(--gu));top:calc(401 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- 21,22,23: 입 전체 -->
-          <div style="position:absolute;left:439px;top:401px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
-          <div style="position:absolute;left:473px;top:401px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
-          <div style="position:absolute;left:188px;top:433px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
-          <div style="position:absolute;left:222px;top:433px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(439 * var(--gu));top:calc(401 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(473 * var(--gu));top:calc(401 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(188 * var(--gu));top:calc(433 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(222 * var(--gu));top:calc(433 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
         </div>
-        <div style="position:absolute;top:88px;left:34px;width:504px;z-index:2;font-family:'Pretendard',sans-serif;font-weight:500;font-size:20px;color:#000;line-height:32px;">
+        <div style="position:absolute;top:calc(88 * var(--gu));left:calc(34 * var(--gu));width:calc(504 * var(--gu));z-index:2;font-family:'Pretendard',sans-serif;font-weight:500;font-size:calc(20 * var(--gu));color:#000;line-height:calc(32 * var(--gu));">
           <p style="margin:0;">하늘은 두상과 이마에 대응한다. 이마는 하늘의 기운을 받는 곳으로, 둥글고 네모진 형태가 가장 이상적이라 여겨진다.</p>
-          <p style="margin:0;line-height:32px;">&nbsp;</p>
+          <p style="margin:0;line-height:calc(32 * var(--gu));">&nbsp;</p>
           <p style="margin:0;">땅은 발에 대응하며 땅의 지혜를 받는 곳으로, 발등이 두툼하고 발가락이 길쭉할수록 땅의 기운을 넉넉하게 받는다.</p>
-          <p style="margin:0;line-height:32px;">&nbsp;</p>
+          <p style="margin:0;line-height:calc(32 * var(--gu));">&nbsp;</p>
           <p style="margin:0;">해와 달은 두 눈이며 해는 눈에서 뿜어져 나오는 빛이고, 달은 눈의 검은 동자이다. 하늘의 해와 달이 지구를 균일하게 비추며 만물을 조화롭게 하듯, 두 눈 또한 그렇다.</p>
-          <p style="margin:0;line-height:32px;">&nbsp;</p>
+          <p style="margin:0;line-height:calc(32 * var(--gu));">&nbsp;</p>
           <p style="margin:0;">바다는 입에 대응하며 치아와 혀, 입술을 모두 포함한 입 전체를 칭한다. 눈과 입이 서로 조화롭게 소통할 때 비로소 사람 안에 균형이 생긴다.</p>
         </div>
       </div>
 
       <!-- ── 상세 패널 7: 자연과 신체의 대응체계 (下) ── -->
       <!-- height = 마지막흰줄(409)+27+30 = 466 -->
-      <div class="detail-panel" id="panel7" style="background:#fe6c48;outline:1px solid #000;isolation:isolate;min-height:0;height:466px;">
-        <div style="position:absolute;left:-1px;top:-1px;background:#e9f056;height:34px;padding:0 38px;display:flex;align-items:center;z-index:3;">
-          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:24px;color:#fe6c48;line-height:34px;white-space:nowrap;">자연과 신체의 대응체계 (下)</span>
+      <div class="detail-panel" id="panel7" style="background:#fe6c48;outline:1px solid #000;isolation:isolate;min-height:0;height:calc(466 * var(--gu));">
+        <div style="position:absolute;left:calc(-1 * var(--gu));top:calc(-1 * var(--gu));background:#e9f056;height:calc(34 * var(--gu));padding:0 calc(38 * var(--gu));display:flex;align-items:center;z-index:3;">
+          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:calc(24 * var(--gu));color:#fe6c48;line-height:calc(34 * var(--gu));white-space:nowrap;">자연과 신체의 대응체계 (下)</span>
         </div>
-        <button onclick="closePanel('panel7')" style="position:absolute;right:-1px;top:-1px;width:80px;height:34px;background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:24px;color:#fe6c48;cursor:pointer;line-height:34px;text-align:center;z-index:3;">X</button>
+        <button onclick="closePanel('panel7')" style="position:absolute;right:calc(-1 * var(--gu));top:calc(-1 * var(--gu));width:calc(80 * var(--gu));height:calc(34 * var(--gu));background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:calc(24 * var(--gu));color:#fe6c48;cursor:pointer;line-height:calc(34 * var(--gu));text-align:center;z-index:3;">X</button>
         <div style="position:absolute;inset:0;z-index:0;pointer-events:none;">
-          <div style="position:absolute;left:32px;top:89px;width:502px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:121px;width:507px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:153px;width:355px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:217px;width:497px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:249px;width:260px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:313px;width:497px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:345px;width:497px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:377px;width:507px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:409px;width:160px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(89 * var(--gu));width:calc(502 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(121 * var(--gu));width:calc(507 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(153 * var(--gu));width:calc(355 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(217 * var(--gu));width:calc(497 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(249 * var(--gu));width:calc(260 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(313 * var(--gu));width:calc(497 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(345 * var(--gu));width:calc(497 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(377 * var(--gu));width:calc(507 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(409 * var(--gu));width:calc(160 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
         </div>
         <div style="position:absolute;inset:0;z-index:1;pointer-events:none;">
           <!-- 1,2: 산과 바위는 -->
-          <div style="position:absolute;left:34px;top:81px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
-          <div style="position:absolute;left:68px;top:81px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(34 * var(--gu));top:calc(81 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(68 * var(--gu));top:calc(81 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- 3: 코에 -->
-          <div style="position:absolute;left:124px;top:81px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(124 * var(--gu));top:calc(81 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- 4: 군주이며 -->
-          <div style="position:absolute;left:340px;top:81px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(340 * var(--gu));top:calc(81 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- 5: 신하 -->
-          <div style="position:absolute;left:126px;top:113px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(126 * var(--gu));top:calc(113 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- 6,7,8: 금강석은 -->
-          <div style="position:absolute;left:185px;top:209px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
-          <div style="position:absolute;left:219px;top:209px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
-          <div style="position:absolute;left:253px;top:209px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(185 * var(--gu));top:calc(209 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(219 * var(--gu));top:calc(209 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(253 * var(--gu));top:calc(209 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- 9,10: 초목은 -->
-          <div style="position:absolute;left:143px;top:305px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
-          <div style="position:absolute;left:277px;top:305px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(143 * var(--gu));top:calc(305 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(277 * var(--gu));top:calc(305 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- 9,10: 털 전체 -->
-          <div style="position:absolute;left:70px;top:337px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
-          <div style="position:absolute;left:104px;top:337px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(70 * var(--gu));top:calc(337 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(104 * var(--gu));top:calc(337 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
         </div>
-        <div style="position:absolute;top:88px;left:34px;width:504px;z-index:2;font-family:'Pretendard',sans-serif;font-weight:500;font-size:20px;color:#000;line-height:32px;">
+        <div style="position:absolute;top:calc(88 * var(--gu));left:calc(34 * var(--gu));width:calc(504 * var(--gu));z-index:2;font-family:'Pretendard',sans-serif;font-weight:500;font-size:calc(20 * var(--gu));color:#000;line-height:calc(32 * var(--gu));">
           <p style="margin:0;">산과 바위는 코에 대응한다. 코는 얼굴의 군주이며 광대뼈는 군주를 보필하는 신하와 같다. 코 아래 인중은 산에서 흘러내리는 계곡물로, 깊고 골이 뚜렷할수록 좋은 것으로 본다.</p>
-          <p style="margin:0;line-height:32px;">&nbsp;</p>
+          <p style="margin:0;line-height:calc(32 * var(--gu));">&nbsp;</p>
           <p style="margin:0;">이 모든걸 지탱하는 금강석은 골격에 대응한다. 금강석처럼 단단하고 묵직한 골격이 좋은 것이다.</p>
-          <p style="margin:0;line-height:32px;">&nbsp;</p>
+          <p style="margin:0;line-height:calc(32 * var(--gu));">&nbsp;</p>
           <p style="margin:0;">지구를 뒤덮은 초목은 몸의 모든 털로 머리카락, 수염, 눈썹 등 몸에 난 털 전체이다. 생명력이 가득한 초목이 윤기 있게 자라듯, 몸의 털 또한 윤기있게 빛나야 한다. 특히 눈썹은 은하수처럼 빛나는 것을 최상으로 친다.</p>
         </div>
       </div>
 
       <!-- ── 상세 패널 8: 복점? 흉점? ── -->
       <!-- height = 마지막흰줄(665)+27+30 = 722 -->
-      <div class="detail-panel" id="panel8" style="background:#fe6c48;outline:1px solid #000;isolation:isolate;min-height:0;height:530px;right:542px;">
-        <div style="position:absolute;left:-1px;top:-1px;background:#e9f056;height:34px;padding:0 38px;display:flex;align-items:center;z-index:3;">
-          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:24px;color:#fe6c48;line-height:34px;white-space:nowrap;">복점? 흉점?</span>
+      <div class="detail-panel" id="panel8" style="background:#fe6c48;outline:1px solid #000;isolation:isolate;min-height:0;height:calc(530 * var(--gu));right:calc(542 * var(--gu));">
+        <div style="position:absolute;left:calc(-1 * var(--gu));top:calc(-1 * var(--gu));background:#e9f056;height:calc(34 * var(--gu));padding:0 calc(38 * var(--gu));display:flex;align-items:center;z-index:3;">
+          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:calc(24 * var(--gu));color:#fe6c48;line-height:calc(34 * var(--gu));white-space:nowrap;">복점? 흉점?</span>
         </div>
-        <button onclick="closePanel('panel8')" style="position:absolute;right:-1px;top:-1px;width:80px;height:34px;background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:24px;color:#fe6c48;cursor:pointer;line-height:34px;text-align:center;z-index:3;">X</button>
+        <button onclick="closePanel('panel8')" style="position:absolute;right:calc(-1 * var(--gu));top:calc(-1 * var(--gu));width:calc(80 * var(--gu));height:calc(34 * var(--gu));background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:calc(24 * var(--gu));color:#fe6c48;cursor:pointer;line-height:calc(34 * var(--gu));text-align:center;z-index:3;">X</button>
         <div style="position:absolute;inset:0;z-index:0;pointer-events:none;">
-          <div style="position:absolute;left:32px;top:89px;width:507px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:121px;width:497px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:153px;width:507px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:185px;width:427px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:249px;width:492px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:281px;width:492px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:313px;width:507px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:345px;width:130px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:409px;width:497px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:441px;width:497px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:473px;width:30px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(89 * var(--gu));width:calc(507 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(121 * var(--gu));width:calc(497 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(153 * var(--gu));width:calc(507 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(185 * var(--gu));width:calc(427 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(249 * var(--gu));width:calc(492 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(281 * var(--gu));width:calc(492 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(313 * var(--gu));width:calc(507 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(345 * var(--gu));width:calc(130 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(409 * var(--gu));width:calc(497 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(441 * var(--gu));width:calc(497 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(473 * var(--gu));width:calc(30 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
         </div>
         <div style="position:absolute;inset:0;z-index:1;pointer-events:none;">
           <!-- 1,2: 복점(福點) -->
-          <div style="position:absolute;left:334px;top:81px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
-          <div style="position:absolute;left:368px;top:81px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(334 * var(--gu));top:calc(81 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(368 * var(--gu));top:calc(81 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- 3,4: 흉점(凶點) -->
-          <div style="position:absolute;left:445px;top:81px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
-          <div style="position:absolute;left:479px;top:81px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(445 * var(--gu));top:calc(81 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(479 * var(--gu));top:calc(81 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- 5,6,7: 형태와 기색 -->
-          <div style="position:absolute;left:185px;top:177px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
-          <div style="position:absolute;left:219px;top:177px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
-          <div style="position:absolute;left:253px;top:177px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(185 * var(--gu));top:calc(177 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(219 * var(--gu));top:calc(177 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(253 * var(--gu));top:calc(177 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- 8,9,10: '살아 있는 점' -->
-          <div style="position:absolute;left:319px;top:273px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
-          <div style="position:absolute;left:353px;top:273px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
-          <div style="position:absolute;left:387px;top:273px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(319 * var(--gu));top:calc(273 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(353 * var(--gu));top:calc(273 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(387 * var(--gu));top:calc(273 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- 11,12: '죽은 점' -->
-          <div style="position:absolute;left:300px;top:433px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
-          <div style="position:absolute;left:334px;top:433px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(300 * var(--gu));top:calc(433 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(334 * var(--gu));top:calc(433 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
         </div>
-        <div style="position:absolute;top:88px;left:34px;width:504px;z-index:2;font-family:'Pretendard',sans-serif;font-weight:500;font-size:20px;color:#000;line-height:32px;">
+        <div style="position:absolute;top:calc(88 * var(--gu));left:calc(34 * var(--gu));width:calc(504 * var(--gu));z-index:2;font-family:'Pretendard',sans-serif;font-weight:500;font-size:calc(20 * var(--gu));color:#000;line-height:calc(32 * var(--gu));">
           <p style="margin:0;">관상학에서는 점의 위치와 형태에 따라 복점(福點)과 흉점(凶點)을 구분한다. 일반적으로 눈에 잘 띄는 위치의 점은 흉점, 잘 드러나지 않거나 털에 가려진 점은 복점으로 해석한다. 다만 점의 위치뿐 아니라 점 자체의 형태와 기색도 중요하게 여겨진다.</p>
-          <p style="margin:0;line-height:32px;">&nbsp;</p>
+          <p style="margin:0;line-height:calc(32 * var(--gu));">&nbsp;</p>
           <p style="margin:0;">복점은 복과 행운을 가져오는 길한 점으로 일반적으로 선명하고 살짝 솟아오른 형태이다. 이러한 점을 '살아 있는 점'이라 표현하며, 점에서 굵고 진한 털이 자라는 경우는 초목에 물을 준다하여 매우 길하게 본다.</p>
-          <p style="margin:0;line-height:32px;">&nbsp;</p>
+          <p style="margin:0;line-height:calc(32 * var(--gu));">&nbsp;</p>
           <p style="margin:0;">반대로 흉점은 좋지 않은 기운을 지닌 점으로 흐릿하고 평평하거나 움푹 파인 형태이다. 이러한 점을 '죽은 점'이라 표현하기도 한다.</p>
         </div>
       </div>
 
       <!-- ── 상세 패널 9: 관상은 끊임없이 변한다 ── -->
-      <div class="detail-panel" id="panel9" style="background:#fe6c48;outline:1px solid #000;isolation:isolate;min-height:0;height:338px;">
-        <div style="position:absolute;left:-1px;top:-1px;background:#e9f056;height:34px;padding:0 38px;display:flex;align-items:center;z-index:3;">
-          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:24px;color:#fe6c48;line-height:34px;white-space:nowrap;">관상은 끊임없이 변한다</span>
+      <div class="detail-panel" id="panel9" style="background:#fe6c48;outline:1px solid #000;isolation:isolate;min-height:0;height:calc(338 * var(--gu));right:calc(462 * var(--gu));top:calc(50% + calc(50 * var(--gu)));">
+        <div style="position:absolute;left:calc(-1 * var(--gu));top:calc(-1 * var(--gu));background:#e9f056;height:calc(34 * var(--gu));padding:0 calc(38 * var(--gu));display:flex;align-items:center;z-index:3;">
+          <span style="font-family:'Pretendard',sans-serif;font-weight:600;font-size:calc(24 * var(--gu));color:#fe6c48;line-height:calc(34 * var(--gu));white-space:nowrap;">관상은 끊임없이 변한다</span>
         </div>
-        <button onclick="closePanel('panel9')" style="position:absolute;right:-1px;top:-1px;width:80px;height:34px;background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:24px;color:#fe6c48;cursor:pointer;line-height:34px;text-align:center;z-index:3;">X</button>
+        <button onclick="closePanel('panel9')" style="position:absolute;right:calc(-1 * var(--gu));top:calc(-1 * var(--gu));width:calc(80 * var(--gu));height:calc(34 * var(--gu));background:#e9f056;border:none;font-family:'Pretendard',sans-serif;font-weight:400;font-size:calc(24 * var(--gu));color:#fe6c48;cursor:pointer;line-height:calc(34 * var(--gu));text-align:center;z-index:3;">X</button>
         <div style="position:absolute;inset:0;z-index:0;pointer-events:none;">
-          <div style="position:absolute;left:32px;top:89px;width:504px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:121px;width:497px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:153px;width:507px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:185px;width:428px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:249px;width:507px;height:27px;background:#fff;"></div>
-          <div style="position:absolute;left:32px;top:281px;width:105px;height:27px;background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(89 * var(--gu));width:calc(504 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(121 * var(--gu));width:calc(497 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(153 * var(--gu));width:calc(507 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(185 * var(--gu));width:calc(428 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(249 * var(--gu));width:calc(507 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
+          <div style="position:absolute;left:calc(32 * var(--gu));top:calc(281 * var(--gu));width:calc(105 * var(--gu));height:calc(27 * var(--gu));background:#fff;"></div>
         </div>
         <div style="position:absolute;inset:0;z-index:1;pointer-events:none;">
           <!-- 1,2: 끊임 -->
-          <div style="position:absolute;left:200px;top:81px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
-          <div style="position:absolute;left:234px;top:81px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(200 * var(--gu));top:calc(81 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(234 * var(--gu));top:calc(81 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- 3: 변하기 -->
-          <div style="position:absolute;left:174px;top:113px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(174 * var(--gu));top:calc(113 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- 4: 확장 -->
-          <div style="position:absolute;left:155px;top:145px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(155 * var(--gu));top:calc(145 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- 5: 변화 -->
-          <div style="position:absolute;left:217px;top:145px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(217 * var(--gu));top:calc(145 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- 6: 운명 -->
-          <div style="position:absolute;left:143px;top:241px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(143 * var(--gu));top:calc(241 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
           <!-- 7: 상태 -->
-          <div style="position:absolute;left:420px;top:241px;width:45px;height:45px;border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
+          <div style="position:absolute;left:calc(420 * var(--gu));top:calc(241 * var(--gu));width:calc(45 * var(--gu));height:calc(45 * var(--gu));border-radius:50%;background:#e9f056;border:0.3px solid #000;"></div>
         </div>
-        <div style="position:absolute;top:88px;left:34px;width:504px;z-index:2;font-family:'Pretendard',sans-serif;font-weight:500;font-size:20px;color:#000;line-height:32px;">
+        <div style="position:absolute;top:calc(88 * var(--gu));left:calc(34 * var(--gu));width:calc(504 * var(--gu));z-index:2;font-family:'Pretendard',sans-serif;font-weight:500;font-size:calc(20 * var(--gu));color:#000;line-height:calc(32 * var(--gu));">
           <p style="margin:0;">관상은 고정되지 않고 끊임 없이 변한다. 이처럼 관상이 변하는 이유는 우주와 자연이 계속해서 변하기 때문이다. 우주는 불완전하기에 계속해서 확장하고 변화한다. 사람의 형태도 우주(자연)와 닮아있기에 그의 마음가짐에 따라서 변할 수 있는 것이다.</p>
-          <p style="margin:0;line-height:32px;">&nbsp;</p>
+          <p style="margin:0;line-height:calc(32 * var(--gu));">&nbsp;</p>
           <p style="margin:0;">관상은 고정된 운명이 아니라, 지금 이 순간 대상의 상태를 읽어나가는 것이다.</p>
         </div>
       </div>
@@ -1139,6 +1144,7 @@
     </nav>
 
     <script>
+
       function openPanel(id, dotEl) {
         var panel = document.getElementById(id);
         var isAlreadyOpen = panel.classList.contains('is-open') && dotEl && dotEl.classList.contains('active');
@@ -1167,7 +1173,8 @@
             targetWidth = span.offsetWidth + 28 + 24; // padding-left 14 + label margin-left 10 + right padding 14
             document.body.removeChild(span);
           }
-          dotEl.style.width = targetWidth + 'px';
+          // 디자인 px(17px 글자 기준) → 화면 단위 --gu
+          dotEl.style.width = 'calc(' + targetWidth + ' * var(--gu))';
           dotEl.classList.add('expanded', 'active');
         }
       }
@@ -1179,7 +1186,6 @@
         });
       }
     </script>
-    <script src="scale.js" defer></script>
     <script src="cursor.js" defer></script>
     <script src="help.js" defer></script>
   <script src="sound.js" defer></script>

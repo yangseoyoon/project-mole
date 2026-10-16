@@ -20,13 +20,14 @@
   position: fixed;
   top: 0; left: 0;
   width: 100%;
-  height: 47px;
+  min-width: var(--page-min-w, 1000px);
+  height: var(--nav-top-h, 47px);
   background: white;
   border-bottom: 1px solid black;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 50px;
+  padding: 0 var(--sp-gutter, 50px);
   z-index: 300;
   box-shadow: 0 1px 1px rgba(0,0,0,0.1);
 }
@@ -45,24 +46,27 @@
   white-space: nowrap;
 }
 
-/* ── 하단 바 (1920px 고정, scale.js bottom-left 스케일) ── */
+/* ── 하단 바 ──
+   1920 에서 Figma 와 같고(로고 450 / 항목 340×4 / ? 110), 좁아지면 가운데 4개 항목만 줄어든다.
+   항목의 inline style="left:…" 는 !important 로 무시한다. */
 .bottomNav {
   position: fixed;
   bottom: 0;
   left: 0;
-  width: 1920px;
-  height: 73px;
+  right: 0;
+  min-width: var(--page-min-w, 1000px);
+  height: var(--nav-bottom-h, 73px);
   background: transparent;
-  transform-origin: bottom left;
   z-index: 300;
 }
 
 .bn-inner {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 1920px;
-  height: 73px;
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  padding-left: 450px;   /* 로고 영역 */
+  padding-right: 110px;  /* ? 영역 */
   overflow: visible;
 }
 
@@ -109,16 +113,18 @@
 .bn-badge--h { left: 331px; background: #e9f056; color: black; }
 .bn-badge--b { left: 389px; background: #757575; color: white; }
 
-/* ─ 네비게이션 항목 (각 340px 박스) ─ */
+/* ─ 네비게이션 항목 (1920 에서 각 340px) ─ */
 .bn-item {
-  position: absolute;
-  top: 0;
-  width: 340px;
-  height: 73px;
+  position: relative;
+  left: auto !important;
+  flex: 1 1 0;
+  min-width: 0;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 30px;
+  gap: 0.5rem;
+  padding: 0 clamp(0.75rem, 1.56vw, 1.875rem);
   background: #fff;
   border: none;
   border-top: 1px solid #000;
@@ -128,12 +134,21 @@
   cursor: pointer;
   font-family: 'Pretendard', sans-serif;
   font-weight: 600;
-  font-size: 24px;
+  font-size: var(--fs-24, 24px);
+  line-height: 1.2;
   color: black;
-  white-space: nowrap;
+  white-space: normal;
+  word-break: keep-all;
+  text-align: left;
   text-decoration: none;
   transition: background 0.12s ease;
   z-index: 1;
+  container-type: inline-size;
+}
+
+/* 항목 폭이 좁으면 화살표를 숨기고 글자에 자리를 준다 */
+@container (max-width: 200px) {
+  .bn-item img { display: none; }
 }
 .bn-item:hover { background: #f0f0f0; }
 .bn-item span { pointer-events: none; }
@@ -147,7 +162,7 @@
 /* ─ 도움말 버튼 (오른쪽 섹션) ─ */
 .bn-help-btn {
   position: absolute;
-  left: 1843px;
+  right: 33px;
   top: 14.5px;
   background: #ea5c3a;
   border: 1px solid black;
@@ -196,7 +211,7 @@
 /* 오른쪽 ? 섹션 배경 */
 .bn-right-bg {
   position: absolute;
-  left: 1810px;
+  right: 0;
   top: 0;
   width: 110px;
   height: 73px;
@@ -206,56 +221,3 @@
   filter: drop-shadow(0px -4px 3px rgba(0,0,0,0.15));
   z-index: 0;
 }
-
-/* ════════════════════════════════════════════════
-   반응형 네비 (body.rwd 페이지 전용, scale.js 미사용)
-   1920 에서는 위 고정 레이아웃과 동일하게 보이고,
-   좁아지면 가운데 4개 항목만 줄어든다 (로고 450 / ? 110 은 고정).
-   항목의 inline style="left:…" 는 !important 로 무시한다.
-   ════════════════════════════════════════════════ */
-.rwd .topNav {
-  height: var(--nav-top-h, 47px);
-  min-width: var(--page-min-w, 1024px);
-  padding: 0 var(--sp-gutter, 50px);
-}
-
-.rwd .bottomNav {
-  right: 0;
-  width: auto;
-  min-width: var(--page-min-w, 1024px);
-  height: var(--nav-bottom-h, 73px);
-  transform: none !important;
-}
-
-.rwd .bn-inner {
-  position: relative;
-  display: flex;
-  width: 100%;
-  height: 100%;
-  padding-left: 450px;   /* 로고 영역 */
-  padding-right: 110px;  /* ? 영역 */
-}
-
-.rwd .bn-item {
-  position: relative;
-  left: auto !important;
-  flex: 1 1 0;
-  min-width: 0;
-  height: 100%;
-  gap: 0.5rem;
-  padding: 0 clamp(0.75rem, 1.56vw, 1.875rem);
-  font-size: var(--fs-24, 24px);
-  line-height: 1.2;
-  white-space: normal;
-  word-break: keep-all;
-  text-align: left;
-  container-type: inline-size;
-}
-
-/* 항목 폭이 좁으면 화살표를 숨기고 글자에 자리를 준다 */
-@container (max-width: 200px) {
-  .rwd .bn-item img { display: none; }
-}
-
-.rwd .bn-right-bg { left: auto; right: 0; }
-.rwd .bn-help-btn { left: auto; right: 33px; }
