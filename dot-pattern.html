@@ -34,6 +34,28 @@ body{
   background:#e2ec00;
 }
 
+/* 음양오행 전체 보기 버튼 (캔버스 왼쪽 위) */
+#show-all-btn{
+  position:absolute;
+  left:24px;
+  top:24px;
+  z-index:60;
+  height:44px;
+  padding:0 22px;
+  border:1px solid #000;
+  border-radius:100px;
+  background:#fff;
+  font-family:'Pretendard JP Variable','Pretendard JP','Pretendard',sans-serif;
+  font-size:16px;
+  font-weight:600;
+  color:#000;
+  cursor:pointer;
+  box-shadow:0 2px 6px rgba(0,0,0,0.15);
+  transition:background .15s, color .15s;
+}
+#show-all-btn:hover{ background:#ea5c3a; color:#fff; }
+#show-all-btn.done{ background:#ea5c3a; color:#fff; }
+
 /* 세로 구분선 */
 #divider{
   width:1px;
@@ -165,7 +187,7 @@ body{
   border-radius:50%;
   display:flex;align-items:center;justify-content:center;
   font-family:'Pretendard JP Variable','Pretendard JP','Pretendard',sans-serif;
-  font-size:14px;font-weight:700;
+  font-size:14px;font-weight:900;
   color:#F04E2D;
   cursor:pointer;
   z-index:50;
@@ -173,11 +195,22 @@ body{
   pointer-events:all;
   user-select:none;
   box-shadow:0 2px 6px rgba(0,0,0,0.15);
+  /* 누르기를 유도하도록 살짝 커졌다 작아졌다 */
+  animation:hintPulse 1.2s ease-in-out infinite;
+}
+.hint-icon.tour-demo{ animation:hintPulse 1.2s ease-in-out infinite !important; }
+@keyframes hintPulse{
+  0%,100%{ transform:translate(-50%,-50%) scale(1); }
+  50%    { transform:translate(-50%,-50%) scale(1.18); }
+}
+@media (prefers-reduced-motion: reduce){
+  .hint-icon, .hint-icon.tour-demo{ animation:none !important; }
 }
 /* ! 팝업 */
+/* 느낌표 설명창: 본문 16px 기준 (이전 20px 규격의 0.8배) */
 #tier3-popup{
   position:fixed;
-  width:600px;
+  width:480px;
   background:#fff;
   outline:1px solid #000;
   z-index:1000;
@@ -188,37 +221,64 @@ body{
 #tier3-popup .popup-header{
   position:absolute;
   top:0;left:0;
-  height:32px;
+  height:26px;
   background:#ea5c3a;
   display:flex;align-items:center;
-  padding:0 25px;
+  padding:0 20px;
   white-space:nowrap;
 }
 #tier3-popup .popup-title{
-  font-size:24px;font-weight:600;color:#fff;
+  font-size:19px;font-weight:600;color:#fff;
   white-space:nowrap;
 }
 #tier3-popup .popup-close{
   position:absolute;
   top:0;right:0;
-  width:80px;height:32px;
+  width:64px;height:26px;
   display:flex;align-items:center;justify-content:center;
   background:#ea5c3a;
-  color:#fff;font-size:24px;font-weight:400;
+  color:#fff;font-size:19px;font-weight:400;
   cursor:pointer;
   border:none;
 }
 #tier3-popup .popup-body{
-  padding:60px 34px 30px;
-  font-size:20px;line-height:32px;color:#000;
+  padding:48px 27px 24px;
+  font-size:16px;line-height:26px;color:#000;
   font-weight:500;
 }
+/* 느낌표를 누르면 버블 옆(오른쪽/왼쪽 40px)에서 "땅!" (커졌다가 살짝 튕기며 멈춤)
+   transform-origin 은 버블 쪽 (placeTier3Popup 에서 지정) */
+#tier3-popup.pop-side{
+  animation:tier3Pop .55s cubic-bezier(.2,.8,.3,1) both !important;
+}
+@keyframes tier3Pop{
+  0%  { transform:scale(.1); opacity:0; }
+  60% { transform:scale(1.08); opacity:1; }
+  78% { transform:scale(.97); }
+  90% { transform:scale(1.01); }
+  100%{ transform:scale(1); opacity:1; }
+}
+@media (prefers-reduced-motion: reduce){
+  #tier3-popup.pop-side{ animation:none !important; }
+}
+/* 키워드: 글자 뒤에 노란 원(검정 0.5px)을 겹침 — 점과 관상 패널의 노란 공과 같은 표현 */
 #tier3-popup .popup-body .kw{
-  display:inline-block;
-  background:#e9f056;
-  border-radius:30px;
-  padding:0 10px;
+  position:relative;
+  isolation:isolate;
   font-weight:600;
+}
+#tier3-popup .popup-body .kw::before{
+  content:'';
+  position:absolute;
+  left:-4px;
+  top:50%;
+  width:36px;
+  height:36px;
+  transform:translateY(-50%);
+  border-radius:50%;
+  background:#e9f056;
+  border:0.5px solid #000;
+  z-index:-1;
 }
 /* 힌트 선 SVG */
 #hint-lines{
@@ -237,7 +297,7 @@ body{
   object-fit:cover;
   pointer-events:none;
   z-index:0;
-  transform:scale(0.95);
+  transform:scale(0.855);  /* 0.95 에서 10% 축소 */
   transform-origin:center center;
 }
 
@@ -314,6 +374,78 @@ body{
 }
 #tut-layer.hidden { display: none; }
 
+/* ── 진입 튜토리얼 (도움말 투어) ──
+   단계마다 해당 구간만 선명하게 두고 나머지는 블러, 그 옆에 도움말 패널.
+   화면 아무 곳이나 누르면 다음 단계, X 는 투어 종료. 페이지에 들어올 때마다 표시. */
+#tour { position: fixed; inset: 0; z-index: 5000; cursor: pointer; }
+#tour.done { display: none; }
+.tour-blur {
+  position: fixed;
+  z-index: 1;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background: transparent;
+}
+.tour-panel {
+  position: fixed;
+  width: max-content;
+  max-width: calc(600 * var(--u));
+  min-width: calc(360 * var(--u));
+  background: #e9f056;
+  border: 1px solid #000;
+  padding: calc(60 * var(--u)) calc(34 * var(--u)) calc(30 * var(--u));
+  z-index: 2;
+}
+/* 탭·X 는 테두리 안쪽 (점과 관상 안내창과 같은 형태) */
+.tour-panel-title {
+  position: absolute;
+  left: 0; top: 0;
+  height: calc(34 * var(--u));
+  padding: 0 calc(38 * var(--u));
+  display: flex; align-items: center;
+  background: #fe6c48;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: calc(24 * var(--u));
+  color: #fff;
+  white-space: nowrap;
+}
+.tour-panel-close {
+  position: absolute;
+  right: 0; top: 0;
+  width: calc(80 * var(--u));
+  height: calc(34 * var(--u));
+  display: flex; align-items: center; justify-content: center;
+  background: #fe6c48;
+  border: none;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: calc(24 * var(--u));
+  color: #fff;
+  cursor: pointer;
+}
+.tour-panel-close:hover { background: #ea5c3a; }
+/* 도움말 패널이 위아래로 둥둥 (카메라 페이지 말풍선과 같은 리듬) */
+.tour-panel { animation: tourFloat 3s ease-in-out infinite; }
+@keyframes tourFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tour-panel { animation: none; }
+}
+.tour-panel-text {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: calc(20 * var(--u));
+  line-height: calc(32 * var(--u));
+  color: #000;
+  word-break: keep-all;
+}
+/* 예시 요소 (투어 동안만 캔버스에 표시) */
+.tour-demo { pointer-events: none; animation: none !important; }
+#tour #tier3-popup { z-index: 3; }
+
 </style>
 </head>
 <body class="rwd">
@@ -329,6 +461,8 @@ body{
 
   <div id="canvas-area">
     <img id="puzzle-bg-img" src="images/puzzle-bg.png" alt=""/>
+    <!-- 모든 단어(1~3단계)를 오른쪽 패널에 펼침 -->
+    <button id="show-all-btn" type="button">음양오행 전체 보기</button>
   </div>
 
   <div id="divider"></div>
@@ -421,16 +555,34 @@ body{
     },
   };
 
-  function showTier3Popup(word, iconLeft, iconTop){
+  // 느낌표 설명창을 버블 옆에 배치: 캔버스 안 남는 공간을 보고 오른쪽(우선) 또는 왼쪽, 간격 40px.
+  // 위아래는 버블 중심에 맞추되 상·하단 바 안쪽으로. 튜토리얼에서도 사용 (window.placeTier3Popup)
+  function placeTier3Popup(popup, anchorEl){
+    const GAP = 40;
+    const a = anchorEl.getBoundingClientRect();
+    const c = canvasEl.getBoundingClientRect();
+    const w = popup.offsetWidth, h = popup.offsetHeight;
+    const spaceR = c.right - a.right, spaceL = a.left - c.left;
+    const side = (spaceR >= w + GAP || spaceR >= spaceL) ? 'right' : 'left';
+    let left = side === 'right' ? a.right + GAP : a.left - GAP - w;
+    left = Math.max(8, Math.min(left, window.innerWidth - w - 8));
+    const minT = 47 + 8, maxT = window.innerHeight - 73 - 8 - h;
+    let top = a.top + a.height / 2 - h / 2;
+    top = Math.max(minT, Math.min(top, Math.max(minT, maxT)));
+    popup.style.left = left + 'px';
+    popup.style.top = top + 'px';
+    popup.style.transformOrigin = side === 'right' ? 'left center' : 'right center';
+  }
+  window.placeTier3Popup = placeTier3Popup;
+
+  // 느낌표 설명창: 해당 버블 옆에서 튀어나옴. 화면 아무 곳이나 누르면 닫힘
+  function showTier3Popup(word, anchorEl){
     const info = TIER3_INFO[word];
     if(!info) return;
     document.getElementById('tier3-popup')&&document.getElementById('tier3-popup').remove();
     const popup = document.createElement('div');
     popup.id = 'tier3-popup';
-    const POPUP_W = 600;
-    const openLeft = (iconLeft + POPUP_W > window.innerWidth) ? iconLeft - POPUP_W : iconLeft;
-    popup.style.left = openLeft + 'px';
-    popup.style.top  = iconTop + 'px';
+    popup.className = 'pop-side';
     popup.innerHTML = `
       <div class="popup-header">
         <span class="popup-title">${info.title}</span>
@@ -438,7 +590,10 @@ body{
       <button class="popup-close">X</button>
       <div class="popup-body">${info.html}</div>`;
     document.body.appendChild(popup);
-    popup.querySelector('.popup-close').addEventListener('click',()=>popup.remove());
+    placeTier3Popup(popup, anchorEl);
+    // 느낌표 클릭은 전파를 막으므로, 다음 클릭부터 화면 어디를 눌러도 닫힘
+    const close = () => { popup.remove(); document.removeEventListener('mousedown', close, true); };
+    document.addEventListener('mousedown', close, true);
   }
 
   const RULES = [
@@ -576,21 +731,29 @@ body{
     items.push(item);
 
     if(TIER3.includes(word)){
+      // 느낌표 말풍선: 3단계 버블에 붙어서 함께 움직임 (placeIcon)
       const exIcon = document.createElement('div');
       exIcon.className='hint-icon';
       exIcon.textContent='!';
-      exIcon.style.left = (x + 30) + 'px';
-      exIcon.style.top  = (y - 45) + 'px';
       canvasEl.appendChild(exIcon);
+      item.icon = exIcon;
+      placeIcon(item);
       exIcon.addEventListener('click', e=>{
         e.stopPropagation();
-        const rect = exIcon.getBoundingClientRect();
-        showTier3Popup(word, rect.left, rect.top);
+        showTier3Popup(word, el);
         exIcon.remove();
+        item.icon = null;
       });
     }
 
     return item;
+  }
+
+  // 느낌표 위치 = 버블 중심에서 오른쪽 30, 위 45
+  function placeIcon(item, x = item.x, y = item.y){
+    if(!item.icon) return;
+    item.icon.style.left = (x + 30) + 'px';
+    item.icon.style.top  = (y - 45) + 'px';
   }
 
   function removeItem(id){
@@ -599,6 +762,7 @@ body{
     clearTimeout(items[i].hintTimer);
     // 이 아이템이 포함된 hint 그룹 제거
     hintGroups = hintGroups.filter(ids=>!ids.includes(id));
+    if(items[i].icon) items[i].icon.remove();
     items[i].el.remove();
     items.splice(i,1);
     redrawHintLines();
@@ -608,6 +772,7 @@ body{
     item.x=x; item.y=y;
     item.el.style.left=x+'px';
     item.el.style.top=y+'px';
+    placeIcon(item);
   }
 
   /* ── 조합 시도 ── */
@@ -645,11 +810,12 @@ body{
     ghost.style.top=e.clientY+'px';
     document.body.appendChild(ghost);
 
+    let ox=null, oy=null;
     if(type==='canvas'){
       const item=items.find(i=>i.id===itemId);
-      if(item) item.el.style.opacity='0.2';
+      if(item){ item.el.style.opacity='0.2'; ox=item.x; oy=item.y; }
     }
-    drag={type,word,itemId,ghost};
+    drag={type,word,itemId,ghost,ox,oy};
   }
 
   document.addEventListener('mousemove',e=>{
@@ -681,7 +847,7 @@ body{
       // 드래그 중인 버블 위치 실시간 반영 → 힌트 선 업데이트
       if(drag.type==='canvas'){
         const dragItem=items.find(i=>i.id===drag.itemId);
-        if(dragItem){ dragItem.x=mx; dragItem.y=my; }
+        if(dragItem){ dragItem.x=mx; dragItem.y=my; placeIcon(dragItem); }  // 느낌표는 커서(유령 버블)를 따라감
       }
       if(hintGroups.length>0) redrawHintLines();
     }
@@ -714,8 +880,9 @@ body{
       }
     } else {
       if(drag.type==='canvas'){
+        // 캔버스 밖에 놓으면 원래 자리로 (느낌표도 함께)
         const item=items.find(i=>i.id===drag.itemId);
-        if(item) item.el.style.opacity='1';
+        if(item){ item.el.style.opacity='1'; item.x=drag.ox; item.y=drag.oy; placeIcon(item); }
       }
     }
     drag=null;
@@ -797,6 +964,16 @@ body{
   }
 
   renderPanel();
+
+  // 음양오행 전체 보기: 아직 발견하지 않은 2·3단계 단어까지 모두 패널에 펼침
+  const showAllBtn = document.getElementById('show-all-btn');
+  showAllBtn.addEventListener('mousedown', e => e.stopPropagation());
+  showAllBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    [...BASE, ...TIER2, ...TIER3].forEach(w => discovered.add(w));
+    renderPanel();
+    showAllBtn.classList.add('done');
+  });
 })();
 </script>
 
@@ -810,6 +987,199 @@ body{
       document.removeEventListener('mousedown', hideTut);
     }
     document.addEventListener('mousedown', hideTut);
+  })();
+</script>
+
+<!-- 진입 튜토리얼 (도움말 투어) -->
+<div id="tour" aria-live="polite"></div>
+<script>
+  (function () {
+    const tour = document.getElementById('tour');
+    const canvas = document.getElementById('canvas-area');
+    const panelWords = document.getElementById('panel-words');
+
+    // Figma(1920×1080) 기준 캔버스 좌표. 캔버스 = 상단 바 아래 1465×1033 → 실제 크기에 비례
+    const CW = 1465, CH = 1033;
+
+    const STEPS = [
+      { text: '다양한 음양오행의 요소를 조합해 새로운 단어를<br>만들어 낼 수 있습니다.' },
+      { text: '점선 원 속의 요소들을 드래그해서 조합하면', hole: 'panel' },
+      {
+        text: '새로운 단어가 만들어집니다.',
+        hole: [450, 320, 930, 680], panel: { right: 544, top: 569 },  /* Figma 549 에서 아래 20 */
+        demo: [
+          { w: '水', x: 737, y: 377 }, { w: '木', x: 829, y: 433 }, { w: '火', x: 746, y: 476 },
+          { w: '산', x: 634, y: 516, t: 'd2' }, { w: '음양', x: 675, y: 553, t: 'd2' },
+          { w: '내부', x: 628, y: 636 },
+        ],
+      },
+      {
+        text: '주황색 원의 느낌표를 클릭하면 관련 설명을<br>볼 수 있습니다.',
+        hole: [491, 337, 889, 665], panel: { right: 565, top: 311 },  /* Figma(615, 341)에서 왼쪽 50 · 위 30 */
+        demo: [
+          { w: '木', x: 838, y: 409 }, { w: '음양', x: 553, y: 577, t: 'd2' },
+          { w: '내부', x: 643, y: 605 }, { w: '오악사독', x: 636, y: 487, t: 'd3' },
+          { icon: true, x: 669, y: 444 },
+        ],
+        popup: {
+          x: 677, y: 442, title: '오악사독 (五嶽四瀆)',
+          html: '<span class="kw">오악(五嶽)</span>은 얼굴의 돌출된 다섯 부분인 이마, 코, 양볼의 광대, 턱을 다섯 개의 산으로 비유한 것이다. <span class="kw">사독(四瀆)</span>은 얼굴의 들어간 네 부분인 눈, 귀, 입, 콧구멍 주변을 물길과 흐름에 비유한 것이다. 오악이 산의 구조라면 사독은 산에 흐르는 물길, 즉 얼굴에 흐르는 에너지의 흐름이다.',
+        },
+      },
+    ];
+
+    let step = 0;
+    let demoEls = [];
+
+    function cx(x) { const r = canvas.getBoundingClientRect(); return r.left + x / CW * r.width; }
+    function cy(y) { const r = canvas.getBoundingClientRect(); return r.top + y / CH * r.height; }
+
+    function holeRect(s) {
+      if (!s.hole) return null;
+      if (s.hole === 'panel') {
+        // 오른쪽 패널의 요소들 둘레 + 여백
+        const bs = [...panelWords.children].map(el => el.getBoundingClientRect());
+        if (!bs.length) return null;
+        const pad = 22;
+        return {
+          left: Math.min(...bs.map(b => b.left)) - pad, top: Math.min(...bs.map(b => b.top)) - pad,
+          right: Math.max(...bs.map(b => b.right)) + pad, bottom: Math.max(...bs.map(b => b.bottom)) + pad,
+        };
+      }
+      const [x1, y1, x2, y2] = s.hole;
+      return { left: cx(x1), top: cy(y1), right: cx(x2), bottom: cy(y2) };
+    }
+
+    function clearDemo() { demoEls.forEach(el => el.remove()); demoEls = []; }
+
+    function addDemo(s) {
+      (s.demo || []).forEach(d => {
+        const el = document.createElement('div');
+        if (d.icon) {
+          el.className = 'hint-icon tour-demo';
+          el.textContent = '!';
+        } else {
+          el.className = 'cbubble tour-demo' + (d.t ? ' ' + d.t : '');
+          el.textContent = d.w;
+          el.style.transform = 'translate(-50%,-50%)';
+        }
+        el.style.left = (d.x / CW * 100) + '%';
+        el.style.top = (d.y / CH * 100) + '%';
+        canvas.appendChild(el);
+        demoEls.push(el);
+      });
+    }
+
+    function render() {
+      const s = STEPS[step];
+      tour.innerHTML = '';
+      const vw = document.documentElement.clientWidth, vh = window.innerHeight;
+      const h = holeRect(s);
+
+      // 블러: 구멍이 없으면 화면 전체, 있으면 구멍을 둘러싼 네 조각
+      const panes = !h ? [[0, 0, vw, vh]] : [
+        [0, 0, vw, h.top],
+        [0, h.bottom, vw, vh - h.bottom],
+        [0, h.top, h.left, h.bottom - h.top],
+        [h.right, h.top, vw - h.right, h.bottom - h.top],
+      ];
+      panes.forEach(([l, t, w, hh]) => {
+        if (w <= 0 || hh <= 0) return;
+        const p = document.createElement('div');
+        p.className = 'tour-blur';
+        Object.assign(p.style, { left: l + 'px', top: t + 'px', width: w + 'px', height: hh + 'px' });
+        tour.appendChild(p);
+      });
+
+      // 도움말 패널
+      const panel = document.createElement('div');
+      panel.className = 'tour-panel';
+      panel.setAttribute('role', 'dialog');
+      panel.innerHTML = '<div class="tour-panel-title">도움말</div>' +
+        '<button class="tour-panel-close" aria-label="다음">→</button>' +
+        '<p class="tour-panel-text">' + s.text + '</p>';
+      tour.appendChild(panel);
+      // → : 다음 단계 (마지막 단계에서는 종료). 건너뛰기는 Esc
+      panel.querySelector('.tour-panel-close').addEventListener('click', e => { e.stopPropagation(); go(step + 1); });
+
+      const pw = panel.offsetWidth;
+      if (!h) {
+        panel.style.left = (vw - pw) / 2 + 'px';
+        panel.style.top = (vh - panel.offsetHeight) / 2 + 'px';
+      } else if (s.hole === 'panel') {
+        // 패널 구간 왼쪽, 위에서 22% 지점 (Figma)
+        panel.style.left = (h.left - 28 - pw) + 'px';
+        panel.style.top = (h.top + (h.bottom - h.top) * 0.22) + 'px';
+      } else {
+        panel.style.left = Math.max(8, cx(s.panel.right) - pw) + 'px';
+        panel.style.top = cy(s.panel.top) + 'px';
+      }
+
+      // 예시 설명창: 느낌표를 누른 뒤에만, 실제 페이지와 같은 방식(화면 중앙 "땅!")으로
+      if (s.popup && popupShown) showDemoPopup(s, false);
+    }
+
+    function showDemoPopup(s, animate) {
+      const pop = document.createElement('div');
+      pop.id = 'tier3-popup';
+      pop.className = 'pop-side';
+      if (!animate) pop.style.setProperty('animation', 'none', 'important');
+      pop.innerHTML = '<div class="popup-header"><span class="popup-title">' + s.popup.title + '</span></div>' +
+        '<button class="popup-close" tabindex="-1">X</button><div class="popup-body">' + s.popup.html + '</div>';
+      tour.appendChild(pop);
+      // 실제 페이지와 같이 예시 3단계 버블 옆에 배치
+      const anchor = demoEls.find(el => el.classList.contains('d3'));
+      if (anchor && window.placeTier3Popup) window.placeTier3Popup(pop, anchor);
+    }
+
+    // 예시 느낌표를 눌렀는지 (화면 좌표가 아이콘 안인지)
+    function hitDemoIcon(e) {
+      const icon = demoEls.find(el => el.classList.contains('hint-icon'));
+      if (!icon) return null;
+      const r = icon.getBoundingClientRect(), pad = 6;
+      return (e.clientX >= r.left - pad && e.clientX <= r.right + pad &&
+              e.clientY >= r.top - pad && e.clientY <= r.bottom + pad) ? icon : null;
+    }
+
+    let popupShown = false;
+
+    function go(i) {
+      clearDemo();
+      popupShown = false;
+      step = i;
+      if (step >= STEPS.length) return end();
+      addDemo(STEPS[step]);
+      render();
+    }
+
+    function end() {
+      clearDemo();
+      tour.innerHTML = '';
+      tour.classList.add('done');
+      window.removeEventListener('resize', onResize);
+    }
+
+    function onResize() { if (!tour.classList.contains('done')) render(); }
+
+    tour.addEventListener('click', e => {
+      const s = STEPS[step];
+      // 마지막 단계: 느낌표를 누르면 설명창이 나타남 (느낌표는 사라짐). 그 다음 클릭에 종료
+      if (s && s.popup && !popupShown) {
+        const icon = hitDemoIcon(e);
+        if (icon) {
+          popupShown = true;
+          icon.remove();
+          demoEls = demoEls.filter(el => el !== icon);
+          showDemoPopup(s, true);
+          return;
+        }
+      }
+      go(step + 1);
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && !tour.classList.contains('done')) end(); });
+    window.addEventListener('resize', onResize);
+
+    go(0);
   })();
 </script>
 <script src="sound.js" defer></script>

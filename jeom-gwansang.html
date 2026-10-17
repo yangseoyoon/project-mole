@@ -93,6 +93,98 @@
       .jeomDot.expanded {
         border-radius: calc(50 * var(--gu));
       }
+
+      /* ── 점 글로우: 주황빛이 바깥으로 퍼져나감 ── */
+      .jeomDot {
+        animation: dotGlow 2.4s ease-out infinite;
+      }
+      /* 점마다 박자를 조금씩 어긋나게 */
+      .jeomDot:nth-of-type(3n+1) { animation-delay: -0.8s; }
+      .jeomDot:nth-of-type(3n+2) { animation-delay: -1.6s; }
+      @keyframes dotGlow {
+        0% {
+          box-shadow:
+            0 0 0 0 rgba(248, 79, 37, 0.55),
+            0 0 calc(6 * var(--gu)) calc(2 * var(--gu)) rgba(248, 79, 37, 0.45);
+        }
+        70% {
+          box-shadow:
+            0 0 0 calc(26 * var(--gu)) rgba(248, 79, 37, 0),
+            0 0 calc(30 * var(--gu)) calc(10 * var(--gu)) rgba(248, 79, 37, 0.15);
+        }
+        100% {
+          box-shadow:
+            0 0 0 calc(26 * var(--gu)) rgba(248, 79, 37, 0),
+            0 0 calc(6 * var(--gu)) calc(2 * var(--gu)) rgba(248, 79, 37, 0.45);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .jeomDot { animation: none; }
+      }
+
+      /* ── 진입 안내(도움말) 팝업: 배경을 흐리게 하고 가운데 노란 창 ──
+         크기는 같은 페이지 상세 패널 규격 (너비 600, 탭 34, 제목 24px, 본문 20px/32) */
+      .jeom-guide-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 5000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+      }
+      .jeom-guide-overlay.active { display: flex; }
+      .jeom-guide {
+        position: relative;
+        width: calc(600 * var(--u));
+        background: #e9f056;
+        border: 1px solid #000;
+        padding: calc(60 * var(--u)) calc(34 * var(--u)) calc(30 * var(--u));
+      }
+      /* 탭·X 는 테두리 안쪽에 붙여 검정 테두리를 덮지 않게 */
+      .jeom-guide-title {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: calc(34 * var(--u));
+        padding: 0 calc(38 * var(--u));
+        display: flex;
+        align-items: center;
+        background: #fe6c48;
+        font-family: 'Pretendard', sans-serif;
+        font-weight: 600;
+        font-size: calc(24 * var(--u));
+        color: #fff;
+        white-space: nowrap;
+      }
+      .jeom-guide-close {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: calc(80 * var(--u));
+        height: calc(34 * var(--u));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fe6c48;
+        border: none;
+        font-family: 'Pretendard', sans-serif;
+        font-weight: 400;
+        font-size: calc(24 * var(--u));
+        color: #fff;
+        cursor: pointer;
+      }
+      .jeom-guide-close:hover { background: #ea5c3a; }
+      .jeom-guide-text {
+        font-family: 'Pretendard', sans-serif;
+        font-weight: 500;
+        font-size: calc(20 * var(--u));
+        line-height: calc(32 * var(--u));
+        color: #000;
+        word-break: keep-all;
+      }
       .dot-label {
         opacity: 0;
         white-space: nowrap;
@@ -1034,6 +1126,15 @@
     </div>
 
     <!-- ── 하단 내비게이션 ── -->
+    <!-- 진입 안내(도움말) 팝업 -->
+    <div class="jeom-guide-overlay active" id="jeomGuide">
+      <div class="jeom-guide" role="dialog" aria-labelledby="jeomGuideTitle">
+        <div class="jeom-guide-title" id="jeomGuideTitle">도움말</div>
+        <button class="jeom-guide-close" id="jeomGuideClose" aria-label="닫기">X</button>
+        <p class="jeom-guide-text">주황색 점을 클릭하면 점과 관상에 대한 다양한 이야기를<br />알아볼 수 있습니다.</p>
+      </div>
+    </div>
+
     <nav class="bottomNav">
       <div class="bn-inner">
         <img
@@ -1178,6 +1279,15 @@
           dotEl.classList.add('expanded', 'active');
         }
       }
+      /* 진입 안내 팝업: X, 바깥 클릭, Esc 로 닫기 */
+      (function () {
+        var guide = document.getElementById('jeomGuide');
+        function closeGuide() { guide.classList.remove('active'); }
+        document.getElementById('jeomGuideClose').addEventListener('click', closeGuide);
+        guide.addEventListener('click', function (e) { if (e.target === guide) closeGuide(); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeGuide(); });
+      })();
+
       function closePanel(id) {
         document.getElementById(id).classList.remove('is-open');
         document.querySelectorAll('.jeomDot.expanded').forEach(function(d) {

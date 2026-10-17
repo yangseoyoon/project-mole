@@ -81,9 +81,9 @@
           <canvas id="canvasLeft" style="width:100%;height:100%;display:block;"></canvas>
         </div>
 
-        <!-- 우측 패널 웹캠 -->
-        <div style="position:absolute;left:calc(1460 * var(--cu));top:calc(565 * var(--cu));width:calc(380 * var(--cu));height:calc(283 * var(--cu));border-radius:calc(10 * var(--cu));overflow:hidden;z-index:5;border:1px solid #a6a6a6;background:#efefef;pointer-events:none;">
-          <video id="videoRight" autoplay playsinline muted style="width:100%;height:100%;object-fit:cover;transform:scaleX(-1) scale(1.06);filter:blur(calc(6 * var(--cu)));"></video>
+        <!-- 우측 패널: 얼굴 영상 없이 2D 메쉬만 노란 배경에 (camera-mesh-panel.js) -->
+        <div style="position:absolute;left:calc(1460 * var(--cu));top:calc(565 * var(--cu));width:calc(380 * var(--cu));height:calc(283 * var(--cu));border-radius:calc(10 * var(--cu));overflow:hidden;z-index:5;border:1px solid #a6a6a6;background:#e9f056;pointer-events:none;">
+          <canvas id="canvasRight" style="width:100%;height:100%;display:block;"></canvas>
         </div>
 
         <!-- 말풍선: 눈썹 가이드 -->
@@ -306,6 +306,7 @@
     <script src="camera.js"></script>
     <script src="camera-text-filter.js"></script>
     <script src="camera-sticker-filter.js"></script>
+    <script src="camera-mesh-panel.js"></script>
     <script src="cursor.js" defer></script>
     <script src="help.js" defer></script>
   <script src="sound.js" defer></script>

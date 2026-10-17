@@ -16,10 +16,16 @@
   ];
 
   function onResults(results) {
+    // 오른쪽 아래 메쉬 패널도 같은 결과를 씀 (camera-mesh-panel.js)
+    if (window.onHolisticResults) window.onHolisticResults(results);
     if (!active || !canvas) return;
-    const cw = canvas.width, ch = canvas.height;
-    ctx.clearRect(0, 0, cw, ch);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawMesh2D(ctx, results, canvas.width, canvas.height, 1);
+  }
 
+  /* 2D 메쉬 그리기 (메인 필터와 오른쪽 아래 패널 공통)
+     cw, ch: 그릴 영역 크기 / k: 선·점 크기 배율 (메인 화면 = 1) */
+  function drawMesh2D(ctx, results, cw, ch, k) {
     const video = document.getElementById('video');
     const vw = video.videoWidth || cw, vh = video.videoHeight || ch;
     const scale = Math.max(cw / vw, ch / vh);
@@ -56,7 +62,7 @@
           ctx.lineTo(b[0], b[1]);
         });
         ctx.strokeStyle = 'rgba(0,0,0,0.15)';
-        ctx.lineWidth = 0.4;
+        ctx.lineWidth = 0.4 * k;
         ctx.stroke();
       }
 
@@ -70,7 +76,7 @@
           ctx.lineTo(b[0], b[1]);
         });
         ctx.strokeStyle = 'rgba(0,0,0,0.35)';
-        ctx.lineWidth = 0.5;
+        ctx.lineWidth = 0.5 * k;
         ctx.stroke();
       }
 
@@ -81,18 +87,18 @@
         ctx.fillStyle = '#fff';
         ctx.fill();
         ctx.strokeStyle = 'rgba(0,0,0,0.8)';
-        ctx.lineWidth = 0.8;
+        ctx.lineWidth = 0.8 * k;
         ctx.stroke();
       }
       faceLm.forEach(function (p, i) {
         if (contourSet.has(i)) return;
         if (i % 8 !== 0) return;
-        drawDot(toCanvas(p), 3);
+        drawDot(toCanvas(p), 3 * k);
       });
       let contourArr = Array.from(contourSet);
       contourArr.forEach(function (i, idx) {
         if (idx % 2 !== 0) return;
-        drawDot(toCanvas(faceLm[i]), 3);
+        drawDot(toCanvas(faceLm[i]), 3 * k);
       });
     }
 
@@ -107,7 +113,7 @@
         ctx.lineTo(b[0], b[1]);
       });
       ctx.strokeStyle = 'rgba(0,0,0,0.35)';
-      ctx.lineWidth = 1.2;
+      ctx.lineWidth = 1.2 * k;
       ctx.stroke();
 
       // 관절 점 (어깨 이하만)
@@ -115,15 +121,16 @@
         if (i < 11) return;
         const pos = toCanvas(p);
         ctx.beginPath();
-        ctx.arc(pos[0], pos[1], 3, 0, Math.PI * 2);
+        ctx.arc(pos[0], pos[1], 3 * k, 0, Math.PI * 2);
         ctx.fillStyle = '#fff';
         ctx.fill();
         ctx.strokeStyle = 'rgba(0,0,0,0.8)';
-        ctx.lineWidth = 1;
+        ctx.lineWidth = 1 * k;
         ctx.stroke();
       });
     }
   }
+  window.drawMesh2D = drawMesh2D;
 
   async function start() {
     const video = document.getElementById('video');
@@ -174,6 +181,8 @@
     var def = document.getElementById('segDefault');
     if (def) def.classList.add('seg-active');
   }
+
+  window.isTextFilterActive = function () { return active; };
 
   window.stopTextFilter = function () {
     if (!active) return;

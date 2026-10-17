@@ -144,6 +144,15 @@
         <span class="legend-c" style="color: #ff53cb">C</span
         ><span class="legend-label">ustom</span>
       </div>
+
+      <!-- 진입 안내(도움말) 팝업 -->
+      <div id="welcomeOverlay" class="welcome-overlay active">
+        <div class="welcome-popup" role="dialog" aria-labelledby="welcomeTitle">
+          <div class="welcome-title" id="welcomeTitle">도움말</div>
+          <button class="welcome-close" id="welcomeClose" aria-label="닫기">X</button>
+          <p class="welcome-body-text">유명인들과 캐릭터들의 점으로 이루어진 지도를<br />살펴볼 수 있습니다.</p>
+        </div>
+      </div>
     </div>
 
     <script src="facemap.js"></script>
@@ -260,6 +269,15 @@
         if (activeDot) activeDot.classList.remove('active');
         activeDot = null;
       });
+
+      /* 진입 안내 팝업: X, 바깥 클릭, Esc 로 닫기 */
+      (function () {
+        const overlay = document.getElementById('welcomeOverlay');
+        const close = () => overlay.classList.remove('active');
+        document.getElementById('welcomeClose').addEventListener('click', close);
+        overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+      })();
     </script>
 
     <!-- 하단 네비게이션 바 -->

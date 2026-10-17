@@ -76,9 +76,10 @@
       </div>
       <!-- 진입 안내 팝업 -->
       <div id="welcomeOverlay" class="welcome-overlay">
-        <div class="welcome-popup">
-          <button class="welcome-close" id="welcomeClose">X</button>
-          <p class="welcome-body-text">+ 버튼을 누르고 원하는 위치를 클릭하면 자신만의 점과 프로필을 추가할 수 있습니다.</p>
+        <div class="welcome-popup" role="dialog" aria-labelledby="welcomeTitle">
+          <div class="welcome-title" id="welcomeTitle">도움말</div>
+          <button class="welcome-close" id="welcomeClose" aria-label="닫기">X</button>
+          <p class="welcome-body-text">+ 버튼을 누르고 원하는 위치를 클릭하면 자신만의 점과<br />프로필을 추가할 수 있습니다.</p>
         </div>
       </div>
       <!-- 점 추가 버튼 -->
