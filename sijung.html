@@ -11,7 +11,7 @@
     />
     <link rel="stylesheet" href="nav.css" />
     <link rel="stylesheet" href="base.css" />
-    <link rel="stylesheet" href="sijung.css" />
+    <link rel="stylesheet" href="sijung.css" />
   </head>
   <body class="rwd">
     <nav class="topNav">
@@ -120,7 +120,21 @@
         </button>
         <div class="bn-right-bg"></div><button class="bn-help-btn">?</button>
       </div>
-    </nav>
+    </nav>
+  <script>
+      // 숫자 원이 무작위로 하나씩 호버 색으로 깜빡 (마우스를 올린 원은 건드리지 않음)
+      (function () {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        const btns = [...document.querySelectorAll('.sijungPage .num-btn')];
+        if (!btns.length) return;
+        setInterval(function () {
+          const b = btns[Math.floor(Math.random() * btns.length)];
+          if (b.matches(':hover') || b.classList.contains('twinkle')) return;
+          b.classList.add('twinkle');
+          setTimeout(function () { b.classList.remove('twinkle'); }, 1200 + Math.random() * 800);
+        }, 700);
+      })();
+    </script>
   <script src="cursor.js"></script>
     <script src="help.js"></script>
 <script src="sound.js"></script>

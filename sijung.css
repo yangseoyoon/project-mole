@@ -297,6 +297,12 @@ body {
 .sijungPage .num-btn {
   transition: background 0.12s ease, color 0.12s ease;
 }
+/* 목차 페이지만: 숫자 원이 무작위로 호버 색으로 깜빡 (sijung.html 스크립트가 .twinkle 을 붙였다 뗌) */
+.sijungPage .num-btn.twinkle {
+  background: #ff5c34;
+  color: #fff;
+  transition: background 0.6s ease, color 0.6s ease;
+}
 
 /* "Click Number!" 힌트 */
 .hint-pill {
@@ -315,6 +321,21 @@ body {
   display: block;
   width: calc(128.32 * var(--su));
   height: calc(15.039 * var(--su));
+}
+
+/* 위아래로 둥둥 — 두 버튼은 반 박자 엇갈려(하나가 올라갈 때 다른 하나는 내려감) */
+.hint-pill {
+  animation: hintFloat 3s ease-in-out infinite;
+}
+.hint-pill + .hint-pill {
+  animation-delay: -1.5s;
+}
+@keyframes hintFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(calc(-10 * var(--su))); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hint-pill { animation: none; }
 }
 
 /* ── 목차: 가운데 텍스트 ── */

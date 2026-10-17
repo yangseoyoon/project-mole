@@ -60,12 +60,9 @@
       /* 노드맵 SVG 스타일 */
       .dot-node .outer { fill: transparent; cursor: grab; }
       .dot-node .outer:active { cursor: grabbing; }
-      .dot-node .inner { fill: #ea5c3a; opacity: 0.7; pointer-events: none; }
-      @keyframes nodeGlow {
-        0%, 100% { filter: drop-shadow(0 0 4px #ea5c3a) drop-shadow(0 0 8px #ea5c3a88); opacity: 0.7; }
-        50%       { filter: drop-shadow(0 0 10px #ea5c3a) drop-shadow(0 0 22px #ea5c3acc); opacity: 1; }
-      }
-      .dot-node .inner { animation: nodeGlow 2.4s ease-in-out infinite; }
+      /* 글로우 없음. 호버하면 점이 커짐 (반지름은 tick() 에서 부드럽게 변경) */
+      .dot-node .inner { fill: #ea5c3a; opacity: 0.7; pointer-events: none; transition: opacity 0.2s; }
+      .dot-node.hover .inner { opacity: 1; }
       .dot-line { stroke: #ea5c3a; stroke-width: 1.5; opacity: 0.25; }
       .dot-label {
         font-family: 'Pretendard', sans-serif;
@@ -234,15 +231,18 @@
         position: fixed;
         z-index: 100;
         background: #fff;
-        border: 1px solid #e0e0e0;
-        border-radius: 12px;
-        padding: 18px 22px;
-        box-shadow: 0 8px 40px rgba(0,0,0,0.14);
-        width: 240px;
+        border: 1px solid #000;
+        border-radius: 0;
+        padding: 0;
+        box-shadow: none;
+        width: fit-content;
+        min-width: 160px;
+        max-width: 220px;
         pointer-events: none;
         opacity: 0;
         transform: translateY(6px) scale(0.97);
         transition: opacity 0.18s, transform 0.18s;
+        overflow: hidden;
       }
       .palace-tooltip.visible {
         opacity: 1;
@@ -251,8 +251,13 @@
       .palace-tooltip-name {
         font-size: 16px;
         font-weight: 800;
-        color: #ea5c3a;
-        margin-bottom: 8px;
+        color: #fff;
+        background: #ea5c3a;
+        padding: 5px 22px;
+        margin: 0;
+      }
+      .palace-tooltip-body {
+        padding: 14px 22px;
       }
       .palace-tooltip-desc {
         font-size: 13px;
@@ -289,23 +294,23 @@
       .res-flip-back {
         position: absolute;
         inset: 0;
-        border-radius: 14px;
-        border: 1px solid rgba(0,0,0,0.13);
+        border-radius: 0;
+        border: 1px solid #000;  /* 그림자 대신 1px 테두리 */
         backface-visibility: hidden;
         -webkit-backface-visibility: hidden;
         overflow: hidden;
-        box-shadow: 0 20px 70px rgba(0,0,0,0.28), 0 4px 16px rgba(0,0,0,0.1);
       }
       .res-flip-front img,
       .res-flip-back img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
       .res-flip-back { transform: rotateY(180deg); }
 
       .res-card-hint {
-        font-size: 11px;
+        font-size: 18px;
+        font-weight: 600;
         color: #000;
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: 8px;
       }
 
       /* 타이핑 도트 (초기 로딩) */
@@ -332,8 +337,10 @@
 
     <div class="palace-tooltip" id="palaceTooltip">
       <div class="palace-tooltip-name" id="ttName"></div>
-      <div class="palace-tooltip-desc" id="ttDesc"></div>
-      <div class="palace-tooltip-count" id="ttCount"></div>
+      <div class="palace-tooltip-body">
+        <div class="palace-tooltip-desc" id="ttDesc"></div>
+        <div class="palace-tooltip-count" id="ttCount"></div>
+      </div>
     </div>
 
     <div class="resultPage page-scale">
@@ -359,7 +366,6 @@
 
       <!-- 우측: 카드 -->
       <div class="res-card-panel" id="elCardPanel">
-        <div class="res-card-eyebrow">유형 카드</div>
         <div class="res-flip-wrap" id="resFlipWrap">
           <div class="res-flip-card" id="resCard">
             <div class="res-flip-inner">
@@ -372,7 +378,13 @@
             </div>
           </div>
         </div>
-        <div class="res-card-hint">← 드래그해서 뒤집기</div>
+        <div class="res-card-hint">
+          <svg width="32" height="16" viewBox="0 0 32 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="0" y1="8" x2="28" y2="8" stroke="#000" stroke-width="2" stroke-linecap="round"/>
+            <polyline points="20,2 28,8 20,14" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+          Drag
+        </div>
       </div>
     </div>
 
@@ -427,19 +439,19 @@
       };
 
       const PALACE_COMMENT = {
-        명궁:'미간(명궁)의 점 — 운명과 타고난 기질, 삶의 방향성을 나타냅니다.',
-        관록궁:'이마 중앙(관록궁)의 점 — 직업운과 사회적 성취를 나타냅니다.',
-        복덕궁:'이마 우측(복덕궁)의 점 — 복과 덕이 쌓이는 위치입니다.',
-        상모궁:'관자놀이(상모궁)의 점 — 외모와 첫인상의 운을 상징합니다.',
-        처첩궁:'눈꼬리(처첩궁)의 점 — 인연과 애정운을 나타냅니다.',
-        남녀궁:'볼 오른쪽(남녀궁)의 점 — 자녀운과 생명력을 의미합니다.',
-        질액궁:'아래 볼(질액궁)의 점 — 건강과 체력 관리에 주의가 필요한 위치입니다.',
-        지각궁:'턱 중앙(지각궁)의 점 — 말년운과 안정적인 토대를 나타냅니다.',
-        전택궁:'왼쪽 아래 볼(전택궁)의 점 — 부동산운과 거주 환경을 상징합니다.',
-        노복궁:'볼 왼쪽(노복궁)의 점 — 아랫사람과의 관계, 인복을 나타냅니다.',
-        재백궁:'눈꼬리 왼쪽(재백궁)의 점 — 재물운과 경제적 능력을 의미합니다.',
-        형제궁:'왼쪽 관자(형제궁)의 점 — 형제·동료와의 관계를 나타냅니다.',
-        천이궁:'이마 좌측(천이궁)의 점 — 이동운과 변화에 강한 기질을 상징합니다.',
+        명궁:'<strong>미간(명궁)의 점</strong><br>운명과 타고난 기질, 삶의 방향성을 나타냅니다.',
+        관록궁:'<strong>이마 중앙(관록궁)의 점</strong><br>직업운과 사회적 성취를 나타냅니다.',
+        복덕궁:'<strong>이마 우측(복덕궁)의 점</strong><br>복과 덕이 쌓이는 위치입니다.',
+        상모궁:'<strong>관자놀이(상모궁)의 점</strong><br>외모와 첫인상의 운을 상징합니다.',
+        처첩궁:'<strong>눈꼬리(처첩궁)의 점</strong><br>인연과 애정운을 나타냅니다.',
+        남녀궁:'<strong>볼 오른쪽(남녀궁)의 점</strong><br>자녀운과 생명력을 의미합니다.',
+        질액궁:'<strong>아래 볼(질액궁)의 점</strong><br>건강과 체력 관리에 주의가 필요한 위치입니다.',
+        지각궁:'<strong>턱 중앙(지각궁)의 점</strong><br>말년운과 안정적인 토대를 나타냅니다.',
+        전택궁:'<strong>왼쪽 아래 볼(전택궁)의 점</strong><br>부동산운과 거주 환경을 상징합니다.',
+        노복궁:'<strong>볼 왼쪽(노복궁)의 점</strong><br>아랫사람과의 관계, 인복을 나타냅니다.',
+        재백궁:'<strong>눈꼬리 왼쪽(재백궁)의 점</strong><br>재물운과 경제적 능력을 의미합니다.',
+        형제궁:'<strong>왼쪽 관자(형제궁)의 점</strong><br>형제·동료와의 관계를 나타냅니다.',
+        천이궁:'<strong>이마 좌측(천이궁)의 점</strong><br>이동운과 변화에 강한 기질을 상징합니다.',
       };
 
       /* 십이궁 좌표 — 텍스트 우측(x>740) 영역에만 배치 */
@@ -516,7 +528,8 @@
           const comment = (dominantPalace && PALACE_COMMENT[dominantPalace])
             ? PALACE_COMMENT[dominantPalace]
             : '관상에서 점은 단순한 점이 아니라 기운이 모이는 자리입니다.';
-          document.getElementById('elComment').textContent = comment;
+          // PALACE_COMMENT 는 코드에 적힌 고정 문구 (<strong>, <br> 포함) → HTML 로 표시
+          document.getElementById('elComment').innerHTML = comment;
           show('elComment', 1200);
           show('elActions', 1500);
           show('resFlipWrap', 400);
@@ -587,9 +600,8 @@
             const r = 8 + Math.min((node.count-1)*4, 12);
             const g = svgEl('g', {class:'dot-node', style:'opacity:0'});
             g.appendChild(svgEl('circle', {class:'outer', cx:node.x, cy:node.y, r:r+18}));
-            const inner = svgEl('circle', {class:'inner', cx:node.x, cy:node.y, r});
-            inner.style.animationDelay = (idx * 0.18) + 's';
-            g.appendChild(inner);
+            g.appendChild(svgEl('circle', {class:'inner', cx:node.x, cy:node.y, r}));
+            node.r = r;
             nodeLayer.appendChild(g);
             nodeEls.push(g);
 
@@ -633,7 +645,7 @@
           function showTooltip(node, clientX, clientY) {
             const s = getScale();
             document.getElementById('ttName').textContent = node.name;
-            document.getElementById('ttDesc').textContent = PALACE_COMMENT[node.name] || '';
+            document.getElementById('ttDesc').innerHTML = PALACE_COMMENT[node.name] || '';
             document.getElementById('ttCount').textContent = node.count > 1 ? `점 ${node.count}개` : '';
 
             // 화면 기준 위치 계산 — 노드 왼쪽에 배치, 화면 밖이면 오른쪽
@@ -725,40 +737,86 @@
           });
 
           let t = 0;
+          /* ── 3D 원근 (튕김 없는 부드러운 보간) ──
+             호버한 점은 화면 쪽(z)으로 부드럽게 다가와 원근 때문에 커 보이고(FOCAL/(FOCAL-z)),
+             이어진 다른 점은 원근 단축만큼 그 점 쪽으로 당겨짐:
+             화면상 거리 = √(선 길이² − 깊이 차²). 호버한 점 자체는 제자리. */
+          const FOCAL = 400;          // 초점 거리 (클수록 원근 약함)
+          const HOVER_Z = 220;        // 호버 시 다가오는 깊이 → 크기 FOCAL/(FOCAL-HOVER_Z) ≈ 2.2배
+          const EASE = 0.1;           // 다가가는 속도 (0~1, 넘치지 않음)
+          const nodeIndex = Object.fromEntries(nodes.map((n, i) => [n.name, i]));
+          const edges = lines.map(l => ({ l, a: nodeIndex[l.dataset.a], b: nodeIndex[l.dataset.b] }));
+          const depth = nodes.map(() => ({ z: 0, target: 0 }));
+          nodeEls.forEach((g, i) => {
+            const outer = g.querySelector('.outer');
+            outer.addEventListener('mouseenter', () => { depth[i].target = HOVER_Z; g.classList.add('hover'); });
+            outer.addEventListener('mouseleave', () => { depth[i].target = 0; g.classList.remove('hover'); });
+          });
+
           function tick() {
             t += 0.008;
-            nodes.forEach((node, i) => {
+            const PAD = 30;
+            depth.forEach(d => { d.z += (d.target - d.z) * EASE; });
+
+            // 기준 위치 (둥둥 + 드래그)
+            const base = nodes.map((node, i) => {
               const d = drag[i];
               if (!d.active) { d.offX *= 0.88; d.offY *= 0.88; }
               const floatX = d.active ? 0 : 2.5 * Math.sin(t * 0.7 + floatPhase[i]);
               const floatY = d.active ? 0 : 3.5 * Math.sin(t * 0.5 + floatPhase[i] * 1.3);
-              const PAD = 30;
-              const cx = Math.max(PAD, Math.min(1240-PAD, basePos[i].x + floatX + d.offX));
-              const cy = Math.max(PAD, Math.min(1080-PAD, basePos[i].y + floatY + d.offY));
+              return { x: basePos[i].x + floatX + d.offX, y: basePos[i].y + floatY + d.offY };
+            });
+
+            // 원근 단축: 더 앞에 있는 점과 이어진 점을 그 점 쪽으로 당김
+            const shift = nodes.map(() => ({ x: 0, y: 0 }));
+            edges.forEach(e => {
+              const dz = depth[e.b].z - depth[e.a].z;
+              if (Math.abs(dz) < 0.5) return;
+              const [back, front] = dz > 0 ? [e.a, e.b] : [e.b, e.a];
+              if (drag[back].active) return;
+              const dx = base[front].x - base[back].x, dy = base[front].y - base[back].y;
+              const L = Math.hypot(dx, dy) || 1;
+              const pull = L - Math.sqrt(Math.max(L * L - dz * dz, 0));
+              shift[back].x += dx / L * pull;
+              shift[back].y += dy / L * pull;
+            });
+
+            // 화면에 그리기: 위치는 xy, 크기·진하기는 원근
+            const pos = nodes.map((node, i) => {
+              const cx = Math.max(PAD, Math.min(1240 - PAD, base[i].x + shift[i].x));
+              const cy = Math.max(PAD, Math.min(1080 - PAD, base[i].y + shift[i].y));
+              const s = FOCAL / (FOCAL - depth[i].z);
+              return { x: cx, y: cy, r: node.r * s, s };
+            });
+
+            if (fillPoly) fillPoly.setAttribute('points', pos.map(q => `${q.x},${q.y}`).join(' '));
+
+            nodes.forEach((node, i) => {
               const g = nodeEls[i];
               if (!g) return;
-              if (fillPoly && i === nodes.length-1) {
-                const pts = nodes.map((_, j) => {
-                  const dj = drag[j];
-                  const fx = dj.active ? 0 : 2.5 * Math.sin(t * 0.7 + floatPhase[j]);
-                  const fy = dj.active ? 0 : 3.5 * Math.sin(t * 0.5 + floatPhase[j] * 1.3);
-                  return `${Math.max(30,Math.min(1210,basePos[j].x+fx+dj.offX))},${Math.max(30,Math.min(1050,basePos[j].y+fy+dj.offY))}`;
-                });
-                fillPoly.setAttribute('points', pts.join(' '));
-              }
+              const { x: cx, y: cy, r: rNow, s } = pos[i];
               g.querySelectorAll('circle').forEach(c => { c.setAttribute('cx', cx); c.setAttribute('cy', cy); });
-              lines.forEach(l => {
-                if (l.dataset.a === node.name) { l.setAttribute('x1', cx); l.setAttribute('y1', cy); }
-                if (l.dataset.b === node.name) { l.setAttribute('x2', cx); l.setAttribute('y2', cy); }
-              });
+              g.querySelector('.inner').setAttribute('r', rNow);
+              g.querySelector('.outer').setAttribute('r', rNow + 18);
+              g.querySelector('.inner').style.opacity = Math.min(1, 0.55 + 0.3 * s);
               const lbl = document.getElementById(`lbl-${node.name}`);
               if (lbl) {
-                const r = 5 + Math.min((node.count-1)*3, 8);
-                const isRight = cx > 960, isCenter = Math.abs(cx-960) < 40;
-                lbl.setAttribute('x', Math.max(5, Math.min(1230, isCenter ? cx : (isRight ? cx+r+10 : cx-r-10))));
-                lbl.setAttribute('y', Math.max(15, Math.min(1070, isCenter ? cy+r+16 : cy+5)));
+                const isRight = cx > 960, isCenter = Math.abs(cx - 960) < 40;
+                lbl.setAttribute('x', Math.max(5, Math.min(1230, isCenter ? cx : (isRight ? cx + rNow + 10 : cx - rNow - 10))));
+                lbl.setAttribute('y', Math.max(15, Math.min(1070, isCenter ? cy + rNow + 16 : cy + 5)));
                 lbl.setAttribute('text-anchor', isCenter ? 'middle' : (isRight ? 'start' : 'end'));
               }
+            });
+
+            // 선: 두 점의 가장자리끼리 (선 굵기도 원근에 맞춰)
+            edges.forEach(e => {
+              const a = pos[e.a], b = pos[e.b];
+              const dx = b.x - a.x, dy = b.y - a.y, len = Math.hypot(dx, dy) || 1;
+              const ux = dx / len, uy = dy / len;
+              const ra = Math.min(a.r, len / 2), rb = Math.min(b.r, len / 2);
+              e.l.setAttribute('x1', a.x + ux * ra); e.l.setAttribute('y1', a.y + uy * ra);
+              e.l.setAttribute('x2', b.x - ux * rb); e.l.setAttribute('y2', b.y - uy * rb);
+              e.l.style.strokeWidth = 1.5 * (a.s + b.s) / 2;
             });
             requestAnimationFrame(tick);
           }

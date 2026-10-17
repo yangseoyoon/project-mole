@@ -118,6 +118,11 @@
             0 0 calc(6 * var(--gu)) calc(2 * var(--gu)) rgba(248, 79, 37, 0.45);
         }
       }
+      /* 호버 중이거나 클릭(활성)된 원은 글로우 멈춤 */
+      .jeomDot:hover,
+      .jeomDot.active {
+        animation: none;
+      }
       @media (prefers-reduced-motion: reduce) {
         .jeomDot { animation: none; }
       }
@@ -1263,22 +1268,39 @@
         panel.classList.add('is-open');
 
         if (dotEl) {
-          var label = dotEl.querySelector('.dot-label');
-          var targetWidth = 48;
-          if (label) {
-            // 텍스트 실제 너비 측정 (padding 28px * 2 = 56, 여백 10px)
-            var span = document.createElement('span');
-            span.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;font-family:Pretendard,sans-serif;font-weight:600;font-size:17px;';
-            span.textContent = label.textContent;
-            document.body.appendChild(span);
-            targetWidth = span.offsetWidth + 28 + 24; // padding-left 14 + label margin-left 10 + right padding 14
-            document.body.removeChild(span);
-          }
-          // 디자인 px(17px 글자 기준) → 화면 단위 --gu
-          dotEl.style.width = 'calc(' + targetWidth + ' * var(--gu))';
-          dotEl.classList.add('expanded', 'active');
+          expandDot(dotEl);
+          dotEl.classList.add('active');
         }
       }
+
+      // 원을 이름표가 보이게 옆으로 열기 (디자인 px, 17px 글자 기준 → 화면 단위 --gu)
+      function expandDot(dotEl) {
+        var label = dotEl.querySelector('.dot-label');
+        var targetWidth = 48;
+        if (label) {
+          // 텍스트 실제 너비 측정
+          var span = document.createElement('span');
+          span.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;font-family:Pretendard,sans-serif;font-weight:600;font-size:17px;';
+          span.textContent = label.textContent;
+          document.body.appendChild(span);
+          targetWidth = span.offsetWidth + 28 + 24; // padding-left 14 + label margin-left 10 + right padding 14
+          document.body.removeChild(span);
+        }
+        dotEl.style.width = 'calc(' + targetWidth + ' * var(--gu))';
+        dotEl.classList.add('expanded');
+      }
+
+      // 호버: 열렸다가 마우스를 떼면 닫힘 (클릭해서 활성된 원은 그대로)
+      document.querySelectorAll('.jeomDot').forEach(function (d) {
+        d.addEventListener('mouseenter', function () {
+          if (!d.classList.contains('active')) expandDot(d);
+        });
+        d.addEventListener('mouseleave', function () {
+          if (d.classList.contains('active')) return;
+          d.classList.remove('expanded');
+          d.style.width = '';
+        });
+      });
       /* 진입 안내 팝업: X, 바깥 클릭, Esc 로 닫기 */
       (function () {
         var guide = document.getElementById('jeomGuide');
