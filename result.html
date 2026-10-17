@@ -744,6 +744,7 @@
           const FOCAL = 400;          // 초점 거리 (클수록 원근 약함)
           const HOVER_Z = 220;        // 호버 시 다가오는 깊이 → 크기 FOCAL/(FOCAL-HOVER_Z) ≈ 2.2배
           const EASE = 0.1;           // 다가가는 속도 (0~1, 넘치지 않음)
+          const MIN_GAP = 24;         // 당겨져도 두 점 가장자리 사이에 남길 최소 간격
           const nodeIndex = Object.fromEntries(nodes.map((n, i) => [n.name, i]));
           const edges = lines.map(l => ({ l, a: nodeIndex[l.dataset.a], b: nodeIndex[l.dataset.b] }));
           const depth = nodes.map(() => ({ z: 0, target: 0 }));
@@ -776,7 +777,11 @@
               if (drag[back].active) return;
               const dx = base[front].x - base[back].x, dy = base[front].y - base[back].y;
               const L = Math.hypot(dx, dy) || 1;
-              const pull = L - Math.sqrt(Math.max(L * L - dz * dz, 0));
+              // 가까운 점끼리 겹치지 않게: 두 점 반지름 합 + 여백만큼은 항상 남김
+              const rFront = nodes[front].r * FOCAL / (FOCAL - depth[front].z);
+              const rBack = nodes[back].r * FOCAL / (FOCAL - depth[back].z);
+              const minDist = rFront + rBack + MIN_GAP;
+              const pull = Math.min(L - Math.sqrt(Math.max(L * L - dz * dz, 0)), Math.max(0, L - minDist));
               shift[back].x += dx / L * pull;
               shift[back].y += dy / L * pull;
             });
