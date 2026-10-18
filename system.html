@@ -15,12 +15,12 @@
       .help-sample-face {
         position: absolute;
         inset: 0;
-        z-index: 3;
+        z-index: 1;   /* 사진(savedCanvas) 위, 점(dotCanvas z2)·그리드 아래 */
         width: 100%;
         height: 100%;
         object-fit: cover;
         object-position: center 18%;
-        transform: scale(1.3);         /* 30% 확대 (얼굴 위쪽 기준) */
+        transform: scale(1.716);       /* 1.3 → ×1.2 → ×1.1 확대 (얼굴 위쪽 기준) */
         transform-origin: center 18%;
         background: #fff;
         pointer-events: none;
@@ -54,44 +54,48 @@
 
       <div class="sys-layout">
 
-      <!-- 왼쪽 패널: 얼굴 + 그리드 -->
-      <div class="sys-left-panel">
-        <div class="sys-bar sys-bar--top"></div>
+      <!-- 왼쪽: ① 얼굴에 점 찍기 (안내는 제목줄, 다시찍기 버튼은 아래줄) -->
+      <section class="sys-left-panel">
+        <div class="sys-bar sys-bar--top sys-bar--title">
+          <span class="sys-step">01</span>
+          <span class="sys-title">얼굴에 점 찍기</span>
+          <span class="sys-hint">사진을 클릭해 점을 찍어보세요</span>
+        </div>
         <div id="faceContainer">
           <canvas id="savedCanvas"></canvas>
           <canvas id="dotCanvas"></canvas>
           <div id="grid"></div>
         </div>
-        <button class="sys-bar sys-bar--bottom" id="retakeBtn" onclick="sessionStorage.setItem('helpTourDone','1');window.location.href='camera.html'">사진 다시찍기</button>
-      </div>
-
-      <!-- 클릭 안내 툴팁 -->
-      <div id="click-hint">
-        <p>사진을 클릭해</p>
-        <p>점을 찍어보세요!</p>
-      </div>
-
-      <!-- 중간 패널: 버튼 -->
-      <div class="sys-mid-panel">
-        <button id="resetBtn">점 다시찍기</button>
-        <button id="analyzeBtn">분석하기</button>
-      </div>
-
-      <!-- 오른쪽 상단 패널: 방사형 차트 -->
-      <div class="sys-right-top">
-        <div class="sys-bar sys-bar--top sys-bar--sm"></div>
-        <div class="sys-chart-area">
-          <svg id="radialSvg" xmlns="http://www.w3.org/2000/svg"></svg>
-          <div id="chartControls">
-            <button id="zoomInBtn">+</button>
-            <button id="zoomOutBtn">−</button>
-          </div>
+        <div class="sys-foot">
+          <button class="sys-btn" id="retakeBtn" onclick="window.location.href='camera.html#retake'">사진 다시찍기</button>
+          <button class="sys-btn" id="resetBtn">점 다시찍기</button>
         </div>
-      </div>
+      </section>
 
-      <!-- 오른쪽 하단 패널 -->
-      <div class="sys-right-bottom">
-        <div class="sys-bar sys-bar--top sys-bar--sm sys-bar--label">궁(宮) 설명</div>
+      <!-- 오른쪽: ② 점 패턴 → 궁 설명 → 분석하기 -->
+      <div class="sys-col">
+        <section class="sys-right-top">
+          <div class="sys-bar sys-bar--top sys-bar--title">
+            <span class="sys-step">02</span>
+            <span class="sys-title">점 패턴</span>
+          </div>
+          <div id="chartControls">
+            <button id="zoomInBtn" aria-label="크게">+</button>
+            <button id="zoomOutBtn" aria-label="작게">−</button>
+          </div>
+          <div class="sys-chart-area">
+            <svg id="radialSvg" xmlns="http://www.w3.org/2000/svg"></svg>
+          </div>
+        </section>
+
+        <section class="sys-right-bottom">
+          <div class="sys-bar sys-bar--top sys-bar--title sys-bar--sub">
+            <span class="sys-title">궁(宮) 설명</span>
+          </div>
+          <p class="pdc-empty">점을 찍으면 그 자리의 궁(宮) 설명이 여기에 나타납니다.</p>
+        </section>
+
+        <button id="analyzeBtn">분석하기 <span aria-hidden="true">→</span></button>
       </div>
 
       </div>
@@ -114,7 +118,7 @@
           <span>프로젝트 알아보기</span>
           <img src="images/nav/nav-arrow.svg" alt="">
         </button>
-        <button class="bn-item" style="left:790px" onclick="window.location.href='camera.html'">
+        <button class="bn-item" style="left:790px" onclick="window.location.href='camera.html#help'">
           <span>점 패턴 분석하기</span>
           <img src="images/nav/nav-arrow.svg" alt="">
         </button>
@@ -143,10 +147,17 @@
         sample.src = 'images/help/sample-face.png';
         sample.alt = '';
         document.getElementById('faceContainer').appendChild(sample);
+        // 예시 점: 얼굴 위 몇 군데를 실제로 클릭한 것처럼 → 점·연결선·방사형 차트 패턴이 그려짐
+        // (그리드 안 비율 위치: 오른쪽 이마, 왼쪽 볼, 오른쪽 입가)
+        const grid = document.getElementById('grid');
+        const gr = grid.getBoundingClientRect();
+        [[0.63, 0.22], [0.29, 0.59], [0.61, 0.77]].forEach(([fx, fy]) => {
+          grid.dispatchEvent(new MouseEvent('click', { bubbles: true, clientX: gr.left + gr.width * fx, clientY: gr.top + gr.height * fy }));
+        });
         startHelpTour([
           {
             // 얼굴 패널만 패널 모양 그대로 선명, 위에 겹친 안내·버튼 패널은 블러
-            text: '얼굴에 직접 점을 찍을 수 있습니다.',
+            text: '얼굴 위에 점을 찍어보세요.',
             hole: '.sys-left-panel', shape: true, blurOverlaps: true,
             // Figma: 패널이 얼굴 패널 왼쪽에 걸침 (얼굴 패널 폭 650 기준 왼쪽 -296, 위 +476)
             panel: (h) => { const k = (h.right - h.left) / 650; return { left: h.left - 296 * k, top: h.top + 476 * k }; },

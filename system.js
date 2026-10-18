@@ -480,4 +480,5 @@ document.getElementById('resetBtn').addEventListener('click', () => {
   points.length = 0;
   redrawDots();
   redrawRadial();
+  showPalaceDesc('');  // 궁 설명도 비움 (안내 문구로 돌아감)
 });

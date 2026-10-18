@@ -1,6 +1,6 @@
 /* system.html 전용 — 반응형(body.rwd), 디자인 1px = var(--u) (base.css)
-   패널 묶음(.sys-layout)은 Figma 1920 기준 x 174.8 ~ 1745.2, y 89 ~ 929.5 영역.
-   묶음 안 좌표는 그 영역의 왼쪽 위(174.8, 89)를 원점으로 한 값. */
+   구성: 왼쪽 ① 얼굴에 점 찍기 패널 | 오른쪽 열 ② 점 패턴(방사형 차트) → 궁 설명 → 분석하기 버튼.
+   묶음(.sys-layout)은 1920 기준 폭 1490, 높이 840. */
 
 body {
   background: #e9f056;
@@ -14,7 +14,7 @@ body {
   flex-direction: column;
   justify-content: center;
   min-height: 100dvh;
-  /* 1920×1080 에서 Figma 와 같은 여백: 위 47+42, 아래 77.5+73 */
+  /* 1920×1080 에서 위 47+42, 아래 77.5+73 여백 */
   padding: calc(var(--nav-top-h) + 42 * var(--u)) 0 calc(var(--nav-bottom-h) + 77.5 * var(--u));
 }
 
@@ -46,22 +46,23 @@ body {
 }
 .sys-deco--orange { background: #fe6c48; }
 
-/* ── 패널 묶음 ── */
+/* ── 묶음: 2열 (얼굴 650 | 간격 60 | 오른쪽 780) ── */
 .sys-layout {
   position: relative;
   flex: none;
-  width: calc(1490.4 * var(--u));  /* 가운데로 모음: 1570.4 에서 80 줄임 */
-  height: calc(840.5 * var(--u));
+  display: grid;
+  grid-template-columns: calc(650 * var(--u)) calc(780 * var(--u));
+  column-gap: calc(60 * var(--u));
+  height: calc(840 * var(--u));
   margin: 0 auto;
   z-index: 1;
 }
 
 /* ── 공통 패널 ── */
 .sys-left-panel,
-.sys-mid-panel,
 .sys-right-top,
 .sys-right-bottom {
-  position: absolute;
+  position: relative;
   background: white;
   border: 1px solid #797979;
   border-radius: calc(10 * var(--u));
@@ -69,41 +70,52 @@ body {
   z-index: 1;
 }
 
-/* ── 왼쪽 패널 (얼굴 — 화면 오른쪽) ── */
-.sys-left-panel {
-  left: calc(840.4 * var(--u));  /* 920.4 에서 왼쪽 80 */
-  top: calc(10 * var(--u));
-  width: calc(650 * var(--u));
-  height: calc(770 * var(--u));
-}
-
-/* ── 바 (타이틀바 / 푸터) ── */
+/* ── 제목줄 ── */
 .sys-bar {
   position: absolute;
-  left: -1px;
-  width: calc(100% + 2px);
+  left: 0;
+  top: 0;
+  width: 100%;
   background: #efefef;
-  border-style: solid;
-  border-color: #a6a6a6;
+  border-bottom: 1px solid #a6a6a6;
   z-index: 2;
 }
-.sys-bar--top    { top: -1px;    height: calc(60 * var(--u)); border-width: 0 0 1px 0; }
-.sys-bar--bottom { bottom: -1px; height: calc(50 * var(--u)); border-width: 1px 0 0 0; }
-.sys-bar--sm     { height: calc(32 * var(--u)); }
-.sys-bar--label {
+.sys-bar--title {
+  height: calc(60 * var(--u));
   display: flex;
   align-items: center;
-  padding-left: calc(20 * var(--u));
+  gap: calc(12 * var(--u));
+  padding: 0 calc(24 * var(--u));
+  box-sizing: border-box;
   font-family: 'Pretendard', sans-serif;
-  font-size: calc(12 * var(--u));
-  color: #888;
+}
+.sys-bar--sub { height: calc(44 * var(--u)); }
+.sys-step {
+  font-weight: 700;
+  font-size: calc(15 * var(--u));
+  color: #fe6c48;
+  letter-spacing: 0.04em;
+}
+.sys-title {
+  font-weight: 600;
+  font-size: calc(18 * var(--u));
+  color: #111;
+}
+.sys-bar--sub .sys-title { font-size: calc(15 * var(--u)); color: #555; }
+.sys-hint {
+  margin-left: auto;
+  font-size: calc(15 * var(--u));
+  color: #777;
 }
 
-/* ── 얼굴 컨테이너 ── */
+/* ── ① 얼굴 패널 ── */
+.sys-left-panel { height: 100%; }
+
+/* ── 얼굴 컨테이너: 제목줄(60)과 아래줄(80) 사이 가운데 ── */
 #faceContainer {
   position: absolute;
   left: calc(60 * var(--u));
-  top: calc(62 * var(--u));
+  top: calc(86 * var(--u));
   width: calc(530 * var(--u));
   height: calc(648 * var(--u));
   background: #e9f056;
@@ -169,97 +181,57 @@ body {
   background: rgba(255, 92, 52, 0.06);
 }
 
-/* ── 중간 패널: 버튼 ── */
-.sys-mid-panel {
-  left: calc(675.2 * var(--u));  /* 735.2 에서 왼쪽 60 */
-  top: calc(201 * var(--u));
-  width: calc(300 * var(--u));
-  height: calc(130 * var(--u));
+/* ── 얼굴 패널 아래줄: 사진 다시찍기 / 점 다시찍기 ── */
+.sys-foot {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: calc(80 * var(--u));
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: calc(14 * var(--u));
+  padding: 0 calc(60 * var(--u));
+  box-sizing: border-box;
+  background: #efefef;
+  border-top: 1px solid #a6a6a6;
 }
-
-#resetBtn,
-#analyzeBtn {
-  width: calc(260 * var(--u));
-  height: calc(50 * var(--u));
+.sys-btn {
+  flex: 1;
+  height: calc(46 * var(--u));
+  background: white;
+  color: #111;
+  border: 1px solid #797979;
   border-radius: calc(8 * var(--u));
   font-family: 'Pretendard', sans-serif;
-  font-weight: 600;
-  font-size: calc(18 * var(--u));
+  font-weight: 500;
+  font-size: calc(16 * var(--u));
   cursor: pointer;
   transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
-
-#resetBtn {
-  background: white;
-  color: black;
-  border: 1px solid #797979;
-}
-#resetBtn:hover {
+.sys-btn:hover {
   background: #ff5c34;
   color: white;
   border-color: #ff5c34;
 }
 
-#analyzeBtn {
-  background: #797979;
-  color: white;
-  border: none;
-}
-#analyzeBtn:hover {
-  background: #ff5c34;
-}
-
-#retakeBtn {
-  font-family: 'Pretendard', sans-serif;
-  font-weight: 500;
-  font-size: calc(15 * var(--u));
-  cursor: pointer;
-  color: #444;
-  background: #efefef;
-  transition: background 0.15s, color 0.15s;
-}
-#retakeBtn:hover {
-  background: #ff5c34;
-  color: white;
+/* ── 오른쪽 열: 차트(550) → 설명(나머지) → 분석하기(60) ── */
+.sys-col {
+  display: flex;
+  flex-direction: column;
+  gap: calc(20 * var(--u));
+  min-height: 0;
 }
 
-/* ── 클릭 안내 툴팁 ── */
-#click-hint {
-  position: absolute;
-  left: calc(605.2 * var(--u));  /* 665.2 에서 왼쪽 60 */
-  top: calc(81 * var(--u));
-  background: #efefef;
-  border: 1px solid #797979;
-  border-radius: calc(14 * var(--u));
-  padding: calc(16 * var(--u)) calc(24 * var(--u));
-  font-family: 'Pretendard', sans-serif;
-  font-size: calc(20 * var(--u));
-  font-weight: 400;
-  line-height: 1.5;
-  text-align: center;
-  z-index: 2;
-  pointer-events: none;
-}
-
-/* ── 오른쪽 상단 패널 (방사형 차트 — 화면 왼쪽) ── */
-.sys-right-top {
-  left: 0;
-  top: 0;
-  width: calc(556 * var(--u));
-  height: calc(555 * var(--u));
-}
+/* ── ② 방사형 차트 ── */
+.sys-right-top { flex: 0 0 calc(550 * var(--u)); }
 
 .sys-chart-area {
   position: absolute;
   left: 0;
-  top: calc(32 * var(--u));
+  top: calc(60 * var(--u));
   width: 100%;
-  height: calc(100% - 32 * var(--u));
+  height: calc(100% - 60 * var(--u));
   overflow: hidden;
 }
 
@@ -269,11 +241,11 @@ body {
   overflow: visible;
 }
 
-/* ── 줌 버튼 ── */
+/* ── 줌 버튼: 차트 제목줄 오른쪽 ── */
 #chartControls {
   position: absolute;
-  top: calc(10 * var(--u));
-  right: calc(10 * var(--u));
+  top: calc(15 * var(--u));
+  right: calc(20 * var(--u));
   display: flex;
   gap: calc(8 * var(--u));
   z-index: 10;
@@ -295,23 +267,36 @@ body {
 }
 #chartControls button:hover { background: #f0f0f0; }
 
-/* ── 오른쪽 하단 패널 (궁 설명 — 화면 왼쪽 아래) ── */
-.sys-right-bottom {
+/* ── 궁 설명 ── */
+.sys-right-bottom { flex: 1 1 0; min-height: calc(150 * var(--u)); }
+
+.pdc-empty {
+  position: absolute;
+  top: calc(44 * var(--u));
+  bottom: 0;
   left: 0;
-  top: calc(640.5 * var(--u));
-  width: calc(617.792 * var(--u));
-  height: calc(200 * var(--u));
+  right: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Pretendard', sans-serif;
+  font-size: calc(15 * var(--u));
+  color: #999;
 }
+/* 설명이 나오면 안내 문구 숨김 */
+.sys-right-bottom:has(#palace-desc-content) .pdc-empty { display: none; }
 
 #palace-desc-content {
   position: absolute;
-  top: calc(44 * var(--u));
+  top: calc(58 * var(--u));
   left: calc(28 * var(--u));
   right: calc(28 * var(--u));
-  bottom: calc(20 * var(--u));
+  bottom: calc(16 * var(--u));
   display: flex;
   flex-direction: column;
   gap: calc(6 * var(--u));
+  overflow: auto;
 }
 
 .pdc-name {
@@ -319,7 +304,7 @@ body {
   font-size: calc(22 * var(--u));
   font-weight: 700;
   color: #111;
-  margin-bottom: calc(2 * var(--u));
+  margin: 0 0 calc(2 * var(--u));
 }
 
 .pdc-sub {
@@ -328,6 +313,7 @@ body {
   font-weight: 400;
   color: #888;
   letter-spacing: 0.03em;
+  margin: 0;
 }
 
 .pdc-body {
@@ -336,32 +322,35 @@ body {
   font-weight: 400;
   color: #333;
   line-height: 1.65;
-  margin-top: calc(4 * var(--u));
+  margin: calc(4 * var(--u)) 0 0;
 }
 
-/* ── 좁은 화면 / 크게 확대한 화면: 2열로 재배치 ──
-   왼쪽: 차트 → 설명, 오른쪽: 안내+버튼 → 얼굴 패널.
-   1340px 미만에서는 Figma 배치(폭 1570)가 화면에 들어가지 않는다. */
-@media (max-width: 1339px) {
+/* ── 분석하기: 오른쪽 열 맨 아래 큰 버튼 ── */
+#analyzeBtn {
+  flex: 0 0 calc(60 * var(--u));
+  width: 100%;
+  background: #111;
+  color: white;
+  border: 1px solid #111;
+  border-radius: calc(10 * var(--u));
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: calc(20 * var(--u));
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+#analyzeBtn:hover {
+  background: #ff5c34;
+  border-color: #ff5c34;
+}
+
+/* ── 좁은 화면 / 크게 확대한 화면: 한 줄로 쌓기 (얼굴 → 차트 → 설명 → 분석하기) ── */
+@media (max-width: 1199px) {
   .sys-layout {
-    display: grid;
-    width: calc(1308 * var(--u));
+    grid-template-columns: calc(780 * var(--u));
+    row-gap: calc(24 * var(--u));
     height: auto;
-    grid-template-columns: calc(618 * var(--u)) calc(650 * var(--u));
-    grid-template-rows: calc(130 * var(--u)) auto auto;
-    gap: calc(24 * var(--u)) calc(40 * var(--u));
-    align-items: start;
   }
-
-  .sys-layout > * {
-    position: relative;
-    left: auto;
-    top: auto;
-  }
-
-  .sys-right-top    { grid-column: 1; grid-row: 1 / 3; }
-  .sys-right-bottom { grid-column: 1; grid-row: 3; }
-  #click-hint       { grid-column: 2; grid-row: 1; justify-self: start; align-self: center; position: relative; left: auto; top: auto; }
-  .sys-mid-panel    { grid-column: 2; grid-row: 1; justify-self: end; }
-  .sys-left-panel   { grid-column: 2; grid-row: 2 / 4; }
+  .sys-left-panel { height: calc(840 * var(--u)); }
+  .sys-right-bottom { flex: none; height: calc(200 * var(--u)); }
 }

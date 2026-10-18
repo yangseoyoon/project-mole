@@ -94,28 +94,23 @@
         border-radius: calc(50 * var(--gu));
       }
 
-      /* ── 점 글로우: 주황빛이 바깥으로 퍼져나감 ── */
+      /* ── 점 글로우: 테두리 링 없이 흐릿한 주황빛이 부드럽게 커졌다 작아짐 (블러 글로우) ── */
       .jeomDot {
-        animation: dotGlow 2.4s ease-out infinite;
+        animation: dotGlow 2.4s ease-in-out infinite;
       }
       /* 점마다 박자를 조금씩 어긋나게 */
       .jeomDot:nth-of-type(3n+1) { animation-delay: -0.8s; }
       .jeomDot:nth-of-type(3n+2) { animation-delay: -1.6s; }
       @keyframes dotGlow {
-        0% {
+        0%, 100% {
           box-shadow:
-            0 0 0 0 rgba(248, 79, 37, 0.55),
-            0 0 calc(6 * var(--gu)) calc(2 * var(--gu)) rgba(248, 79, 37, 0.45);
+            0 0 calc(8 * var(--gu)) calc(1 * var(--gu)) rgba(248, 79, 37, 0.55),
+            0 0 calc(18 * var(--gu)) calc(3 * var(--gu)) rgba(248, 79, 37, 0.25);
         }
-        70% {
+        50% {
           box-shadow:
-            0 0 0 calc(26 * var(--gu)) rgba(248, 79, 37, 0),
-            0 0 calc(30 * var(--gu)) calc(10 * var(--gu)) rgba(248, 79, 37, 0.15);
-        }
-        100% {
-          box-shadow:
-            0 0 0 calc(26 * var(--gu)) rgba(248, 79, 37, 0),
-            0 0 calc(6 * var(--gu)) calc(2 * var(--gu)) rgba(248, 79, 37, 0.45);
+            0 0 calc(16 * var(--gu)) calc(5 * var(--gu)) rgba(248, 79, 37, 0.5),
+            0 0 calc(38 * var(--gu)) calc(12 * var(--gu)) rgba(248, 79, 37, 0.22);
         }
       }
       /* 호버 중이거나 클릭(활성)된 원은 글로우 멈춤 */
@@ -329,6 +324,7 @@
         overflow: visible;
       }
     </style>
+    <script src="help-gate.js"></script>
   </head>
   <body class="rwd">
     <nav class="topNav">
@@ -1223,7 +1219,7 @@
         <button
           class="bn-item"
           style="left: 790px"
-          onclick="window.location.href = 'camera.html'"
+          onclick="window.location.href = 'camera.html#help'"
         >
           <span>점 패턴 분석하기</span>
           <img src="images/nav/nav-arrow.svg" alt="" />
@@ -1305,6 +1301,8 @@
       (function () {
         var guide = document.getElementById('jeomGuide');
         function closeGuide() { guide.classList.remove('active'); }
+        // 네비게이션바로 새로 들어온 뒤 처음 올 때만 (help-gate.js)
+        if (!helpGate('jeom-gwansang')) closeGuide();
         document.getElementById('jeomGuideClose').addEventListener('click', closeGuide);
         guide.addEventListener('click', function (e) { if (e.target === guide) closeGuide(); });
         document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeGuide(); });

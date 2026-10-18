@@ -13,6 +13,7 @@
              또는 (holeRect, panelW, panelH) => {left, top} 로 직접 지정
      shape : true 면 hole 요소 모양(둥근 모서리) 그대로 뚫음 (hole 은 선택자, 첫 요소 기준, pad 무시)
      blurOverlaps : true 면 hole 요소 위에 겹친 형제 요소도 블러 (구멍 안에서도 흐리게)
+                    shape 와 함께면 겹친 요소 모양대로 구멍에서 빼서 배경과 한 번에 블러 (네모 경계 없음)
      zoom  : 숫자면 이 단계 동안만 hole 요소를 그 배율로 확대 (작은 요소 설명용)
      enter / leave : 이 단계가 시작될 때 / 끝날 때 실행할 함수 (예시 이미지 표시 등)
    화면 아무 곳이나 / → 를 누르면 다음 단계, 마지막 단계 다음은 종료. Esc 로 건너뜀. */
@@ -65,6 +66,33 @@
       });
     }
 
+    // 요소의 둥근 모서리 반지름 (화면 px)
+    function radiusOf(el, r) {
+      const rad = (parseFloat(getComputedStyle(el).borderTopLeftRadius) || 0) * (r.width / (el.offsetWidth || r.width));
+      return Math.min(rad, r.width / 2, r.height / 2);
+    }
+    // 둥근 사각형 경로. ccw = 반시계방향 (구멍)
+    function rrect(r, k, ccw) {
+      const x0 = r.left, y0 = r.top, x1 = r.right, y1 = r.bottom;
+      return ccw
+        ? `M${x0 + k} ${y0} A${k} ${k} 0 0 0 ${x0} ${y0 + k} V${y1 - k} A${k} ${k} 0 0 0 ${x0 + k} ${y1} H${x1 - k} A${k} ${k} 0 0 0 ${x1} ${y1 - k} V${y0 + k} A${k} ${k} 0 0 0 ${x1 - k} ${y0} Z`
+        : `M${x0 + k} ${y0} H${x1 - k} A${k} ${k} 0 0 1 ${x1} ${y0 + k} V${y1 - k} A${k} ${k} 0 0 1 ${x1 - k} ${y1} H${x0 + k} A${k} ${k} 0 0 1 ${x0} ${y1 - k} V${y0 + k} A${k} ${k} 0 0 1 ${x0 + k} ${y0} Z`;
+    }
+    // 구멍 요소보다 위 레이어에서 겹친 형제 요소 (z-index 가 더 크거나, 같으면 문서에서 뒤에 오는 것)
+    function overlapsAbove(holeEl, h) {
+      const parent = holeEl.parentElement;
+      if (!parent) return [];
+      const z = el => parseInt(getComputedStyle(el).zIndex, 10) || 0;
+      const zh = z(holeEl);
+      return [...parent.children].filter(el => {
+        if (el === holeEl || getComputedStyle(el).visibility === 'hidden') return false;
+        const r = el.getBoundingClientRect();
+        if (!(r.width && r.height && r.right > h.left && r.left < h.right && r.bottom > h.top && r.top < h.bottom)) return false;
+        const ze = z(el);
+        return ze > zh || (ze === zh && !!(holeEl.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING));
+      }).map(el => { const r = el.getBoundingClientRect(); return { r, k: radiusOf(el, r) }; });
+    }
+
     // zoom: 이 단계 동안만 hole 요소를 확대 (scale 속성, 원래 값 보관 후 복원)
     function clearZoom() {
       document.querySelectorAll('.htour-zoomed').forEach(el => {
@@ -101,19 +129,24 @@
       }
 
       // shape: 구멍을 요소 모양(둥근 모서리) 그대로 — 화면 전체 블러 한 장에 clip-path 로 뚫음
+      //  blurOverlaps 면 구멍 위 레이어에 겹친 요소(말풍선·패널 등)는 그 모양대로 구멍에서 빼서 배경과 함께 블러
+      //  (nonzero 채우기: 화면 시계방향 + 구멍 반시계방향 = 뚫림, 겹친 요소 시계방향 = 다시 막힘)
       if (holeEl) {
         const r = holeEl.getBoundingClientRect();
-        const rad = (parseFloat(getComputedStyle(holeEl).borderTopLeftRadius) || 0) * (r.width / (holeEl.offsetWidth || r.width));
-        const x0 = r.left, y0 = r.top, x1 = r.right, y1 = r.bottom, k = Math.min(rad, r.width / 2, r.height / 2);
-        const hole = `M${x0 + k} ${y0} H${x1 - k} A${k} ${k} 0 0 1 ${x1} ${y0 + k} V${y1 - k} A${k} ${k} 0 0 1 ${x1 - k} ${y1}` +
-                     ` H${x0 + k} A${k} ${k} 0 0 1 ${x0} ${y1 - k} V${y0 + k} A${k} ${k} 0 0 1 ${x0 + k} ${y0} Z`;
+        const k = radiusOf(holeEl, r);
+        const x0 = r.left, y0 = r.top;
+        const covers = s.blurOverlaps ? overlapsAbove(holeEl, r) : [];
         const p = document.createElement('div');
         p.className = 'htour-blur';
         p.style.inset = '0';
-        p.style.clipPath = `path(evenodd, 'M0 0 H${vw} V${vh} H0 Z ${hole}')`;
+        p.style.clipPath = `path(nonzero, 'M0 0 H${vw} V${vh} H0 Z ${rrect(r, k, true)} ${covers.map(c => rrect(c.r, c.k, false)).join(' ')}')`;
         tour.appendChild(p);
-        if (s.blurOverlaps) blurOverlaps(holeEl, { left: x0, top: y0, right: x1, bottom: y1 });
-        addHoleGlow({ left: x0, top: y0, right: x1, bottom: y1 }, k);
+        const glow = addHoleGlow(r, k);
+        // 주황 그림자도 겹친 요소 위로는 그리지 않음 (그림자 요소 기준 좌표)
+        if (covers.length) {
+          const off = c => ({ left: c.r.left - x0, top: c.r.top - y0, right: c.r.right - x0, bottom: c.r.bottom - y0 });
+          glow.style.clipPath = `path(nonzero, 'M${-x0} ${-y0} H${vw - x0} V${vh - y0} H${-x0} Z ${covers.map(c => rrect(off(c), c.k, true)).join(' ')}')`;
+        }
       } else if (h) {
         addHoleGlow(h, 0);
       }
@@ -128,6 +161,7 @@
           borderRadius: radius + 'px',
         });
         tour.appendChild(o);
+        return o;
       }
 
       // 사각 구멍에서도 겹친 형제 요소 블러 (첫 hole 요소 기준)
@@ -136,18 +170,14 @@
         if (first) blurOverlaps(first, h);
       }
 
-      // 사각 구멍: 구멍을 둘러싼 네 조각
-      const panes = (!h || holeEl) ? [] : [
-        [0, 0, vw, h.top], [0, h.bottom, vw, vh - h.bottom],
-        [0, h.top, h.left, h.bottom - h.top], [h.right, h.top, vw - h.right, h.bottom - h.top],
-      ];
-      panes.forEach(([l, t, w, hh]) => {
-        if (w <= 0 || hh <= 0) return;
+      // 사각 구멍: 화면 전체 블러 한 장에 사각형으로 뚫음 (조각을 나누면 조각 경계에 블러 이음매가 생김)
+      if (h && !holeEl) {
         const p = document.createElement('div');
         p.className = 'htour-blur';
-        Object.assign(p.style, { left: l + 'px', top: t + 'px', width: w + 'px', height: hh + 'px' });
+        p.style.inset = '0';
+        p.style.clipPath = `path(nonzero, 'M0 0 H${vw} V${vh} H0 Z ${rrect(h, 0, true)}')`;
         tour.appendChild(p);
-      });
+      }
 
       // 도움말 패널
       const panel = document.createElement('div');

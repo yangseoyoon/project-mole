@@ -454,6 +454,7 @@ body{
 #tour #tier3-popup { z-index: 3; }
 
 </style>
+  <script src="help-gate.js"></script>
 </head>
 <body class="rwd">
 
@@ -1002,6 +1003,8 @@ body{
 <script>
   (function () {
     const tour = document.getElementById('tour');
+    // 네비게이션바로 새로 들어온 뒤 처음 올 때만 (help-gate.js)
+    if (!helpGate('dot-pattern')) { tour.classList.add('done'); return; }
     const canvas = document.getElementById('canvas-area');
     const panelWords = document.getElementById('panel-words');
 

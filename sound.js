@@ -22,6 +22,11 @@
 
   // 네비게이션 클릭: 사운드 재생 후 이동 (즉시 페이지 이동 시 오디오 끊김 방지)
   document.addEventListener('click', function (e) {
+    // 하단 네비게이션바 버튼: 새로 들어간다는 표시 (도움말 규칙, help-gate.js)
+    if (e.target.closest('.bn-item')) {
+      try { sessionStorage.setItem('navEntry', String(Date.now())); } catch (err) {}
+    }
+
     // <a href> 링크
     var link = e.target.closest('a[href]');
     if (link) {
