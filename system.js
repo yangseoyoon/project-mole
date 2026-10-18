@@ -391,7 +391,7 @@ grid.addEventListener('click', (e) => {
 });
 
 // ── 줌 버튼 ──
-let zoomLevel = 0.9;
+let zoomLevel = 0.855;  // 기본 크기 (0.9 에서 5% 축소)
 svg.style.transform = `scale(${zoomLevel})`;
 document.getElementById('zoomInBtn').addEventListener('click', () => {
   zoomLevel = Math.min(zoomLevel + 0.1, 2);
@@ -407,6 +407,7 @@ function analyzePattern() {
   if (points.length === 0) {
     localStorage.setItem('resultType', 'NONE');
     localStorage.setItem('palaceCount', JSON.stringify({}));
+    localStorage.removeItem('dominantPalace');  // 이전 분석 값이 결과에 남지 않게
     window.location.href = 'result.html';
     return;
   }

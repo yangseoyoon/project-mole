@@ -50,7 +50,7 @@ body {
 .sys-layout {
   position: relative;
   flex: none;
-  width: calc(1570.4 * var(--u));
+  width: calc(1490.4 * var(--u));  /* 가운데로 모음: 1570.4 에서 80 줄임 */
   height: calc(840.5 * var(--u));
   margin: 0 auto;
   z-index: 1;
@@ -71,7 +71,7 @@ body {
 
 /* ── 왼쪽 패널 (얼굴 — 화면 오른쪽) ── */
 .sys-left-panel {
-  left: calc(920.4 * var(--u));
+  left: calc(840.4 * var(--u));  /* 920.4 에서 왼쪽 80 */
   top: calc(10 * var(--u));
   width: calc(650 * var(--u));
   height: calc(770 * var(--u));
@@ -171,7 +171,7 @@ body {
 
 /* ── 중간 패널: 버튼 ── */
 .sys-mid-panel {
-  left: calc(735.2 * var(--u));
+  left: calc(675.2 * var(--u));  /* 735.2 에서 왼쪽 60 */
   top: calc(201 * var(--u));
   width: calc(300 * var(--u));
   height: calc(130 * var(--u));
@@ -231,7 +231,7 @@ body {
 /* ── 클릭 안내 툴팁 ── */
 #click-hint {
   position: absolute;
-  left: calc(665.2 * var(--u));
+  left: calc(605.2 * var(--u));  /* 665.2 에서 왼쪽 60 */
   top: calc(81 * var(--u));
   background: #efefef;
   border: 1px solid #797979;

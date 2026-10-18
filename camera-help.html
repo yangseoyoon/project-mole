@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>도움말 | DOT SHIFT</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <!-- 다음 슬라이드 이미지 미리 받기 -->
+    <link rel="preload" as="image" href="images/help/slides/camera-1.png" />
+    <style>
+      /* 점 패턴 분석하기 도움말 — PPT 처럼 이미지 슬라이드 + 도움말 패널만.
+         슬라이드 이미지: images/help/slides/camera-1~5.png (1920×1080, 패널 없는 화면 캡처)
+         다시 캡처하는 방법은 images/help/slides/README.md */
+      html, body {
+        margin: 0;
+        height: 100%;
+        overflow: hidden;
+        background: #f0f0f0;
+        cursor: pointer;
+      }
+      /* 1920×1080 무대를 화면에 꽉 차게 (비율이 다르면 가장자리가 조금 잘림) */
+      .viewport {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+      }
+      .stage {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1920px;
+        height: 1080px;
+        transform-origin: 0 0;
+      }
+      .slide {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        display: none;
+        user-select: none;
+        -webkit-user-drag: none;
+      }
+      .slide.on { display: block; }
+
+      /* 도움말 패널 (help-tour.css 와 같은 모양, 1920 기준 px) */
+      .panel {
+        position: absolute;
+        width: max-content;
+        max-width: 600px;
+        min-width: 250px;
+        box-sizing: border-box;
+        background: #e9f056;
+        border: 1px solid #000;
+        padding: 60px 34px 30px;
+      }
+      .panel-title {
+        position: absolute;
+        left: 0; top: 0;
+        height: 34px;
+        padding: 0 38px;
+        display: flex; align-items: center;
+        background: #fe6c48;
+        font-family: 'Pretendard', sans-serif;
+        font-weight: 600;
+        font-size: 24px;
+        color: #fff;
+        white-space: nowrap;
+      }
+      .panel-next {
+        position: absolute;
+        right: 0; top: 0;
+        width: 80px;
+        height: 34px;
+        display: flex; align-items: center; justify-content: center;
+        background: #fe6c48;
+        border: none;
+        padding: 0;
+        font-family: 'Pretendard', sans-serif;
+        font-size: 24px;
+        color: #fff;
+        cursor: pointer;
+      }
+      .panel-text {
+        margin: 0;
+        font-family: 'Pretendard', sans-serif;
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 32px;
+        color: #000;
+        word-break: keep-all;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="viewport">
+    <div class="stage" id="stage">
+      <div class="panel" id="panel" role="dialog" aria-live="polite">
+        <div class="panel-title">도움말</div>
+        <button class="panel-next" id="next" aria-label="다음">→</button>
+        <p class="panel-text" id="text"></p>
+      </div>
+    </div>
+    </div>
+
+    <script>
+      (function () {
+        // 이미지와 패널 위치(1920×1080 기준, 캡처할 때 화면에서 잰 값)
+        const SLIDES = [
+          { img: 'camera-1.png', left: 716, top: 462, text: '자신이 어떤 점 패턴을 가지고 있는지 직접 얼굴에 점을<br>찍어 알아볼 수 있습니다.' },
+          { img: 'camera-2.png', left: 180, top: 191, text: '가이드 선에 맞춰서 얼굴 사진을 찍어주세요.' },
+          { img: 'camera-3.png', left: 544, top: 807, text: '아래 슬라이드로 얼굴크기를 쉽게 맞출 수 있습니다.' },
+          { img: 'camera-4.png', left: 721, top: 584, text: '얼굴에 직접 점을 찍을 수 있습니다.' },
+          { img: 'camera-5.png', left: 819, top: 305, text: '찍은 점은 패턴으로 재구성됩니다.' },
+        ];
+        const stage = document.getElementById('stage');
+        const panel = document.getElementById('panel');
+        const text = document.getElementById('text');
+
+        // 이미지 미리 다 넣어두고 보이는 것만 바꿈
+        const imgs = SLIDES.map((s, i) => {
+          const img = document.createElement('img');
+          img.className = 'slide';
+          img.src = 'images/help/slides/' + s.img;
+          img.alt = '';
+          img.decoding = 'async';
+          stage.insertBefore(img, panel);
+          return img;
+        });
+
+        function fit() {
+          const k = Math.max(innerWidth / 1920, innerHeight / 1080);
+          stage.style.transform = 'translate(' + (innerWidth - 1920 * k) / 2 + 'px, ' + (innerHeight - 1080 * k) / 2 + 'px) scale(' + k + ')';
+        }
+        fit();
+        addEventListener('resize', fit);
+
+        let i = 0;
+        function show(n) {
+          i = n;
+          imgs.forEach((img, j) => img.classList.toggle('on', j === i));
+          const s = SLIDES[i];
+          text.innerHTML = s.text;
+          panel.style.left = s.left + 'px';
+          panel.style.top = s.top + 'px';
+        }
+        // 끝나면(또는 Esc) 카메라로 — 카메라 페이지가 도움말로 다시 보내지 않게 표시
+        function done() {
+          sessionStorage.setItem('helpTourDone', '1');
+          location.replace('camera.html');
+        }
+        function next() { if (i + 1 < SLIDES.length) show(i + 1); else done(); }
+
+        document.addEventListener('click', next);
+        document.addEventListener('keydown', e => {
+          if (e.key === 'Escape') done();
+          else if (e.key === 'ArrowRight' || e.key === 'Enter' || e.key === ' ') { e.preventDefault(); next(); }
+          else if (e.key === 'ArrowLeft' && i > 0) show(i - 1);
+        });
+        show(0);
+      })();
+    </script>
+  </body>
+</html>

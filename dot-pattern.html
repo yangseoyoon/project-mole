@@ -386,6 +386,13 @@ body{
   -webkit-backdrop-filter: blur(8px);
   background: transparent;
 }
+/* 선명한 구간 바깥으로 주황 그림자 (help-tour.css .htour-hole 과 같은 값) */
+.tour-hole {
+  position: fixed;
+  z-index: 1;
+  pointer-events: none;
+  box-shadow: 0 0 18px 2px rgba(234, 92, 58, 0.55);
+}
 .tour-panel {
   position: fixed;
   width: max-content;
@@ -1090,6 +1097,13 @@ body{
         Object.assign(p.style, { left: l + 'px', top: t + 'px', width: w + 'px', height: hh + 'px' });
         tour.appendChild(p);
       });
+      // 선명한 구간 바깥으로 주황 그림자 (블러와의 경계 구분, 카메라 도움말과 같은 효과)
+      if (h) {
+        const o = document.createElement('div');
+        o.className = 'tour-hole';
+        Object.assign(o.style, { left: h.left + 'px', top: h.top + 'px', width: (h.right - h.left) + 'px', height: (h.bottom - h.top) + 'px' });
+        tour.appendChild(o);
+      }
 
       // 도움말 패널
       const panel = document.createElement('div');

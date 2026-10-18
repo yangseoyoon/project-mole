@@ -483,7 +483,9 @@
         };
 
         const rawCode = localStorage.getItem('resultType') || 'NONE';
-        const dominantPalace = localStorage.getItem('dominantPalace') || '';
+        // NONE 이면 이전 분석의 대표 궁이 남아 있어도 쓰지 않음
+        const dominantPalace = (localStorage.getItem('resultType') || 'NONE') === 'NONE'
+          ? '' : (localStorage.getItem('dominantPalace') || '');
         const typeKey = TYPE_MAP[rawCode] ? rawCode : 'NONE';
         const data = TYPE_MAP[typeKey];
 
@@ -538,6 +540,7 @@
 
         // ── 얼굴 노드맵 ─────────────────────────────────────────────
         (function buildMap() {
+          if (typeKey === 'NONE') return;  // NONE 유형은 노드맵 없음 (이전 분석 값이 남아 있어도)
           const palaceCount = JSON.parse(localStorage.getItem('palaceCount') || '{}');
           const activePalaces = Object.keys(palaceCount);
           const svg = document.getElementById('mapSvg');
@@ -555,9 +558,8 @@
           // 활성 노드 목록
           let nodes = activePalaces.filter(p => PALACE_POS[p])
             .map(p => ({name:p, ...PALACE_POS[p], count: palaceCount[p]||1}));
-          if (nodes.length === 0) {
-            ['관록궁','남녀궁','처첩궁'].forEach(p => { if (PALACE_POS[p]) nodes.push({name:p, ...PALACE_POS[p], count:1}); });
-          }
+          // 찍은 점이 없으면(NONE) 노드맵을 그리지 않음 (예전에는 예시 노드 3개를 대신 보여줬음)
+          if (nodes.length === 0) return;
 
           // 면 채우기
           const faceLayer = svgEl('g', {});

@@ -1,0 +1,92 @@
+/* 진입 도움말 투어 (help-tour.js) — 음양오행(dot-pattern) 투어와 같은 형태
+   해당 구간만 선명하게 두고 나머지는 블러, 옆에 도움말 패널 */
+.htour { position: fixed; inset: 0; z-index: 5000; cursor: pointer; }
+.htour.done { display: none; }
+.htour-blur {
+  position: fixed;
+  z-index: 1;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background: transparent;
+}
+.htour-panel {
+  position: fixed;
+  z-index: 2;
+  left: 50%;
+  top: 50%;  /* JS 가 위치를 다시 잡기 전 기본값 */
+  width: max-content;
+  max-width: calc(600 * var(--u));
+  min-width: calc(250 * var(--u));  /* 텍스트에 맞춤 — 도움말 탭(약 150) + → 버튼(80) 이 겹치지 않을 만큼만 */
+  background: #e9f056;
+  border: 1px solid #000;
+  padding: calc(60 * var(--u)) calc(34 * var(--u)) calc(30 * var(--u));
+  animation: htourFloat 3s ease-in-out infinite;
+}
+/* 선명한 구간 바깥으로 주황 그림자 (블러 쪽으로 번짐, 경계 구분) */
+.htour-hole {
+  position: fixed;
+  z-index: 1;
+  pointer-events: none;
+  box-shadow: 0 0 18px 2px rgba(234, 92, 58, 0.55);
+}
+/* 구멍 위에 겹친 요소는 직접 흐리게 (blurOverlaps) */
+.htour-blurred {
+  filter: blur(8px) !important;
+}
+/* zoom 으로 확대한 요소는 다른 요소 위로 */
+.htour-zoomed {
+  z-index: 50 !important;
+}
+/* 탭·→ 는 테두리 안쪽 */
+.htour-title {
+  position: absolute;
+  left: 0; top: 0;
+  height: calc(34 * var(--u));
+  padding: 0 calc(38 * var(--u));
+  display: flex; align-items: center;
+  background: #fe6c48;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: calc(24 * var(--u));
+  color: #fff;
+  white-space: nowrap;
+}
+.htour-next {
+  position: absolute;
+  right: 0; top: 0;
+  width: calc(80 * var(--u));
+  height: calc(34 * var(--u));
+  display: flex; align-items: center; justify-content: center;
+  background: #fe6c48;
+  border: none;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: calc(24 * var(--u));
+  color: #fff;
+  cursor: pointer;
+}
+.htour-next:hover { background: #ea5c3a; }
+.htour-text {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: calc(20 * var(--u));
+  line-height: calc(32 * var(--u));
+  color: #000;
+  word-break: keep-all;
+  text-align: center;  /* 패널 폭이 최소 폭보다 짧은 문구여도 가운데 */
+}
+@keyframes htourFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .htour-panel { animation: none; }
+}
+
+/* 캡처 모드 (#capture=N): 도움말 패널 숨김, 화면 애니메이션·전환 정지 → 슬라이드 이미지용 정지 화면 */
+.htour-capture .htour-panel { visibility: hidden !important; }
+.htour-capture *, .htour-capture *::before, .htour-capture *::after {
+  animation: none !important;
+  transition: none !important;
+}
+.htour-capture #dot-cursor { display: none !important; }

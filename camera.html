@@ -4,6 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>웹캠 | DOT SHIFT</title>
+    <script>
+      // 들어오면 먼저 도움말 슬라이드(camera-help.html)로. 도움말을 마쳤거나 '사진 다시찍기'로 온 경우만 바로 촬영
+      // (#capture=N 은 슬라이드 이미지 캡처용이라 그대로 둠)
+      (function () {
+        if (/capture=/.test(location.hash)) return;
+        if (sessionStorage.getItem('helpTourDone')) { sessionStorage.removeItem('helpTourDone'); return; }
+        location.replace('camera-help.html');
+      })();
+    </script>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
     <link
       rel="stylesheet"
@@ -11,6 +20,7 @@
     />
     <link rel="stylesheet" href="nav.css" />
     <link rel="stylesheet" href="base.css" />
+    <link rel="stylesheet" href="help-tour.css" />
     <link rel="stylesheet" href="camera.css" />
   </head>
   <body class="rwd">
@@ -307,6 +317,48 @@
     <script src="camera-text-filter.js"></script>
     <script src="camera-sticker-filter.js"></script>
     <script src="camera-mesh-panel.js"></script>
+    <!-- 블러 도움말 (보관용): 실제 도움말은 camera-help.html 슬라이드.
+         이 코드는 슬라이드 이미지를 다시 캡처할 때만 씀 — camera.html#capture=1~3 (images/help/slides/README.md 참고) -->
+    <script src="help-tour.js"></script>
+    <script>
+      // 도움말 동안은 웹캠 대신 예시 화면
+      //  - 카메라 창: Figma 2131:1761 (창 전체 1236×880 을 화면 영역 위치에 맞춰 덮음)
+      //  - 왼쪽 위 작은 화면: 같은 여성 사진
+      //  - 오른쪽 아래 2D 메쉬: 메쉬 숨김 (노란 배경만)
+      const sampleCam = () => {
+        const add = (parent, cls, src) => {
+          const img = document.createElement('img');
+          img.className = cls;
+          img.src = src;
+          img.alt = '';
+          parent.appendChild(img);
+        };
+        add(document.querySelector('.win-body'), 'help-sample-cam', 'images/help/sample-camera.png');
+        add(document.getElementById('canvasLeft').parentElement, 'help-sample-side', 'images/help/sample-face.png');
+        document.body.classList.add('help-demo');
+      };
+      if (window.helpTourCapture) { sampleCam(); startHelpTour([
+        { text: '자신이 어떤 점 패턴을 가지고 있는지 직접 얼굴에 점을<br>찍어 알아볼 수 있습니다.' },
+        {
+          // 카메라 창만 선명, 패널은 창 왼쪽 위 모서리에 걸침 (Figma: 창 왼쪽에서 -167, 위에서 +125, 창 폭 1174 기준)
+          text: '가이드 선에 맞춰서 얼굴 사진을 찍어주세요.',
+          // 카메라 창 모양(둥근 모서리) 그대로만 선명, 창 위에 겹친 패널·말풍선은 블러
+          hole: '.browser-window', shape: true, blurOverlaps: true,
+          panel: (h) => { const k = (h.right - h.left) / 1174; return { left: h.left - 167 * k, top: h.top + 125 * k }; },
+        },
+        {
+          // 카메라 창 아래 크기 조절 슬라이더만 선명
+          text: '아래 슬라이드로 얼굴크기를 쉽게 맞출 수 있습니다.',
+          // 너무 작아서 이 단계에서만 2배 확대, 확대되며 겹치는 옆 버튼은 블러
+          // 패널은 슬라이더 왼쪽 옆, 세로 가운데
+          hole: '.zoom-wrap', pad: 14, zoom: 2, blurOverlaps: true, panel: 'left',
+        },
+      ], { onFinish: () => { sessionStorage.setItem('helpTour', 'system'); location.href = 'system.html'; },
+        onEnd: () => {
+          document.querySelectorAll('.help-sample-cam, .help-sample-side').forEach(el => el.remove());
+          document.body.classList.remove('help-demo');
+        } }); }
+    </script>
     <script src="cursor.js" defer></script>
     <script src="help.js" defer></script>
   <script src="sound.js" defer></script>
