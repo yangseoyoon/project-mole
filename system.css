@@ -1,5 +1,5 @@
 /* system.html 전용 — 반응형(body.rwd), 디자인 1px = var(--u) (base.css)
-   구성: 왼쪽 ① 얼굴에 점 찍기 패널 | 오른쪽 열 ② 점 패턴(방사형 차트) → 궁 설명 → 분석하기 버튼.
+   구성: 왼쪽 열 ② 점 패턴(방사형 차트) → 궁 설명 → 분석하기 버튼 | 오른쪽 ① 얼굴에 점 찍기 패널.
    묶음(.sys-layout)은 1920 기준 폭 1490, 높이 840. */
 
 body {
@@ -46,12 +46,12 @@ body {
 }
 .sys-deco--orange { background: #fe6c48; }
 
-/* ── 묶음: 2열 (얼굴 650 | 간격 60 | 오른쪽 780) ── */
+/* ── 묶음: 2열 (왼쪽 차트 열 780 | 간격 60 | 오른쪽 얼굴 650) ── */
 .sys-layout {
   position: relative;
   flex: none;
   display: grid;
-  grid-template-columns: calc(650 * var(--u)) calc(780 * var(--u));
+  grid-template-columns: calc(780 * var(--u)) calc(650 * var(--u));
   column-gap: calc(60 * var(--u));
   height: calc(840 * var(--u));
   margin: 0 auto;
@@ -102,14 +102,35 @@ body {
   color: #111;
 }
 .sys-bar--sub .sys-title { font-size: calc(15 * var(--u)); color: #555; }
-.sys-hint {
-  margin-left: auto;
-  font-size: calc(15 * var(--u));
-  color: #777;
+/* ── 안내 말풍선 (camera.css .hint-pill 과 같은 모양) — 얼굴 패널 오른쪽 모서리에 걸쳐 둥둥 ── */
+@keyframes sysHintFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(calc(-10 * var(--u))); }
+}
+.sys-hint-pill {
+  position: absolute;
+  right: calc(-120 * var(--u));
+  top: calc(250 * var(--u));
+  background: white;
+  border: 0.3px solid #000;
+  border-radius: calc(100 * var(--u));
+  padding: calc(12 * var(--u)) calc(20 * var(--u));
+  filter: drop-shadow(calc(2 * var(--u)) calc(2 * var(--u)) calc(1 * var(--u)) rgba(0,0,0,0.3));
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: calc(22 * var(--u));
+  color: #000;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 5;
+  animation: sysHintFloat 3s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sys-hint-pill { animation: none; }
 }
 
-/* ── ① 얼굴 패널 ── */
-.sys-left-panel { height: 100%; }
+/* ── ① 얼굴 패널: 화면 오른쪽 열 ── */
+.sys-left-panel { height: 100%; grid-column: 2; grid-row: 1; }
 
 /* ── 얼굴 컨테이너: 제목줄(60)과 아래줄(80) 사이 가운데 ── */
 #faceContainer {
@@ -215,8 +236,10 @@ body {
   border-color: #ff5c34;
 }
 
-/* ── 오른쪽 열: 차트(550) → 설명(나머지) → 분석하기(60) ── */
+/* ── 왼쪽 열: 차트(534) → 설명(나머지) → 분석하기(60) ── */
 .sys-col {
+  grid-column: 1;
+  grid-row: 1;
   display: flex;
   flex-direction: column;
   gap: calc(20 * var(--u));
@@ -224,7 +247,7 @@ body {
 }
 
 /* ── ② 방사형 차트 ── */
-.sys-right-top { flex: 0 0 calc(550 * var(--u)); }
+.sys-right-top { flex: 0 0 calc(534 * var(--u)); }
 
 .sys-chart-area {
   position: absolute;
@@ -272,7 +295,7 @@ body {
 
 .pdc-empty {
   position: absolute;
-  top: calc(44 * var(--u));
+  top: calc(60 * var(--u));
   bottom: 0;
   left: 0;
   right: 0;
@@ -289,7 +312,7 @@ body {
 
 #palace-desc-content {
   position: absolute;
-  top: calc(58 * var(--u));
+  top: calc(74 * var(--u));
   left: calc(28 * var(--u));
   right: calc(28 * var(--u));
   bottom: calc(16 * var(--u));
@@ -325,7 +348,28 @@ body {
   margin: calc(4 * var(--u)) 0 0;
 }
 
-/* ── 분석하기: 오른쪽 열 맨 아래 큰 버튼 ── */
+/* 점 해석 한 줄: 앞에 주황 '점' 꼬리표 */
+.pdc-dot {
+  font-family: 'Pretendard', sans-serif;
+  font-size: calc(14 * var(--u));
+  color: #333;
+  line-height: 1.65;
+  margin: 0;
+}
+.pdc-dot-label {
+  display: inline-block;
+  margin-right: calc(8 * var(--u));
+  padding: 0 calc(8 * var(--u));
+  border-radius: calc(10 * var(--u));
+  background: #fe6c48;
+  color: white;
+  font-size: calc(12 * var(--u));
+  font-weight: 600;
+  line-height: calc(20 * var(--u));
+  vertical-align: 1px;
+}
+
+/* ── 분석하기: 왼쪽 열 맨 아래 큰 버튼 ── */
 #analyzeBtn {
   flex: 0 0 calc(60 * var(--u));
   width: 100%;
@@ -351,6 +395,8 @@ body {
     row-gap: calc(24 * var(--u));
     height: auto;
   }
-  .sys-left-panel { height: calc(840 * var(--u)); }
+  .sys-left-panel { height: calc(840 * var(--u)); grid-column: 1; grid-row: 1; }
+  .sys-col { grid-column: 1; grid-row: 2; }
+  .sys-hint-pill { right: calc(20 * var(--u)); top: calc(90 * var(--u)); }
   .sys-right-bottom { flex: none; height: calc(200 * var(--u)); }
 }

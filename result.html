@@ -28,31 +28,78 @@
         height: 100vh;
       }
 
+      /* 1920×1080 무대: 왼쪽 '내 결과'(유형 + 점 지도·버튼) | 오른쪽 유형 카드 — 둘을 가깝게 모아 가운데, 세로도 가운데 */
       .resultPage {
         position: fixed;
         top: 0; left: 0;
         width: 1920px;
         height: 1080px;
         display: flex;
+        align-items: center;
+        justify-content: center;   /* 내 결과와 카드를 가깝게 모아 가운데 */
+        gap: 120px;
+        padding: 47px 0 73px;
         background: #fff;
-      }
-
-      /* ── 좌측: 결과 정보 ── */
-      .res-left {
-        flex: 1;
-        height: 1080px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        padding: 100px 100px 80px 120px;
-        position: relative;
         overflow: hidden;
       }
 
-      /* 노드맵 SVG 오버레이 (좌측 패널 배경) */
+      /* ── 왼쪽: 내 결과 ── */
+      .res-left {
+        flex: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      /* 아래 줄: 작은 점 지도 | 설명·버튼 */
+      .res-detail {
+        display: flex;
+        align-items: center;
+        gap: 56px;
+      }
+      .res-map-col { flex: 0 0 360px; }
+      .res-sub-eyebrow {
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        color: #000;
+        margin-bottom: 4px;
+      }
+      /* 점 지도: viewBox 560×800 을 360×514 로 축소해 표시 */
+      .res-map-box {
+        position: relative;
+        width: 360px;
+        height: 514px;
+      }
+      .res-map-empty {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        color: #999;
+      }
+      .res-map-box:has(.dot-node) .res-map-empty { display: none; }
+      .res-map-face {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+      .res-detail-text { flex: none; }
+      /* 점 지도 옆 궁 설명 글은 쓰지 않음 (요소는 JS 가 채우므로 남겨두고 숨김) */
+      .res-detail-text .res-divider,
+      .res-detail-text .res-comment { display: none; }
+
+      /* 노드맵 SVG: 점 지도 칸을 꽉 채움 */
       .res-map-overlay {
         position: absolute;
         inset: 0;
+        width: 100%;
+        height: 100%;
         z-index: 10;
         opacity: 0;
         transition: opacity 1s 0.8s;
@@ -75,7 +122,7 @@
       .dot-line { stroke: #ea5c3a; stroke-width: 1.5; opacity: 0.25; }
       .dot-label {
         font-family: 'Pretendard', sans-serif;
-        font-size: 13px;
+        font-size: 20px;   /* 점 지도가 축소되어 보이므로 viewBox 기준 크게 (화면에선 약 13px) */
         fill: #000;
         opacity: 0;
         transition: opacity 0.3s;
@@ -128,7 +175,7 @@
         font-weight: 400;
         color: #000;
         line-height: 1.5;
-        margin-bottom: 40px;
+        margin-bottom: 28px;
         max-width: 680px;
         opacity: 0;
         transform: translateY(12px);
@@ -140,7 +187,7 @@
         display: flex;
         flex-wrap: wrap;
         gap: 10px;
-        margin-bottom: 40px;
+        margin-bottom: 28px;
         opacity: 0;
         transform: translateY(10px);
         transition: opacity 0.5s 0.35s, transform 0.5s 0.35s;
@@ -172,7 +219,7 @@
         color: #000;
         line-height: 1.85;
         max-width: 640px;
-        margin-bottom: 56px;
+        margin-bottom: 40px;
         opacity: 0;
         transform: translateY(10px);
         transition: opacity 0.5s 0.45s, transform 0.5s 0.45s;
@@ -209,9 +256,7 @@
         to   { transform: translate(0, 0)           rotate(0deg);  opacity: 1; }
       }
       .res-card-panel {
-        width: 680px;
-        flex-shrink: 0;
-        height: 1080px;
+        flex: none;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -356,9 +401,8 @@
 
     <div class="resultPage page-scale">
 
-      <!-- 좌측: 결과 정보 -->
+      <!-- 왼쪽: 유형 정보 -->
       <div class="res-left">
-        <svg class="res-map-overlay" id="mapSvg" viewBox="0 0 1240 1080" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"></svg>
         <div class="res-bg-code" id="resBgCode"></div>
 
         <div class="res-eyebrow" id="elEyebrow">Type.</div>
@@ -367,15 +411,29 @@
         </div>
         <div class="res-type-name" id="elName"></div>
         <div class="res-tags" id="elTags"></div>
-        <div class="res-divider" id="elDivider"></div>
-        <div class="res-comment" id="elComment"></div>
-        <div class="res-actions" id="elActions">
-          <button class="res-btn res-btn--secondary" onclick="window.location.href='camera.html#retake'">다시 촬영하기</button>
-          <button class="res-btn res-btn--secondary" onclick="window.location.href='jeom-gwansang.html'">관상 더 알아보기 →</button>
+        <!-- 아래: 작은 점 지도 + 그 점에 대한 설명·버튼 -->
+        <div class="res-detail">
+          <div class="res-map-col">
+            <div class="res-sub-eyebrow">My dots.</div>
+            <!-- 노드맵: 노드 좌표(1240×1080 기준)에서 얼굴 부분만 잘라 작게 표시 (드래그는 실제 표시 배율로 계산) -->
+            <div class="res-map-box">
+              <!-- 얼굴 윤곽: 카메라 가이드 이미지(노란 점선 타원). 타원(이미지 안 142~604, 31~652)을
+                   노드 얼굴 범위(가로 가운데 960, 위 155·아래 895)에 맞춰 1.1916배로 깔음 -->
+              <svg class="res-map-face" viewBox="680 130 560 800" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <image href="images/cam/guide-overlay-new.svg" x="515.5" y="118.1" width="885.4" height="863.9" preserveAspectRatio="none" />
+              </svg>
+              <svg class="res-map-overlay" id="mapSvg" viewBox="680 130 560 800" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"></svg>
+              <p class="res-map-empty">찍은 점이 없어요</p>
+            </div>
+          </div>
+          <div class="res-detail-text">
+            <div class="res-divider" id="elDivider"></div>
+            <div class="res-comment" id="elComment"></div>
+          </div>
         </div>
       </div>
 
-      <!-- 우측: 카드 -->
+      <!-- 오른쪽: 유형 카드 -->
       <div class="res-card-panel" id="elCardPanel">
         <div class="res-flip-wrap" id="resFlipWrap">
           <div class="res-flip-card" id="resCard">
@@ -395,6 +453,11 @@
             <polyline points="20,2 28,8 20,14" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
           </svg>
           Drag
+        </div>
+        <!-- 다음 행동: 카드 아래 -->
+        <div class="res-actions" id="elActions">
+          <button class="res-btn res-btn--secondary" onclick="window.location.href='camera.html#retake'">다시 촬영하기</button>
+          <button class="res-btn res-btn--secondary" onclick="window.location.href='jeom-gwansang.html'">관상 더 알아보기 →</button>
         </div>
       </div>
     </div>
@@ -610,7 +673,7 @@
           const nodeEls = [];
 
           nodes.forEach((node, idx) => {
-            const r = 8 + Math.min((node.count-1)*4, 12);
+            const r = 11 + Math.min((node.count-1)*4, 12);  // 점 지도가 축소되어 보이므로 조금 크게
             const g = svgEl('g', {class:'dot-node', style:'opacity:0'});
             g.appendChild(svgEl('circle', {class:'outer', cx:node.x, cy:node.y, r:r+18}));
             g.appendChild(svgEl('circle', {class:'inner', cx:node.x, cy:node.y, r}));
@@ -651,6 +714,8 @@
           const drag = nodes.map(() => ({offX:0, offY:0, active:false, clientX0:0, clientY0:0, offX0:0, offY0:0}));
 
           function getScale() { return Math.min(window.innerWidth/1920, window.innerHeight/1080); }
+          // 점 지도의 실제 표시 배율 (화면 px / viewBox 단위) — 작게 표시되므로 드래그 이동량은 이 값으로 나눔
+          function mapScale() { return svg.getBoundingClientRect().width / 560; }
 
           const tooltip = document.getElementById('palaceTooltip');
           let tooltipTimer = null;
@@ -714,7 +779,7 @@
             }, {passive: true});
           });
           window.addEventListener('mousemove', e => {
-            const s = getScale();
+            const s = mapScale();
             drag.forEach(d => {
               if (!d.active) return;
               d.offX = d.offX0 + (e.clientX - d.clientX0) / s;
@@ -737,7 +802,7 @@
             }
           });
           window.addEventListener('touchmove', e => {
-            const s = getScale();
+            const s = mapScale();
             const t = e.touches[0];
             drag.forEach(d => {
               if (!d.active) return;

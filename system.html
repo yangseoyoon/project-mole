@@ -54,12 +54,11 @@
 
       <div class="sys-layout">
 
-      <!-- 왼쪽: ① 얼굴에 점 찍기 (안내는 제목줄, 다시찍기 버튼은 아래줄) -->
+      <!-- 오른쪽(화면): ① 얼굴에 점 찍기 (안내는 제목줄, 다시찍기 버튼은 아래줄) -->
       <section class="sys-left-panel">
         <div class="sys-bar sys-bar--top sys-bar--title">
-          <span class="sys-step">01</span>
+          <span class="sys-step">STEP 01</span>
           <span class="sys-title">얼굴에 점 찍기</span>
-          <span class="sys-hint">사진을 클릭해 점을 찍어보세요</span>
         </div>
         <div id="faceContainer">
           <canvas id="savedCanvas"></canvas>
@@ -72,11 +71,14 @@
         </div>
       </section>
 
-      <!-- 오른쪽: ② 점 패턴 → 궁 설명 → 분석하기 -->
+      <!-- 안내 말풍선: 카메라 페이지 말풍선과 같은 모양, 얼굴 패널 오른쪽 모서리에 걸침 -->
+      <div class="sys-hint-pill">사진을 클릭해 점을 찍어보세요!</div>
+
+      <!-- 왼쪽(화면): ② 점 패턴 → 궁 설명 → 분석하기 -->
       <div class="sys-col">
         <section class="sys-right-top">
           <div class="sys-bar sys-bar--top sys-bar--title">
-            <span class="sys-step">02</span>
+            <span class="sys-step">STEP 02</span>
             <span class="sys-title">점 패턴</span>
           </div>
           <div id="chartControls">
@@ -89,7 +91,8 @@
         </section>
 
         <section class="sys-right-bottom">
-          <div class="sys-bar sys-bar--top sys-bar--title sys-bar--sub">
+          <div class="sys-bar sys-bar--top sys-bar--title">
+            <span class="sys-step">STEP 02+</span>
             <span class="sys-title">궁(宮) 설명</span>
           </div>
           <p class="pdc-empty">점을 찍으면 그 자리의 궁(宮) 설명이 여기에 나타납니다.</p>
