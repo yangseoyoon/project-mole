@@ -191,6 +191,7 @@
         currentCustomDotId = null;
         bPhotoWrap.style.background = '';
         bPhotoWrap.style.border = '';
+        bPhoto.style.objectFit = '';
       }
 
       document.querySelector('.faceMapBg').addEventListener('click', (e) => {
@@ -269,9 +270,17 @@
           activeCustomDot = btn;
           btn.classList.add('active');
           const photoOpt = PHOTO_OPTIONS.find(p => p.id === (dot.photo || 'none'));
-          bPhoto.src = photoOpt && photoOpt.img ? photoOpt.img : '';
-          bPhotoWrap.style.background = photoOpt ? photoOpt.color : '#ffe0f6';
-          bPhotoWrap.style.border = '1.5px solid #ff53cb';
+          if (photoOpt && photoOpt.img) {
+            // 프로필 아이콘은 자체 검정 원 테두리가 있어서 그 원에 맞춤 (핑크 테두리·배경 없이, 잘리지 않게)
+            bPhoto.src = photoOpt.img;
+            bPhoto.style.objectFit = 'contain';
+            bPhotoWrap.style.background = 'transparent';
+            bPhotoWrap.style.border = 'none';
+          } else {
+            bPhoto.src = '';
+            bPhotoWrap.style.background = photoOpt ? photoOpt.color : '#ffe0f6';
+            bPhotoWrap.style.border = '1.5px solid #ff53cb';
+          }
           bName.textContent = dot.name;
           bDesc.textContent = dot.desc || '';
           positionBubble(btn);
