@@ -131,7 +131,7 @@
 
       const PHOTO_OPTIONS = [
         { id: 'none', color: '#d9d9d9' },
-        { id: 'ph1',  color: '#d9d9d9' },
+        { id: 'ph1',  color: '#d9d9d9', img: 'images/facemap/profile-default.svg' },
         { id: 'ph2',  color: '#d9d9d9' },
         { id: 'ph3',  color: '#d9d9d9' },
         { id: 'ph4',  color: '#d9d9d9' },
@@ -146,6 +146,8 @@
           btn.dataset.photoId = opt.id;
           if (opt.id === 'none') {
             btn.innerHTML = `<span class="photo-shape" style="background:${opt.color};display:flex;align-items:center;justify-content:center;font-size:20px;color:#aaa;">✕</span>`;
+          } else if (opt.img) {
+            btn.innerHTML = `<img class="photo-shape" src="${opt.img}" alt="" />`;
           } else {
             btn.innerHTML = `<span class="photo-shape" style="background:${opt.color};"></span>`;
           }
@@ -267,7 +269,7 @@
           activeCustomDot = btn;
           btn.classList.add('active');
           const photoOpt = PHOTO_OPTIONS.find(p => p.id === (dot.photo || 'none'));
-          bPhoto.src = '';
+          bPhoto.src = photoOpt && photoOpt.img ? photoOpt.img : '';
           bPhotoWrap.style.background = photoOpt ? photoOpt.color : '#ffe0f6';
           bPhotoWrap.style.border = '1.5px solid #ff53cb';
           bName.textContent = dot.name;
