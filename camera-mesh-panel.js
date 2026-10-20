@@ -5,7 +5,8 @@
 (function () {
   const BG = '#e9f056';
   const INTERVAL = 66; // ms
-  const ZOOM = 1.44;   // 메쉬 확대 배율 (1.2 × 1.2)
+  const ZOOM = 2.88;   // 메쉬 확대 배율 (예전 1.44 의 2배)
+  const BASE_ZOOM = 1.44;  // 선·점 굵기는 예전(1.44배) 때 보이던 굵기로 유지
 
   window.addEventListener('load', function () {
     const canvas = document.getElementById('canvasRight');
@@ -24,17 +25,33 @@
       return { w, h };
     }
 
+    // 얼굴 가운데(얼굴 점들의 평균)를 패널 좌표로 — drawMesh2D 와 같은 변환(화면 채우기 + 거울 반전)
+    let focus = null;  // 부드럽게 따라가는 확대 중심
+    function faceCenter(results, w, h) {
+      const lm = results && results.faceLandmarks;
+      if (!lm || !lm.length) return null;
+      const vw = video.videoWidth || w, vh = video.videoHeight || h;
+      const sc = Math.max(w / vw, h / vh), ox = (w - vw * sc) / 2, oy = (h - vh * sc) / 2;
+      let sx = 0, sy = 0;
+      lm.forEach(p => { sx += p.x; sy += p.y; });
+      const x = (sx / lm.length) * vw * sc + ox, y = (sy / lm.length) * vh * sc + oy;
+      return { x: w - x, y };
+    }
+
     function render(results) {
       const { w, h } = fitCanvas();
       ctx.fillStyle = BG;
       ctx.fillRect(0, 0, w, h);
       if (!results) return;
-      const k = w / (video.offsetWidth || w);
-      // 메쉬를 패널 가운데 기준 ZOOM 배로 (선·점도 함께 커짐)
+      // 선·점 굵기: 확대해도 예전(1.44배) 때와 같은 굵기로 보이게
+      const k = w / (video.offsetWidth || w) * BASE_ZOOM / ZOOM;
+      // 얼굴 가운데를 패널 가운데에 두고 ZOOM 배로 (얼굴이 화면 밖으로 잘리지 않게, 중심은 부드럽게 따라감)
+      const c = faceCenter(results, w, h) || { x: w / 2, y: h / 2 };
+      focus = focus ? { x: focus.x + (c.x - focus.x) * 0.25, y: focus.y + (c.y - focus.y) * 0.25 } : c;
       ctx.save();
       ctx.translate(w / 2, h / 2);
       ctx.scale(ZOOM, ZOOM);
-      ctx.translate(-w / 2, -h / 2);
+      ctx.translate(-focus.x, -focus.y);
       window.drawMesh2D(ctx, results, w, h, k);
       ctx.restore();
     }

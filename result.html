@@ -259,10 +259,10 @@
         flex: none;
         display: flex;
         flex-direction: column;
-        align-items: center;
         justify-content: center;
         background: #fff;
-        gap: 24px;
+        align-items: center;
+        gap: 32px;           /* 기울어진 카드 모서리가 조금 내려오므로 */
       }
       .res-flip-wrap {
         opacity: 0;
@@ -329,7 +329,60 @@
         letter-spacing: 1px;
       }
 
-      .res-flip-wrap { perspective: 1600px; }
+      .res-flip-wrap { perspective: 1600px; position: relative; }
+      .res-card-holder { position: relative; margin-top: 40px; }  /* 카드 아래로 조금 */
+
+      /* 카드 크게 보기: 화면 전체에 흐린 배경 + 가운데 큰 카드 */
+      .card-zoom {
+        position: fixed;
+        inset: 0;
+        z-index: 6000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.55);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        cursor: zoom-out;
+        animation: cardZoomFade 0.2s ease-out;
+      }
+      .card-zoom[hidden] { display: none; }
+      /* 크게 본 카드도 드래그로 뒤집기 (작은 카드와 같은 구조: 앞·뒷면 겹쳐 3D 회전) */
+      .zoom-flip {
+        height: 88vh;
+        aspect-ratio: 1502 / 4096;
+        perspective: 2400px;
+        cursor: grab;
+        user-select: none;
+        animation: cardZoomIn 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      .zoom-flip:active { cursor: grabbing; }
+      .zoom-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+        transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .zoom-flip.flipped .zoom-inner { transform: rotateY(180deg); }
+      .zoom-inner img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border: 1px solid #000;
+        background: #fff;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        pointer-events: none;
+      }
+      .zoom-inner .zoom-back { transform: rotateY(180deg); }
+      @keyframes cardZoomFade { from { opacity: 0; } to { opacity: 1; } }
+      @keyframes cardZoomIn { from { transform: scale(0.85); opacity: 0; } to { transform: none; opacity: 1; } }
+
+      /* 카드를 살짝 사선으로 (뒤집기는 안쪽 .res-flip-inner 에서 그대로) */
+      .res-flip-card { rotate: -4deg; }
       .res-flip-card {
         width: 248px;
         height: 676px;
@@ -360,13 +413,39 @@
       .res-flip-back img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
       .res-flip-back { transform: rotateY(180deg); }
 
+      /* 'Drag!' 안내: 관상학 페이지 'Click Number!' 말풍선과 같은 수치
+         (여백 위아래 12·좌우 20, 글자 높이 15 → 전체 높이 약 39), 위아래로 천천히
+         카드 왼쪽 위 가장자리에 걸침 — 말풍선 가운데가 카드 왼쪽 끝, 위에서 105 지점 */
       .res-card-hint {
+        position: absolute;
+        left: -40px;          /* 카드 왼쪽 끝에서 왼쪽으로 40 */
+        top: 105px;
+        translate: -50% -50%;
+        z-index: 2;
+        background: #fff;
+        border: 0.3px solid #000;
+        border-radius: 100px;
+        padding: 12px 20px;
+        filter: drop-shadow(2px 2px 1px rgba(0, 0, 0, 0.3));
         font-size: 18px;
+        line-height: 15px;
         font-weight: 600;
         color: #000;
-        display: flex;
-        align-items: center;
-        gap: 8px;
+        white-space: nowrap;
+        /* 카드가 다 들어온 뒤(약 2초) 제자리에서 나타나고, 그다음 위아래로 천천히 */
+        animation: resHintIn 0.45s ease-out 2s both, resHintFloat 3s ease-in-out 2.45s infinite;
+        pointer-events: none; /* 카드 위에 있어도 카드 드래그·클릭이 되도록 */
+      }
+      @keyframes resHintIn {
+        from { opacity: 0; transform: translateY(8px) scale(0.92); }
+        to   { opacity: 1; transform: none; }
+      }
+      @keyframes resHintFloat {
+        0%, 100% { transform: translateY(0); }
+        50%      { transform: translateY(-8px); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .res-card-hint { animation: none; }
       }
 
       /* 타이핑 도트 (초기 로딩) */
@@ -435,6 +514,8 @@
 
       <!-- 오른쪽: 유형 카드 -->
       <div class="res-card-panel" id="elCardPanel">
+        <!-- 카드 자리: 카드(미끄러져 들어옴)와 Drag! 말풍선(제자리에서 나타남)을 같은 기준으로 -->
+        <div class="res-card-holder">
         <div class="res-flip-wrap" id="resFlipWrap">
           <div class="res-flip-card" id="resCard">
             <div class="res-flip-inner">
@@ -447,17 +528,23 @@
             </div>
           </div>
         </div>
-        <div class="res-card-hint">
-          <svg width="32" height="16" viewBox="0 0 32 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <line x1="0" y1="8" x2="28" y2="8" stroke="#000" stroke-width="2" stroke-linecap="round"/>
-            <polyline points="20,2 28,8 20,14" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-          </svg>
-          Drag
+          <!-- Drag! 말풍선: 카드 왼쪽 위 가장자리에 걸침 (카드와 따로, 카드가 들어온 뒤 나타남) -->
+          <div class="res-card-hint">Drag!</div>
         </div>
         <!-- 다음 행동: 카드 아래 -->
         <div class="res-actions" id="elActions">
           <button class="res-btn res-btn--secondary" onclick="window.location.href='camera.html#retake'">다시 촬영하기</button>
           <button class="res-btn res-btn--secondary" onclick="window.location.href='jeom-gwansang.html'">관상 더 알아보기 →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 카드 크게 보기 (카드를 클릭하면) -->
+    <div class="card-zoom" id="cardZoom" hidden>
+      <div class="zoom-flip" id="zoomFlip">
+        <div class="zoom-inner">
+          <img class="zoom-front" id="zoomFront" src="" alt="유형 카드 앞면 크게 보기" />
+          <img class="zoom-back" id="zoomBack" src="" alt="유형 카드 뒷면 크게 보기" />
         </div>
       </div>
     </div>
@@ -908,8 +995,8 @@
 
         // 카드 드래그 플립
         const card = document.getElementById('resCard');
-        let startX = 0, dragging = false;
-        card.addEventListener('mousedown', e => { startX = e.clientX; dragging = true; });
+        let startX = 0, startY = 0, dragging = false;
+        card.addEventListener('mousedown', e => { startX = e.clientX; startY = e.clientY; dragging = true; });
         window.addEventListener('mousemove', e => {
           if (!dragging) return;
           const dx = e.clientX - startX;
@@ -926,7 +1013,38 @@
           inner.style.transition = '';
           inner.style.transform = '';
           if (Math.abs(dx) > 50) card.classList.toggle('flipped');
+          // 거의 움직이지 않고 누른 경우 = 클릭 → 지금 보이는 면을 크게 보기
+          else if (Math.abs(dx) < 5 && Math.abs(e.clientY - startY) < 5) openCardZoom();
         });
+
+        // ── 카드 크게 보기: 화면 가운데에 크게. 크게 본 카드도 드래그로 뒤집기. 바깥 누르거나 Esc 로 닫기 ──
+        const zoom = document.getElementById('cardZoom');
+        const zoomFlip = document.getElementById('zoomFlip');
+        const zoomInner = zoomFlip.querySelector('.zoom-inner');
+        function openCardZoom() {
+          document.getElementById('zoomFront').src = document.getElementById('resCardFront').src;
+          document.getElementById('zoomBack').src = document.getElementById('resCardBack').src;
+          zoomFlip.classList.toggle('flipped', card.classList.contains('flipped'));  // 보던 면 그대로
+          zoom.hidden = false;
+        }
+        function closeCardZoom() { zoom.hidden = true; }
+        zoom.addEventListener('click', e => { if (!e.target.closest('#zoomFlip')) closeCardZoom(); });
+        let zx = 0, zDrag = false;
+        zoomFlip.addEventListener('mousedown', e => { zx = e.clientX; zDrag = true; e.preventDefault(); });
+        window.addEventListener('mousemove', e => {
+          if (!zDrag) return;
+          const base = zoomFlip.classList.contains('flipped') ? 180 : 0;
+          zoomInner.style.transition = 'none';
+          zoomInner.style.transform = `rotateY(${base + (e.clientX - zx) * 0.25}deg)`;
+        });
+        window.addEventListener('mouseup', e => {
+          if (!zDrag) return;
+          zDrag = false;
+          zoomInner.style.transition = '';
+          zoomInner.style.transform = '';
+          if (Math.abs(e.clientX - zx) > 50) zoomFlip.classList.toggle('flipped');
+        });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape' && !zoom.hidden) closeCardZoom(); });
       })();
 
     </script>

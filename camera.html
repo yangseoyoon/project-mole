@@ -345,16 +345,18 @@
         {
           // 카메라 창만 선명, 패널은 창 왼쪽 위 모서리에 걸침 (Figma: 창 왼쪽에서 -167, 위에서 +125, 창 폭 1174 기준)
           text: '가이드 선에 맞춰서 얼굴 사진을 찍어주세요.',
-          // 카메라 창 모양(둥근 모서리) 그대로만 선명, 창 위에 겹친 패널·말풍선은 블러
-          hole: '.browser-window', shape: true, blurOverlaps: true,
+          // 카메라 화면 속 얼굴 부분만 선명 (머리 위 ~ 노란 타원 아래, 카메라 창 디자인 좌표 1236 기준 238,72 / 760×675)
+          hole: () => {
+            const w = document.querySelector('.browser-window').getBoundingClientRect(), k = w.width / 1236;
+            return { left: w.left + 238 * k, top: w.top + 72 * k, right: w.left + 998 * k, bottom: w.top + 747 * k };
+          },
           panel: (h) => { const k = (h.right - h.left) / 1174; return { left: h.left - 167 * k, top: h.top + 125 * k }; },
         },
         {
           // 카메라 창 아래 크기 조절 슬라이더만 선명
           text: '아래 슬라이드로 얼굴크기를 쉽게 맞출 수 있습니다.',
-          // 너무 작아서 이 단계에서만 2배 확대, 확대되며 겹치는 옆 버튼은 블러
-          // 패널은 슬라이더 왼쪽 옆, 세로 가운데
-          hole: '.zoom-wrap', pad: 14, zoom: 2, blurOverlaps: true, panel: 'left',
+          // 슬라이더만 선명 (확대 없이 원래 크기)
+          hole: '.zoom-wrap', pad: 14, panel: 'left',
         },
       ], { onFinish: () => { sessionStorage.setItem('helpTour', 'system'); location.href = 'system.html'; },
         onEnd: () => {

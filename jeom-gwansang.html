@@ -89,37 +89,25 @@
         transition: width 0.4s cubic-bezier(0.4,0,0.2,1),
                     border-radius 0.4s cubic-bezier(0.4,0,0.2,1);
       }
-      .jeomDot.active { outline: 1px solid #000; }
+      /* 클릭(활성)해도 테두리는 그대로 (진해지는 효과 없음) */
       .jeomDot.expanded {
         border-radius: calc(50 * var(--gu));
       }
 
-      /* ── 점 글로우: 테두리 링 없이 흐릿한 주황빛이 부드럽게 커졌다 작아짐 (블러 글로우) ── */
-      .jeomDot {
-        animation: dotGlow 2.4s ease-in-out infinite;
+      /* ── 점 깜빡임: 무작위로 한 점씩 약 10px 작아졌다(48 → 38) 천천히 원래대로 (스크립트가 .shrink 를 붙임) ──
+         회전(transform)과 따로 움직이도록 scale 속성 사용 */
+      @keyframes dotShrink {
+        0%, 100% { scale: 1; }
+        /* 기준점(왼쪽 가장자리)을 고정한 채 줄임 — 선(화살표)이 그 가장자리에서 시작해 원 뒤를 지나므로
+           가운데로 줄이면 뒤에 숨은 선 끝이 드러남. 선이 나가는 쪽으로만 줄어 선이 자연스럽게 이어짐 */
+        50%      { scale: var(--shrink, 0.792); }
       }
-      /* 점마다 박자를 조금씩 어긋나게 */
-      .jeomDot:nth-of-type(3n+1) { animation-delay: -0.8s; }
-      .jeomDot:nth-of-type(3n+2) { animation-delay: -1.6s; }
-      @keyframes dotGlow {
-        0%, 100% {
-          box-shadow:
-            0 0 calc(8 * var(--gu)) calc(1 * var(--gu)) rgba(248, 79, 37, 0.55),
-            0 0 calc(18 * var(--gu)) calc(3 * var(--gu)) rgba(248, 79, 37, 0.25);
-        }
-        50% {
-          box-shadow:
-            0 0 calc(16 * var(--gu)) calc(5 * var(--gu)) rgba(248, 79, 37, 0.5),
-            0 0 calc(38 * var(--gu)) calc(12 * var(--gu)) rgba(248, 79, 37, 0.22);
-        }
-      }
-      /* 호버 중이거나 클릭(활성)된 원은 글로우 멈춤 */
+      .jeomDot.shrink { animation: dotShrink 1.2s ease-in-out; }
+      /* 호버 중이거나 클릭(활성)·펼친 원은 그대로 */
       .jeomDot:hover,
-      .jeomDot.active {
+      .jeomDot.active,
+      .jeomDot.expanded {
         animation: none;
-      }
-      @media (prefers-reduced-motion: reduce) {
-        .jeomDot { animation: none; }
       }
 
       /* ── 진입 안내(도움말) 팝업: 배경을 흐리게 하고 가운데 노란 창 ──
@@ -138,7 +126,9 @@
       .jeom-guide-overlay.active { display: flex; }
       .jeom-guide {
         position: relative;
-        width: calc(600 * var(--u));
+        width: max-content;                 /* 글 길이에 맞춤 (가운데 정렬) */
+        max-width: calc(600 * var(--u));
+        min-width: calc(250 * var(--u));    /* 도움말 탭 + X 가 겹치지 않을 만큼 */
         background: #e9f056;
         border: 1px solid #000;
         padding: calc(60 * var(--u)) calc(34 * var(--u)) calc(30 * var(--u));
@@ -184,6 +174,7 @@
         line-height: calc(32 * var(--u));
         color: #000;
         word-break: keep-all;
+        text-align: center;   /* 도움말 패널 글 가운데 정렬 */
       }
       .dot-label {
         opacity: 0;
@@ -1297,6 +1288,35 @@
           d.style.width = '';
         });
       });
+      /* 점 깜빡임: 무작위 간격·속도·크기로 점이 잠깐 작아졌다 돌아옴 (호버·활성·펼친 점 제외) */
+      (function () {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        var dots = Array.prototype.slice.call(document.querySelectorAll('.jeomDot'));
+        if (!dots.length) return;
+        dots.forEach(function (d) {
+          d.addEventListener('animationend', function () { d.classList.remove('shrink'); });
+        });
+        (function tick() {
+          var pool = dots.filter(function (d) {
+            return !d.matches(':hover') && !d.classList.contains('active') &&
+                   !d.classList.contains('expanded') && !d.classList.contains('shrink');
+          });
+          // 매번 다르게: 속도 0.8~2.2초, 줄어드는 정도 약 20px(48 → 31~25), 부드러운 곡선 셋 중 하나
+          var EASES = ['ease-in-out', 'cubic-bezier(0.37, 0, 0.63, 1)', 'cubic-bezier(0.45, 0, 0.55, 1)'];
+          function shrinkOne() {
+            if (!pool.length) return;
+            var d = pool.splice(Math.floor(Math.random() * pool.length), 1)[0];
+            d.style.setProperty('--shrink', (1 - (17 + Math.random() * 6) / 48).toFixed(3));  // 약 20px(17~23) 작아짐
+            d.style.animationDuration = (0.8 + Math.random() * 1.4).toFixed(2) + 's';
+            d.style.animationTimingFunction = EASES[Math.floor(Math.random() * EASES.length)];
+            d.classList.add('shrink');
+          }
+          shrinkOne();
+          if (Math.random() < 0.25) setTimeout(shrinkOne, 100 + Math.random() * 300);  // 가끔 두 점이 거의 같이
+          setTimeout(tick, 200 + Math.random() * 2000);  // 다음까지 0.2~2.2초
+        })();
+      })();
+
       /* 진입 안내 팝업: X, 바깥 클릭, Esc 로 닫기 */
       (function () {
         var guide = document.getElementById('jeomGuide');

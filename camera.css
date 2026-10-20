@@ -217,7 +217,7 @@ body {
 /* ── 줌 슬라이더 ── */
 .zoom-wrap {
   position: absolute;
-  right: calc(200 * var(--cu));
+  right: calc(240 * var(--cu));  /* 200 에서 왼쪽 40 */
   top: 50%;
   transform: translateY(-50%);
   display: flex;

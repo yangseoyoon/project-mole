@@ -382,8 +382,8 @@ body{
 .tour-blur {
   position: fixed;
   z-index: 1;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   background: transparent;
 }
 /* 선명한 구간 바깥으로 주황 그림자 (help-tour.css .htour-hole 과 같은 값) */
@@ -391,13 +391,13 @@ body{
   position: fixed;
   z-index: 1;
   pointer-events: none;
-  box-shadow: 0 0 18px 2px rgba(234, 92, 58, 0.55);
+  box-shadow: none;  /* 주황 선·빛 없음 (help-tour.css 와 같음) */
 }
 .tour-panel {
   position: fixed;
   width: max-content;
   max-width: calc(600 * var(--u));
-  min-width: calc(360 * var(--u));
+  min-width: calc(250 * var(--u));  /* 글 길이에 맞춤 — 도움말 탭 + → 가 겹치지 않을 만큼만 */
   background: #e9f056;
   border: 1px solid #000;
   padding: calc(60 * var(--u)) calc(34 * var(--u)) calc(30 * var(--u));
@@ -448,6 +448,23 @@ body{
   line-height: calc(32 * var(--u));
   color: #000;
   word-break: keep-all;
+  text-align: center;   /* 도움말 패널 글 가운데 정렬 (말풍선은 아래에서 왼쪽 정렬) */
+}
+/* 둘째 단계부터: 패널 대신 말풍선 (Figma 2138:1694 — 흰 바탕, 왼쪽 아래만 각진 둥근 모서리, 옅은 그림자) */
+.tour-panel.tour-bubble {
+  min-width: 0;
+  background: #fff;
+  border: 0.5px solid #d9d9d9;
+  border-radius: calc(20 * var(--u)) calc(20 * var(--u)) calc(20 * var(--u)) 0;
+  box-shadow: calc(4 * var(--u)) calc(4 * var(--u)) calc(6.6 * var(--u)) rgba(0, 0, 0, 0.15);
+  padding: calc(20 * var(--u)) calc(26 * var(--u));
+}
+/* 말풍선 글: 피그마 댓글 말풍선처럼 작게 */
+.tour-bubble .tour-panel-text {
+  font-size: calc(17 * var(--u));
+  line-height: calc(26 * var(--u));
+  font-weight: 400;
+  text-align: left;
 }
 /* 예시 요소 (투어 동안만 캔버스에 표시) */
 .tour-demo { pointer-events: none; animation: none !important; }
@@ -479,7 +496,7 @@ body{
   </div>
 
   <!-- 튜토리얼: content 전체 위에 오버레이 -->
-  <div id="tut-layer">
+  <div id="tut-layer" class="hidden">  <!-- 도움말 투어가 끝난 뒤 보여줌 (startDragTutorial) -->
     <div id="tut-bubble">오른쪽 패널의 원을 드래그해서 캔버스에 배치하세요</div>
     <div id="tut-ghost-circle">木</div>
     <div id="tut-cursor">
@@ -986,15 +1003,18 @@ body{
 </script>
 
 <script>
-  // 첫 드래그 시 튜토리얼 숨김
+  // 드래그 안내 애니메이션: 도움말 투어가 끝난 뒤(또는 투어가 없는 방문이면 바로) 보여주고, 첫 마우스 누름에 숨김
   (function() {
     var tut = document.getElementById('tut-layer');
-    if (!tut) return;
     function hideTut() {
       tut.classList.add('hidden');
       document.removeEventListener('mousedown', hideTut);
     }
-    document.addEventListener('mousedown', hideTut);
+    window.startDragTutorial = function () {
+      if (!tut) return;
+      tut.classList.remove('hidden');
+      document.addEventListener('mousedown', hideTut);
+    };
   })();
 </script>
 
@@ -1004,7 +1024,7 @@ body{
   (function () {
     const tour = document.getElementById('tour');
     // 네비게이션바로 새로 들어온 뒤 처음 올 때만 (help-gate.js)
-    if (!helpGate('dot-pattern')) { tour.classList.add('done'); return; }
+    if (!helpGate('dot-pattern')) { tour.classList.add('done'); window.startDragTutorial(); return; }
     const canvas = document.getElementById('canvas-area');
     const panelWords = document.getElementById('panel-words');
 
@@ -1013,10 +1033,11 @@ body{
 
     const STEPS = [
       { text: '다양한 음양오행의 요소를 조합해 새로운 단어를<br>만들어 낼 수 있습니다.' },
-      { text: '점선 원 속의 요소들을 드래그해서 조합하면', hole: 'panel' },
+      { text: '점선 원 속의 요소들을 드래그해서 조합하면', hole: 'panel', bubbleDx: -40 },  /* 말풍선 왼쪽으로 40 */
       {
         text: '새로운 단어가 만들어집니다.',
         hole: [450, 320, 930, 680], panel: { right: 544, top: 569 },  /* Figma 549 에서 아래 20 */
+        bubbleDx: -50,  /* 말풍선 왼쪽으로 50 */
         demo: [
           { w: '水', x: 737, y: 377 }, { w: '木', x: 829, y: 433 }, { w: '火', x: 746, y: 476 },
           { w: '산', x: 634, y: 516, t: 'd2' }, { w: '음양', x: 675, y: 553, t: 'd2' },
@@ -1026,6 +1047,7 @@ body{
       {
         text: '주황색 원의 느낌표를 클릭하면 관련 설명을<br>볼 수 있습니다.',
         hole: [491, 337, 889, 665], panel: { right: 565, top: 311 },  /* Figma(615, 341)에서 왼쪽 50 · 위 30 */
+        bubbleDx: -160, bubbleDy: -30,  /* 말풍선 왼쪽으로 160 · 위로 30 */
         demo: [
           { w: '木', x: 838, y: 409 }, { w: '음양', x: 553, y: 577, t: 'd2' },
           { w: '내부', x: 643, y: 605 }, { w: '오악사독', x: 636, y: 487, t: 'd3' },
@@ -1035,6 +1057,11 @@ body{
           x: 677, y: 442, title: '오악사독 (五嶽四瀆)',
           html: '<span class="kw">오악(五嶽)</span>은 얼굴의 돌출된 다섯 부분인 이마, 코, 양볼의 광대, 턱을 다섯 개의 산으로 비유한 것이다. <span class="kw">사독(四瀆)</span>은 얼굴의 들어간 네 부분인 눈, 귀, 입, 콧구멍 주변을 물길과 흐름에 비유한 것이다. 오악이 산의 구조라면 사독은 산에 흐르는 물길, 즉 얼굴에 흐르는 에너지의 흐름이다.',
         },
+      },
+      {
+        // 왼쪽 위 '음양오행 전체 보기' 버튼만 선명, 말풍선은 버튼 오른쪽 (버튼과 같은 높이로 내림)
+        text: '전체 보기를 누르면 모든 요소를 한 번에 볼 수 있습니다.',
+        hole: '#show-all-btn', bubbleDy: 15, bubbleMaxW: 560,  /* 한 줄로 */
       },
     ];
 
@@ -1055,6 +1082,13 @@ body{
           left: Math.min(...bs.map(b => b.left)) - pad, top: Math.min(...bs.map(b => b.top)) - pad,
           right: Math.max(...bs.map(b => b.right)) + pad, bottom: Math.max(...bs.map(b => b.bottom)) + pad,
         };
+      }
+      if (typeof s.hole === 'string') {
+        // 요소 선택자: 그 요소 둘레 + 여백 10
+        const el = document.querySelector(s.hole);
+        if (!el) return null;
+        const b = el.getBoundingClientRect(), pad = 10;
+        return { left: b.left - pad, top: b.top - pad, right: b.right + pad, bottom: b.bottom + pad };
       }
       const [x1, y1, x2, y2] = s.hole;
       return { left: cx(x1), top: cy(y1), right: cx(x2), bottom: cy(y2) };
@@ -1109,18 +1143,31 @@ body{
       }
 
       // 도움말 패널
+      // 첫 단계는 페이지 소개 패널, 그 뒤는 말풍선 (화면 아무 곳이나 누르면 다음)
+      const bubble = step > 0;
       const panel = document.createElement('div');
-      panel.className = 'tour-panel';
+      panel.className = bubble ? 'tour-panel tour-bubble' : 'tour-panel';
       panel.setAttribute('role', 'dialog');
-      panel.innerHTML = '<div class="tour-panel-title">도움말</div>' +
-        '<button class="tour-panel-close" aria-label="다음">→</button>' +
+      panel.innerHTML = (bubble ? '' : '<div class="tour-panel-title">도움말</div>' +
+        '<button class="tour-panel-close" aria-label="다음">→</button>') +
         '<p class="tour-panel-text">' + s.text + '</p>';
       tour.appendChild(panel);
       // → : 다음 단계 (마지막 단계에서는 종료). 건너뛰기는 Esc
-      panel.querySelector('.tour-panel-close').addEventListener('click', e => { e.stopPropagation(); go(step + 1); });
+      const nextBtn = panel.querySelector('.tour-panel-close');
+      if (nextBtn) nextBtn.addEventListener('click', e => { e.stopPropagation(); go(step + 1); });
+      // (--u 는 calc 식이라 값으로 못 읽음 → 말풍선 글자 크기 17u 로 1u 를 구함)
+      const u = bubble ? parseFloat(getComputedStyle(panel.querySelector('.tour-panel-text')).fontSize) / 17 : 1;
 
       const pw = panel.offsetWidth;
-      if (!h) {
+      if (bubble && h) {
+        // 말풍선: 꼬리(왼쪽 아래)를 선명한 구간의 오른쪽 가장자리, 위에서 35% 높이에 붙이고 오른쪽 위로 펼침
+        // 화면 오른쪽 끝을 넘지 않게 폭 제한 → 넘치면 줄바꿈
+        // bubbleDx / bubbleDy: 단계별로 꼬리 위치를 가로·세로로 옮김 (디자인 px)
+        const tx = h.right + (s.bubbleDx || 0) * u, ty = h.top + (h.bottom - h.top) * 0.35 + (s.bubbleDy || 0) * u;
+        panel.style.maxWidth = Math.min((s.bubbleMaxW || 400) * u, vw - tx - 16) + 'px';  // bubbleMaxW: 단계별 최대 폭
+        panel.style.left = tx + 'px';
+        panel.style.top = (ty - panel.offsetHeight) + 'px';
+      } else if (!h) {
         panel.style.left = (vw - pw) / 2 + 'px';
         panel.style.top = (vh - panel.offsetHeight) / 2 + 'px';
       } else if (s.hole === 'panel') {
@@ -1147,6 +1194,9 @@ body{
       // 실제 페이지와 같이 예시 3단계 버블 옆에 배치
       const anchor = demoEls.find(el => el.classList.contains('d3'));
       if (anchor && window.placeTier3Popup) window.placeTier3Popup(pop, anchor);
+      // 설명창이 말풍선 자리와 겹치므로, 설명창이 뜨면 말풍선은 숨김 (안내가 끝난 상태)
+      const bubble = tour.querySelector('.tour-bubble');
+      if (bubble) bubble.style.visibility = 'hidden';
     }
 
     // 예시 느낌표를 눌렀는지 (화면 좌표가 아이콘 안인지)
@@ -1174,6 +1224,7 @@ body{
       tour.innerHTML = '';
       tour.classList.add('done');
       window.removeEventListener('resize', onResize);
+      window.startDragTutorial();  // 도움말이 끝나면 드래그 안내 애니메이션 시작
     }
 
     function onResize() { if (!tour.classList.contains('done')) render(); }

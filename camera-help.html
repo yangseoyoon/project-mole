@@ -90,6 +90,24 @@
         color: #fff;
         cursor: pointer;
       }
+      /* 둘째 장부터: 패널 대신 말풍선 (Figma 2138:1694 — 흰 바탕, 왼쪽 아래만 각진 둥근 모서리, 옅은 그림자) */
+      .panel.bubble {
+        min-width: 0;
+        background: #fff;
+        border: 0.5px solid #d9d9d9;
+        border-radius: 20px 20px 20px 0;
+        box-shadow: 4px 4px 6.6px rgba(0, 0, 0, 0.15);
+        padding: 20px 26px;
+      }
+      /* 말풍선 글: 피그마 댓글 말풍선처럼 작게, 왼쪽 정렬 */
+      .panel.bubble .panel-text {
+        font-size: 17px;
+        line-height: 26px;
+        font-weight: 400;
+        text-align: left;
+      }
+      .panel.bubble .panel-title,
+      .panel.bubble .panel-next { display: none; }
       .panel-text {
         margin: 0;
         font-family: 'Pretendard', sans-serif;
@@ -118,12 +136,12 @@
         // 이미지와 패널 위치(1920×1080 기준, 캡처할 때 화면에서 잰 값)
         const SLIDES = [
           { img: 'camera-1.png', left: 716, top: 462, text: '자신이 어떤 점 패턴을 가지고 있는지 직접 얼굴에 점을<br>찍어 알아볼 수 있습니다.' },
-          { img: 'camera-2.png', left: 200, top: 241, text: '가이드 선에 맞춰서 얼굴 사진을 찍어주세요.' },
-          { img: 'camera-3.png', left: 544, top: 807, text: '아래 슬라이드로 얼굴크기를 쉽게 맞출 수 있습니다.' },
-          { img: 'camera-4.png', left: 780, top: 554, text: '얼굴 위에 점을 찍어보세요.' },
-          { img: 'camera-5.png', left: 1033, top: 325, text: '찍은 점은 패턴으로 재구성됩니다.' },
-          // 결과 페이지 (Figma 2132:1911) — 패널은 유형 글 오른쪽 옆
-          { img: 'camera-6.png', left: 1035, top: 147, text: '점 패턴을 통해 나는 어떤 유형인가를 알아보세요.' },
+          // 둘째 장부터 말풍선: tail = 말풍선 왼쪽 아래(꼬리)가 닿을 점 — 선명한 구간의 오른쪽 가장자리
+          { img: 'camera-2.png', tail: [1176, 400], text: '가이드 선에 맞춰서 얼굴 사진을 찍어주세요.' },   // 얼굴 부분 오른쪽
+          { img: 'camera-3.png', tail: [1338, 860], text: '아래 슬라이드로 얼굴크기를 쉽게 맞출 수 있습니다.' },  // 슬라이더 오른쪽
+          { img: 'camera-4.png', tail: [1515, 390], text: '얼굴 위에 점을 찍어보세요.' },  // 얼굴 패널 오른쪽 위 (예전 '사진을 클릭해…' 말풍선 자리)
+          { img: 'camera-5.png', tail: [725, 310], text: '찍은 점은 패턴으로 재구성됩니다.' },  // 방사형 차트 패널 오른쪽
+          { img: 'camera-6.png', tail: [756, 182], text: '점 패턴을 통해 나는 어떤 유형인가를 알아보세요.' },  // 결과 페이지(Figma 2132:1911) 유형 알파벳(EDVS) 왼쪽 위
         ];
         const stage = document.getElementById('stage');
         const panel = document.getElementById('panel');
@@ -154,8 +172,20 @@
           imgs.forEach((img, j) => img.classList.toggle('on', j === i));
           const s = SLIDES[i];
           text.innerHTML = s.text;
-          panel.style.left = s.left + 'px';
-          panel.style.top = s.top + 'px';
+          // 첫 장은 페이지 소개 패널, 그 뒤는 말풍선
+          const bubble = !!s.tail;
+          panel.classList.toggle('bubble', bubble);
+          if (bubble) {
+            // 꼬리(왼쪽 아래)를 tail 점에 붙이고 오른쪽 위로 펼침. 화면 오른쪽 끝(1920)을 넘지 않게 폭 제한 → 넘치면 줄바꿈
+            const [tx, ty] = s.tail;
+            panel.style.maxWidth = Math.min(400, 1920 - tx - 16) + 'px';
+            panel.style.left = tx + 'px';
+            panel.style.top = (ty - panel.offsetHeight) + 'px';
+          } else {
+            panel.style.maxWidth = '';
+            panel.style.left = s.left + 'px';
+            panel.style.top = s.top + 'px';
+          }
           // 마지막 장은 → 대신 X (Figma)
           const last = i === SLIDES.length - 1;
           nextBtn.textContent = last ? 'X' : '→';

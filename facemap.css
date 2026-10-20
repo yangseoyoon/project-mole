@@ -381,7 +381,9 @@ body {
    너비 600, 왼쪽 위 "도움말" 탭 / 오른쪽 위 X (높이 34, 테두리 안쪽), 본문 20px/32 */
 .welcome-popup {
   position: relative;
-  width: calc(600 * var(--u));
+  width: max-content;                 /* 글 길이에 맞춤 (가운데 정렬) */
+  max-width: calc(600 * var(--u));
+  min-width: calc(250 * var(--u));    /* 도움말 탭 + X 가 겹치지 않을 만큼 */
   background: #e9f056;
   border: 1px solid #000;
   padding: calc(60 * var(--u)) calc(34 * var(--u)) calc(30 * var(--u));
@@ -408,6 +410,7 @@ body {
   line-height: calc(32 * var(--u));
   color: #000;
   word-break: keep-all;
+  text-align: center;   /* 도움말 패널 글 가운데 정렬 */
 }
 .welcome-close {
   position: absolute;

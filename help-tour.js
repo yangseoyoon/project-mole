@@ -13,7 +13,7 @@
              또는 (holeRect, panelW, panelH) => {left, top} 로 직접 지정
      shape : true 면 hole 요소 모양(둥근 모서리) 그대로 뚫음 (hole 은 선택자, 첫 요소 기준, pad 무시)
      blurOverlaps : true 면 hole 요소 위에 겹친 형제 요소도 블러 (구멍 안에서도 흐리게)
-                    shape 와 함께면 겹친 요소 모양대로 구멍에서 빼서 배경과 한 번에 블러 (네모 경계 없음)
+                    shape 와 함께면 겹친 요소도 함께 블러에서 빼서 선명하게 (대상 둘레에만 주황 선)
      zoom  : 숫자면 이 단계 동안만 hole 요소를 그 배율로 확대 (작은 요소 설명용)
      enter / leave : 이 단계가 시작될 때 / 끝날 때 실행할 함수 (예시 이미지 표시 등)
    화면 아무 곳이나 / → 를 누르면 다음 단계, 마지막 단계 다음은 종료. Esc 로 건너뜀. */
@@ -90,7 +90,7 @@
         if (!(r.width && r.height && r.right > h.left && r.left < h.right && r.bottom > h.top && r.top < h.bottom)) return false;
         const ze = z(el);
         return ze > zh || (ze === zh && !!(holeEl.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING));
-      }).map(el => { const r = el.getBoundingClientRect(); return { r, k: radiusOf(el, r) }; });
+      });
     }
 
     // zoom: 이 단계 동안만 hole 요소를 확대 (scale 속성, 원래 값 보관 후 복원)
@@ -128,22 +128,29 @@
         tour.appendChild(p);
       }
 
-      // shape: 구멍을 요소 모양(둥근 모서리) 그대로 — 화면 전체 블러 한 장에 clip-path 로 뚫음
-      //  blurOverlaps 면 구멍 위 레이어에 겹친 요소(말풍선·패널 등)는 그 모양대로 구멍에서 빼서 배경과 함께 블러
-      //  (nonzero 채우기: 화면 시계방향 + 구멍 반시계방향 = 뚫림, 겹친 요소 시계방향 = 다시 막힘)
+      // shape: 구멍을 요소 모양(둥근 모서리) 그대로 — 화면 전체 블러 한 장에 마스크로 뚫음
+      //  blurOverlaps 면 구멍 위 레이어에 겹친 요소(말풍선·패널 등)도 그 모양대로 함께 뚫어서 블러가 걸리지 않게
+      //  (여러 모양을 합쳐 뚫어야 해서 clip-path 대신 SVG 마스크: 흰 바탕 = 블러, 검은 모양 = 뚫림)
       if (holeEl) {
         const r = holeEl.getBoundingClientRect();
         const k = radiusOf(holeEl, r);
-        const x0 = r.left, y0 = r.top;
-        const covers = s.blurOverlaps ? overlapsAbove(holeEl, r) : [];
+        const covers = s.blurOverlaps ? overlapsAbove(holeEl, r).map(el => { const cr = el.getBoundingClientRect(); return { r: cr, k: radiusOf(el, cr) }; }) : [];
+        const shapes = [{ r, k }, ...covers].map(c =>
+          `<rect x='${c.r.left}' y='${c.r.top}' width='${c.r.width}' height='${c.r.height}' rx='${c.k}' fill='black'/>`).join('');
+        const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${vw}' height='${vh}'><defs><mask id='m'>` +
+          `<rect width='100%' height='100%' fill='white'/>${shapes}</mask></defs>` +
+          `<rect width='100%' height='100%' fill='white' mask='url(#m)'/></svg>`;
         const p = document.createElement('div');
         p.className = 'htour-blur';
         p.style.inset = '0';
-        p.style.clipPath = `path(nonzero, 'M0 0 H${vw} V${vh} H0 Z ${rrect(r, k, true)} ${covers.map(c => rrect(c.r, c.k, false)).join(' ')}')`;
+        const mask = `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
+        p.style.maskImage = p.style.webkitMaskImage = mask;
+        p.style.maskSize = p.style.webkitMaskSize = '100% 100%';
         tour.appendChild(p);
         const glow = addHoleGlow(r, k);
-        // 주황 그림자도 겹친 요소 위로는 그리지 않음 (그림자 요소 기준 좌표)
+        // 주황 선·빛은 대상 둘레에만, 위에 겹친 요소 위로는 그리지 않음 (그림자 요소 기준 좌표)
         if (covers.length) {
+          const x0 = r.left, y0 = r.top;
           const off = c => ({ left: c.r.left - x0, top: c.r.top - y0, right: c.r.right - x0, bottom: c.r.bottom - y0 });
           glow.style.clipPath = `path(nonzero, 'M${-x0} ${-y0} H${vw - x0} V${vh - y0} H${-x0} Z ${covers.map(c => rrect(off(c), c.k, true)).join(' ')}')`;
         }
