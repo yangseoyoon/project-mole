@@ -81,7 +81,7 @@ body {
 /* ── 좌측 인물 ── */
 .portraitLeft {
   position: absolute;
-  left: calc(50% + (-490 - 960) * var(--hu));  /* -450 에서 왼쪽 40 */
+  left: calc(50% + (-590 - 960) * var(--hu));  /* -450 에서 왼쪽 140 */
   top: calc(50% + (24.71 - 540) * var(--hu));
   pointer-events: none;
 }
@@ -95,7 +95,7 @@ body {
 /* ── 우측 인물 ── */
 .portraitRight {
   position: absolute;
-  right: calc(50% + (-510 - 960) * var(--hu));  /* -470 에서 오른쪽 40 */
+  right: calc(50% + (-610 - 960) * var(--hu));  /* -470 에서 오른쪽 140 */
   top: calc(50% + (-62 - 540) * var(--hu));
   width: calc(1011 * var(--hu));
   height: calc(1355 * var(--hu));
