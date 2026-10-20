@@ -175,7 +175,29 @@
         color: #000;
         word-break: keep-all;
         text-align: center;   /* 도움말 패널 글 가운데 정렬 */
+        position: relative;
+        isolation: isolate;
       }
+      /* 강조 단어 뒤 흰 원 (지름 38, 8 씩 겹침, 검정 0.5 테두리) — 다른 도움말과 같은 모양 */
+      .jeom-guide-text .kw { position: relative; }
+      .jeom-guide-text .kw-dots {
+        position: absolute;
+        left: calc(-3 * var(--u));
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        z-index: -1;
+        pointer-events: none;
+      }
+      .jeom-guide-text .kw-dots i {
+        width: calc(38 * var(--u));
+        height: calc(38 * var(--u));
+        box-sizing: border-box;
+        border-radius: 50%;
+        background: #fff;
+        border: 0.5px solid #000;
+      }
+      .jeom-guide-text .kw-dots i + i { margin-left: calc(-8 * var(--u)); }
       .dot-label {
         opacity: 0;
         white-space: nowrap;
@@ -1123,7 +1145,7 @@
       <div class="jeom-guide" role="dialog" aria-labelledby="jeomGuideTitle">
         <div class="jeom-guide-title" id="jeomGuideTitle">도움말</div>
         <button class="jeom-guide-close" id="jeomGuideClose" aria-label="닫기">X</button>
-        <p class="jeom-guide-text">주황색 점을 클릭하면 점과 관상에 대한 다양한 이야기를<br />알아볼 수 있습니다.</p>
+        <p class="jeom-guide-text"><span class="kw"><span class="kw-dots" aria-hidden="true" style="left:calc(-4 * var(--u))"><i></i><i></i><i></i></span>주황색 점</span>을 클릭하면 점과 관상에 대한 다양한 이야기를<br />알아볼 수 있습니다.</p>
       </div>
     </div>
 

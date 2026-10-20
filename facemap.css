@@ -709,3 +709,25 @@ body {
 .profile-bubble.custom-active .bubble-photo-placeholder {
   display: flex;
 }
+
+/* 도움말 강조 단어: 글자 뒤에 흰 원 3개(지름 38, 8 씩 겹침, 검정 0.5 테두리) — 점 패턴 도움말 첫 장과 같은 모양 */
+.welcome-body-text { position: relative; isolation: isolate; }
+.welcome-body-text .kw { position: relative; }
+.welcome-body-text .kw-dots {
+  position: absolute;
+  left: calc(-6 * var(--u));
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  z-index: -1;
+  pointer-events: none;
+}
+.welcome-body-text .kw-dots i {
+  width: calc(38 * var(--u));
+  height: calc(38 * var(--u));
+  box-sizing: border-box;
+  border-radius: 50%;
+  background: #fff;
+  border: 0.5px solid #000;
+}
+.welcome-body-text .kw-dots i + i { margin-left: calc(-8 * var(--u)); }
