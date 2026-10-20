@@ -190,6 +190,8 @@
           name: 'Jang Won-young',
           desc: '대한민국 6인조 걸그룹 IVE의 멤버',
           photo: 'images/facemap/photo-jangwonyoung.png',
+          // 사진 속 얼굴이 작아서 2배 확대, 얼굴(사진의 가로 55%·세로 57% 부근)을 기준으로
+          photoZoom: { scale: 2, origin: '55% 57%' },
         },
         rei: {
           name: 'Rei',
@@ -253,6 +255,8 @@
           btn.classList.add('active');
           const p = PROFILES[btn.dataset.profile];
           bPhoto.src = p.photo;
+          bPhoto.style.transform = p.photoZoom ? `scale(${p.photoZoom.scale})` : '';
+          bPhoto.style.transformOrigin = p.photoZoom ? p.photoZoom.origin : '';
           bName.textContent = p.name;
           bDesc.textContent = p.desc;
 
