@@ -59,10 +59,6 @@
         <button class="dotBtn" data-profile="jangwonyoung" style="left: calc(1467.5 * var(--fu)); top: calc(604.4 * var(--fu))">
           <img src="images/facemap/dot-jangwonyoung.svg" alt="" />
         </button>
-        <!-- Frame405: 장식용 -->
-        <div class="dotBtn" style="left: calc(1209.5 * var(--fu)); top: calc(164.55 * var(--fu))">
-          <img src="images/facemap/dot-deco.svg" alt="" />
-        </div>
         <!-- Frame412: 이로하 -->
         <button class="dotBtn" data-profile="iroha" style="left: calc(1118.79 * var(--fu)); top: calc(402.09 * var(--fu))">
           <img src="images/facemap/dot-iroha.svg" alt="" />
@@ -194,6 +190,8 @@
           name: 'Jang Won-young',
           desc: '대한민국 6인조 걸그룹 IVE의 멤버',
           photo: 'images/facemap/photo-jangwonyoung.png',
+          // 사진 속 얼굴이 작아서 2배 확대, 얼굴(사진의 가로 55%·세로 57% 부근)을 기준으로
+          photoZoom: { scale: 2, origin: '55% 57%' },
         },
         rei: {
           name: 'Rei',
@@ -257,6 +255,8 @@
           btn.classList.add('active');
           const p = PROFILES[btn.dataset.profile];
           bPhoto.src = p.photo;
+          bPhoto.style.transform = p.photoZoom ? `scale(${p.photoZoom.scale})` : '';
+          bPhoto.style.transformOrigin = p.photoZoom ? p.photoZoom.origin : '';
           bName.textContent = p.name;
           bDesc.textContent = p.desc;
 

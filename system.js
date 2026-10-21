@@ -487,3 +487,8 @@ document.getElementById('resetBtn').addEventListener('click', () => {
   redrawRadial();
   showPalaceDesc('');  // 궁 설명도 비움 (안내 문구로 돌아감)
 });
+
+// 다음 로딩 페이지(loading.html)의 얼굴 사진 21장을 점 찍는 동안 미리 받아둠 (한 장당 0.15초만 보여서 그때 받으면 늦음)
+window.addEventListener('load', () => {
+  for (let i = 1; i <= 21; i++) new Image().src = `images/loading/face-${String(i).padStart(2, '0')}.webp`;
+});
