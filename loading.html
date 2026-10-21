@@ -87,7 +87,7 @@
 
       <p class="loading-text">유형을 분석하는 중입니다</p>
 
-      <img class="loading-face" id="loadingFace" src="images/아트보드 1.png" alt="" />
+      <img class="loading-face" id="loadingFace" src="images/loading/face-01.webp" alt="" />
 
     </div>
 
@@ -127,31 +127,31 @@
     <script>
       (function() {
         const images = [
-          'images/아트보드 1.png',
-          'images/아트보드 2.png',
-          'images/아트보드 3.png',
-          'images/아트보드 4.png',
-          'images/아트보드 5.png',
-          'images/아트보드 6.png',
-          'images/아트보드 7.png',
-          'images/아트보드 8.png',
-          'images/아트보드 9.png',
-          'images/아트보드 10.png',
-          'images/아트보드 11.png',
-          'images/아트보드 12.png',
-          'images/아트보드 13.png',
-          'images/아트보드 14.png',
-          'images/아트보드 15.png',
-          'images/아트보드 16.png',
-          'images/아트보드 17.png',
-          'images/아트보드 18.png',
-          'images/아트보드 19.png',
-          'images/아트보드 20.png',
-          'images/아트보드 21.png',
+          'images/loading/face-01.webp',
+          'images/loading/face-02.webp',
+          'images/loading/face-03.webp',
+          'images/loading/face-04.webp',
+          'images/loading/face-05.webp',
+          'images/loading/face-06.webp',
+          'images/loading/face-07.webp',
+          'images/loading/face-08.webp',
+          'images/loading/face-09.webp',
+          'images/loading/face-10.webp',
+          'images/loading/face-11.webp',
+          'images/loading/face-12.webp',
+          'images/loading/face-13.webp',
+          'images/loading/face-14.webp',
+          'images/loading/face-15.webp',
+          'images/loading/face-16.webp',
+          'images/loading/face-17.webp',
+          'images/loading/face-18.webp',
+          'images/loading/face-19.webp',
+          'images/loading/face-20.webp',
+          'images/loading/face-21.webp',
         ];
         const el = document.getElementById('loadingFace');
         let idx = 0;
-        const INTERVAL = 200; // 한 장당 표시 시간(ms)
+        const INTERVAL = 150; // 한 장당 표시 시간(ms) — 21장이 4초 안에 다 나오게
         const TOTAL = 4000;
 
         // 미리 받아두고, 다 받아진 사진만 보여줌 (사진이 커서 받는 중인 사진은 건너뜀)
