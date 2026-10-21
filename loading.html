@@ -68,7 +68,6 @@
         width: calc(235 * var(--u));
         height: calc(313.437 * var(--u));
         object-fit: cover;
-        transition: opacity 0.4s ease;
       }
 
     </style>
@@ -155,13 +154,16 @@
         const INTERVAL = 200; // 한 장당 표시 시간(ms)
         const TOTAL = 4000;
 
+        // 미리 받아두고, 다 받아진 사진만 보여줌 (사진이 커서 받는 중인 사진은 건너뜀)
+        const loaded = images.map(src => { const im = new Image(); im.src = src; return im; });
+        const ready = (im) => im.complete && im.naturalWidth > 0;
+
+        // 바꿀 때 투명하게 했다 켜면 200ms 간격에선 계속 흐려져 안 보이므로 바로 바꿈
         const timer = setInterval(() => {
-          el.style.opacity = 0;
-          setTimeout(() => {
-            idx = (idx + 1) % images.length;
-            el.src = images[idx];
-            el.style.opacity = 1;
-          }, 200);
+          for (let k = 1; k <= images.length; k++) {
+            const next = (idx + k) % images.length;
+            if (ready(loaded[next])) { idx = next; el.src = images[idx]; break; }
+          }
         }, INTERVAL);
 
         setTimeout(() => {
