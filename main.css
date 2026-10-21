@@ -16,11 +16,14 @@ body {
 /* 2번째 섹션: 아직 진입 동작이 없어(기존에도 화면 밖 대기) 숨겨 둠 */
 #section2 { display: none; }
 
-/* 히어로 그림 단위: 1920 미만에서는 화면폭에 정비례(그림 비율 유지),
-   그 이상에서는 --u 를 따른다. 글자(부제·툴팁)는 --u 를 써서 확대가 반영된다. */
+/* 히어로 그림 단위: 27인치 아이맥(2560 폭)에서 맞춘 구도를 어떤 화면 비율에서도 똑같이.
+   그 화면에서 1920×1080 디자인은 화면 폭의 90%(×1.2)로 보였음 →
+   폭 기준 0.9 × 100vw/1920 과 높이 기준 100dvh/1080 중 작은 값 (구도 전체가 늘 화면 안에, 비율 유지).
+   16:9 보다 넓은 화면은 높이에 맞춰 양옆이, 좁은(높은) 화면은 폭에 맞춰 위아래가 노란 여백으로 남음.
+   부제 글자도 같은 단위라 인물·타이틀과의 관계가 그대로. */
 .heroMain,
 #dotsLayer {
-  --hu: min(var(--u), 100vw / 1920);
+  --hu: min(100vw * 0.9 / 1920, 100dvh / 1080);
 }
 
 /* ── 메인 히어로 영역: 뷰포트 전체를 채움 ── */
@@ -81,7 +84,9 @@ body {
 /* ── 좌측 인물 ── */
 .portraitLeft {
   position: absolute;
-  left: calc(50% + (-450 - 960) * var(--hu));
+  /* 화면 왼쪽 끝 기준: 아이맥에서처럼 얼굴이 화면 끝에서 잘리게 (와이드 화면에서도 같음).
+     폭 기준일 때 50% = 1066.67 hu 이므로 -450-960 + 1066.67 = -343.33 → 16:9 이하에선 예전 위치와 동일 */
+  left: calc(-343.33 * var(--hu));
   top: calc(50% + (24.71 - 540) * var(--hu));
   pointer-events: none;
 }
@@ -95,7 +100,8 @@ body {
 /* ── 우측 인물 ── */
 .portraitRight {
   position: absolute;
-  right: calc(50% + (-470 - 960) * var(--hu));
+  /* 화면 오른쪽 끝 기준 (위와 같은 방식: -470-960 + 1066.67 = -363.33) */
+  right: calc(-363.33 * var(--hu));
   top: calc(50% + (-62 - 540) * var(--hu));
   width: calc(1011 * var(--hu));
   height: calc(1355 * var(--hu));
@@ -141,10 +147,10 @@ body {
 .titleSub {
   font-family: 'Pretendard', sans-serif;
   font-weight: 400;
-  font-size: calc(22 * var(--u));
+  font-size: calc(22 * var(--hu));
   color: #000;
   text-align: center;
-  margin-top: calc(16 * var(--u));
+  margin-top: calc(16 * var(--hu));
   letter-spacing: 0;
 }
 

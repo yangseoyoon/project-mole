@@ -189,7 +189,11 @@ function showPalaceDesc(name) {
 function getPalaceName(dx, dy) {
   const adx = Math.abs(dx);
 
-  // 이마 상단 (dy > 2)
+  // 칸 높이 기준 (사진 830 을 19칸): 카메라 가이드에 맞춰 찍으면
+  // 눈썹 ≈ dy 1~2, 눈 ≈ dy 0, 애교살 ≈ dy -1, 코 ≈ dy -1~-5, 입 ≈ dy -6~-8, 턱 ≈ dy -9 이하
+  // (예시 얼굴 위에 구역을 칠해 맞춤. 눈은 가운데에서 약 3~7칸 옆)
+
+  // 이마 (dy > 2): 가운데 관록궁, 양쪽 복덕궁, 이마 모서리 천이궁
   if (dy > 2) {
     if (adx <= 2) return '관록궁';
     if (adx <= 6) return '복덕궁';
@@ -197,44 +201,44 @@ function getPalaceName(dx, dy) {
     return '공백';
   }
 
-  // 눈썹 (dy 1~2)
+  // 눈썹 (dy 1~2): 두 눈썹 사이 명궁, 눈썹 형제궁, 눈썹 끝~관자놀이 처첩궁
   if (dy >= 1) {
     if (adx <= 1) return '명궁';
-    if (adx <= 5) return '형제궁';
-    if (adx <= 9) return '처첩궁';
+    if (adx <= 7) return '형제궁';
+    if (adx <= 10) return '처첩궁';
     return '공백';
   }
 
-  // 미간 / 눈 (dy -1~1)
-  if (dy >= -1) {
-    if (adx <= 1) return '명궁';
-    if (adx <= 4) return '전택궁';
-    if (adx <= 9) return '처첩궁';
+  // 눈 (dy 0): 두 눈 사이 콧대 시작 질액궁, 눈두덩·눈 전택궁, 눈꼬리~관자놀이 처첩궁
+  if (dy === 0) {
+    if (adx <= 1) return '질액궁';
+    if (adx <= 7) return '전택궁';
+    if (adx <= 10) return '처첩궁';
     return '공백';
   }
 
-  // 코 / 볼 상단 (dy -4~-1)
-  if (dy >= -4) {
-    if (adx <= 2) return '질액궁';
-    if (adx <= 5) return '남녀궁';
-    if (adx <= 8) return '상모궁';
+  // 눈 밑 (dy -1): 콧대 재백궁, 애교살 남녀궁, 광대 쪽 상모궁
+  if (dy === -1) {
+    if (adx <= 1) return '재백궁';
+    if (adx <= 7) return '남녀궁';
+    if (adx <= 9) return '상모궁';
     return '공백';
   }
 
-  // 인중 / 볼 중단 (dy -6~-4)
-  if (dy >= -6) {
-    if (adx <= 3) return '재백궁';
+  // 코 (dy -2~-5): 코 재백궁, 볼 상모궁
+  if (dy >= -5) {
+    if (adx <= 2) return '재백궁';
+    if (adx <= 9) return '상모궁';
+    return '공백';
+  }
+
+  // 인중·입 (dy -6~-8): 상모궁 (얼굴 전체의 조화)
+  if (dy >= -8) {
     if (adx <= 7) return '상모궁';
     return '공백';
   }
 
-  // 입 / 볼 하단 (dy -8~-6)
-  if (dy >= -8) {
-    if (adx <= 5) return '상모궁';
-    return '공백';
-  }
-
-  // 턱 (dy < -8)
+  // 턱 (dy -9 이하)
   if (adx <= 6) return '노복궁';
   return '공백';
 }
